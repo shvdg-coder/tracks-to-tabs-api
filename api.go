@@ -1,8 +1,8 @@
 package ttt_api
 
 import (
-	"tabs/pkg/base/database"
-	"tabs/pkg/ttt-api/users"
+	"github.com/shvdg-dev/base-pkg/database"
+	"github.com/shvdg-dev/ttt-api/users"
 )
 
 // API represents the main entry point to interact with the API functionalities.
