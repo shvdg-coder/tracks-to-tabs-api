@@ -1,4 +1,4 @@
-module ttt-api
+module github.com/shvdg-dev/ttt-api
 
 go 1.22.2
 
