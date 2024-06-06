@@ -2,7 +2,7 @@ package ttt_api
 
 import (
 	"github.com/shvdg-dev/base-pkg/database"
-	"github.com/shvdg-dev/ttt-api/users"
+	"github.com/shvdg-dev/tunes-to-tabs-api/users"
 )
 
 // API represents the main entry point to interact with the API functionalities.
