@@ -2,18 +2,18 @@ package users
 
 import (
 	_ "github.com/lib/pq"
-	"github.com/shvdg-dev/base-pkg/database"
-	"github.com/shvdg-dev/base-pkg/utils"
+	logic "github.com/shvdg-dev/base-logic/pkg"
+
 	"log"
 )
 
 // API is for managing users.
 type API struct {
-	Database *database.Manager
+	Database *logic.DatabaseManager
 }
 
 // NewAPI creates a new instance of the API struct.
-func NewAPI(database *database.Manager) *API {
+func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{Database: database}
 }
 
@@ -27,7 +27,7 @@ func (a *API) CreateUsersTable() {
 
 // InsertUser inserts a new user into the users table.
 func (a *API) InsertUser(email, plainPassword string) {
-	hashedPassword, _ := utils.HashPassword(plainPassword)
+	hashedPassword, _ := logic.HashPassword(plainPassword)
 	_, err := a.Database.DB.Exec(insertUserQuery, email, hashedPassword)
 	if err != nil {
 		log.Fatal(err)
@@ -44,5 +44,5 @@ func (a *API) IsPasswordCorrect(email, plainPassword string) bool {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return utils.ArePasswordsEqual(plainPassword, foundHashedPassword)
+	return logic.ArePasswordsEqual(plainPassword, foundHashedPassword)
 }

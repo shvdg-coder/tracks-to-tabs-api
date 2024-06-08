@@ -1,7 +1,8 @@
 package ttt_api
 
 import (
-	"github.com/shvdg-dev/base-pkg/database"
+	logic "github.com/shvdg-dev/base-logic/pkg"
+
 	"github.com/shvdg-dev/tunes-to-tabs-api/sessions"
 	"github.com/shvdg-dev/tunes-to-tabs-api/users"
 )
@@ -13,7 +14,7 @@ type API struct {
 }
 
 // NewAPI creates a new instance of the API.
-func NewAPI(database *database.Manager) *API {
+func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{
 		Sessions: sessions.NewAPI(database),
 		Users:    users.NewAPI(database)}

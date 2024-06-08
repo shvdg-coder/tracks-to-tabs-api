@@ -1,17 +1,17 @@
 package sessions
 
 import (
-	"github.com/shvdg-dev/base-pkg/database"
+	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
 )
 
 // API is for managing users.
 type API struct {
-	Database *database.Manager
+	Database *logic.DatabaseManager
 }
 
 // NewAPI creates a new instance of the API struct.
-func NewAPI(database *database.Manager) *API {
+func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{Database: database}
 }
 
