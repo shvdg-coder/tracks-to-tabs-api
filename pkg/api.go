@@ -5,6 +5,7 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/id_references"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/sessions"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/users"
 )
 
@@ -13,6 +14,7 @@ type API struct {
 	Artists      *artists.API
 	IdReferences *id_references.API
 	Sessions     *sessions.API
+	Tabs         *tracks.API
 	Users        *users.API
 }
 
@@ -22,6 +24,7 @@ func NewAPI(database *logic.DatabaseManager) *API {
 		Artists:      artists.NewAPI(database),
 		IdReferences: id_references.NewAPI(database),
 		Sessions:     sessions.NewAPI(database),
+		Tabs:         tracks.NewAPI(database),
 		Users:        users.NewAPI(database),
 	}
 }

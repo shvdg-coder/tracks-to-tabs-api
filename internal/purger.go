@@ -24,5 +24,6 @@ func (p *Purger) DropTables() {
 	p.API.Artists.DropArtistsTable()
 	p.API.IdReferences.DropIdReferencesTable()
 	p.API.Sessions.DropSessionsTable()
+	p.API.Tabs.DropTracksTable()
 	p.API.Users.DropUsersTable()
 }
