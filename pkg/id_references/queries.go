@@ -28,10 +28,12 @@ const createIdReferencesTableQuery = `
 	);
 `
 
+// dropIdReferencesTableQuery is a SQL query to drop the 'id_references' table from the database.
 const dropIdReferencesTableQuery = `
 	DROP TABLE IF EXISTS id_references;
 `
 
+// insertIdReferenceQuery is a SQL query to insert a new external reference in the 'id_reference' table
 const insertIdReferenceQuery = `
 	INSERT INTO id_references (internalSource, internalID, externalsource, externalID)
     VALUES ($1, $2, $3, $4) 
