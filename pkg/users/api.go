@@ -44,7 +44,7 @@ func (a *API) InsertUser(email, plainPassword string) {
 	if err != nil {
 		log.Printf("Failed inserting user with email '%s': %s", email, err.Error())
 	} else {
-		log.Printf("Successfully inserted the '%s' in the Users table", email)
+		log.Printf("Successfully inserted the user '%s' in the Users table", email)
 	}
 }
 

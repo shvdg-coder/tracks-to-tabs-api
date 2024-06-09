@@ -43,6 +43,6 @@ func (a *API) InsertArtist(name string) {
 	if err != nil {
 		log.Printf("Failed inserting user with name '%s': %s", name, err.Error())
 	} else {
-		log.Printf("Successfully inserted '%s' Artists table", name)
+		log.Printf("Successfully inserted artist '%s' into the Artists table", name)
 	}
 }
