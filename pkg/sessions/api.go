@@ -24,5 +24,17 @@ func (a *API) CreateSessionsTable() {
 	_, err = a.Database.DB.Exec(createSessionExpiryIndexQuery)
 	if err != nil {
 		log.Fatal(err)
+	} else {
+		log.Println("Successfully created the Sessions table")
+	}
+}
+
+// DropSessionsTable drops the sessions table if it exists.
+func (a *API) DropSessionsTable() {
+	_, err := a.Database.DB.Exec(dropSessionsTableQuery)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		log.Println("Successfully dropped the Sessions table")
 	}
 }

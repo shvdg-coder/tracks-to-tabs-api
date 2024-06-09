@@ -8,6 +8,10 @@ const createSessionsTableQuery = `
 	);
 	`
 
+const dropSessionsTableQuery = `
+	DROP TABLE IF EXISTS sessions;
+`
+
 const createSessionExpiryIndexQuery = `
 	DO $$ BEGIN
 		IF NOT EXISTS (

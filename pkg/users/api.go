@@ -22,6 +22,18 @@ func (a *API) CreateUsersTable() {
 	_, err := a.Database.DB.Exec(createUsersTableQuery)
 	if err != nil {
 		log.Fatal(err)
+	} else {
+		log.Println("Successfully created the Users table")
+	}
+}
+
+// DropUsersTable drops the users table if it exists.
+func (a *API) DropUsersTable() {
+	_, err := a.Database.DB.Exec(dropUsersTableQuery)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		log.Println("Successfully dropped the Users table")
 	}
 }
 
@@ -31,6 +43,8 @@ func (a *API) InsertUser(email, plainPassword string) {
 	_, err := a.Database.DB.Exec(insertUserQuery, email, hashedPassword)
 	if err != nil {
 		log.Fatal(err)
+	} else {
+		log.Printf("Successfully inserted the '%s' in the Users table", email)
 	}
 }
 
