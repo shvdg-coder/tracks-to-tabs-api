@@ -41,8 +41,8 @@ func (a *API) DropArtistsTable() {
 func (a *API) InsertArtist(name string) {
 	_, err := a.Database.DB.Exec(insertArtistQuery, name)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed inserting user with name '%s': %s", name, err.Error())
 	} else {
-		log.Printf("Successfully inserted '%s' itno the Artists table", name)
+		log.Printf("Successfully inserted '%s' Artists table", name)
 	}
 }

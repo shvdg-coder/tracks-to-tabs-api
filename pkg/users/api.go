@@ -42,7 +42,7 @@ func (a *API) InsertUser(email, plainPassword string) {
 	hashedPassword, _ := logic.HashPassword(plainPassword)
 	_, err := a.Database.DB.Exec(insertUserQuery, email, hashedPassword)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed inserting user with email '%s': %s", email, err.Error())
 	} else {
 		log.Printf("Successfully inserted the '%s' in the Users table", email)
 	}

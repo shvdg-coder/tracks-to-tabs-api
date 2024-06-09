@@ -35,7 +35,11 @@ func (s *Seeder) MinimumSeed() {
 func (s *Seeder) InsertAdmin() {
 	email := logic.GetEnvValueAsString(KeyAdminInitialEmail)
 	password := logic.GetEnvValueAsString(KeyAdminInitialPassword)
-	s.API.Users.InsertUser(email, password)
+	if email != "" && password != "" {
+		s.API.Users.InsertUser(email, password)
+	} else {
+		log.Println("Did not insert the initial admin account as no credentials were defined")
+	}
 }
 
 // DummySeed when permitted, seeds the database with dummy data.

@@ -15,7 +15,6 @@ const dropUsersTableQuery = `
 const insertUserQuery = `
 	INSERT INTO users (id, email, password)
     VALUES (gen_random_uuid(), $1, $2) 
-    ON CONFLICT DO NOTHING;
 `
 
 const selectUserPasswordQuery = `SELECT password FROM users WHERE email = $1`

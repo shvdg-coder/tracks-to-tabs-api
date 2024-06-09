@@ -14,5 +14,4 @@ const dropArtistsTableQuery = `
 const insertArtistQuery = `
 	INSERT INTO artists (id, name)
     VALUES (gen_random_uuid(), $1) 
-    ON CONFLICT DO NOTHING;
 `
