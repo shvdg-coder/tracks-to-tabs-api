@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-// API is for managing users.
+// API is for managing artists.
 type API struct {
 	Database *logic.DatabaseManager
 }
@@ -23,7 +23,7 @@ func (a *API) CreateArtistsTable() {
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		log.Println("Successfully created the Artists table")
+		log.Println("Successfully created the 'artists' table")
 	}
 }
 
@@ -33,7 +33,7 @@ func (a *API) DropArtistsTable() {
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		log.Println("Successfully dropped the Artists table")
+		log.Println("Successfully dropped the 'artists' table")
 	}
 }
 
@@ -43,6 +43,6 @@ func (a *API) InsertArtist(name string) {
 	if err != nil {
 		log.Printf("Failed inserting user with name '%s': %s", name, err.Error())
 	} else {
-		log.Printf("Successfully inserted artist '%s' into the Artists table", name)
+		log.Printf("Successfully inserted artist '%s' into the 'artists' table", name)
 	}
 }

@@ -22,6 +22,7 @@ func (c *Creator) CreateTables() {
 		log.Fatalf("It is not allowed to create new tables for the database")
 	}
 	c.API.Artists.CreateArtistsTable()
+	c.API.IdReferences.CreateIdReferencesTable()
 	c.API.Sessions.CreateSessionsTable()
 	c.API.Users.CreateUsersTable()
 }

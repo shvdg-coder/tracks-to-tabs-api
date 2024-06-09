@@ -26,7 +26,7 @@ func (a *API) CreateSessionsTable() {
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		log.Println("Successfully created the Sessions table")
+		log.Println("Successfully created the 'sessions' table")
 	}
 }
 
@@ -36,6 +36,6 @@ func (a *API) DropSessionsTable() {
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		log.Println("Successfully dropped the Sessions table")
+		log.Println("Successfully dropped the 'sessions' table")
 	}
 }

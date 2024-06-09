@@ -22,6 +22,7 @@ func (p *Purger) DropTables() {
 		log.Fatalf("It is not allowed to purge the database")
 	}
 	p.API.Artists.DropArtistsTable()
+	p.API.IdReferences.DropIdReferencesTable()
 	p.API.Sessions.DropSessionsTable()
 	p.API.Users.DropUsersTable()
 }

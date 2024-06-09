@@ -23,7 +23,7 @@ func (a *API) CreateUsersTable() {
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		log.Println("Successfully created the Users table")
+		log.Println("Successfully created the 'users' table")
 	}
 }
 
@@ -33,7 +33,7 @@ func (a *API) DropUsersTable() {
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		log.Println("Successfully dropped the Users table")
+		log.Println("Successfully dropped the 'users' table")
 	}
 }
 
@@ -44,7 +44,7 @@ func (a *API) InsertUser(email, plainPassword string) {
 	if err != nil {
 		log.Printf("Failed inserting user with email '%s': %s", email, err.Error())
 	} else {
-		log.Printf("Successfully inserted the user '%s' in the Users table", email)
+		log.Printf("Successfully inserted the user '%s' in the 'users' table", email)
 	}
 }
 
