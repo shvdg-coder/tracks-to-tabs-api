@@ -16,6 +16,7 @@ func NewAPI(database *logic.DatabaseManager) *API {
 }
 
 // CreateSessionsTable creates the sessions table in the database and adds an expiry index.
+// It assumes a structure as defined in: github.com/alexedwards/scs
 func (a *API) CreateSessionsTable() {
 	_, err := a.Database.DB.Exec(createSessionsTableQuery)
 	if err != nil {
