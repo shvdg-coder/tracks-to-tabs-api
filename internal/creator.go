@@ -21,20 +21,29 @@ func (c *Creator) CreateTables() {
 	if !logic.GetEnvValueAsBoolean(KeyDatabaseAllowCreatingCommand) {
 		log.Fatalf("It is not allowed to create new tables for the database")
 	}
+	c.CreateLookupTables()
+	c.CreateStorageTables()
+	c.CreateRelationLinkTables()
+}
 
-	// Lookup table
+// CreateLookupTables creates the lookup tables.
+func (c *Creator) CreateLookupTables() {
 	c.API.Instruments.CreateInstrumentsTable()
 	c.API.Difficulties.CreateDifficultiesTable()
+}
 
-	// Data storage
+// CreateStorageTables creates tables.
+func (c *Creator) CreateStorageTables() {
 	c.API.Artists.CreateArtistsTable()
 	c.API.IdReferences.CreateIdReferencesTable()
 	c.API.Sessions.CreateSessionsTable()
 	c.API.Tabs.CreateTabsTable()
 	c.API.Tracks.CreateTracksTable()
 	c.API.Users.CreateUsersTable()
+}
 
-	// Relation mappings
+// CreateRelationLinkTables removes the relationship links between artists and tracks by creating and dropping the necessary tables.
+func (c *Creator) CreateRelationLinkTables() {
 	c.API.Artists.CreateArtistTrackTable()
 	c.API.Tracks.CreateTrackTabTable()
 }
