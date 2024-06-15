@@ -22,10 +22,13 @@ func (c *Creator) CreateTables() {
 		log.Fatalf("It is not allowed to create new tables for the database")
 	}
 
+	// Lookup table
+	c.API.Instruments.CreateInstrumentsTable()
+	c.API.Difficulties.CreateDifficultiesTable()
+
 	// Data storage
 	c.API.Artists.CreateArtistsTable()
 	c.API.IdReferences.CreateIdReferencesTable()
-	c.API.Instruments.CreateInstrumentsTable()
 	c.API.Sessions.CreateSessionsTable()
 	c.API.Tabs.CreateTabsTable()
 	c.API.Tracks.CreateTracksTable()

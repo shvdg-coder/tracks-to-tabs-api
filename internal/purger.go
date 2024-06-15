@@ -34,4 +34,8 @@ func (p *Purger) DropTables() {
 	p.API.Tabs.DropTabsTable()
 	p.API.Tracks.DropTracksTable()
 	p.API.Users.DropUsersTable()
+
+	// Lookup table
+	p.API.Instruments.DropInstrumentsTable()
+	p.API.Difficulties.DropDifficultiesTable()
 }

@@ -3,6 +3,7 @@ package pkg
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/id_references"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/sessions"
@@ -14,6 +15,7 @@ import (
 // API represents the main entry point to interact with the API functionalities.
 type API struct {
 	Artists      *artists.API
+	Difficulties *difficulties.API
 	IdReferences *id_references.API
 	Instruments  *instruments.API
 	Sessions     *sessions.API
@@ -26,6 +28,7 @@ type API struct {
 func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{
 		Artists:      artists.NewAPI(database),
+		Difficulties: difficulties.NewAPI(database),
 		IdReferences: id_references.NewAPI(database),
 		Instruments:  instruments.NewAPI(database),
 		Sessions:     sessions.NewAPI(database),
