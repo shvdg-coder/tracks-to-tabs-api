@@ -24,7 +24,9 @@ func (c *Creator) CreateTables() {
 	c.API.Artists.CreateArtistsTable()
 	c.API.IdReferences.CreateIdReferencesTable()
 	c.API.Sessions.CreateSessionsTable()
-	c.API.Tabs.CreateTracksTable()
+	c.API.Tabs.CreateTabsTable()
+	c.API.Tracks.CreateTracksTable()
+	c.API.Tracks.CreateTrackTabTable()
 	c.API.Users.CreateUsersTable()
 	c.API.Artists.CreateArtistTrackTable()
 }
