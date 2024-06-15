@@ -17,7 +17,6 @@ It contains the following columns:
   - 'TuningID': This column represents the ID of the tuning from a lookup table.
   - 'Description': This column records the description of the tab.
 */
-
 const createTabsTableQuery = `
 	CREATE TABLE IF NOT EXISTS tabs (
 	   ID UUID PRIMARY KEY,

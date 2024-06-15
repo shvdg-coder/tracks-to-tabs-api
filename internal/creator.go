@@ -21,12 +21,17 @@ func (c *Creator) CreateTables() {
 	if !logic.GetEnvValueAsBoolean(KeyDatabaseAllowCreatingCommand) {
 		log.Fatalf("It is not allowed to create new tables for the database")
 	}
+
+	// Data storage
 	c.API.Artists.CreateArtistsTable()
 	c.API.IdReferences.CreateIdReferencesTable()
+	c.API.Instruments.CreateInstrumentsTable()
 	c.API.Sessions.CreateSessionsTable()
 	c.API.Tabs.CreateTabsTable()
 	c.API.Tracks.CreateTracksTable()
-	c.API.Tracks.CreateTrackTabTable()
 	c.API.Users.CreateUsersTable()
+
+	// Relation mappings
 	c.API.Artists.CreateArtistTrackTable()
+	c.API.Tracks.CreateTrackTabTable()
 }

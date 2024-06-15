@@ -21,10 +21,15 @@ func (p *Purger) DropTables() {
 	if !logic.GetEnvValueAsBoolean(KeyDatabaseAllowPurgingCommand) {
 		log.Fatalf("It is not allowed to purge the database")
 	}
-	p.API.Tracks.DropTrackTabTable()
+
+	// Relation mappings
 	p.API.Artists.DropArtistTrackTable()
+	p.API.Tracks.DropTrackTabTable()
+
+	// Data storage
 	p.API.Artists.DropArtistsTable()
 	p.API.IdReferences.DropIdReferencesTable()
+	p.API.Instruments.DropInstrumentsTable()
 	p.API.Sessions.DropSessionsTable()
 	p.API.Tabs.DropTabsTable()
 	p.API.Tracks.DropTracksTable()
