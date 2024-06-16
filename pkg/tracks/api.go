@@ -36,12 +36,12 @@ func (a *API) DropTracksTable() {
 }
 
 // InsertTrack inserts a track into the tracks table.
-func (a *API) InsertTrack(ID, title string) {
-	_, err := a.Database.DB.Exec(insertTrackQuery, ID, title)
+func (a *API) InsertTrack(track *Track) {
+	_, err := a.Database.DB.Exec(insertTrackQuery, track.ID, track.Title, track.Duration)
 	if err != nil {
-		log.Printf("Failed to insert track with ID '%s' and Title '%s': %s", ID, title, err.Error())
+		log.Printf("Failed to insert track with title '%s': %s", track.Title, err.Error())
 	} else {
-		log.Printf("Successfully inserted track into the 'tracks' table with ID '%s' and Title '%s'", ID, title)
+		log.Printf("Successfully inserted track into the 'tracks' table with title '%s'", track.Title)
 	}
 }
 

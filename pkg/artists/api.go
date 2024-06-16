@@ -38,12 +38,12 @@ func (a *API) DropArtistsTable() {
 }
 
 // InsertArtist inserts an artist into the artists table.
-func (a *API) InsertArtist(name string) {
-	_, err := a.Database.DB.Exec(insertArtistQuery, name)
+func (a *API) InsertArtist(artist *Artist) {
+	_, err := a.Database.DB.Exec(insertArtistQuery, artist.ID, artist.Name)
 	if err != nil {
-		log.Printf("Failed inserting user with name '%s': %s", name, err.Error())
+		log.Printf("Failed inserting user with name '%s': %s", artist.Name, err.Error())
 	} else {
-		log.Printf("Successfully inserted artist '%s' into the 'artists' table", name)
+		log.Printf("Successfully inserted artist '%s' into the 'artists' table", artist.Name)
 	}
 }
 

@@ -28,11 +28,11 @@ func (s *Seeder) MinimumSeed() {
 		log.Println("It is not allowed to seed the database with the minimally required values.")
 		return
 	}
-	s.InsertAdmin()
+	s.seedAdmin()
 }
 
-// InsertAdmin inserts an administrator user into the database.
-func (s *Seeder) InsertAdmin() {
+// seedAdmin inserts an administrator user into the database.
+func (s *Seeder) seedAdmin() {
 	email := logic.GetEnvValueAsString(KeyAdminInitialEmail)
 	password := logic.GetEnvValueAsString(KeyAdminInitialPassword)
 	if email != "" && password != "" {
@@ -48,4 +48,8 @@ func (s *Seeder) DummySeed() {
 		log.Println("It is not allowed to seed the database with dummy data.")
 		return
 	}
+}
+
+func (s *Seeder) seedDummyArtists() {
+	//TODO:
 }

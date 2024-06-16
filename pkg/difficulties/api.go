@@ -40,8 +40,8 @@ func (a *API) DropDifficultiesTable() {
 func (a *API) InsertDifficulty(name string) {
 	_, err := a.Database.DB.Exec(insertDifficultyQuery, name)
 	if err != nil {
-		log.Printf("Failed inserting difficulty level with Name: '%s': %s", name, err.Error())
+		log.Printf("Failed inserting difficulty level with Title: '%s': %s", name, err.Error())
 	} else {
-		log.Printf("Successfully inserted difficulty level with Name: '%s'", name)
+		log.Printf("Successfully inserted difficulty level with Title: '%s'", name)
 	}
 }

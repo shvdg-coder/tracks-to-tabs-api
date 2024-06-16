@@ -1,23 +1,25 @@
 package tracks
 
 /*
-+--------------------------------------+--------------------+
-|                 ID                   |       Title        |
-+--------------------------------------+--------------------+
-| 123e4567-e89b-12d3-a456-426614174000 | Sweet Child O'Mine |
-| 123e4567-e89b-12d3-a456-426614174001 | Stairway to Heaven |
-+--------------------------------------+--------------------+
++--------------------------------------+--------------------+------------+
+|                 ID                   |       Title        |  Duration  |
++--------------------------------------+--------------------+------------+
+| 123e4567-e89b-12d3-a456-426614174000 | Sweet Child O'Mine |  356000    |
+| 123e4567-e89b-12d3-a456-426614174001 | Stairway to Heaven |  483000    |
++--------------------------------------+--------------------+------------+
 
 This table is used to store the tracks of songs.
 
 It contains the following columns:
-  - 'ID': This is the UUID that uniquely identifies a track in our system.
-  - 'Title': This column records the Title of the track.
+  - 'ID': The UUID that uniquely identifies a track in our system.
+  - 'Title': The title of the track.
+  - 'Duration': The duration of the track in milliseconds.
 */
 const createTracksTableQuery = `
 	CREATE TABLE IF NOT EXISTS tracks (
 	   ID UUID PRIMARY KEY,
-	   Title VARCHAR(500) NOT NULL
+	   Title VARCHAR(500) NOT NULL,
+	   Duration NUMERIC NOT NULL
 	);
 `
 
@@ -28,8 +30,8 @@ const dropTracksTableQuery = `
 
 // insertTrackQuery is a SQL query to insert a track into the 'tracks' table.
 const insertTrackQuery = `
-	INSERT INTO tracks (id, title)
-    VALUES (gen_random_uuid(), $2) 
+	INSERT INTO tracks (id, title, duration)
+    VALUES ($1, $2, $3) 
 `
 
 /*

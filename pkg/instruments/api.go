@@ -41,8 +41,8 @@ func (a *API) DropInstrumentsTable() {
 func (a *API) InsertInstrument(name string) {
 	_, err := a.Database.DB.Exec(insertInstrumentQuery, name)
 	if err != nil {
-		log.Printf("Failed inserting instrument with Name: '%s': %s", name, err.Error())
+		log.Printf("Failed inserting instrument with Title: '%s': %s", name, err.Error())
 	} else {
-		log.Printf("Successfully inserted instrument with Name: '%s'", name)
+		log.Printf("Successfully inserted instrument with Title: '%s'", name)
 	}
 }
