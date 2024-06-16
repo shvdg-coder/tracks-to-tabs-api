@@ -9,13 +9,13 @@ import (
 // Tab represents a tab.
 type Tab struct {
 	ID          uuid.UUID
-	Instrument  inst.Instrument
-	Difficulty  diff.Difficulty
+	Instrument  *inst.Instrument
+	Difficulty  *diff.Difficulty
 	Description string
 }
 
 // NewTab instantiates a new Tab.
-func NewTab(instrument inst.Instrument, difficulty diff.Difficulty, description string) *Tab {
+func NewTab(instrument *inst.Instrument, difficulty *diff.Difficulty, description string) *Tab {
 	return &Tab{
 		ID:          uuid.New(),
 		Instrument:  instrument,

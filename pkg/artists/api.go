@@ -37,6 +37,13 @@ func (a *API) DropArtistsTable() {
 	}
 }
 
+// InsertArtists inserts multiple artists into the artists table.
+func (a *API) InsertArtists(artists ...*Artist) {
+	for _, artist := range artists {
+		a.InsertArtist(artist)
+	}
+}
+
 // InsertArtist inserts an artist into the artists table.
 func (a *API) InsertArtist(artist *Artist) {
 	_, err := a.Database.DB.Exec(insertArtistQuery, artist.ID, artist.Name)

@@ -35,6 +35,13 @@ func (a *API) DropTracksTable() {
 	}
 }
 
+// InsertTracks inserts multiple tracks into the tracks table.
+func (a *API) InsertTracks(tracks ...*Track) {
+	for _, track := range tracks {
+		a.InsertTrack(track)
+	}
+}
+
 // InsertTrack inserts a track into the tracks table.
 func (a *API) InsertTrack(track *Track) {
 	_, err := a.Database.DB.Exec(insertTrackQuery, track.ID, track.Title, track.Duration)

@@ -2,7 +2,7 @@ package artists
 
 /*
 +--------------------------------------+------------+
-|                   ID                 |    Title    |
+|                   ID                 |    Name    |
 +--------------------------------------+------------+
 | 123e4567-e89b-12d3-a456-426614174000 | Artist 1   |
 | 123e4567-e89b-12d3-a456-426614174001 | Artist 2   |
@@ -12,12 +12,12 @@ This table is used to store Artists in our system.
 
 It contains the following columns:
   - 'ID': This is the UUID that uniquely identifies a record in our system.
-  - 'Title': This column has the Title of the Artist.
+  - 'Name': This column has the name of an Artist.
 */
 const createArtistsTableQuery = `
 	CREATE TABLE IF NOT EXISTS artists  (
 	   ID UUID PRIMARY KEY,
-	   Title VARCHAR(500) NOT NULL
+	   Name VARCHAR(500) NOT NULL
 	);
 `
 

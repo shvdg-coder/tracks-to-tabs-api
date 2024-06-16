@@ -32,3 +32,6 @@ const insertDifficultyQuery = `
 	INSERT INTO difficulties (name)
     VALUES ($1) 
 `
+
+// getDifficultiesQuery is a SQL query to get difficulties.
+const getDifficultiesQuery = `SELECT ID, Name FROM difficulties`

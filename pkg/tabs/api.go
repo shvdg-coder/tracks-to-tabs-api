@@ -3,7 +3,6 @@ package tabs
 import (
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
-
 	"log"
 )
 
@@ -37,12 +36,19 @@ func (a *API) DropTabsTable() {
 	}
 }
 
+// InsertTabs inserts multiple tabs in the tabs table.
+func (a *API) InsertTabs(tabs ...*Tab) {
+	for _, tab := range tabs {
+		a.InsertTab(tab)
+	}
+}
+
 // InsertTab inserts a new tab in the tabs table.
-func (a *API) InsertTab(instrumentId int, difficultyId int, tuningId int, description string) {
-	_, err := a.Database.DB.Exec(insertTabQuery, instrumentId, difficultyId, tuningId, description)
+func (a *API) InsertTab(tab *Tab) {
+	_, err := a.Database.DB.Exec(insertTabQuery, tab.ID, tab.Instrument.ID, tab.Difficulty.ID, tab.Description)
 	if err != nil {
-		log.Printf("Failed inserting tab with Following IDs '%d', '%d', '%d' & Description: '%s': %s", instrumentId, difficultyId, tuningId, description, err.Error())
+		log.Printf("Failed to insert tab with '%s', '%s' & Description: '%s': %s", tab.Instrument.Name, tab.Difficulty.Name, tab.Description, err.Error())
 	} else {
-		log.Printf("Successfully inserted tab with Following IDs '%d', '%d', '%d' & Description: '%s'", instrumentId, difficultyId, tuningId, description)
+		log.Printf("Successfully inserted tab with '%s', '%s' & Description: '%s'", tab.Instrument.Name, tab.Difficulty.Name, tab.Description)
 	}
 }
