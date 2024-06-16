@@ -2,7 +2,7 @@ package users
 
 import "github.com/google/uuid"
 
-// User represents an artist
+// User represents a user.
 type User struct {
 	ID    uuid.UUID
 	Email string

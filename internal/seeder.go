@@ -3,6 +3,8 @@ package internal
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	api "github.com/shvdg-dev/tunes-to-tabs-api/pkg"
+	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
+	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
 	"log"
 )
 
@@ -29,6 +31,8 @@ func (s *Seeder) MinimumSeed() {
 		return
 	}
 	s.seedAdmin()
+	s.seedInstruments()
+	s.seedDifficulties()
 }
 
 // seedAdmin inserts an administrator user into the database.
@@ -40,6 +44,24 @@ func (s *Seeder) seedAdmin() {
 	} else {
 		log.Println("Did not insert the initial admin account as no credentials were defined")
 	}
+}
+
+// seedInstruments seeds the instruments table with the default instruments.
+func (s *Seeder) seedInstruments() {
+	s.API.Instruments.InsertInstruments(
+		inst.NewInstrument(InstrumentElectricGuitar),
+		inst.NewInstrument(InstrumentAcousticGuitar),
+		inst.NewInstrument(InstrumentBassGuitar),
+		inst.NewInstrument(InstrumentDrums))
+}
+
+// seedDifficulties seeds the difficulties table with the default difficulties.
+func (s *Seeder) seedDifficulties() {
+	s.API.Difficulties.InsertDifficulties(
+		diff.NewDifficulty(DifficultyEasy),
+		diff.NewDifficulty(DifficultyIntermediate),
+		diff.NewDifficulty(DifficultyHard),
+		diff.NewDifficulty(DifficultyExpert))
 }
 
 // DummySeed when permitted, seeds the database with dummy data.

@@ -2,7 +2,7 @@ package difficulties
 
 /*
 +----+---------------------+
-| ID |         Email        |
+| ID |         Name        |
 +----+---------------------+
 | 1  |  Easy               |
 | 2  |  Intermediate       |
@@ -13,12 +13,12 @@ This table is used to store Difficulty Levels in our system.
 
 It contains the following columns:
   - 'ID': This is an auto-incrementing integer that uniquely identifies a record.
-  - 'Email': This column records the name of the difficulty level.
+  - 'Name': This column records the name of the difficulty level.
 */
 const createDifficultiesTableQuery = `
 	CREATE TABLE IF NOT EXISTS difficulties (
 	   ID SERIAL PRIMARY KEY,
-	   Email VARCHAR(255) NOT NULL
+	   Name VARCHAR(255) NOT NULL
 	);
 `
 

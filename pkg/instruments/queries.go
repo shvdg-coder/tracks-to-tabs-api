@@ -2,7 +2,7 @@ package instruments
 
 /*
 +----+---------------------+
-| ID |         Email        |
+| ID |         Name        |
 +----+---------------------+
 | 1  |  Distortion Guitar  |
 | 2  |  Acoustic Guitar    |
@@ -12,12 +12,12 @@ This table is used to store Instruments in our system.
 
 It contains the following columns:
   - 'ID': This is an auto-incrementing integer that uniquely identifies a record.
-  - 'Email': This column records the name of the instrument.
+  - 'Name': This column records the name of the instrument.
 */
 const createInstrumentsTableQuery = `
 	CREATE TABLE IF NOT EXISTS instruments (
 	   ID SERIAL PRIMARY KEY,
-	   Email VARCHAR(255) NOT NULL
+	   Name VARCHAR(255) NOT NULL
 	);
 `
 

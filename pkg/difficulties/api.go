@@ -36,12 +36,19 @@ func (a *API) DropDifficultiesTable() {
 	}
 }
 
+// InsertDifficulties inserts multiple difficulty levels.
+func (a *API) InsertDifficulties(difficulties ...*Difficulty) {
+	for _, difficulty := range difficulties {
+		a.InsertDifficulty(difficulty)
+	}
+}
+
 // InsertDifficulty inserts a new difficulty level.
-func (a *API) InsertDifficulty(name string) {
-	_, err := a.Database.DB.Exec(insertDifficultyQuery, name)
+func (a *API) InsertDifficulty(difficulty *Difficulty) {
+	_, err := a.Database.DB.Exec(insertDifficultyQuery, difficulty.Name)
 	if err != nil {
-		log.Printf("Failed inserting difficulty level with Title: '%s': %s", name, err.Error())
+		log.Printf("Failed inserting difficulty level with name: '%s': %s", difficulty.Name, err.Error())
 	} else {
-		log.Printf("Successfully inserted difficulty level with Title: '%s'", name)
+		log.Printf("Successfully inserted difficulty level with name: '%s'", difficulty.Name)
 	}
 }

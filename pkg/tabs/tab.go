@@ -1,23 +1,25 @@
 package tabs
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
+	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
+)
 
-// Tabs represents an artist
-type Tabs struct {
-	ID           uuid.UUID
-	InstrumentID uint
-	DifficultyID uint
-	TuningID     uint
-	Description  string
+// Tab represents a tab.
+type Tab struct {
+	ID          uuid.UUID
+	Instrument  inst.Instrument
+	Difficulty  diff.Difficulty
+	Description string
 }
 
-// NewTab instantiates a new Tabs.
-func NewTab(instrumentId uint, difficultyId uint, tuningId uint, description string) *Tabs {
-	return &Tabs{
-		ID:           uuid.New(),
-		InstrumentID: instrumentId,
-		DifficultyID: difficultyId,
-		TuningID:     tuningId,
-		Description:  description,
+// NewTab instantiates a new Tab.
+func NewTab(instrument inst.Instrument, difficulty diff.Difficulty, description string) *Tab {
+	return &Tab{
+		ID:          uuid.New(),
+		Instrument:  instrument,
+		Difficulty:  difficulty,
+		Description: description,
 	}
 }
