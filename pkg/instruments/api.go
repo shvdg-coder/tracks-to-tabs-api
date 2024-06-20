@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-// API is for managing tabs and instruments.
+// API is for managing instruments.
 type API struct {
 	Database *logic.DatabaseManager
 }
