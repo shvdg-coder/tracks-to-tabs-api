@@ -7,6 +7,7 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/resources"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/sessions"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/sources"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/users"
@@ -16,9 +17,10 @@ import (
 type API struct {
 	Artists      *artists.API
 	Difficulties *difficulties.API
-	Resources    *resources.API
 	Instruments  *instruments.API
+	Resources    *resources.API
 	Sessions     *sessions.API
+	Sources      *sources.API
 	Tabs         *tabs.API
 	Tracks       *tracks.API
 	Users        *users.API
@@ -29,9 +31,10 @@ func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{
 		Artists:      artists.NewAPI(database),
 		Difficulties: difficulties.NewAPI(database),
-		Resources:    resources.NewAPI(database),
 		Instruments:  instruments.NewAPI(database),
+		Resources:    resources.NewAPI(database),
 		Sessions:     sessions.NewAPI(database),
+		Sources:      sources.NewAPI(database),
 		Tabs:         tabs.NewAPI(database),
 		Tracks:       tracks.NewAPI(database),
 		Users:        users.NewAPI(database),
