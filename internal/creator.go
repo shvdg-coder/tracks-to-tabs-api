@@ -34,6 +34,7 @@ func (c *Creator) CreateLookupTables() {
 
 // CreateStorageTables creates tables.
 func (c *Creator) CreateStorageTables() {
+	c.API.Sources.CreateSourcesTable()
 	c.API.Artists.CreateArtistsTable()
 	c.API.Endpoints.CreateEndpointsTable()
 	c.API.References.CreateResourcesTable()

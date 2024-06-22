@@ -21,7 +21,9 @@ const createTabsTableQuery = `
 	   ID UUID PRIMARY KEY,
 	   InstrumentID INT NOT NULL,
 	   DifficultyID INT NOT NULL,
-	   Description TEXT
+	   Description TEXT,
+	   CONSTRAINT fk_instrument FOREIGN KEY(InstrumentID) REFERENCES instruments(ID),
+	   CONSTRAINT fk_difficulty	FOREIGN KEY(DifficultyID) REFERENCES difficulties(ID)
 	);
 `
 

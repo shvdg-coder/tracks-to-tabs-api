@@ -21,7 +21,8 @@ const createEndpointsTableQuery = `
 	   SourceID INT NOT NULL,
 	   Category VARCHAR(250) NOT NULL, 
 	   Endpoint VARCHAR(250) NOT NULL,
-	   UNIQUE(SourceID, Category, Endpoint)                                    
+	   UNIQUE(SourceID, Category, Endpoint),  
+	   CONSTRAINT fk_source FOREIGN KEY(SourceID) REFERENCES sources(ID)
 	);
 `
 

@@ -27,7 +27,8 @@ const createReferencesTableQuery = `
 	   Category VARCHAR(250) NOT NULL, 
 	   Type VARCHAR(250) NOT NULL,
 	   Reference VARCHAR(250) NOT NULL,
-	   UNIQUE(InternalID, SourceID, Category, Type)                                    
+	   UNIQUE(InternalID, SourceID, Category, Type),
+       CONSTRAINT fk_source FOREIGN KEY(SourceID) REFERENCES sources(ID)
 	);
 `
 
