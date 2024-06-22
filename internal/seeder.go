@@ -1,6 +1,7 @@
 package internal
 
 import (
+	faker "github.com/brianvoe/gofakeit/v7"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	api "github.com/shvdg-dev/tunes-to-tabs-api/pkg"
 	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
@@ -10,13 +11,14 @@ import (
 
 // Seeder helps with deleting data from the database
 type Seeder struct {
+	Config  *Config
 	API     *api.API
 	Factory *Factory
 }
 
 // NewSeeder creates a new instance of Seeder
-func NewSeeder(api *api.API) *Seeder {
-	return &Seeder{API: api}
+func NewSeeder(config *Config, api *api.API) *Seeder {
+	return &Seeder{API: api, Config: config}
 }
 
 // SeedTables attempts to seed the database with the minimally required values and dummy data.
@@ -29,7 +31,7 @@ func (s *Seeder) SeedTables() {
 func (s *Seeder) initFactory() {
 	instruments := s.API.Instruments.GetInstruments()
 	difficulties := s.API.Difficulties.GetDifficulties()
-	s.Factory = NewFactory(instruments, difficulties)
+	s.Factory = NewFactory(s.Config, instruments, difficulties)
 }
 
 // minimumSeed when permitted, seeds the database with the minimally required values.
@@ -83,7 +85,7 @@ func (s *Seeder) dummySeed() {
 
 // seedDummyArtists inserts dummy artists, tracks, and tabs into the database.
 func (s *Seeder) seedDummyArtists() {
-	artists := s.Factory.CreateDummyArtists(1)
+	artists := s.Factory.CreateDummyArtists(uint(faker.Number(s.Config.Seeds.Tracks.Min, s.Config.Seeds.Tracks.Max)))
 	// Insert the artist
 	s.API.Artists.InsertArtists(artists...)
 	for _, artist := range artists {

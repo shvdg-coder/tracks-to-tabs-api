@@ -37,10 +37,10 @@ func (p *Purger) DropStorageTables() {
 	p.API.Artists.DropArtistsTable()
 	p.API.Endpoints.DropEndpointsTable()
 	p.API.References.DropResourcesTable()
-	p.API.Instruments.DropInstrumentsTable()
 	p.API.Sessions.DropSessionsTable()
-	p.API.Tabs.DropTabsTable()
 	p.API.Tracks.DropTracksTable()
+	p.API.Tabs.DropTabsTable()
+	p.API.Instruments.DropInstrumentsTable()
 	p.API.Users.DropUsersTable()
 }
 

@@ -1,7 +1,7 @@
 package internal
 
 import (
-	gofakeit "github.com/brianvoe/gofakeit/v7"
+	faker "github.com/brianvoe/gofakeit/v7"
 	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
 	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
@@ -11,13 +11,15 @@ import (
 
 // Factory helps with creating entities.
 type Factory struct {
+	Config       *Config
 	Instruments  []*inst.Instrument
 	Difficulties []*diff.Difficulty
 }
 
 // NewFactory creates a new Factory instance.
-func NewFactory(instruments []*inst.Instrument, difficulties []*diff.Difficulty) *Factory {
+func NewFactory(config *Config, instruments []*inst.Instrument, difficulties []*diff.Difficulty) *Factory {
 	return &Factory{
+		Config:       config,
 		Instruments:  instruments,
 		Difficulties: difficulties,
 	}
@@ -25,12 +27,12 @@ func NewFactory(instruments []*inst.Instrument, difficulties []*diff.Difficulty)
 
 // GetRandomInstrument returns a random instrument from the Factory's list of instruments.
 func (f *Factory) GetRandomInstrument() *inst.Instrument {
-	return f.Instruments[gofakeit.Number(0, len(f.Instruments)-1)]
+	return f.Instruments[faker.Number(0, len(f.Instruments)-1)]
 }
 
 // GetRandomDifficulty returns a random difficulty from the Factory's list of difficulties.
 func (f *Factory) GetRandomDifficulty() *diff.Difficulty {
-	return f.Difficulties[gofakeit.Number(0, len(f.Difficulties)-1)]
+	return f.Difficulties[faker.Number(0, len(f.Difficulties)-1)]
 }
 
 // CreateDummyArtists creates a specified amount of dummy artists.
@@ -45,8 +47,8 @@ func (f *Factory) CreateDummyArtists(amount uint) []*art.Artist {
 // CreateDummyArtist creates a dummy artist with a random name and tracks.
 func (f *Factory) CreateDummyArtist() *art.Artist {
 	return art.NewArtist(
-		gofakeit.HipsterWord(),
-		art.WithTracks(f.CreateDummyTracks(uint(gofakeit.Number(0, 20)))))
+		faker.HipsterWord(),
+		art.WithTracks(f.CreateDummyTracks(uint(faker.Number(f.Config.Seeds.Tracks.Min, f.Config.Seeds.Tracks.Max)))))
 }
 
 // CreateDummyTracks creates a specified amount of dummy tracks.
@@ -61,9 +63,9 @@ func (f *Factory) CreateDummyTracks(amount uint) []*trk.Track {
 // createDummyTrack creates a dummy track with a random title, duration, and tabs.
 func (f *Factory) createDummyTrack() *trk.Track {
 	return trk.NewTrack(
-		gofakeit.HipsterSentence(gofakeit.Number(1, 6)),
-		uint(gofakeit.Number(10000, 3000000)), // 1 to 5 minutes
-		trk.WithTabs(f.createDummyTabs(uint(gofakeit.Number(0, 4)))))
+		faker.HipsterSentence(faker.Number(1, 6)),
+		uint(faker.Number(10000, 3000000)), // 1 to 5 minutes
+		trk.WithTabs(f.createDummyTabs(uint(faker.Number(f.Config.Seeds.Tabs.Min, f.Config.Seeds.Tabs.Max)))))
 }
 
 // createDummyTabs creates a specified amount of dummy tabs.
@@ -77,5 +79,5 @@ func (f *Factory) createDummyTabs(amount uint) []*tabs.Tab {
 
 // CreateDummyTab creates a new dummy tab with a random instrument, difficulty, and description
 func (f *Factory) CreateDummyTab() *tabs.Tab {
-	return tabs.NewTab(f.GetRandomInstrument(), f.GetRandomDifficulty(), gofakeit.Name())
+	return tabs.NewTab(f.GetRandomInstrument(), f.GetRandomDifficulty(), faker.Name())
 }

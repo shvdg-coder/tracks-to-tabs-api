@@ -4,14 +4,14 @@ package endpoints
 type Endpoint struct {
 	SourceID int
 	Category string
-	Endpoint string
+	URL      string
 }
 
 // NewEndpoint instantiates a new Endpoint.
-func NewEndpoint(sourceId int, category, endpoint string) *Endpoint {
+func NewEndpoint(sourceId int, category, url string) *Endpoint {
 	return &Endpoint{
 		SourceID: sourceId,
 		Category: category,
-		Endpoint: endpoint,
+		URL:      url,
 	}
 }

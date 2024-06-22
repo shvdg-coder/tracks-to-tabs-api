@@ -11,6 +11,10 @@ const (
 )
 
 const (
+	PathConfig = "config.yaml"
+)
+
+const (
 	ValueDatabaseDriver      = "postgres"
 	CommandCreate            = "create"
 	CommandPurge             = "purge"

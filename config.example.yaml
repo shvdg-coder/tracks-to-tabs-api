@@ -1,0 +1,28 @@
+seeds:
+  artists:
+    min: 1
+    max: 1
+    tracks:
+      min: 0
+      max: 10
+      tabs:
+        min: 0
+        max: 4
+  sources:
+    - source:
+        name: 'Music Provider 1'
+    - source:
+        name: 'Tab Provider 1'
+  endpoints:
+    - endpoint:
+      source: 'Music Provider 1'
+      category: 'Artist'
+      URL: 'https://musicprovider1/artist/$s'
+    - endpoint:
+      source: 'Music Provider 1'
+      category: 'Track'
+      URL: 'https://musicprovider1/track/$s'
+    - endpoint:
+      source: 'Tab Provider 1'
+      category: 'Tab'
+      URL: 'https://tabprovider1/tab/$s'
