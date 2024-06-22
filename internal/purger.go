@@ -35,7 +35,7 @@ func (p *Purger) DropRelationLinkTables() {
 // DropStorageTables drops tables.
 func (p *Purger) DropStorageTables() {
 	p.API.Artists.DropArtistsTable()
-	p.API.Resources.DropResourcesTable()
+	p.API.References.DropResourcesTable()
 	p.API.Instruments.DropInstrumentsTable()
 	p.API.Sessions.DropSessionsTable()
 	p.API.Tabs.DropTabsTable()
