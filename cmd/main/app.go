@@ -21,13 +21,6 @@ func init() {
 	api = pkg.NewAPI(database)
 }
 
-// initDatabase initializes the database manager.
-func initDatabase() *logic.DatabaseManager {
-	URL := logic.GetEnvValueAsString(inter.KeyDatabaseURL)
-	database := logic.NewDatabaseManager(inter.ValueDatabaseDriver, URL)
-	return database
-}
-
 // initConfig initializes the application configuration.
 func initConfig() *inter.Config {
 	conf, err := inter.NewConfig(inter.PathConfig)
@@ -35,6 +28,13 @@ func initConfig() *inter.Config {
 		log.Fatalf("Could not load config")
 	}
 	return conf
+}
+
+// initDatabase initializes the database manager.
+func initDatabase() *logic.DatabaseManager {
+	URL := logic.GetEnvValueAsString(inter.KeyDatabaseURL)
+	database := logic.NewDatabaseManager(inter.ValueDatabaseDriver, URL)
+	return database
 }
 
 // main is the entry point of the application.
