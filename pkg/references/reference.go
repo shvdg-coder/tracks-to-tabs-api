@@ -11,8 +11,8 @@ type Reference struct {
 	Reference  string
 }
 
-// NewResource instantiates a new Reference.
-func NewResource(internalId, sourceId uuid.UUID, category, referenceType, reference string) *Reference {
+// NewReference instantiates a new Reference.
+func NewReference(internalId, sourceId uuid.UUID, category, referenceType, reference string) *Reference {
 	return &Reference{
 		InternalID: internalId,
 		SourceID:   sourceId,
