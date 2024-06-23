@@ -9,23 +9,36 @@ dummies:
     min: 0
     max: 4
 seeds:
+  instruments:
+    - id: 1
+      name: 'Electric Guitar'
+    - id: 2
+      name: 'Acoustic Guitar'
+    - id: 3
+      name: 'Bass Guitar'
+    - id: 4
+      name: 'Drums'
+  difficulties:
+    - id: 1
+      name: 'Easy'
+    - id: 2
+      name: 'Intermediate'
+    - id: 3
+      name: 'Hard'
+    - id: 4
+      name: 'Expert'
   sources:
-    - source:
-        id: 1
-        name: 'Music Provider 1'
-    - source:
-        id: 2
-        name: 'Tab Provider 1'
+    - id: 1
+      name: 'Music Provider 1'
+    - id: 2
+      name: 'Tab Provider 1'
   endpoints:
-    - endpoint:
-      sourceId: 1
+    - sourceId: 1
       category: 'Artist'
       url: 'https://musicprovider1/artist/$s'
-    - endpoint:
-      sourceId: 1
+    - sourceId: 1
       category: 'Track'
       url: 'https://musicprovider1/track/$s'
-    - endpoint:
-      sourceId: 2
+    - sourceId: 2
       category: 'Tab'
       url: 'https://tabprovider1/tab/$s'

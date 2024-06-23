@@ -15,16 +15,8 @@ const (
 )
 
 const (
-	ValueDatabaseDriver      = "postgres"
-	CommandCreate            = "create"
-	CommandPurge             = "purge"
-	CommandSeed              = "seed"
-	InstrumentElectricGuitar = "Electric Guitar"
-	InstrumentAcousticGuitar = "Acoustic Guitar"
-	InstrumentBassGuitar     = "Bass Guitar"
-	InstrumentDrums          = "Drums"
-	DifficultyEasy           = "Easy"
-	DifficultyIntermediate   = "Intermediate"
-	DifficultyHard           = "Hard"
-	DifficultyExpert         = "Expert"
+	ValueDatabaseDriver = "postgres"
+	CommandCreate       = "create"
+	CommandPurge        = "purge"
+	CommandSeed         = "seed"
 )

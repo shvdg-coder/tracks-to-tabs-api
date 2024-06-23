@@ -4,8 +4,6 @@ import (
 	faker "github.com/brianvoe/gofakeit/v7"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	api "github.com/shvdg-dev/tunes-to-tabs-api/pkg"
-	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
-	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
 	"log"
 )
 
@@ -28,6 +26,7 @@ func (s *Seeder) SeedTables() {
 	s.dummySeed()
 }
 
+// initFactory initializes the Factory with instruments and difficulties.
 func (s *Seeder) initFactory() {
 	instruments := s.API.Instruments.GetInstruments()
 	difficulties := s.API.Difficulties.GetDifficulties()
@@ -60,20 +59,12 @@ func (s *Seeder) seedAdmin() {
 
 // seedInstruments seeds the instruments table with the default instruments.
 func (s *Seeder) seedInstruments() {
-	s.API.Instruments.InsertInstruments(
-		inst.NewInstrument(InstrumentElectricGuitar),
-		inst.NewInstrument(InstrumentAcousticGuitar),
-		inst.NewInstrument(InstrumentBassGuitar),
-		inst.NewInstrument(InstrumentDrums))
+	s.API.Instruments.InsertInstruments(s.Config.Seeds.Instruments...)
 }
 
 // seedDifficulties seeds the difficulties table with the default difficulties.
 func (s *Seeder) seedDifficulties() {
-	s.API.Difficulties.InsertDifficulties(
-		diff.NewDifficulty(DifficultyEasy),
-		diff.NewDifficulty(DifficultyIntermediate),
-		diff.NewDifficulty(DifficultyHard),
-		diff.NewDifficulty(DifficultyExpert))
+	s.API.Difficulties.InsertDifficulties(s.Config.Seeds.Difficulties...)
 }
 
 // seedSources seeds the sources from the config file.

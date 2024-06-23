@@ -2,8 +2,8 @@ package difficulties
 
 // Difficulty represents a difficulty level.
 type Difficulty struct {
-	ID   uint
-	Name string
+	ID   uint   `yaml:"id"`
+	Name string `yaml:"name"`
 }
 
 // DifficultyConfig modifies a Difficulty with configuration options.

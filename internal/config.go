@@ -1,7 +1,9 @@
 package internal
 
 import (
+	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"
+	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
 	src "github.com/shvdg-dev/tunes-to-tabs-api/pkg/sources"
 	"gopkg.in/yaml.v2"
 	"os"
@@ -40,8 +42,10 @@ type Tabs struct {
 
 // Seeds represents the configuration with predefined seeds.
 type Seeds struct {
-	Sources   []*src.Source   `yaml:"sources"`
-	Endpoints []*end.Endpoint `yaml:"endpoints"`
+	Instruments  []*inst.Instrument `yaml:"instruments"`
+	Difficulties []*diff.Difficulty `yaml:"difficulties"`
+	Sources      []*src.Source      `yaml:"sources"`
+	Endpoints    []*end.Endpoint    `yaml:"endpoints"`
 }
 
 // NewConfig reads a file from the given path and unmarshalls its contents into a Config struct.
