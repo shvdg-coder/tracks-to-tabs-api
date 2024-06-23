@@ -36,7 +36,7 @@ func (p *Purger) DropRelationLinkTables() {
 func (p *Purger) DropStorageTables() {
 	p.API.Artists.DropArtistsTable()
 	p.API.Endpoints.DropEndpointsTable()
-	p.API.References.DropResourcesTable()
+	p.API.References.DropReferencesTable()
 	p.API.Sessions.DropSessionsTable()
 	p.API.Tracks.DropTracksTable()
 	p.API.Tabs.DropTabsTable()
@@ -48,4 +48,5 @@ func (p *Purger) DropStorageTables() {
 func (p *Purger) DropLookupTables() {
 	p.API.Instruments.DropInstrumentsTable()
 	p.API.Difficulties.DropDifficultiesTable()
+	p.API.Sources.DropSourcesTable()
 }

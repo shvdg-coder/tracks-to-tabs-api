@@ -47,7 +47,7 @@ func (a *API) InsertSources(sources ...*Source) {
 
 // InsertSource inserts a new source in the sources table.
 func (a *API) InsertSource(source *Source) {
-	_, err := a.Database.DB.Exec(insertSourceQuery, source.Name)
+	_, err := a.Database.DB.Exec(insertSourceQuery, source.ID, source.Name)
 	if err != nil {
 		log.Printf("Failed inserting source with name: '%s': %s", source.Name, err.Error())
 	} else {

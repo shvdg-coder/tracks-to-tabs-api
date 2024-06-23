@@ -18,7 +18,7 @@ It contains the following columns:
 */
 const createSourcesTableQuery = `
 	CREATE TABLE IF NOT EXISTS sources(
-	   ID SERIAL PRIMARY KEY,
+	   ID int PRIMARY KEY,
 	   Name VARCHAR(250) NOT NULL,
 	   UNIQUE(Name)                                    
 	);
@@ -31,8 +31,8 @@ const dropSourcesTableQuery = `
 
 // insertSourceQuery is a SQL to insert a new record into the 'sources' table
 const insertSourceQuery = `
-	INSERT INTO sources (Name)
-    VALUES ($1) 
+	INSERT INTO sources (ID, Name)
+    VALUES ($1, $2) 
 `
 
 // getSourcesQuery is a SQL to get all the records from the 'sources' table

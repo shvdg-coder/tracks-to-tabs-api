@@ -1,22 +1,23 @@
 package internal
 
 import (
+	end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"
+	src "github.com/shvdg-dev/tunes-to-tabs-api/pkg/sources"
 	"gopkg.in/yaml.v2"
 	"os"
 )
 
 // Config represents the configuration object for the application.
 type Config struct {
-	Seeds Seeds `yaml:"seeds"`
+	Dummies *Dummies `yaml:"dummies"`
+	Seeds   *Seeds   `yaml:"seeds"`
 }
 
-// Seeds represents the configuration for the seed data.
-type Seeds struct {
-	Artists   Artists    `yaml:"artists"`
-	Tracks    Tracks     `yaml:"tracks"`
-	Tabs      Tabs       `yaml:"tabs"`
-	Sources   []Source   `yaml:"sources"`
-	Endpoints []Endpoint `yaml:"endpoints"`
+// Dummies represents the configuration for generating dummies.
+type Dummies struct {
+	Artists *Artists `yaml:"artists"`
+	Tracks  *Tracks  `yaml:"tracks"`
+	Tabs    *Tabs    `yaml:"tabs"`
 }
 
 // Artists represents a struct for seeding artists.
@@ -37,16 +38,10 @@ type Tabs struct {
 	Max int `yaml:"max"`
 }
 
-// Source represents a struct for seeding a source.
-type Source struct {
-	Name string `yaml:"name"`
-}
-
-// Endpoint represents a struct for seeding an endpoint.
-type Endpoint struct {
-	Source   string `yaml:"source"`
-	Category string `yaml:"category"`
-	URL      string `yaml:"URL"`
+// Seeds represents the configuration with predefined seeds.
+type Seeds struct {
+	Sources   []*src.Source   `yaml:"sources"`
+	Endpoints []*end.Endpoint `yaml:"endpoints"`
 }
 
 // NewConfig reads a file from the given path and unmarshalls its contents into a Config struct.

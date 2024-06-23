@@ -35,6 +35,13 @@ func (a *API) DropEndpointsTable() {
 	}
 }
 
+// InsertEndpoints inserts multiple records into the endpoints table.
+func (a *API) InsertEndpoints(endpoints ...*Endpoint) {
+	for _, endpoint := range endpoints {
+		a.InsertEndpoint(endpoint)
+	}
+}
+
 // InsertEndpoint inserts a record into the endpoints table.
 func (a *API) InsertEndpoint(endpoint *Endpoint) {
 	_, err := a.Database.DB.Exec(insertEndpointQuery, endpoint.SourceID, endpoint.Category, endpoint.URL)

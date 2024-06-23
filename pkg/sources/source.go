@@ -2,8 +2,8 @@ package sources
 
 // Source represents a unique resource or provider.
 type Source struct {
-	ID   uint
-	Name string
+	ID   uint   `yaml:"id"`
+	Name string `yaml:"name"`
 }
 
 // SourceConfig modifies a Source with configuration options.

@@ -16,7 +16,7 @@ type Factory struct {
 	Difficulties []*diff.Difficulty
 }
 
-// NewFactory creates a new Factory instance.
+// NewFactory creates a new Dummies instance.
 func NewFactory(config *Config, instruments []*inst.Instrument, difficulties []*diff.Difficulty) *Factory {
 	return &Factory{
 		Config:       config,
@@ -48,7 +48,7 @@ func (f *Factory) CreateDummyArtists(amount uint) []*art.Artist {
 func (f *Factory) CreateDummyArtist() *art.Artist {
 	return art.NewArtist(
 		faker.HipsterWord(),
-		art.WithTracks(f.CreateDummyTracks(uint(faker.Number(f.Config.Seeds.Tracks.Min, f.Config.Seeds.Tracks.Max)))))
+		art.WithTracks(f.CreateDummyTracks(uint(faker.Number(f.Config.Dummies.Tracks.Min, f.Config.Dummies.Tracks.Max)))))
 }
 
 // CreateDummyTracks creates a specified amount of dummy tracks.
@@ -65,7 +65,7 @@ func (f *Factory) createDummyTrack() *trk.Track {
 	return trk.NewTrack(
 		faker.HipsterSentence(faker.Number(1, 6)),
 		uint(faker.Number(10000, 3000000)), // 1 to 5 minutes
-		trk.WithTabs(f.createDummyTabs(uint(faker.Number(f.Config.Seeds.Tabs.Min, f.Config.Seeds.Tabs.Max)))))
+		trk.WithTabs(f.createDummyTabs(uint(faker.Number(f.Config.Dummies.Tabs.Min, f.Config.Dummies.Tabs.Max)))))
 }
 
 // createDummyTabs creates a specified amount of dummy tabs.

@@ -47,8 +47,8 @@ This table is linking the 'artists' table and the 'tracks' table.
 */
 const createArtistTrackTableQuery = `
 	CREATE TABLE IF NOT EXISTS artist_track  (
-	   ArtistID UUID REFERENCES artists (id),
-	   TrackID UUID REFERENCES tracks (id),
+	   ArtistID UUID REFERENCES artists (ID),
+	   TrackID UUID REFERENCES tracks (ID),
 	   PRIMARY KEY (ArtistID, TrackID)
 	);
 `

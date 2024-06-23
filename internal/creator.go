@@ -30,14 +30,14 @@ func (c *Creator) CreateTables() {
 func (c *Creator) CreateLookupTables() {
 	c.API.Instruments.CreateInstrumentsTable()
 	c.API.Difficulties.CreateDifficultiesTable()
+	c.API.Sources.CreateSourcesTable()
+	c.API.Endpoints.CreateEndpointsTable()
 }
 
 // CreateStorageTables creates tables.
 func (c *Creator) CreateStorageTables() {
-	c.API.Sources.CreateSourcesTable()
 	c.API.Artists.CreateArtistsTable()
-	c.API.Endpoints.CreateEndpointsTable()
-	c.API.References.CreateResourcesTable()
+	c.API.References.CreateReferencesTable()
 	c.API.Sessions.CreateSessionsTable()
 	c.API.Tabs.CreateTabsTable()
 	c.API.Tracks.CreateTracksTable()

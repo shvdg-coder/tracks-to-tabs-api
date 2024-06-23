@@ -15,8 +15,8 @@ func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{Database: database}
 }
 
-// CreateResourcesTable creates the references table if it doesn't already exist.
-func (a *API) CreateResourcesTable() {
+// CreateReferencesTable creates the references table if it doesn't already exist.
+func (a *API) CreateReferencesTable() {
 	_, err := a.Database.DB.Exec(createReferencesTableQuery)
 	if err != nil {
 		log.Fatal(err)
@@ -25,8 +25,8 @@ func (a *API) CreateResourcesTable() {
 	}
 }
 
-// DropResourcesTable drops the references table if it exists.
-func (a *API) DropResourcesTable() {
+// DropReferencesTable drops the references table if it exists.
+func (a *API) DropReferencesTable() {
 	_, err := a.Database.DB.Exec(dropReferencesTableQuery)
 	if err != nil {
 		log.Fatal(err)
@@ -35,8 +35,8 @@ func (a *API) DropResourcesTable() {
 	}
 }
 
-// InsertResource inserts a record into the references table.
-func (a *API) InsertResource(reference *Reference) {
+// InsertReference inserts a record into the references table.
+func (a *API) InsertReference(reference *Reference) {
 	_, err := a.Database.DB.Exec(insertReferenceQuery, reference.InternalID, reference.SourceID, reference.Category, reference.Type, reference.Reference)
 	if err != nil {
 		log.Printf(

@@ -49,8 +49,8 @@ This table is used to link the 'tracks' table and the 'tabs' table.
 */
 const createTrackTabTableQuery = `
 	CREATE TABLE IF NOT EXISTS track_tab  (
-	   TrackID UUID REFERENCES tracks (id),
-	   TabID UUID REFERENCES tabs (id),
+	   TrackID UUID REFERENCES tracks (ID),
+	   TabID UUID REFERENCES tabs (ID),
 	   PRIMARY KEY (TrackID, TabID)
 	);
 `

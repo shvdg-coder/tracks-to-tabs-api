@@ -1,4 +1,4 @@
-seeds:
+dummies:
   artists:
     min: 1
     max: 1
@@ -8,21 +8,24 @@ seeds:
   tabs:
     min: 0
     max: 4
+seeds:
   sources:
     - source:
+        id: 1
         name: 'Music Provider 1'
     - source:
+        id: 2
         name: 'Tab Provider 1'
   endpoints:
     - endpoint:
-      source: 'Music Provider 1'
+      sourceId: 1
       category: 'Artist'
-      URL: 'https://musicprovider1/artist/$s'
+      url: 'https://musicprovider1/artist/$s'
     - endpoint:
-      source: 'Music Provider 1'
+      sourceId: 1
       category: 'Track'
-      URL: 'https://musicprovider1/track/$s'
+      url: 'https://musicprovider1/track/$s'
     - endpoint:
-      source: 'Tab Provider 1'
+      sourceId: 2
       category: 'Tab'
-      URL: 'https://tabprovider1/tab/$s'
+      url: 'https://tabprovider1/tab/$s'

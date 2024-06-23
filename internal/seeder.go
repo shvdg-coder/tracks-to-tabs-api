@@ -43,6 +43,8 @@ func (s *Seeder) minimumSeed() {
 	s.seedAdmin()
 	s.seedInstruments()
 	s.seedDifficulties()
+	s.seedSources()
+	s.seedEndpoints()
 }
 
 // seedAdmin inserts an administrator user into the database.
@@ -74,6 +76,16 @@ func (s *Seeder) seedDifficulties() {
 		diff.NewDifficulty(DifficultyExpert))
 }
 
+// seedSources seeds the sources from the config file.
+func (s *Seeder) seedSources() {
+	s.API.Sources.InsertSources(s.Config.Seeds.Sources...)
+}
+
+// seedEndpoints seeds the endpoints from the config file.
+func (s *Seeder) seedEndpoints() {
+	s.API.Endpoints.InsertEndpoints(s.Config.Seeds.Endpoints...)
+}
+
 // dummySeed when permitted, seeds the database with dummy data.
 func (s *Seeder) dummySeed() {
 	if !logic.GetEnvValueAsBoolean(KeyDatabaseAllowDummySeedingCommand) {
@@ -85,7 +97,7 @@ func (s *Seeder) dummySeed() {
 
 // seedDummyArtists inserts dummy artists, tracks, and tabs into the database.
 func (s *Seeder) seedDummyArtists() {
-	artists := s.Factory.CreateDummyArtists(uint(faker.Number(s.Config.Seeds.Tracks.Min, s.Config.Seeds.Tracks.Max)))
+	artists := s.Factory.CreateDummyArtists(uint(faker.Number(s.Config.Dummies.Tracks.Min, s.Config.Dummies.Tracks.Max)))
 	// Insert the artist
 	s.API.Artists.InsertArtists(artists...)
 	for _, artist := range artists {
