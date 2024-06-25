@@ -44,16 +44,16 @@ func (a *API) InsertEndpoints(endpoints ...*Endpoint) {
 
 // InsertEndpoint inserts a record into the endpoints table.
 func (a *API) InsertEndpoint(endpoint *Endpoint) {
-	_, err := a.Database.DB.Exec(insertEndpointQuery, endpoint.SourceID, endpoint.Category, endpoint.URL)
+	_, err := a.Database.DB.Exec(insertEndpointQuery, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL)
 	if err != nil {
 		log.Printf(
-			"Failed to insert endpoint with SourceID '%d', Category '%s', and URL '%s': %s",
-			endpoint.SourceID, endpoint.Category, endpoint.URL, err.Error(),
+			"Failed to insert endpoint with SourceID '%d', Category '%s', Type '%s', and URL '%s': %s",
+			endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL, err.Error(),
 		)
 	} else {
 		log.Printf(
-			"Successfully inserted endpoint into the 'endpoints' table with SourceID '%d', Category '%s', and URL '%s'",
-			endpoint.SourceID, endpoint.Category, endpoint.URL,
+			"Successfully inserted endpoint into the 'endpoints' table with SourceID '%d', Category '%s', Type '%s', and URL '%s'",
+			endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL,
 		)
 	}
 }

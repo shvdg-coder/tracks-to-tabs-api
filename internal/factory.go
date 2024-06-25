@@ -5,24 +5,42 @@ import (
 	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
 	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
+	src "github.com/shvdg-dev/tunes-to-tabs-api/pkg/sources"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
 	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 )
 
 // Factory helps with creating entities.
 type Factory struct {
-	Config       *Config
+	Dummies      *Dummies
+	Sources      []*src.Source
 	Instruments  []*inst.Instrument
 	Difficulties []*diff.Difficulty
 }
 
-// NewFactory creates a new Dummies instance.
-func NewFactory(config *Config, instruments []*inst.Instrument, difficulties []*diff.Difficulty) *Factory {
+// NewFactory creates a new Seeding.Dummies instance.
+func NewFactory(dummies *Dummies, instruments []*inst.Instrument, difficulties []*diff.Difficulty) *Factory {
 	return &Factory{
-		Config:       config,
+		Dummies:      dummies,
 		Instruments:  instruments,
 		Difficulties: difficulties,
 	}
+}
+
+// GetRandomSource returns a random source that has the provided categories, from the Factory's list of sources.
+func (f *Factory) GetRandomSource(categories ...string) *src.Source {
+	var matchingSources []*src.Source
+	for _, source := range f.Sources {
+		if source.HasCategories(categories...) {
+			matchingSources = append(matchingSources, source)
+		}
+	}
+
+	if len(matchingSources) == 0 {
+		return nil
+	}
+
+	return matchingSources[faker.Number(0, len(matchingSources)-1)]
 }
 
 // GetRandomInstrument returns a random instrument from the Factory's list of instruments.
@@ -48,7 +66,7 @@ func (f *Factory) CreateDummyArtists(amount uint) []*art.Artist {
 func (f *Factory) CreateDummyArtist() *art.Artist {
 	return art.NewArtist(
 		faker.HipsterWord(),
-		art.WithTracks(f.CreateDummyTracks(uint(faker.Number(f.Config.Dummies.Tracks.Min, f.Config.Dummies.Tracks.Max)))))
+		art.WithTracks(f.CreateDummyTracks(uint(faker.Number(f.Dummies.Tracks.Min, f.Dummies.Tracks.Max)))))
 }
 
 // CreateDummyTracks creates a specified amount of dummy tracks.
@@ -65,7 +83,7 @@ func (f *Factory) createDummyTrack() *trk.Track {
 	return trk.NewTrack(
 		faker.HipsterSentence(faker.Number(1, 6)),
 		uint(faker.Number(10000, 3000000)), // 1 to 5 minutes
-		trk.WithTabs(f.createDummyTabs(uint(faker.Number(f.Config.Dummies.Tabs.Min, f.Config.Dummies.Tabs.Max)))))
+		trk.WithTabs(f.createDummyTabs(uint(faker.Number(f.Dummies.Tabs.Min, f.Dummies.Tabs.Max)))))
 }
 
 // createDummyTabs creates a specified amount of dummy tabs.

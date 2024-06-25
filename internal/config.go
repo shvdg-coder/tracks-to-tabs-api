@@ -11,8 +11,16 @@ import (
 
 // Config represents the configuration object for the application.
 type Config struct {
-	Dummies *Dummies `yaml:"dummies"`
-	Seeds   *Seeds   `yaml:"seeds"`
+	Seeding *Seeding `yaml:"seeding"`
+}
+
+// Seeding represents the configuration with predefined seeds.
+type Seeding struct {
+	Dummies      *Dummies           `yaml:"dummies"`
+	Instruments  []*inst.Instrument `yaml:"instruments"`
+	Difficulties []*diff.Difficulty `yaml:"difficulties"`
+	Sources      []*src.Source      `yaml:"sources"`
+	Endpoints    []*end.Endpoint    `yaml:"endpoints"`
 }
 
 // Dummies represents the configuration for generating dummies.
@@ -38,14 +46,6 @@ type Tracks struct {
 type Tabs struct {
 	Min int `yaml:"min"`
 	Max int `yaml:"max"`
-}
-
-// Seeds represents the configuration with predefined seeds.
-type Seeds struct {
-	Instruments  []*inst.Instrument `yaml:"instruments"`
-	Difficulties []*diff.Difficulty `yaml:"difficulties"`
-	Sources      []*src.Source      `yaml:"sources"`
-	Endpoints    []*end.Endpoint    `yaml:"endpoints"`
 }
 
 // NewConfig reads a file from the given path and unmarshalls its contents into a Config struct.

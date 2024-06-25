@@ -4,14 +4,16 @@ package endpoints
 type Endpoint struct {
 	SourceID int    `yaml:"sourceId"`
 	Category string `yaml:"category"`
+	Type     string `yaml:"type"`
 	URL      string `yaml:"url"`
 }
 
 // NewEndpoint instantiates a new Endpoint.
-func NewEndpoint(sourceId int, category, url string) *Endpoint {
+func NewEndpoint(sourceId int, category, endpointType, url string) *Endpoint {
 	return &Endpoint{
 		SourceID: sourceId,
 		Category: category,
+		Type:     endpointType,
 		URL:      url,
 	}
 }

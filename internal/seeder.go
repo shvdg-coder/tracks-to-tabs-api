@@ -16,21 +16,16 @@ type Seeder struct {
 
 // NewSeeder creates a new instance of Seeder
 func NewSeeder(config *Config, api *api.API) *Seeder {
-	return &Seeder{API: api, Config: config}
+	return &Seeder{
+		API:     api,
+		Config:  config,
+		Factory: NewFactory(config.Seeding.Dummies, config.Seeding.Instruments, config.Seeding.Difficulties)}
 }
 
 // SeedTables attempts to seed the database with the minimally required values and dummy data.
 func (s *Seeder) SeedTables() {
 	s.minimumSeed()
-	s.initFactory()
 	s.dummySeed()
-}
-
-// initFactory initializes the Factory with instruments and difficulties.
-func (s *Seeder) initFactory() {
-	instruments := s.API.Instruments.GetInstruments()
-	difficulties := s.API.Difficulties.GetDifficulties()
-	s.Factory = NewFactory(s.Config, instruments, difficulties)
 }
 
 // minimumSeed when permitted, seeds the database with the minimally required values.
@@ -59,22 +54,22 @@ func (s *Seeder) seedAdmin() {
 
 // seedInstruments seeds the instruments table with the default instruments.
 func (s *Seeder) seedInstruments() {
-	s.API.Instruments.InsertInstruments(s.Config.Seeds.Instruments...)
+	s.API.Instruments.InsertInstruments(s.Config.Seeding.Instruments...)
 }
 
 // seedDifficulties seeds the difficulties table with the default difficulties.
 func (s *Seeder) seedDifficulties() {
-	s.API.Difficulties.InsertDifficulties(s.Config.Seeds.Difficulties...)
+	s.API.Difficulties.InsertDifficulties(s.Config.Seeding.Difficulties...)
 }
 
 // seedSources seeds the sources from the config file.
 func (s *Seeder) seedSources() {
-	s.API.Sources.InsertSources(s.Config.Seeds.Sources...)
+	s.API.Sources.InsertSources(s.Config.Seeding.Sources...)
 }
 
 // seedEndpoints seeds the endpoints from the config file.
 func (s *Seeder) seedEndpoints() {
-	s.API.Endpoints.InsertEndpoints(s.Config.Seeds.Endpoints...)
+	s.API.Endpoints.InsertEndpoints(s.Config.Seeding.Endpoints...)
 }
 
 // dummySeed when permitted, seeds the database with dummy data.
@@ -88,7 +83,8 @@ func (s *Seeder) dummySeed() {
 
 // seedDummyArtists inserts dummy artists, tracks, and tabs into the database.
 func (s *Seeder) seedDummyArtists() {
-	artists := s.Factory.CreateDummyArtists(uint(faker.Number(s.Config.Dummies.Tracks.Min, s.Config.Dummies.Tracks.Max)))
+	artists := s.Factory.CreateDummyArtists(
+		uint(faker.Number(s.Config.Seeding.Dummies.Tracks.Min, s.Config.Seeding.Dummies.Tracks.Max)))
 	// Insert the artist
 	s.API.Artists.InsertArtists(artists...)
 	for _, artist := range artists {
