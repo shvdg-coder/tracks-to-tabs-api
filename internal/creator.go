@@ -18,8 +18,8 @@ func NewCreator(API *api.API) *Creator {
 
 // CreateTables when permitted, creates tables in the database
 func (c *Creator) CreateTables() {
-	if !logic.GetEnvValueAsBoolean(KeyDatabaseAllowCreatingCommand) {
-		log.Fatalf("It is not allowed to create new tables for the database")
+	if !logic.GetEnvValueAsBoolean(KeyDatabaseEnableCreatingCommand) {
+		log.Fatalf("Did not create new tables for the database, as it was disabled")
 	}
 	c.CreateLookupTables()
 	c.CreateStorageTables()

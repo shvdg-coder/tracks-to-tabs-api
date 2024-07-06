@@ -57,7 +57,7 @@ func handleArg(arg string) {
 	case inter.CommandPurge:
 		inter.NewPurger(api).DropTables()
 	case inter.CommandSeed:
-		inter.NewSeeder(config, api).SeedTables()
+		inter.NewSeeder(config.Seeding, api).Seed()
 	default:
 		printErrorAndExit()
 	}

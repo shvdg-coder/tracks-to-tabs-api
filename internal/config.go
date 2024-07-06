@@ -1,6 +1,7 @@
 package internal
 
 import (
+	faker "github.com/brianvoe/gofakeit/v7"
 	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"
 	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
@@ -26,26 +27,38 @@ type Seeding struct {
 // Dummies represents the configuration for generating dummies.
 type Dummies struct {
 	Artists *Artists `yaml:"artists"`
-	Tracks  *Tracks  `yaml:"tracks"`
-	Tabs    *Tabs    `yaml:"tabs"`
 }
 
 // Artists represents a struct for seeding artists.
 type Artists struct {
-	Min int `yaml:"min"`
-	Max int `yaml:"max"`
+	Min    int     `yaml:"min"`
+	Max    int     `yaml:"max"`
+	Tracks *Tracks `yaml:"tracks"`
+}
+
+func (a *Artists) randomAmount() uint {
+	return uint(faker.Number(a.Min, a.Max))
 }
 
 // Tracks represents a struct for seeding tracks.
 type Tracks struct {
-	Min int `yaml:"min"`
-	Max int `yaml:"max"`
+	Min  int   `yaml:"min"`
+	Max  int   `yaml:"max"`
+	Tabs *Tabs `yaml:"tabs"`
+}
+
+func (t *Tracks) randomAmount() uint {
+	return uint(faker.Number(t.Min, t.Max))
 }
 
 // Tabs represents a struct for seeing tabs.
 type Tabs struct {
 	Min int `yaml:"min"`
 	Max int `yaml:"max"`
+}
+
+func (t *Tabs) randomAmount() uint {
+	return uint(faker.Number(t.Min, t.Max))
 }
 
 // NewConfig reads a file from the given path and unmarshalls its contents into a Config struct.

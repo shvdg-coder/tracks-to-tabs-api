@@ -1,7 +1,6 @@
 package internal
 
 import (
-	faker "github.com/brianvoe/gofakeit/v7"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	api "github.com/shvdg-dev/tunes-to-tabs-api/pkg"
 	"log"
@@ -9,29 +8,29 @@ import (
 
 // Seeder helps with deleting data from the database
 type Seeder struct {
-	Config  *Config
+	Seeding *Seeding
 	API     *api.API
 	Factory *Factory
 }
 
 // NewSeeder creates a new instance of Seeder
-func NewSeeder(config *Config, api *api.API) *Seeder {
+func NewSeeder(seeding *Seeding, api *api.API) *Seeder {
 	return &Seeder{
+		Seeding: seeding,
 		API:     api,
-		Config:  config,
-		Factory: NewFactory(config.Seeding.Dummies, config.Seeding.Instruments, config.Seeding.Difficulties)}
+		Factory: NewFactory(seeding.Instruments, seeding.Difficulties)}
 }
 
-// SeedTables attempts to seed the database with the minimally required values and dummy data.
-func (s *Seeder) SeedTables() {
+// Seed attempts to seed the database with the minimally required values and dummy data.
+func (s *Seeder) Seed() {
 	s.minimumSeed()
 	s.dummySeed()
 }
 
 // minimumSeed when permitted, seeds the database with the minimally required values.
 func (s *Seeder) minimumSeed() {
-	if !logic.GetEnvValueAsBoolean(KeyDatabaseAllowMinimumSeedingCommand) {
-		log.Println("It is not allowed to seed the database with the minimally required values.")
+	if !logic.GetEnvValueAsBoolean(KeyDatabaseEnableMinimumSeedingCommand) {
+		log.Println("Did not seed the database with the minimally required values, as it was disabled.")
 		return
 	}
 	s.seedAdmin()
@@ -54,38 +53,32 @@ func (s *Seeder) seedAdmin() {
 
 // seedInstruments seeds the instruments table with the default instruments.
 func (s *Seeder) seedInstruments() {
-	s.API.Instruments.InsertInstruments(s.Config.Seeding.Instruments...)
+	s.API.Instruments.InsertInstruments(s.Seeding.Instruments...)
 }
 
 // seedDifficulties seeds the difficulties table with the default difficulties.
 func (s *Seeder) seedDifficulties() {
-	s.API.Difficulties.InsertDifficulties(s.Config.Seeding.Difficulties...)
+	s.API.Difficulties.InsertDifficulties(s.Seeding.Difficulties...)
 }
 
 // seedSources seeds the sources from the config file.
 func (s *Seeder) seedSources() {
-	s.API.Sources.InsertSources(s.Config.Seeding.Sources...)
+	s.API.Sources.InsertSources(s.Seeding.Sources...)
 }
 
 // seedEndpoints seeds the endpoints from the config file.
 func (s *Seeder) seedEndpoints() {
-	s.API.Endpoints.InsertEndpoints(s.Config.Seeding.Endpoints...)
+	s.API.Endpoints.InsertEndpoints(s.Seeding.Endpoints...)
 }
 
 // dummySeed when permitted, seeds the database with dummy data.
 func (s *Seeder) dummySeed() {
-	if !logic.GetEnvValueAsBoolean(KeyDatabaseAllowDummySeedingCommand) {
-		log.Println("It is not allowed to seed the database with dummy data.")
+	if !logic.GetEnvValueAsBoolean(KeyDatabaseEnableDummySeedingCommand) {
+		log.Println("Did not seed the database with dummy data, as it was disabled.")
 		return
 	}
-	s.seedDummyArtists()
-}
-
-// seedDummyArtists inserts dummy artists, tracks, and tabs into the database.
-func (s *Seeder) seedDummyArtists() {
-	artists := s.Factory.CreateDummyArtists(
-		uint(faker.Number(s.Config.Seeding.Dummies.Tracks.Min, s.Config.Seeding.Dummies.Tracks.Max)))
-	// Insert the artist
+	artists := s.Factory.CreateDummyArtists(s.Seeding.Dummies.Artists)
+	// Insert the artists
 	s.API.Artists.InsertArtists(artists...)
 	for _, artist := range artists {
 		// Insert the tracks of an artist
@@ -96,3 +89,11 @@ func (s *Seeder) seedDummyArtists() {
 		}
 	}
 }
+
+//TODO: Create seperate functions for seeding, each accepting arguments. Tracks do it for the provided art and tabs do it for the provided trcks.
+//TODO: Create a seeder for the references table. One for art, one for trcks (the same as artist), and one for tabs.
+//TODO: Put error messages somewhere, string format
+//TODO: Better deal with errors and logging
+//TODO: Add unit tests
+//TODO: Add integration tests
+//TODO: Create views?

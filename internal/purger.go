@@ -18,7 +18,7 @@ func NewPurger(API *api.API) *Purger {
 
 // DropTables when permitted, drops the tables in the database
 func (p *Purger) DropTables() {
-	if !logic.GetEnvValueAsBoolean(KeyDatabaseAllowPurgingCommand) {
+	if !logic.GetEnvValueAsBoolean(KeyDatabaseEnablePurgingCommand) {
 		log.Fatalf("It is not allowed to purge the database")
 	}
 	p.DropRelationLinkTables()
