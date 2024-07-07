@@ -4,9 +4,9 @@ package endpoints
 +---------------------------------------------------------------+
 |   source_id  | category   | type      | url                   |
 +---------------------------------------------------------------+
-| 1001         | artist     | web       | /artist/$s            |
-| 1001         | track      | web       | /track/$s             |
-| 1003         | tab        | api       | /tab/$s               |
+| 1001         | artist     | web       | /artist/{artistID}    |
+| 1001         | track      | web       | /track/{trackID}      |
+| 1003         | tab        | api       | /tab/{trackID}        |
 +---------------------------------------------------------------+
 
 The table 'endpoints' is used to store various endpoints for internal records.
@@ -40,14 +40,14 @@ const insertEndpointQuery = `
 `
 
 /*
-+-------------+-------------------+-------------------+-------------------+---------------+-----------------------------------+
-| source_id   |  source_name      | source_category   | endpoint_category | endpoint_type | endpoint_url                      |
-+-------------+-------------------+-------------------+-------------------+---------------+-----------------------------------+
-| 1000        | Music Provider 1  | music             | artist            | web           | https://musicprovider1/artist/$s  |
-| 1000        | Music Provider 1  | music             | track             | web           | https://musicprovider1/track/$s   |
-| 2000        | Tab Provider 1    | tabs              | artist            | web           | https://tabprovider1/artist/$s    |
-| 2000        | Tab Provider 1    | tabs              | tab               | api           | https://tabprovider1/artist/api/$s|
-+-------------+-------------------+-------------------+-------------------+---------------+-----------------------------------+
++-------------+-------------------+-------------------+-------------------+---------------+--------------------------------------------+
+| source_id   |  source_name      | source_category   | endpoint_category | endpoint_type | endpoint_url                               |
++-------------+-------------------+-------------------+-------------------+---------------+--------------------------------------------+
+| 1000        | Music Provider 1  | music             | artist            | web           | https://musicprovider1/artist/{artistID}   |
+| 1000        | Music Provider 1  | music             | track             | web           | https://musicprovider1/track/{trackID}     |
+| 2000        | Tab Provider 1    | tabs              | artist            | web           | https://tabprovider1/artist/{artistID}     |
+| 2000        | Tab Provider 1    | tabs              | artist            | api           | https://tabprovider1/artist/api/{artistID} |
++-------------+-------------------+-------------------+-------------------+---------------+--------------------------------------------+
 
 This view is used to display a combination of Source and Endpoint information in our system.
 

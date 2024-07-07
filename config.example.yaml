@@ -11,22 +11,22 @@ seeding:
           max: 1
   instruments:
     - id: 1
-      name: 'Electric Guitar'
+      name: 'electric guitar'
     - id: 2
-      name: 'Acoustic Guitar'
+      name: 'acoustic guitar'
     - id: 3
-      name: 'Bass Guitar'
+      name: 'bass guitar'
     - id: 4
-      name: 'Drums'
+      name: 'drums'
   difficulties:
     - id: 1
-      name: 'Easy'
+      name: 'easy'
     - id: 2
-      name: 'Intermediate'
+      name: 'intermediate'
     - id: 3
-      name: 'Hard'
+      name: 'hard'
     - id: 4
-      name: 'Expert'
+      name: 'expert'
   sources:
     - id: 1000
       name: 'Music Provider 1'
@@ -38,16 +38,20 @@ seeding:
     - sourceId: 1000
       category: 'artist'
       type: 'web'
-      url: 'https://musicprovider1/artist/$s'
+      url: 'https://musicprovider1/artist/{artistID}'
     - sourceId: 1000
       category: 'track'
       type: 'web'
-      url: 'https://musicprovider1/track/$s'
+      url: 'https://musicprovider1/track/{trackID}'
     - sourceId: 2000
       category: 'artist'
       type: 'web'
-      url: 'https://tabprovider1/artist/$s'
+      url: 'https://tabprovider1/artist/{artistID}'
     - sourceId: 2000
       category: 'tab'
+      type: 'web'
+      url: 'https://tabprovider1/track/{trackID}'
+    - sourceId: 2000
+      category: 'artist'
       type: 'api'
-      url: 'https://tabprovider1/artist/api/$s'
+      url: 'https://tabprovider1/artist/api/{artistID}'
