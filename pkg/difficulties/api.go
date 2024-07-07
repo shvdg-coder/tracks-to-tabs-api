@@ -1,7 +1,6 @@
 package difficulties
 
 import (
-	"database/sql"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
@@ -51,40 +50,5 @@ func (a *API) InsertDifficulty(difficulty *Difficulty) {
 		log.Printf("Failed inserting difficulty level with name: '%s': %s", difficulty.Name, err.Error())
 	} else {
 		log.Printf("Successfully inserted difficulty level with name: '%s'", difficulty.Name)
-	}
-}
-
-// rowsToDifficulties converts the given *sql.Rows into a slice of *Difficulty objects.
-func rowsToDifficulties(rows *sql.Rows) []*Difficulty {
-	var difficulties []*Difficulty
-	for rows.Next() {
-		difficulty := rowsToDifficulty(rows)
-		if difficulty != nil {
-			difficulties = append(difficulties, difficulty)
-		}
-	}
-	return difficulties
-}
-
-// rowsToDifficulty scans the SQL row into a Difficulty struct.
-func rowsToDifficulty(rows *sql.Rows) *Difficulty {
-	var difficulty Difficulty
-	err := rows.Scan(&difficulty.ID, &difficulty.Name)
-	if err != nil {
-		log.Printf("Unable to scan difficulty: %s", err.Error())
-		return nil
-	}
-	return &difficulty
-}
-
-// closeRows closes the SQL rows and logs error if any.
-func closeRows(rows *sql.Rows) {
-	err := rows.Err()
-	if err != nil {
-		log.Printf("Error while processing rows: %s", err.Error())
-	}
-	err = rows.Close()
-	if err != nil {
-		log.Printf("Failed to close rows: %s", err.Error())
 	}
 }

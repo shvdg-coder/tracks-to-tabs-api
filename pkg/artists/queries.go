@@ -69,7 +69,7 @@ const insertArtistTrackQuery = `
 |  artist_id       | artist_name  |  track_id    |   track_title      |  track_duration  |     tab_id    |   instrument_id   | instrument_name  | difficulty_id  | difficulty_name  | description          |
 +---------------------------------+--------------+--------------------+------------------+---------------+-------------------+------------------+----------------+------------------+----------------------+
 | 234e5678-e90c... | Sting        |     600      | Englishman in NY   |   140305         | 123e4567-e... |  700              |  Bass guitar     | 500            | Intermediate     | Sting playing bass   |
-| 234e5678-e90c... | B.B. King    |     650      | The Thrill is Gone |   124022         | 123e4569-e... |  785              |  Electric guitar | 530            | Advanced         | B.B. King's solo     |
+| 234e5649-e90c... | B.B. King    |     650      | The Thrill is Gone |   124022         | 123e4569-e... |  785              |  Electric guitar | 530            | Advanced         | B.B. King's solo     |
 +------------------+--------------+--------------+--------------------+------------------+---------------+-------------------+------------------+----------------+------------------+----------------------+
 
 This view is used to display a comprehensive listing of Artist, Track, and Tab information in our system.

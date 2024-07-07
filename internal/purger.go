@@ -16,8 +16,8 @@ func NewPurger(API *api.API) *Purger {
 	return &Purger{API: API}
 }
 
-// DropTables when permitted, drops the tables in the database
-func (p *Purger) DropTables() {
+// Purge when permitted, drops the tables in the database
+func (p *Purger) Purge() {
 	if !logic.GetEnvValueAsBoolean(KeyDatabaseEnablePurgingCommand) {
 		log.Fatalf("It is not allowed to purge the database")
 	}

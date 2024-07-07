@@ -55,7 +55,7 @@ func handleArg(arg string) {
 	case inter.CommandCreate:
 		inter.NewCreator(api).Create()
 	case inter.CommandPurge:
-		inter.NewPurger(api).DropTables()
+		inter.NewPurger(api).Purge()
 	case inter.CommandSeed:
 		inter.NewSeeder(config.Seeding, api).Seed()
 	default:
