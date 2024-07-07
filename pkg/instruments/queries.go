@@ -31,8 +31,3 @@ const insertInstrumentQuery = `
 	INSERT INTO instruments (name)
     VALUES ($1) 
 `
-
-// getInstrumentsQuery is a SQL query string used to retrieve all instruments from the 'instruments' table.
-const getInstrumentsQuery = `
-	SELECT id, name FROM instruments
-`

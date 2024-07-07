@@ -54,20 +54,6 @@ func (a *API) InsertDifficulty(difficulty *Difficulty) {
 	}
 }
 
-// GetDifficulties retrieves the difficulties.
-func (a *API) GetDifficulties() []*Difficulty {
-	rows, err := a.Database.DB.Query(getDifficultiesQuery)
-	if err != nil {
-		log.Printf("Failed to get difficulties: %s", err)
-		return nil
-	}
-
-	difficulties := rowsToDifficulties(rows)
-	defer closeRows(rows)
-
-	return difficulties
-}
-
 // rowsToDifficulties converts the given *sql.Rows into a slice of *Difficulty objects.
 func rowsToDifficulties(rows *sql.Rows) []*Difficulty {
 	var difficulties []*Difficulty

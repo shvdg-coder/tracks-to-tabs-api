@@ -37,11 +37,6 @@ const insertSourceQuery = `
     VALUES ($1, $2, $3) 
 `
 
-// getSourcesQuery is a SQL to get all the records from the 'sources' table
-const getSourcesQuery = `
-	SELECT id, name, category FROM sources
-`
-
 /*
 +-------------+-------------------+-------------------+-------------------+---------------+--------------------------------------------+
 | source_id   |  source_name      | source_category   | endpoint_category | endpoint_type | endpoint_url                               |

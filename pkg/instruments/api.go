@@ -55,20 +55,6 @@ func (a *API) InsertInstrument(instrument *Instrument) {
 	}
 }
 
-// GetInstruments retrieves the instruments.
-func (a *API) GetInstruments() []*Instrument {
-	rows, err := a.Database.DB.Query(getInstrumentsQuery)
-	if err != nil {
-		log.Printf("Failed to get instruments: %s", err)
-		return nil
-	}
-
-	instruments := rowsToInstruments(rows)
-	defer closeRows(rows)
-
-	return instruments
-}
-
 // rowsToInstruments converts the given *sql.Rows into a slice of *Instrument objects.
 func rowsToInstruments(rows *sql.Rows) []*Instrument {
 	var instruments []*Instrument
