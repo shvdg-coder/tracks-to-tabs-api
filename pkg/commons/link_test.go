@@ -17,7 +17,7 @@ func TestNewLink(t *testing.T) {
 		{SourceID: 1000, Category: "artist", Type: "web", URL: "https://test.com/artist/{artistID}"},
 		{SourceID: 1000, Category: "track", Type: "web", URL: "https://test.com/track/{trackID}"},
 		{SourceID: 2000, Category: "artist", Type: "web", URL: "https://test.com/a/wsa/{artistName}-tabs-a{artistID}"},
-		{SourceID: 2000, Category: "tab", Type: "web", URL: "https://test.com/a/wsa/{artistName}-{trackTitle}-tab-s{trackID}"},
+		{SourceID: 2000, Category: "tab", Type: "web", URL: "https://test.com/a/wsa/{artistName}-{trackTitle}-{tabType}-s{trackID}"},
 		{SourceID: 2000, Category: "artist", Type: "api", URL: "https://test.com/api/artist/{artistID}/songs?from={from}&size={size}"},
 	}
 
@@ -48,8 +48,14 @@ func TestNewLink(t *testing.T) {
 		{
 			name:         "TabProvider1_Tab",
 			endpoint:     endpoints[3],
-			replacements: map[string]string{"{trackID}": "141516", "{artistName}": "testArtist", "{trackTitle}": "testTrack"},
+			replacements: map[string]string{"{trackID}": "141516", "{tabType}": "tab", "{artistName}": "testArtist", "{trackTitle}": "testTrack"},
 			want:         "https://test.com/a/wsa/testArtist-testTrack-tab-s141516",
+		},
+		{
+			name:         "TabProvider1_BassTab",
+			endpoint:     endpoints[3],
+			replacements: map[string]string{"{trackID}": "141516", "{tabType}": "bass-tab", "{artistName}": "testArtist", "{trackTitle}": "testTrack"},
+			want:         "https://test.com/a/wsa/testArtist-testTrack-bass-tab-s141516",
 		},
 		{
 			name:         "TabProvider1_API",
