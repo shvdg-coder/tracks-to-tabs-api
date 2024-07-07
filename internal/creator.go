@@ -16,14 +16,15 @@ func NewCreator(API *api.API) *Creator {
 	return &Creator{API: API}
 }
 
-// CreateTables when permitted, creates tables in the database
-func (c *Creator) CreateTables() {
+// Create when permitted, creates tables in the database
+func (c *Creator) Create() {
 	if !logic.GetEnvValueAsBoolean(KeyDatabaseEnableCreatingCommand) {
 		log.Fatalf("Did not create new tables for the database, as it was disabled")
 	}
 	c.CreateLookupTables()
 	c.CreateStorageTables()
 	c.CreateRelationLinkTables()
+	c.CreateViews()
 }
 
 // CreateLookupTables creates the lookup tables.
@@ -48,4 +49,10 @@ func (c *Creator) CreateStorageTables() {
 func (c *Creator) CreateRelationLinkTables() {
 	c.API.Artists.CreateArtistTrackTable()
 	c.API.Tracks.CreateTrackTabTable()
+}
+
+// CreateViews creates the views.
+func (c *Creator) CreateViews() {
+	c.API.Tabs.CreateTabsView()
+	c.API.Endpoints.CreateSourcesEndpointsView()
 }

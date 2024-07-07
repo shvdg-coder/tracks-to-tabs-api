@@ -1,20 +1,20 @@
 package endpoints
 
 /*
-+---------------------------------------------------------------------------------------------+
-|   source_id  | category   | type      | url
-+---------------------------------------------------------------------------------------------+
-| 1001         | Artist     | web       | /artist/$s
-| 1002         | Track      | web       | /track/$s
-| 1003         | Tab        | api       | /tab/$s
-+---------------------------------------------------------------------------------------------+
++---------------------------------------------------------------+
+|   source_id  | category   | type      | url                   |
++---------------------------------------------------------------+
+| 1001         | artist     | web       | /artist/$s            |
+| 1001         | track      | web       | /track/$s             |
+| 1003         | tab        | api       | /tab/$s               |
++---------------------------------------------------------------+
 
 The table 'endpoints' is used to store various endpoints for internal records.
 
 It contains the following columns:
   - 'source_id': This is the ID of the external source from which the data was referenced.
-  - 'category': This denotes the category of an external reference (e.g., 'Artist', 'Track', 'Tab').
-  - 'type': This denotes the type (e.g., 'Web', 'API').
+  - 'category': This denotes the category of an external reference.
+  - 'type': This denotes the type.
   - 'url': This is the endpoint, which has to be formatted with the corresponding IDs/references, as stored in the 'references' table.
 */
 const createEndpointsTableQuery = `
@@ -37,4 +37,38 @@ const dropEndpointsTableQuery = `
 const insertEndpointQuery = `
 	INSERT INTO "endpoints" (source_id, category, type, url)
     VALUES ($1, $2, $3, $4)
+`
+
+/*
++-------------+-------------------+-------------------+-------------------+---------------+-----------------------------------+
+| source_id   |  source_name      | source_category   | endpoint_category | endpoint_type | endpoint_url                      |
++-------------+-------------------+-------------------+-------------------+---------------+-----------------------------------+
+| 1000        | Music Provider 1  | music             | artist            | web           | https://musicprovider1/artist/$s  |
+| 1000        | Music Provider 1  | music             | track             | web           | https://musicprovider1/track/$s   |
+| 2000        | Tab Provider 1    | tabs              | artist            | web           | https://tabprovider1/artist/$s    |
+| 2000        | Tab Provider 1    | tabs              | tab               | api           | https://tabprovider1/artist/api/$s|
++-------------+-------------------+-------------------+-------------------+---------------+-----------------------------------+
+
+This view is used to display a combination of Source and Endpoint information in our system.
+
+The view combines these tables and includes the following columns:
+  - 'source_id': The ID of the source from the `sources` table.
+  - 'source_name': The name of the source from the `sources` table.
+  - 'source_category': The category of the source from the `sources` table.
+  - 'endpoint_category': The category of the endpoint from the `endpoints` table.
+  - 'endpoint_type': The type of the endpoint from the `endpoints` table.
+  - 'endpoint_url': The URL of the endpoint from the `endpoints` table.
+*/
+const createSourcesEndpointsViewQuery = `
+	CREATE VIEW v_source_endpoints AS
+		SELECT sources.id as source_id, sources.name as source_name, sources.category AS source_category, 
+			   endpoints.category AS endpoint_category, endpoints.type as endpoint_type, endpoints.url as endpoint_url
+		FROM sources
+		INNER JOIN endpoints
+		ON sources.id = endpoints.source_id;
+`
+
+// dropSourcesEndpointsViewQuery is a SQL query to drop the 'sources' to 'endpoints' view from the database.
+const dropSourcesEndpointsViewQuery = `
+	DROP VIEW IF EXISTS "v_source_endpoints";
 `

@@ -21,6 +21,7 @@ func (p *Purger) DropTables() {
 	if !logic.GetEnvValueAsBoolean(KeyDatabaseEnablePurgingCommand) {
 		log.Fatalf("It is not allowed to purge the database")
 	}
+	p.DropViews()
 	p.DropRelationLinkTables()
 	p.DropStorageTables()
 	p.DropLookupTables()
@@ -49,4 +50,10 @@ func (p *Purger) DropLookupTables() {
 	p.API.Instruments.DropInstrumentsTable()
 	p.API.Difficulties.DropDifficultiesTable()
 	p.API.Sources.DropSourcesTable()
+}
+
+// DropViews drops the views.
+func (p *Purger) DropViews() {
+	p.API.Tabs.DropTabsView()
+	p.API.Endpoints.DropSourcesEndpointsView()
 }

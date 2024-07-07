@@ -4,9 +4,9 @@ package difficulties
 +----+---------------------+
 | id |         name        |
 +----+---------------------+
-| 1  |  Easy               |
-| 2  |  Intermediate       |
-| 3  |  Hard               |
+| 1  |  easy               |
+| 2  |  intermediate       |
+| 3  |  hard               |
 +----+---------------------+
 
 This table is used to store Difficulty Levels in our system.

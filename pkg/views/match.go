@@ -1,4 +1,4 @@
-package matches
+package views
 
 import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"

@@ -4,8 +4,8 @@ package instruments
 +----+---------------------+
 | id |         name        |
 +----+---------------------+
-| 1  |  Distortion Guitar  |
-| 2  |  Acoustic Guitar    |
+| 1  |  distortion guitar  |
+| 2  |  acoustic guitar    |
 +----+---------------------+
 
 This table is used to store Instruments in our system.

@@ -1,14 +1,14 @@
 package sources
 
 /*
-+------------------------+-------------+
-| id |       name        |  category   |
-+------------------------+-------------+
-| 1  | Music Provider 1  |   music     |
-| 2  | Music Provider 2  |   music     |
-| 3  | Tab Provider 1    |   tabs      |
-| 4  | Tab Provider 2    |   tabs      |
-+------------------------+-------------+
++-------+-------------------+-------------+
+| id    |       name        |  category   |
++-------+-------------------+-------------+
+| 1001  | Music Provider 1  |   music     |
+| 1002  | Music Provider 2  |   music     |
+| 1003  | Tab Provider 1    |   tabs      |
+| 1004  | Tab Provider 2    |   tabs      |
++-------+-------------------+-------------+
 
 The table named 'sources' has the purpose of storing unique source names.
 
@@ -17,7 +17,6 @@ It contains the following columns:
   - 'name': The name of the source.
   - 'category': The category of the source.
 */
-
 const createSourcesTableQuery = `
 	CREATE TABLE IF NOT EXISTS sources(
 	   id int PRIMARY KEY,

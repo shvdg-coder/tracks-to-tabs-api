@@ -1,4 +1,4 @@
-package matches
+package views
 
 type Link struct {
 	Format    string

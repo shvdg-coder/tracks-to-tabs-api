@@ -53,7 +53,7 @@ func handleArgs(args []string) {
 func handleArg(arg string) {
 	switch arg {
 	case inter.CommandCreate:
-		inter.NewCreator(api).CreateTables()
+		inter.NewCreator(api).Create()
 	case inter.CommandPurge:
 		inter.NewPurger(api).DropTables()
 	case inter.CommandSeed:
