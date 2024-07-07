@@ -2,7 +2,7 @@ package artists
 
 /*
 +--------------------------------------+------------+
-|                   ID                 |    Name    |
+|                   id                 |   name    |
 +--------------------------------------+------------+
 | 123e4567-e89b-12d3-a456-426614174000 | Artist 1   |
 | 123e4567-e89b-12d3-a456-426614174001 | Artist 2   |
@@ -11,13 +11,13 @@ package artists
 This table is used to store Artists in our system.
 
 It contains the following columns:
-  - 'ID': This is the UUID that uniquely identifies a record in our system.
-  - 'Name': This column has the name of an Artist.
+  - 'id': This is the UUID that uniquely identifies a record in our system.
+  - 'name': This column has the name of an Artist.
 */
 const createArtistsTableQuery = `
 	CREATE TABLE IF NOT EXISTS artists  (
-	   ID UUID PRIMARY KEY,
-	   Name VARCHAR(500) NOT NULL
+	   id UUID PRIMARY KEY,
+	   name VARCHAR(500) NOT NULL
 	);
 `
 
@@ -34,7 +34,7 @@ const insertArtistQuery = `
 
 /*
 +--------------------------------------+--------------------------------------+
-|              ArtistID                |               TrackID                |
+|              artist_id               |              track_id                |
 +--------------------------------------+--------------------------------------+
 | 123e4567-e89b-12d3-a456-426614174050 | 123e4567-e89b-12d3-a456-426614174000 |
 | 123e4567-e89b-12d3-a456-426614174051 | 123e4567-e89b-12d3-a456-426614174001 |
@@ -42,14 +42,14 @@ const insertArtistQuery = `
 
 This table is linking the 'artists' table and the 'tracks' table.
 
-- 'ArtistID': The UUID that uniquely identifies an artist in the 'artists' table.
-- 'TrackID': The UUID that uniquely identifies a track in the 'tracks' table.
+- 'artist_id': The UUID that uniquely identifies an artist in the 'artists' table.
+- 'track_id': The UUID that uniquely identifies a track in the 'tracks' table.
 */
 const createArtistTrackTableQuery = `
 	CREATE TABLE IF NOT EXISTS artist_track  (
-	   ArtistID UUID REFERENCES artists (ID),
-	   TrackID UUID REFERENCES tracks (ID),
-	   PRIMARY KEY (ArtistID, TrackID)
+	   artist_id UUID REFERENCES artists (id),
+	   track_id UUID REFERENCES tracks (id),
+	   PRIMARY KEY (artist_id, track_id)
 	);
 `
 
@@ -60,6 +60,6 @@ const dropArtistTrackTableQuery = `
 
 // insertArtistTrackQuery is a SQL query to insert a link from an artist to a track in the 'artist_track' table.
 const insertArtistTrackQuery = `
-	INSERT INTO artist_track (artistId, trackId)
+	INSERT INTO artist_track (artist_id, track_id)
     VALUES ($1, $2) 
 `

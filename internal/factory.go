@@ -30,16 +30,16 @@ func NewFactory(sources []*src.Source, instruments []*inst.Instrument, difficult
 	}
 }
 
-// GetRandomSource returns a random source that has the provided categories, from the DummyFactory's list of sources.
-func (d *DummyFactory) GetRandomSource(categories ...string) (*src.Source, error) {
+// GetRandomSource returns a random source that has the provided category, from the DummyFactory's list of sources.
+func (d *DummyFactory) GetRandomSource(category string) (*src.Source, error) {
 	var matchingSources []*src.Source
 	for _, source := range d.Sources {
-		if source.HasCategories(categories...) {
+		if source.HasCategory(category) {
 			matchingSources = append(matchingSources, source)
 		}
 	}
 	if len(matchingSources) == 0 {
-		return nil, errors.New(fmt.Sprintf("A source with the categories '%s' does not exist", categories))
+		return nil, errors.New(fmt.Sprintf("A source with the category '%s' does not exist", category))
 	}
 	return matchingSources[faker.Number(0, len(matchingSources)-1)], nil
 }
@@ -54,13 +54,13 @@ func (d *DummyFactory) GetRandomDifficulty() *diff.Difficulty {
 	return d.Difficulties[faker.Number(0, len(d.Difficulties)-1)]
 }
 
-// CreateReferenceID creates a new reference ID based on the provided internal ID and category.
-func (d *DummyFactory) CreateReferenceID(internalId uuid.UUID, category string) *references.Reference {
-	sourceId, _ := d.GetRandomSource(category)
+// CreateReferenceID creates a new reference ID, based on the provided internal ID and categories.
+func (d *DummyFactory) CreateReferenceID(internalId uuid.UUID, sourceCategory, referenceCategory string) *references.Reference {
+	sourceId, _ := d.GetRandomSource(sourceCategory)
 	return references.NewReference(
 		internalId,
 		sourceId.ID,
-		category,
+		referenceCategory,
 		"ID",
 		faker.UUID(),
 	)

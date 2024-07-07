@@ -2,7 +2,7 @@ package users
 
 /*
 +--------------------------------------+---------------+-------------+
-|                   ID                 |     Email     | Password 	 |
+|                   id                 |     email     | password 	 |
 +--------------------------------------+---------------+-------------+
 | 123e4567-e89b-12d3-a456-426614174000 | john@doe.com  | hashedPw123 |
 | 123e4567-e89b-12d3-a456-426614174001 | jane@doe.com  | hashedPw456 |
@@ -11,13 +11,13 @@ package users
 This table is used to store a user with their credentials in our system.
 
 It consists of the following columns:
-  - 'ID': This is the UUID that uniquely identifies a user in our system.
-  - 'Email': This is the user's email address.
-  - 'Password': This stores the hashed password of the user.
+  - 'id': This is the UUID that uniquely identifies a user in our system.
+  - 'email': This is the user's email address.
+  - 'password': This stores the hashed password of the user.
 */
 const createUsersTableQuery = `
 	CREATE TABLE IF NOT EXISTS users  (
-	   ID UUID PRIMARY KEY,
+	   id UUID PRIMARY KEY,
 	   email VARCHAR(255) UNIQUE NOT NULL,
 	   password VARCHAR(60) NOT NULL
 	);

@@ -89,7 +89,7 @@ func (s *Seeder) dummySeed() {
 func (s *Seeder) insertArtists(artists []*art.Artist) {
 	for _, artist := range artists {
 		s.API.Artists.InsertArtist(artist)
-		artistRef := s.Factory.CreateReferenceID(artist.ID, "artists")
+		artistRef := s.Factory.CreateReferenceID(artist.ID, CategoryMusic, CategoryArtist)
 		s.API.References.InsertReference(artistRef)
 		s.insertTracks(artist.Tracks, artist.ID)
 	}
@@ -100,7 +100,7 @@ func (s *Seeder) insertTracks(tracks []*trk.Track, artistID uuid.UUID) {
 	for _, track := range tracks {
 		s.API.Tracks.InsertTrack(track)
 		s.API.Artists.LinkArtistToTrack(artistID.String(), track.ID.String())
-		trackRef := s.Factory.CreateReferenceID(track.ID, "tracks")
+		trackRef := s.Factory.CreateReferenceID(track.ID, CategoryMusic, CategoryTrack)
 		s.API.References.InsertReference(trackRef)
 		s.insertTabs(track.Tabs, track.ID)
 	}
@@ -111,7 +111,7 @@ func (s *Seeder) insertTabs(tabs []*tabs.Tab, trackID uuid.UUID) {
 	for _, tab := range tabs {
 		s.API.Tabs.InsertTab(tab)
 		s.API.Tracks.LinkTrackToTab(trackID.String(), tab.ID.String())
-		tabRef := s.Factory.CreateReferenceID(tab.ID, "tabs")
+		tabRef := s.Factory.CreateReferenceID(tab.ID, CategoryTabs, CategoryTab)
 		s.API.References.InsertReference(tabRef)
 	}
 }

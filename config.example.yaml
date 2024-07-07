@@ -3,12 +3,12 @@ seeding:
     artists:
       min: 1
       max: 1
-    tracks:
-      min: 0
-      max: 10
-    tabs:
-      min: 0
-      max: 4
+      tracks:
+        min: 1
+        max: 1
+        tabs:
+          min: 1
+          max: 1
   instruments:
     - id: 1
       name: 'Electric Guitar'
@@ -30,10 +30,10 @@ seeding:
   sources:
     - id: 1000
       name: 'Music Provider 1'
-      categories: ['artists', 'tracks']
+      category: 'music'
     - id: 2000
       name: 'Tab Provider 1'
-      categories: ['tabs']
+      category: 'tabs'
   endpoints:
     - sourceId: 1000
       category: 'artist'

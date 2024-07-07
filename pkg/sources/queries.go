@@ -1,26 +1,29 @@
 package sources
 
 /*
-+------------------------+
-| ID |       Name        |
-+------------------------+
-| 1  | Music Provider 1  |
-| 2  | Music Provider 2  |
-| 3  | Tab Provider 1    |
-| 4  | Tab Provider 2    |
-+------------------------+
++------------------------+-------------+
+| id |       name        |  category   |
++------------------------+-------------+
+| 1  | Music Provider 1  |   music     |
+| 2  | Music Provider 2  |   music     |
+| 3  | Tab Provider 1    |   tabs      |
+| 4  | Tab Provider 2    |   tabs      |
++------------------------+-------------+
 
 The table named 'sources' has the purpose of storing unique source names.
 
 It contains the following columns:
-  - 'ID': An auto-incrementing integer that uniquely identifies a record.
-  - 'Name': The name of the source.
+  - 'id': An auto-incrementing integer that uniquely identifies a record.
+  - 'name': The name of the source.
+  - 'category': The category of the source.
 */
+
 const createSourcesTableQuery = `
 	CREATE TABLE IF NOT EXISTS sources(
-	   ID int PRIMARY KEY,
-	   Name VARCHAR(250) NOT NULL,
-	   UNIQUE(Name)                                    
+	   id int PRIMARY KEY,
+	   name VARCHAR(250) NOT NULL,
+	   category VARCHAR(100) NOT NULL,
+	   UNIQUE(name)                                    
 	);
 `
 
@@ -31,11 +34,11 @@ const dropSourcesTableQuery = `
 
 // insertSourceQuery is a SQL to insert a new record into the 'sources' table
 const insertSourceQuery = `
-	INSERT INTO sources (ID, Name)
-    VALUES ($1, $2) 
+	INSERT INTO sources (id, name, category)
+    VALUES ($1, $2, $3) 
 `
 
 // getSourcesQuery is a SQL to get all the records from the 'sources' table
 const getSourcesQuery = `
-	SELECT ID, Name FROM sources
+	SELECT id, name, category FROM sources
 `

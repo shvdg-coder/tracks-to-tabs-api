@@ -19,4 +19,9 @@ const (
 	CommandCreate       = "create"
 	CommandPurge        = "purge"
 	CommandSeed         = "seed"
+	CategoryMusic       = "music"
+	CategoryTabs        = "tabs"
+	CategoryTab         = "tab"
+	CategoryArtist      = "artist"
+	CategoryTrack       = "track"
 )

@@ -2,7 +2,7 @@ package tabs
 
 /*
 +--------------------------------------+---------------+---------------+------------------+
-|                  ID                  | InstrumentID  | DifficultyID  |   Description    |
+|                  id                  | instrument_id | difficulty_id |   description    |
 +--------------------------------------+---------------+---------------+------------------+
 | 123e4567-e89b-12d3-a456-426614174000 |      580      |      423      | James Hetfield   |
 | 123e4567-e89b-12d3-a456-426614174001 |      590      |      420      | Mick Mars        |
@@ -11,19 +11,19 @@ package tabs
 This table is used to store Tracks in our system.
 
 It contains the following columns:
-  - 'ID': This is the UUID that uniquely identifies a record.
-  - 'InstrumentID': This column represents the ID of the instrument from a lookup table.
-  - 'DifficultyID': This column represents the ID of the difficulty level from a lookup table.
-  - 'Description': This column records the description of the tab.
+  - 'id': This is the UUID that uniquely identifies a record.
+  - 'instrument_id': This column represents the ID of the instrument from a lookup table.
+  - 'difficulty_id': This column represents the ID of the difficulty level from a lookup table.
+  - 'description': This column records the description of the tab.
 */
 const createTabsTableQuery = `
 	CREATE TABLE IF NOT EXISTS tabs (
-	   ID UUID PRIMARY KEY,
-	   InstrumentID INT NOT NULL,
-	   DifficultyID INT NOT NULL,
-	   Description TEXT,
-	   CONSTRAINT fk_instrument FOREIGN KEY(InstrumentID) REFERENCES instruments(ID),
-	   CONSTRAINT fk_difficulty	FOREIGN KEY(DifficultyID) REFERENCES difficulties(ID)
+	   id UUID PRIMARY KEY,
+	   instrument_id INT NOT NULL,
+	   difficulty_id INT NOT NULL,
+	   description TEXT,
+	   CONSTRAINT fk_instrument FOREIGN KEY(instrument_id) REFERENCES instruments(id),
+	   CONSTRAINT fk_difficulty	FOREIGN KEY(difficulty_id) REFERENCES difficulties(id)
 	);
 `
 
@@ -34,6 +34,6 @@ const dropTabsTableQuery = `
 
 // insertTabQuery is a SQL query string used to insert a tab into the 'tabs' table.
 const insertTabQuery = `
-	INSERT INTO tabs (id, instrumentId, difficultyId, description)
+	INSERT INTO tabs (id, instrument_id, difficulty_id, description)
     VALUES ($1, $2, $3, $4) 
 `
