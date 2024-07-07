@@ -1,4 +1,4 @@
-package common
+package commons
 
 import (
 	end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"

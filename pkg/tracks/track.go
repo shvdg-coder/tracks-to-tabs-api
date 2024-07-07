@@ -2,7 +2,7 @@ package tracks
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/common"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/commons"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
 )
 
@@ -12,7 +12,7 @@ type Track struct {
 	Title    string
 	Duration uint // in milliseconds
 	Tabs     []*tabs.Tab
-	Links    []*common.Link
+	Links    []*commons.Link
 }
 
 // TrackConfig modifies a Track with configuration options.

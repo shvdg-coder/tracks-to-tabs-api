@@ -2,7 +2,7 @@ package artists
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/common"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/commons"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 )
 
@@ -11,7 +11,7 @@ type Artist struct {
 	ID     uuid.UUID
 	Name   string
 	Tracks []*tracks.Track
-	Links  []*common.Link
+	Links  []*commons.Link
 }
 
 // ArtistConfig modifies an Artist with configuration options.

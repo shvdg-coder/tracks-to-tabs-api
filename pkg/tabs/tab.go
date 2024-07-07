@@ -2,7 +2,7 @@ package tabs
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/common"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/commons"
 	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
 )
@@ -13,7 +13,7 @@ type Tab struct {
 	Instrument  *inst.Instrument
 	Difficulty  *diff.Difficulty
 	Description string
-	Links       []*common.Link
+	Links       []*commons.Link
 }
 
 // NewTab instantiates a new Tab.
