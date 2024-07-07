@@ -57,23 +57,3 @@ func (a *API) InsertEndpoint(endpoint *Endpoint) {
 		)
 	}
 }
-
-// CreateSourcesEndpointsView creates the sources to endpoints view.
-func (a *API) CreateSourcesEndpointsView() {
-	_, err := a.Database.DB.Exec(createSourcesEndpointsViewQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'sources' to 'endpoints' view")
-	}
-}
-
-// DropSourcesEndpointsView drops the sources to endpoints view if it exists.
-func (a *API) DropSourcesEndpointsView() {
-	_, err := a.Database.DB.Exec(dropSourcesEndpointsViewQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'sources' to 'endpoints' view")
-	}
-}

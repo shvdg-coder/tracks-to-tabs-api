@@ -54,6 +54,6 @@ func (p *Purger) DropLookupTables() {
 
 // DropViews drops the views.
 func (p *Purger) DropViews() {
-	p.API.Tabs.DropTabsView()
-	p.API.Endpoints.DropSourcesEndpointsView()
+	p.API.Artists.DropArtistsToTabsView()
+	p.API.Sources.DropSourcesToEndpointsView()
 }

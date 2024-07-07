@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
-
 	"log"
 )
 
@@ -101,5 +100,25 @@ func closeRows(rows *sql.Rows) {
 	err = rows.Close()
 	if err != nil {
 		log.Printf("Failed to close rows: %s", err.Error())
+	}
+}
+
+// CreateSourcesToEndpointsView creates the sources to endpoints view.
+func (a *API) CreateSourcesToEndpointsView() {
+	_, err := a.Database.DB.Exec(createSourcesToEndpointsViewQuery)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		log.Println("Successfully created the 'sources' to 'endpoints' view")
+	}
+}
+
+// DropSourcesToEndpointsView drops the sources to endpoints view if it exists.
+func (a *API) DropSourcesToEndpointsView() {
+	_, err := a.Database.DB.Exec(dropSourcesToEndpointsViewQuery)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		log.Println("Successfully dropped the 'sources' to 'endpoints' view")
 	}
 }

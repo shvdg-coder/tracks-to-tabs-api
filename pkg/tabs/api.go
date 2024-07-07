@@ -52,23 +52,3 @@ func (a *API) InsertTab(tab *Tab) {
 		log.Printf("Successfully inserted tab with '%s', '%s' & Description: '%s'", tab.Instrument.Name, tab.Difficulty.Name, tab.Description)
 	}
 }
-
-// CreateTabsView creates a tabs table if it doesn't already exist.
-func (a *API) CreateTabsView() {
-	_, err := a.Database.DB.Exec(createTabsViewQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'tabs' view.")
-	}
-}
-
-// DropTabsView drops the tabs view if it exists.
-func (a *API) DropTabsView() {
-	_, err := a.Database.DB.Exec(dropTabsViewQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'tabs' view.")
-	}
-}
