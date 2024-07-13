@@ -51,8 +51,10 @@ const dropArtistsTracksTabsViewQuery = `
 	DROP VIEW IF EXISTS "v_artists_tracks_tabs";
 `
 
-// getArtistsTracksTabsQuery is a SQL query string used to retrieve the artists, tracks and tabs, given a set of IDs, from the database.
-const getArtistsTracksTabsQuery = `SELECT * FROM v_artists_tracks_tabs WHERE artist_id = ANY($1)`
+// selectArtistsTracksTabsQuery is a SQL query string used to retrieve the artists, tracks and tabs, given a set of IDs, from the database.
+const selectArtistsTracksTabsQuery = `
+	SELECT * FROM v_artists_tracks_tabs WHERE artist_id = ANY($1);
+`
 
 /*
 +-------------+-------------------+-------------------+-------------------+---------------+--------------------------------------------+
@@ -83,7 +85,12 @@ const createSourcesEndpointsViewQuery = `
 		ON sources.id = endpoints.source_id;
 `
 
-// dropSourcesEndpointViewQuery is a SQL query to drop the 'sources and endpoints' view from the database.
-const dropSourcesEndpointViewQuery = `
+// dropSourcesEndpointsViewQuery is a SQL query to drop the 'sources and endpoints' view from the database.
+const dropSourcesEndpointsViewQuery = `
 	DROP VIEW IF EXISTS "v_sources_endpoints";
+`
+
+// selectSourcesEndpoints is a SQL query used to retrieve all the sources and endpoints from the database.
+const selectSourcesEndpoints = `
+	SELECT * FROM v_sources_endpoints;
 `

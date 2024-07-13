@@ -1,10 +1,13 @@
 package sources
 
+import end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"
+
 // Source represents a unique provider.
 type Source struct {
-	ID       uint   `yaml:"id"`
-	Name     string `yaml:"name"`
-	Category string `yaml:"category"`
+	ID        uint   `yaml:"id"`
+	Name      string `yaml:"name"`
+	Category  string `yaml:"category"`
+	Endpoints []*end.Endpoint
 }
 
 // SourceOptional sets an optional value of the Source object.
@@ -14,6 +17,13 @@ type SourceOptional func(source *Source)
 func WithCategory(category string) SourceOptional {
 	return func(source *Source) {
 		source.Category = category
+	}
+}
+
+// WithEndpoint sets the endpoints property of the Source object.
+func WithEndpoint(endpoints *end.Endpoint) SourceOptional {
+	return func(source *Source) {
+		source.Endpoints = append(source.Endpoints, endpoints)
 	}
 }
 
