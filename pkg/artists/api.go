@@ -82,3 +82,23 @@ func (a *API) LinkArtistToTrack(artistId, trackId string) {
 		log.Printf("Successfully linked artist with ID '%s' and track with ID '%s'", artistId, trackId)
 	}
 }
+
+// CreateArtistsTracksTabsView creates a view with the artists, tracks and tabs.
+func (a *API) CreateArtistsTracksTabsView() {
+	_, err := a.Database.DB.Exec(createArtistsTracksTabsViewQuery)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		log.Println("Successfully created the 'artists, tracks, tabs' view.")
+	}
+}
+
+// DropArtistsTracksTabsView drops the view with the artists, tracks and tabs.
+func (a *API) DropArtistsTracksTabsView() {
+	_, err := a.Database.DB.Exec(dropArtistsTracksTabsViewQuery)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		log.Println("Successfully dropped the 'artists, tracks, tabs' view.")
+	}
+}

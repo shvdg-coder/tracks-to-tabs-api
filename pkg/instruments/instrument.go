@@ -6,7 +6,20 @@ type Instrument struct {
 	Name string `yaml:"name"`
 }
 
+type Option func(*Instrument)
+
+// WithID sets the ID of an instrument
+func WithID(id uint) Option {
+	return func(i *Instrument) {
+		i.ID = id
+	}
+}
+
 // NewInstrument instantiates a new Instrument.
-func NewInstrument(id uint, name string) *Instrument {
-	return &Instrument{ID: id, Name: name}
+func NewInstrument(name string, options ...Option) *Instrument {
+	instrument := &Instrument{Name: name}
+	for _, option := range options {
+		option(instrument)
+	}
+	return instrument
 }

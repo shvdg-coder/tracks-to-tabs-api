@@ -6,21 +6,21 @@ type Difficulty struct {
 	Name string `yaml:"name"`
 }
 
-// DifficultyConfig modifies a Difficulty with configuration options.
-type DifficultyConfig func(*Difficulty)
+// Option modifies a Difficulty with configuration options.
+type Option func(*Difficulty)
 
 // WithID sets the ID of a Difficulty.
-func WithID(id uint) DifficultyConfig {
-	return func(a *Difficulty) {
-		a.ID = id
+func WithID(id uint) Option {
+	return func(d *Difficulty) {
+		d.ID = id
 	}
 }
 
 // NewDifficulty instantiates a new Difficulty.
-func NewDifficulty(name string, configs ...DifficultyConfig) *Difficulty {
-	instrument := &Difficulty{Name: name}
-	for _, config := range configs {
-		config(instrument)
+func NewDifficulty(name string, options ...Option) *Difficulty {
+	difficulty := &Difficulty{Name: name}
+	for _, option := range options {
+		option(difficulty)
 	}
-	return instrument
+	return difficulty
 }

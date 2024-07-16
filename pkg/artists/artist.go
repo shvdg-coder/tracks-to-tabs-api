@@ -14,25 +14,25 @@ type Artist struct {
 	Links  []*commons.Link
 }
 
-// ArtistConfig modifies an Artist with configuration options.
-type ArtistConfig func(*Artist)
+// Option modifies an Artist with configuration options.
+type Option func(*Artist)
 
 // WithID sets the ID of an Artist.
-func WithID(id uuid.UUID) ArtistConfig {
+func WithID(id uuid.UUID) Option {
 	return func(a *Artist) {
 		a.ID = id
 	}
 }
 
 // WithTracks sets the tracks of an Artist.
-func WithTracks(tracks []*tracks.Track) ArtistConfig {
+func WithTracks(tracks []*tracks.Track) Option {
 	return func(a *Artist) {
 		a.Tracks = tracks
 	}
 }
 
 // NewArtist instantiates a new Artist.
-func NewArtist(name string, configs ...ArtistConfig) *Artist {
+func NewArtist(name string, configs ...Option) *Artist {
 	artist := &Artist{ID: uuid.New(), Name: name}
 	for _, config := range configs {
 		config(artist)

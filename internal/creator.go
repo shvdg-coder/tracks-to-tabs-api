@@ -53,6 +53,5 @@ func (c *Creator) CreateRelationLinkTables() {
 
 // CreateViews creates the views.
 func (c *Creator) CreateViews() {
-	c.API.Views.Tabs.CreateArtistsTracksTabsView()
-	c.API.Views.Endpoints.CreateSourcesEndpointsView()
+	c.API.Artists.CreateArtistsTracksTabsView()
 }

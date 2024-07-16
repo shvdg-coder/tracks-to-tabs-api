@@ -13,7 +13,6 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/users"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/views"
 )
 
 // API represents the main entry point to interact with the API functionalities.
@@ -29,7 +28,6 @@ type API struct {
 	Tabs         *tabs.API
 	Tracks       *tracks.API
 	Users        *users.API
-	Views        *views.API
 }
 
 // NewAPI creates a new instance of the API.
@@ -46,6 +44,5 @@ func NewAPI(database *logic.DatabaseManager) *API {
 		Tabs:         tabs.NewAPI(database),
 		Tracks:       tracks.NewAPI(database),
 		Users:        users.NewAPI(database),
-		Views:        views.NewAPI(database),
 	}
 }
