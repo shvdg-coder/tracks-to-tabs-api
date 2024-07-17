@@ -53,52 +53,35 @@ func (a *API) InsertArtist(artist *Artist) {
 	}
 }
 
-// CreateArtistTrackTable creates an artist_track table if it doesn't already exist.
-func (a *API) CreateArtistTrackTable() {
-	_, err := a.Database.DB.Exec(createArtistTrackTableQuery)
+// GetArtists retrieves artists, without references to other entities.
+func (a *API) GetArtists(artistID ...string) ([]*Artist, error) {
+	rows, err := a.Database.DB.Query(getArtistsFromIDs, artistID)
 	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'artist_track' table")
+		return nil, err
 	}
+
+	var artists []*Artist
+
+	for rows.Next() {
+		artist := &Artist{}
+		err := rows.Scan(&artist.ID, &artist.Name)
+		if err != nil {
+			return nil, err
+		}
+		artists = append(artists, artist)
+	}
+	return artists, nil
 }
 
-// DropArtistTrackTable drops the artist_track table if it exists.
-func (a *API) DropArtistTrackTable() {
-	_, err := a.Database.DB.Exec(dropArtistTrackTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'artist_track' table")
-	}
-}
-
-// LinkArtistToTrack inserts a link between an artist and a track into the artist_track table.
-func (a *API) LinkArtistToTrack(artistId, trackId string) {
-	_, err := a.Database.DB.Exec(insertArtistTrackQuery, artistId, trackId)
-	if err != nil {
-		log.Printf("Failed linking artist with ID '%s' and track with ID '%s': %s", artistId, trackId, err.Error())
-	} else {
-		log.Printf("Successfully linked artist with ID '%s' and track with ID '%s'", artistId, trackId)
-	}
-}
-
-// CreateArtistsTracksTabsView creates a view with the artists, tracks and tabs.
-func (a *API) CreateArtistsTracksTabsView() {
-	_, err := a.Database.DB.Exec(createArtistsTracksTabsViewQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'artists, tracks, tabs' view.")
-	}
-}
-
-// DropArtistsTracksTabsView drops the view with the artists, tracks and tabs.
-func (a *API) DropArtistsTracksTabsView() {
-	_, err := a.Database.DB.Exec(dropArtistsTracksTabsViewQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'artists, tracks, tabs' view.")
-	}
+// GetArtistsCascading retrieves artists, with references to other entities.
+func (a *API) GetArtistsCascading(artistID ...string) ([]*Artist, error) {
+	//artists, err := a.GetArtists(artistID...)
+	//if err != nil {
+	//	return nil, err
+	//}
+	// TODO: get TrackIDs
+	// TODO: get Tracks
+	// TODO: get TabIDs
+	// TODO: get Tabs
+	return nil, nil
 }

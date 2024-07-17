@@ -21,7 +21,6 @@ func (p *Purger) Purge() {
 	if !logic.GetEnvValueAsBoolean(KeyDatabaseEnablePurgingCommand) {
 		log.Fatalf("It is not allowed to purge the database")
 	}
-	p.DropViews()
 	p.DropRelationLinkTables()
 	p.DropStorageTables()
 	p.DropLookupTables()
@@ -29,8 +28,8 @@ func (p *Purger) Purge() {
 
 // DropRelationLinkTables drops the tables that hold relation links.
 func (p *Purger) DropRelationLinkTables() {
-	p.API.Artists.DropArtistTrackTable()
-	p.API.Tracks.DropTrackTabTable()
+	p.API.ArtistTrack.DropArtistTrackTable()
+	p.API.TrackTab.DropTrackTabTable()
 }
 
 // DropStorageTables drops tables.
@@ -50,9 +49,4 @@ func (p *Purger) DropLookupTables() {
 	p.API.Instruments.DropInstrumentsTable()
 	p.API.Difficulties.DropDifficultiesTable()
 	p.API.Sources.DropSourcesTable()
-}
-
-// DropViews drops the views.
-func (p *Purger) DropViews() {
-	p.API.Artists.DropArtistsTracksTabsView()
 }

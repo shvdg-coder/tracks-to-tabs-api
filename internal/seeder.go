@@ -99,7 +99,7 @@ func (s *Seeder) insertArtists(artists []*art.Artist) {
 func (s *Seeder) insertTracks(tracks []*trk.Track, artistID uuid.UUID) {
 	for _, track := range tracks {
 		s.API.Tracks.InsertTrack(track)
-		s.API.Artists.LinkArtistToTrack(artistID.String(), track.ID.String())
+		s.API.ArtistTrack.LinkArtistToTrack(artistID.String(), track.ID.String())
 		trackRef := s.Factory.CreateReferenceID(track.ID, CategoryMusic, CategoryTrack)
 		s.API.References.InsertReference(trackRef)
 		s.insertTabs(track.Tabs, track.ID)
@@ -110,14 +110,8 @@ func (s *Seeder) insertTracks(tracks []*trk.Track, artistID uuid.UUID) {
 func (s *Seeder) insertTabs(tabs []*tabs.Tab, trackID uuid.UUID) {
 	for _, tab := range tabs {
 		s.API.Tabs.InsertTab(tab)
-		s.API.Tracks.LinkTrackToTab(trackID.String(), tab.ID.String())
+		s.API.TrackTab.LinkTrackToTab(trackID.String(), tab.ID.String())
 		tabRef := s.Factory.CreateReferenceID(tab.ID, CategoryTabs, CategoryTab)
 		s.API.References.InsertReference(tabRef)
 	}
 }
-
-//TODO: Put error messages somewhere (constants), string format
-//TODO: Better deal with errors and logging
-//TODO: Add unit tests
-//TODO: Add integration tests
-//TODO: Create views?

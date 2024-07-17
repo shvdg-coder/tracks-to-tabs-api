@@ -24,7 +24,6 @@ func (c *Creator) Create() {
 	c.CreateLookupTables()
 	c.CreateStorageTables()
 	c.CreateRelationLinkTables()
-	c.CreateViews()
 }
 
 // CreateLookupTables creates the lookup tables.
@@ -47,11 +46,6 @@ func (c *Creator) CreateStorageTables() {
 
 // CreateRelationLinkTables removes the relationship links between artists and tracks by creating and dropping the necessary tables.
 func (c *Creator) CreateRelationLinkTables() {
-	c.API.Artists.CreateArtistTrackTable()
-	c.API.Tracks.CreateTrackTabTable()
-}
-
-// CreateViews creates the views.
-func (c *Creator) CreateViews() {
-	c.API.Artists.CreateArtistsTracksTabsView()
+	c.API.ArtistTrack.CreateArtistTrackTable()
+	c.API.TrackTab.CreateTrackTabTable()
 }
