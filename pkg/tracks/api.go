@@ -51,3 +51,32 @@ func (a *API) InsertTrack(track *Track) {
 		log.Printf("Successfully inserted track into the 'tracks' table with title '%s'", track.Title)
 	}
 }
+
+// GetTracks retrieves the tracks, without references to other entities.
+func (a *API) GetTracks(trackID ...string) ([]*Track, error) {
+	rows, err := a.Database.DB.Query(getTracksFromIDs, trackID)
+	if err != nil {
+		return nil, err
+	}
+
+	var tracks []*Track
+
+	for rows.Next() {
+		track := &Track{}
+		err := rows.Scan(&track.ID, &track.Title, &track.Duration)
+		if err != nil {
+			return nil, err
+		}
+		tracks = append(tracks, track)
+	}
+	return nil, nil
+}
+
+// GetTracksCascading retrieves the tracks, with references to other entities.
+func (a *API) GetTracksCascading(trackID ...string) ([]*Track, error) {
+	//tracks, err := a.GetTracks(trackID...)
+	//if err != nil {
+	//	return nil, err
+	//}
+	return nil, nil
+}

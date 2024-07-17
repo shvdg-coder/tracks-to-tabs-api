@@ -79,9 +79,5 @@ func (a *API) GetArtistsCascading(artistID ...string) ([]*Artist, error) {
 	//if err != nil {
 	//	return nil, err
 	//}
-	// TODO: get TrackIDs
-	// TODO: get Tracks
-	// TODO: get TabIDs
-	// TODO: get Tabs
 	return nil, nil
 }
