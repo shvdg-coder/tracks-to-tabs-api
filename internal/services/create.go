@@ -6,14 +6,14 @@ import (
 	"log"
 )
 
-// CreateService helps with deleting data from the database
+// CreateService helps with creating tables for the database
 type CreateService struct {
-	Service *TableService
+	TableService *TableService
 }
 
 // NewCreateService creates a new instance of CreateService
 func NewCreateService(service *TableService) *CreateService {
-	return &CreateService{Service: service}
+	return &CreateService{TableService: service}
 }
 
 // CreateAll when permitted, creates tables in the database
@@ -28,24 +28,24 @@ func (c *CreateService) CreateAll() {
 
 // CreateLookupTables creates the lookup tables.
 func (c *CreateService) CreateLookupTables() {
-	c.Service.CreateInstrumentsTable()
-	c.Service.CreateDifficultiesTable()
-	c.Service.CreateSourcesTable()
-	c.Service.CreateEndpointsTable()
+	c.TableService.CreateInstrumentsTable()
+	c.TableService.CreateDifficultiesTable()
+	c.TableService.CreateSourcesTable()
+	c.TableService.CreateEndpointsTable()
 }
 
 // CreateStorageTables creates tables.
 func (c *CreateService) CreateStorageTables() {
-	c.Service.CreateArtistsTable()
-	c.Service.CreateReferencesTable()
-	c.Service.CreateSessionsTable()
-	c.Service.CreateTabsTable()
-	c.Service.CreateTracksTable()
-	c.Service.CreateUsersTable()
+	c.TableService.CreateArtistsTable()
+	c.TableService.CreateReferencesTable()
+	c.TableService.CreateSessionsTable()
+	c.TableService.CreateTabsTable()
+	c.TableService.CreateTracksTable()
+	c.TableService.CreateUsersTable()
 }
 
-// CreateRelationLinkTables removes the relationship links between artists and tracks by creating and dropping the necessary tables.
+// CreateRelationLinkTables creates tables for establishing links.
 func (c *CreateService) CreateRelationLinkTables() {
-	c.Service.CreateArtistTrackTable()
-	c.Service.CreateTrackTabTable()
+	c.TableService.CreateArtistTrackTable()
+	c.TableService.CreateTrackTabTable()
 }

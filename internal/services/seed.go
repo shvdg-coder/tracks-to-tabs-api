@@ -11,11 +11,11 @@ import (
 	"log"
 )
 
-// SeedService helps with deleting data from the database
+// SeedService helps with seeding data into the database
 type SeedService struct {
 	Seeding *internal.SeedingConfig
 	API     *api.API
-	Factory *DummyService
+	Dummy   *DummyService
 }
 
 // NewSeedService creates a new instance of SeedService
@@ -23,7 +23,7 @@ func NewSeedService(seeding *internal.SeedingConfig, api *api.API) *SeedService 
 	return &SeedService{
 		Seeding: seeding,
 		API:     api,
-		Factory: NewDummyService(seeding.Sources, seeding.Instruments, seeding.Difficulties)}
+		Dummy:   NewDummyService(seeding.Sources, seeding.Instruments, seeding.Difficulties)}
 }
 
 // Seed attempts to seed the database with the minimally required values and dummy data.
@@ -82,7 +82,7 @@ func (s *SeedService) dummySeed() {
 		log.Println("Did not seed the database with dummy data, as it was disabled.")
 		return
 	}
-	artists := s.Factory.CreateArtists(s.Seeding.Dummies.Artists)
+	artists := s.Dummy.CreateArtists(s.Seeding.Dummies.Artists)
 	s.insertArtists(artists)
 }
 
@@ -90,7 +90,7 @@ func (s *SeedService) dummySeed() {
 func (s *SeedService) insertArtists(artists []*art.Artist) {
 	for _, artist := range artists {
 		s.API.ArtistsAPI().InsertArtist(artist)
-		artistRef := s.Factory.CreateReferenceID(artist.ID, internal.CategoryMusic, internal.CategoryArtist)
+		artistRef := s.Dummy.CreateReferenceID(artist.ID, internal.CategoryMusic, internal.CategoryArtist)
 		s.API.ReferencesAPI().InsertReference(artistRef)
 		s.insertTracks(artist.Tracks, artist.ID)
 	}
@@ -101,7 +101,7 @@ func (s *SeedService) insertTracks(tracks []*trk.Track, artistID uuid.UUID) {
 	for _, track := range tracks {
 		s.API.TracksAPI().InsertTrack(track)
 		s.API.ArtistTrackAPI().LinkArtistToTrack(artistID.String(), track.ID.String())
-		trackRef := s.Factory.CreateReferenceID(track.ID, internal.CategoryMusic, internal.CategoryTrack)
+		trackRef := s.Dummy.CreateReferenceID(track.ID, internal.CategoryMusic, internal.CategoryTrack)
 		s.API.ReferencesAPI().InsertReference(trackRef)
 		s.insertTabs(track.Tabs, track.ID)
 	}
@@ -112,7 +112,7 @@ func (s *SeedService) insertTabs(tabs []*tabs.Tab, trackID uuid.UUID) {
 	for _, tab := range tabs {
 		s.API.TabsAPI().InsertTab(tab)
 		s.API.TrackTabAPI().LinkTrackToTab(trackID.String(), tab.ID.String())
-		tabRef := s.Factory.CreateReferenceID(tab.ID, internal.CategoryTabs, internal.CategoryTab)
+		tabRef := s.Dummy.CreateReferenceID(tab.ID, internal.CategoryTabs, internal.CategoryTab)
 		s.API.ReferencesAPI().InsertReference(tabRef)
 	}
 }
