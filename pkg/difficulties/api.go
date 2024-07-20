@@ -16,26 +16,6 @@ func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{Database: database}
 }
 
-// CreateDifficultiesTable creates a difficulties table.
-func (a *API) CreateDifficultiesTable() {
-	_, err := a.Database.DB.Exec(createDifficultiesTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'difficulties' table.")
-	}
-}
-
-// DropDifficultiesTable drops the difficulties table.
-func (a *API) DropDifficultiesTable() {
-	_, err := a.Database.DB.Exec(dropDifficultiesTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'difficulties' table.")
-	}
-}
-
 // InsertDifficulties inserts multiple difficulty levels.
 func (a *API) InsertDifficulties(difficulties ...*Difficulty) {
 	for _, difficulty := range difficulties {

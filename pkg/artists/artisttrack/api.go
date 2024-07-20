@@ -16,26 +16,6 @@ func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{Database: database}
 }
 
-// CreateArtistTrackTable creates an artist_track table if it doesn't already exist.
-func (a *API) CreateArtistTrackTable() {
-	_, err := a.Database.DB.Exec(createArtistTrackTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'artist_track' table")
-	}
-}
-
-// DropArtistTrackTable drops the artist_track table if it exists.
-func (a *API) DropArtistTrackTable() {
-	_, err := a.Database.DB.Exec(dropArtistTrackTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'artist_track' table")
-	}
-}
-
 // LinkArtistToTrack inserts a link between an artist and a track into the artist_track table.
 func (a *API) LinkArtistToTrack(artistId, trackId string) {
 	_, err := a.Database.DB.Exec(insertArtistTrackQuery, artistId, trackId)

@@ -3,7 +3,6 @@ package users
 import (
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
-
 	"log"
 )
 
@@ -15,26 +14,6 @@ type API struct {
 // NewAPI creates a new instance of the API struct.
 func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{Database: database}
-}
-
-// CreateUsersTable creates a users table if it doesn't already exist.
-func (a *API) CreateUsersTable() {
-	_, err := a.Database.DB.Exec(createUsersTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'users' table")
-	}
-}
-
-// DropUsersTable drops the users table if it exists.
-func (a *API) DropUsersTable() {
-	_, err := a.Database.DB.Exec(dropUsersTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'users' table")
-	}
 }
 
 // InsertUser inserts a new user into the users table.

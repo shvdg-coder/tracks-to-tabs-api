@@ -12,52 +12,52 @@ import (
 
 // Config represents the configuration object for the application.
 type Config struct {
-	Seeding *Seeding `yaml:"seeding"`
+	Seeding *SeedingConfig `yaml:"seeding"`
 }
 
-// Seeding represents the configuration with predefined seeds.
-type Seeding struct {
-	Dummies      *Dummies           `yaml:"dummies"`
+// SeedingConfig represents the configuration with predefined seeds.
+type SeedingConfig struct {
+	Dummies      *DummiesConfig     `yaml:"dummies"`
 	Instruments  []*inst.Instrument `yaml:"instruments"`
 	Difficulties []*diff.Difficulty `yaml:"difficulties"`
 	Sources      []*src.Source      `yaml:"sources"`
 	Endpoints    []*end.Endpoint    `yaml:"endpoints"`
 }
 
-// Dummies represents the configuration for generating dummies.
-type Dummies struct {
-	Artists *Artists `yaml:"artists"`
+// DummiesConfig represents the configuration for generating dummies.
+type DummiesConfig struct {
+	Artists *ArtistsConfig `yaml:"artists"`
 }
 
-// Artists represents a struct for seeding artists.
-type Artists struct {
-	Min    int     `yaml:"min"`
-	Max    int     `yaml:"max"`
-	Tracks *Tracks `yaml:"tracks"`
+// ArtistsConfig represents a struct for seeding artists.
+type ArtistsConfig struct {
+	Min    int           `yaml:"min"`
+	Max    int           `yaml:"max"`
+	Tracks *TracksConfig `yaml:"tracks"`
 }
 
-func (a *Artists) randomAmount() uint {
+func (a *ArtistsConfig) randomAmount() uint {
 	return uint(faker.Number(a.Min, a.Max))
 }
 
-// Tracks represents a struct for seeding tracks.
-type Tracks struct {
-	Min  int   `yaml:"min"`
-	Max  int   `yaml:"max"`
-	Tabs *Tabs `yaml:"tabs"`
+// TracksConfig represents a struct for seeding tracks.
+type TracksConfig struct {
+	Min  int         `yaml:"min"`
+	Max  int         `yaml:"max"`
+	Tabs *TabsConfig `yaml:"tabs"`
 }
 
-func (t *Tracks) randomAmount() uint {
+func (t *TracksConfig) randomAmount() uint {
 	return uint(faker.Number(t.Min, t.Max))
 }
 
-// Tabs represents a struct for seeing tabs.
-type Tabs struct {
+// TabsConfig represents a struct for seeing tabs.
+type TabsConfig struct {
 	Min int `yaml:"min"`
 	Max int `yaml:"max"`
 }
 
-func (t *Tabs) randomAmount() uint {
+func (t *TabsConfig) randomAmount() uint {
 	return uint(faker.Number(t.Min, t.Max))
 }
 

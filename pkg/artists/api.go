@@ -20,26 +20,6 @@ func NewAPI(database *logic.DatabaseManager, artistTrack *at.API, tracks *trcks.
 	return &API{Database: database, ArtistTrack: artistTrack, Tracks: tracks}
 }
 
-// CreateArtistsTable creates an artists table if it doesn't already exist.
-func (a *API) CreateArtistsTable() {
-	_, err := a.Database.DB.Exec(createArtistsTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'artists' table")
-	}
-}
-
-// DropArtistsTable drops the artists table if it exists.
-func (a *API) DropArtistsTable() {
-	_, err := a.Database.DB.Exec(dropArtistsTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'artists' table")
-	}
-}
-
 // InsertArtists inserts multiple artists into the artists table.
 func (a *API) InsertArtists(artists ...*Artist) {
 	for _, artist := range artists {

@@ -4,20 +4,23 @@ import (
 	"fmt"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	inter "github.com/shvdg-dev/tunes-to-tabs-api/internal"
+	"github.com/shvdg-dev/tunes-to-tabs-api/internal/services"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg"
 	"log"
 	"os"
 )
 
 var (
-	config *inter.Config
-	api    *pkg.API
+	config  *inter.Config
+	service *services.TableService
+	api     *pkg.API
 )
 
 // init instantiates all app requirements.
 func init() {
 	config = initConfig()
 	database := initDatabase()
+	service = services.NewTableService(database)
 	api = pkg.NewAPI(database)
 }
 
@@ -53,9 +56,9 @@ func handleArgs(args []string) {
 func handleArg(arg string) {
 	switch arg {
 	case inter.CommandCreate:
-		inter.NewCreator(api).Create()
+		inter.NewCreator(service).Create()
 	case inter.CommandPurge:
-		inter.NewPurger(api).Purge()
+		inter.NewPurger(service).Purge()
 	case inter.CommandSeed:
 		inter.NewSeeder(config.Seeding, api).Seed()
 	default:

@@ -12,13 +12,13 @@ import (
 
 // Seeder helps with deleting data from the database
 type Seeder struct {
-	Seeding *Seeding
+	Seeding *SeedingConfig
 	API     *api.API
 	Factory *DummyFactory
 }
 
 // NewSeeder creates a new instance of Seeder
-func NewSeeder(seeding *Seeding, api *api.API) *Seeder {
+func NewSeeder(seeding *SeedingConfig, api *api.API) *Seeder {
 	return &Seeder{
 		Seeding: seeding,
 		API:     api,
@@ -49,7 +49,7 @@ func (s *Seeder) seedAdmin() {
 	email := logic.GetEnvValueAsString(KeyAdminInitialEmail)
 	password := logic.GetEnvValueAsString(KeyAdminInitialPassword)
 	if email != "" && password != "" {
-		s.API.Users.InsertUser(email, password)
+		s.API.UsersAPI().InsertUser(email, password)
 	} else {
 		log.Println("Did not insert the initial admin account as no credentials were defined")
 	}
@@ -57,22 +57,22 @@ func (s *Seeder) seedAdmin() {
 
 // seedInstruments seeds the instruments table with the default instruments.
 func (s *Seeder) seedInstruments() {
-	s.API.Instruments.InsertInstruments(s.Seeding.Instruments...)
+	s.API.InstrumentsAPI().InsertInstruments(s.Seeding.Instruments...)
 }
 
 // seedDifficulties seeds the difficulties table with the default difficulties.
 func (s *Seeder) seedDifficulties() {
-	s.API.Difficulties.InsertDifficulties(s.Seeding.Difficulties...)
+	s.API.DifficultiesAPI().InsertDifficulties(s.Seeding.Difficulties...)
 }
 
 // seedSources seeds the sources from the config file.
 func (s *Seeder) seedSources() {
-	s.API.Sources.InsertSources(s.Seeding.Sources...)
+	s.API.SourcesAPI().InsertSources(s.Seeding.Sources...)
 }
 
 // seedEndpoints seeds the endpoints from the config file.
 func (s *Seeder) seedEndpoints() {
-	s.API.Endpoints.InsertEndpoints(s.Seeding.Endpoints...)
+	s.API.EndpointsAPI().InsertEndpoints(s.Seeding.Endpoints...)
 }
 
 // dummySeed when enabled, seeds the database with dummy data.
@@ -88,9 +88,9 @@ func (s *Seeder) dummySeed() {
 // insertArtists inserts the given artists and references into the database.
 func (s *Seeder) insertArtists(artists []*art.Artist) {
 	for _, artist := range artists {
-		s.API.Artists.InsertArtist(artist)
+		s.API.ArtistsAPI().InsertArtist(artist)
 		artistRef := s.Factory.CreateReferenceID(artist.ID, CategoryMusic, CategoryArtist)
-		s.API.References.InsertReference(artistRef)
+		s.API.ReferencesAPI().InsertReference(artistRef)
 		s.insertTracks(artist.Tracks, artist.ID)
 	}
 }
@@ -98,10 +98,10 @@ func (s *Seeder) insertArtists(artists []*art.Artist) {
 // insertTracks inserts the given tracks and references into the database.
 func (s *Seeder) insertTracks(tracks []*trk.Track, artistID uuid.UUID) {
 	for _, track := range tracks {
-		s.API.Tracks.InsertTrack(track)
-		s.API.ArtistTrack.LinkArtistToTrack(artistID.String(), track.ID.String())
+		s.API.TracksAPI().InsertTrack(track)
+		s.API.ArtistTrackAPI().LinkArtistToTrack(artistID.String(), track.ID.String())
 		trackRef := s.Factory.CreateReferenceID(track.ID, CategoryMusic, CategoryTrack)
-		s.API.References.InsertReference(trackRef)
+		s.API.ReferencesAPI().InsertReference(trackRef)
 		s.insertTabs(track.Tabs, track.ID)
 	}
 }
@@ -109,9 +109,9 @@ func (s *Seeder) insertTracks(tracks []*trk.Track, artistID uuid.UUID) {
 // insertTabs inserts the given tabs and references into the database.
 func (s *Seeder) insertTabs(tabs []*tabs.Tab, trackID uuid.UUID) {
 	for _, tab := range tabs {
-		s.API.Tabs.InsertTab(tab)
-		s.API.TrackTab.LinkTrackToTab(trackID.String(), tab.ID.String())
+		s.API.TabsAPI().InsertTab(tab)
+		s.API.TrackTabAPI().LinkTrackToTab(trackID.String(), tab.ID.String())
 		tabRef := s.Factory.CreateReferenceID(tab.ID, CategoryTabs, CategoryTab)
-		s.API.References.InsertReference(tabRef)
+		s.API.ReferencesAPI().InsertReference(tabRef)
 	}
 }

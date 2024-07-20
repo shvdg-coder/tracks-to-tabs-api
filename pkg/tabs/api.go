@@ -16,26 +16,6 @@ func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{Database: database}
 }
 
-// CreateTabsTable creates a tabs table if it doesn't already exist.
-func (a *API) CreateTabsTable() {
-	_, err := a.Database.DB.Exec(createTabsTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'tabs' table.")
-	}
-}
-
-// DropTabsTable drops the tabs table if it exists.
-func (a *API) DropTabsTable() {
-	_, err := a.Database.DB.Exec(dropTabsTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'tabs' table.")
-	}
-}
-
 // InsertTabs inserts multiple tabs in the tabs table.
 func (a *API) InsertTabs(tabs ...*Tab) {
 	for _, tab := range tabs {

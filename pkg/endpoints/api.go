@@ -15,26 +15,6 @@ func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{Database: database}
 }
 
-// CreateEndpointsTable creates the endpoints table if it doesn't already exist.
-func (a *API) CreateEndpointsTable() {
-	_, err := a.Database.DB.Exec(createEndpointsTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'endpoints' table")
-	}
-}
-
-// DropEndpointsTable drops the endpoints table if it exists.
-func (a *API) DropEndpointsTable() {
-	_, err := a.Database.DB.Exec(dropEndpointsTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'endpoints' table")
-	}
-}
-
 // InsertEndpoints inserts multiple records into the endpoints table.
 func (a *API) InsertEndpoints(endpoints ...*Endpoint) {
 	for _, endpoint := range endpoints {

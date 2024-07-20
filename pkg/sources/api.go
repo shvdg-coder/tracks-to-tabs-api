@@ -16,26 +16,6 @@ func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{Database: database}
 }
 
-// CreateSourcesTable creates a sources table if it doesn't already exist.
-func (a *API) CreateSourcesTable() {
-	_, err := a.Database.DB.Exec(createSourcesTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'sources' table.")
-	}
-}
-
-// DropSourcesTable drops the sources table if it exists.
-func (a *API) DropSourcesTable() {
-	_, err := a.Database.DB.Exec(dropSourcesTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'sources' table.")
-	}
-}
-
 // InsertSources inserts multiple sources in the sources table.
 func (a *API) InsertSources(sources ...*Source) {
 	for _, source := range sources {

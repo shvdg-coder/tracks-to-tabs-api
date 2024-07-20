@@ -2,18 +2,18 @@ package internal
 
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	api "github.com/shvdg-dev/tunes-to-tabs-api/pkg"
+	"github.com/shvdg-dev/tunes-to-tabs-api/internal/services"
 	"log"
 )
 
 // Creator helps with deleting data from the database
 type Creator struct {
-	API *api.API
+	Service *services.TableService
 }
 
 // NewCreator creates a new instance of Creator
-func NewCreator(API *api.API) *Creator {
-	return &Creator{API: API}
+func NewCreator(service *services.TableService) *Creator {
+	return &Creator{Service: service}
 }
 
 // Create when permitted, creates tables in the database
@@ -28,24 +28,24 @@ func (c *Creator) Create() {
 
 // CreateLookupTables creates the lookup tables.
 func (c *Creator) CreateLookupTables() {
-	c.API.Instruments.CreateInstrumentsTable()
-	c.API.Difficulties.CreateDifficultiesTable()
-	c.API.Sources.CreateSourcesTable()
-	c.API.Endpoints.CreateEndpointsTable()
+	c.Service.CreateInstrumentsTable()
+	c.Service.CreateDifficultiesTable()
+	c.Service.CreateSourcesTable()
+	c.Service.CreateEndpointsTable()
 }
 
 // CreateStorageTables creates tables.
 func (c *Creator) CreateStorageTables() {
-	c.API.Artists.CreateArtistsTable()
-	c.API.References.CreateReferencesTable()
-	c.API.Sessions.CreateSessionsTable()
-	c.API.Tabs.CreateTabsTable()
-	c.API.Tracks.CreateTracksTable()
-	c.API.Users.CreateUsersTable()
+	c.Service.CreateArtistsTable()
+	c.Service.CreateReferencesTable()
+	c.Service.CreateSessionsTable()
+	c.Service.CreateTabsTable()
+	c.Service.CreateTracksTable()
+	c.Service.CreateUsersTable()
 }
 
 // CreateRelationLinkTables removes the relationship links between artists and tracks by creating and dropping the necessary tables.
 func (c *Creator) CreateRelationLinkTables() {
-	c.API.ArtistTrack.CreateArtistTrackTable()
-	c.API.TrackTab.CreateTrackTabTable()
+	c.Service.CreateArtistTrackTable()
+	c.Service.CreateTrackTabTable()
 }

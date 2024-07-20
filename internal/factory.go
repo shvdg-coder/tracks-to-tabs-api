@@ -67,7 +67,7 @@ func (d *DummyFactory) CreateReferenceID(internalId uuid.UUID, sourceCategory, r
 }
 
 // CreateArtists creates a specified amount of dummy artists.
-func (d *DummyFactory) CreateArtists(artists *Artists) []*art.Artist {
+func (d *DummyFactory) CreateArtists(artists *ArtistsConfig) []*art.Artist {
 	dummyArtists := make([]*art.Artist, artists.randomAmount())
 	for i := range dummyArtists {
 		dummyArtists[i] = d.CreateArtist(artists.Tracks)
@@ -76,14 +76,14 @@ func (d *DummyFactory) CreateArtists(artists *Artists) []*art.Artist {
 }
 
 // CreateArtist creates a dummy artist with a random name and tracks.
-func (d *DummyFactory) CreateArtist(tracks *Tracks) *art.Artist {
+func (d *DummyFactory) CreateArtist(tracks *TracksConfig) *art.Artist {
 	return art.NewArtist(
 		faker.HipsterWord(),
 		art.WithTracks(d.CreateTracks(tracks)))
 }
 
 // CreateTracks creates a specified amount of dummy tracks.
-func (d *DummyFactory) CreateTracks(tracks *Tracks) []*trk.Track {
+func (d *DummyFactory) CreateTracks(tracks *TracksConfig) []*trk.Track {
 	dummyTracks := make([]*trk.Track, tracks.randomAmount())
 	for i := range dummyTracks {
 		dummyTracks[i] = d.CreateTrack(tracks.Tabs)
@@ -92,7 +92,7 @@ func (d *DummyFactory) CreateTracks(tracks *Tracks) []*trk.Track {
 }
 
 // CreateTrack creates a dummy track with a random title, duration, and tabs.
-func (d *DummyFactory) CreateTrack(tabs *Tabs) *trk.Track {
+func (d *DummyFactory) CreateTrack(tabs *TabsConfig) *trk.Track {
 	return trk.NewTrack(
 		faker.HipsterSentence(faker.Number(1, 6)),
 		uint(faker.Number(10000, 3000000)), // 1 to 5 minutes

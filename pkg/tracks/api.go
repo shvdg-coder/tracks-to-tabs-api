@@ -19,26 +19,6 @@ func NewAPI(database *logic.DatabaseManager, trackTab *tracktab.API, tabs *tabs.
 	return &API{Database: database, TrackTab: trackTab, Tabs: tabs}
 }
 
-// CreateTracksTable creates the tracks table if it doesn't already exist.
-func (a *API) CreateTracksTable() {
-	_, err := a.Database.DB.Exec(createTracksTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully created the 'tracks' table")
-	}
-}
-
-// DropTracksTable drops the tracks table if it exists.
-func (a *API) DropTracksTable() {
-	_, err := a.Database.DB.Exec(dropTracksTableQuery)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("Successfully dropped the 'tracks' table")
-	}
-}
-
 // InsertTracks inserts multiple tracks into the tracks table.
 func (a *API) InsertTracks(tracks ...*Track) {
 	for _, track := range tracks {
