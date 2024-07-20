@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// Test the creation of a new Link instance, with formatting the endpoint URL and the corresponding values.
+// Test the creation of a new Link instance, formatting the endpoint URL with the corresponding values.
 func TestNewLink(t *testing.T) {
 	sources := []*src.Source{
 		{ID: 1000, Name: "MusicProvider1", Category: "music"},
@@ -68,7 +68,7 @@ func TestNewLink(t *testing.T) {
 	for _, tt := range tests {
 		var source *src.Source
 		for _, s := range sources {
-			if int(s.ID) == tt.endpoint.SourceID {
+			if s.ID == tt.endpoint.SourceID {
 				source = s
 				break
 			}
