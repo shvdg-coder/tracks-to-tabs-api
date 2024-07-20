@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/shvdg-dev/base-logic/pkg"
+	quer "github.com/shvdg-dev/tunes-to-tabs-api/internal/queries"
 	"log"
 )
 
@@ -17,7 +18,7 @@ func NewTableService(database *pkg.DatabaseManager) *TableService {
 
 // CreateArtistsTable creates an artists table if it doesn't already exist.
 func (t *TableService) CreateArtistsTable() {
-	_, err := t.Database.DB.Exec(createArtistsTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateArtistsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -27,7 +28,7 @@ func (t *TableService) CreateArtistsTable() {
 
 // DropArtistsTable drops the artists table if it exists.
 func (t *TableService) DropArtistsTable() {
-	_, err := t.Database.DB.Exec(dropArtistsTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropArtistsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -37,7 +38,7 @@ func (t *TableService) DropArtistsTable() {
 
 // CreateTracksTable creates the tracks table if it doesn't already exist.
 func (t *TableService) CreateTracksTable() {
-	_, err := t.Database.DB.Exec(createTracksTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateTracksTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -47,7 +48,7 @@ func (t *TableService) CreateTracksTable() {
 
 // DropTracksTable drops the tracks table if it exists.
 func (t *TableService) DropTracksTable() {
-	_, err := t.Database.DB.Exec(dropTracksTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropTracksTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -57,7 +58,7 @@ func (t *TableService) DropTracksTable() {
 
 // CreateArtistTrackTable creates an artist_track table if it doesn't already exist.
 func (t *TableService) CreateArtistTrackTable() {
-	_, err := t.Database.DB.Exec(createArtistTrackTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateArtistTrackTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -67,7 +68,7 @@ func (t *TableService) CreateArtistTrackTable() {
 
 // DropArtistTrackTable drops the artist_track table if it exists.
 func (t *TableService) DropArtistTrackTable() {
-	_, err := t.Database.DB.Exec(dropArtistTrackTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropArtistTrackTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -77,7 +78,7 @@ func (t *TableService) DropArtistTrackTable() {
 
 // CreateDifficultiesTable creates a difficulties table.
 func (t *TableService) CreateDifficultiesTable() {
-	_, err := t.Database.DB.Exec(createDifficultiesTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateDifficultiesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -87,7 +88,7 @@ func (t *TableService) CreateDifficultiesTable() {
 
 // DropDifficultiesTable drops the difficulties table.
 func (t *TableService) DropDifficultiesTable() {
-	_, err := t.Database.DB.Exec(dropDifficultiesTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropDifficultiesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -97,7 +98,7 @@ func (t *TableService) DropDifficultiesTable() {
 
 // CreateEndpointsTable creates the endpoints table if it doesn't already exist.
 func (t *TableService) CreateEndpointsTable() {
-	_, err := t.Database.DB.Exec(createEndpointsTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateEndpointsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -107,7 +108,7 @@ func (t *TableService) CreateEndpointsTable() {
 
 // DropEndpointsTable drops the endpoints table if it exists.
 func (t *TableService) DropEndpointsTable() {
-	_, err := t.Database.DB.Exec(dropEndpointsTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropEndpointsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -117,7 +118,7 @@ func (t *TableService) DropEndpointsTable() {
 
 // CreateInstrumentsTable creates an instruments table if it doesn't already exist.
 func (t *TableService) CreateInstrumentsTable() {
-	_, err := t.Database.DB.Exec(createInstrumentsTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateInstrumentsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -127,7 +128,7 @@ func (t *TableService) CreateInstrumentsTable() {
 
 // DropInstrumentsTable drops the instruments table if it exists.
 func (t *TableService) DropInstrumentsTable() {
-	_, err := t.Database.DB.Exec(dropInstrumentsTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropInstrumentsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -137,7 +138,7 @@ func (t *TableService) DropInstrumentsTable() {
 
 // CreateReferencesTable creates the references table if it doesn't already exist.
 func (t *TableService) CreateReferencesTable() {
-	_, err := t.Database.DB.Exec(createReferencesTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateReferencesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -147,7 +148,7 @@ func (t *TableService) CreateReferencesTable() {
 
 // DropReferencesTable drops the references table if it exists.
 func (t *TableService) DropReferencesTable() {
-	_, err := t.Database.DB.Exec(dropReferencesTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropReferencesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -157,11 +158,11 @@ func (t *TableService) DropReferencesTable() {
 
 // CreateSessionsTable creates the sessions table in the database and adds an expiry index.
 func (t *TableService) CreateSessionsTable() {
-	_, err := t.Database.DB.Exec(createSessionsTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateSessionsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = t.Database.DB.Exec(createSessionExpiryIndexQuery)
+	_, err = t.Database.DB.Exec(quer.CreateSessionExpiryIndexQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -171,7 +172,7 @@ func (t *TableService) CreateSessionsTable() {
 
 // DropSessionsTable drops the sessions table if it exists.
 func (t *TableService) DropSessionsTable() {
-	_, err := t.Database.DB.Exec(dropSessionsTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropSessionsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -181,7 +182,7 @@ func (t *TableService) DropSessionsTable() {
 
 // CreateSourcesTable creates a sources table if it doesn't already exist.
 func (t *TableService) CreateSourcesTable() {
-	_, err := t.Database.DB.Exec(createSourcesTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateSourcesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -191,7 +192,7 @@ func (t *TableService) CreateSourcesTable() {
 
 // DropSourcesTable drops the sources table if it exists.
 func (t *TableService) DropSourcesTable() {
-	_, err := t.Database.DB.Exec(dropSourcesTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropSourcesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -201,7 +202,7 @@ func (t *TableService) DropSourcesTable() {
 
 // CreateTabsTable creates a tabs table if it doesn't already exist.
 func (t *TableService) CreateTabsTable() {
-	_, err := t.Database.DB.Exec(createTabsTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateTabsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -211,7 +212,7 @@ func (t *TableService) CreateTabsTable() {
 
 // DropTabsTable drops the tabs table if it exists.
 func (t *TableService) DropTabsTable() {
-	_, err := t.Database.DB.Exec(dropTabsTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropTabsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -221,7 +222,7 @@ func (t *TableService) DropTabsTable() {
 
 // CreateTrackTabTable creates a track_tab table if it doesn't already exist.
 func (t *TableService) CreateTrackTabTable() {
-	_, err := t.Database.DB.Exec(createTrackTabTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateTrackTabTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -231,7 +232,7 @@ func (t *TableService) CreateTrackTabTable() {
 
 // DropTrackTabTable drops the track_tab table if it exists.
 func (t *TableService) DropTrackTabTable() {
-	_, err := t.Database.DB.Exec(dropTrackTabTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropTrackTabTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -241,7 +242,7 @@ func (t *TableService) DropTrackTabTable() {
 
 // CreateUsersTable creates a users table if it doesn't already exist.
 func (t *TableService) CreateUsersTable() {
-	_, err := t.Database.DB.Exec(createUsersTableQuery)
+	_, err := t.Database.DB.Exec(quer.CreateUsersTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -251,7 +252,7 @@ func (t *TableService) CreateUsersTable() {
 
 // DropUsersTable drops the users table if it exists.
 func (t *TableService) DropUsersTable() {
-	_, err := t.Database.DB.Exec(dropUsersTableQuery)
+	_, err := t.Database.DB.Exec(quer.DropUsersTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {

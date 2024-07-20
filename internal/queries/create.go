@@ -1,6 +1,7 @@
-package services
+package queries
 
 /*
+CreateArtistsTableQuery is a query to create an artists table.
 +--------------------------------------+------------+
 |                   id                 |   name    |
 +--------------------------------------+------------+
@@ -8,13 +9,11 @@ package services
 | 123e4567-e89b-12d3-a456-426614174001 | Artist 2   |
 +--------------------------------------+------------+
 
-This table is used to store Artists in our system.
-
 It contains the following columns:
   - 'id': This is the UUID that uniquely identifies a record in our system.
   - 'name': This column has the name of an Artist.
 */
-const createArtistsTableQuery = `
+const CreateArtistsTableQuery = `
 	CREATE TABLE IF NOT EXISTS artists  (
 	   id UUID PRIMARY KEY,
 	   name VARCHAR(500) NOT NULL
@@ -22,6 +21,7 @@ const createArtistsTableQuery = `
 `
 
 /*
+CreateArtistTrackTableQuery is a query to create an 'artist to track' linking table.
 +--------------------------------------+--------------------------------------+
 |              artist_id               |              track_id                |
 +--------------------------------------+--------------------------------------+
@@ -29,12 +29,11 @@ const createArtistsTableQuery = `
 | 123e4567-e89b-12d3-a456-426614174051 | 123e4567-e89b-12d3-a456-426614174001 |
 +--------------------------------------+--------------------------------------+
 
-This table is linking the 'artists' table and the 'tracks' table.
-
+It contains the following columns:
 - 'artist_id': The UUID that uniquely identifies an artist in the 'artists' table.
 - 'track_id': The UUID that uniquely identifies a track in the 'tracks' table.
 */
-const createArtistTrackTableQuery = `
+const CreateArtistTrackTableQuery = `
 	CREATE TABLE IF NOT EXISTS artist_track  (
 	   artist_id UUID REFERENCES artists (id),
 	   track_id UUID REFERENCES tracks (id),
@@ -43,6 +42,7 @@ const createArtistTrackTableQuery = `
 `
 
 /*
+CreateTracksTableQuery is a query to create the tracks table.
 +--------------------------------------+--------------------+------------+
 |                 id                   |       title        |  duration  |
 +--------------------------------------+--------------------+------------+
@@ -50,14 +50,12 @@ const createArtistTrackTableQuery = `
 | 123e4567-e89b-12d3-a456-426614174001 | Stairway to Heaven |  483000    |
 +--------------------------------------+--------------------+------------+
 
-This table is used to store the tracks of songs.
-
 It contains the following columns:
   - 'id': The UUID that uniquely identifies a track in our system.
   - 'title': The title of the track.
   - 'duration': The duration of the track in milliseconds.
 */
-const createTracksTableQuery = `
+const CreateTracksTableQuery = `
 	CREATE TABLE IF NOT EXISTS tracks (
 	   id UUID PRIMARY KEY,
 	   title VARCHAR(500) NOT NULL,
@@ -66,6 +64,7 @@ const createTracksTableQuery = `
 `
 
 /*
+CreateTrackTabTableQuery is a query to create the 'track to tab' table.
 +--------------------------------------+--------------------------------------+
 |               track_id               |                tab_id                |
 +--------------------------------------+--------------------------------------+
@@ -73,12 +72,10 @@ const createTracksTableQuery = `
 | 123e4567-e89b-12d3-a456-426614174051 | 123e4567-e89b-12d3-a456-426614174001 |
 +--------------------------------------+--------------------------------------+
 
-This table is used to link the 'tracks' table and the 'tabs' table.
-
 - 'track_id': The UUID that uniquely identifies a track from the 'tracks' table.
 - 'tab_id': The UUID that uniquely identifies a tab from the 'tabs' table.
 */
-const createTrackTabTableQuery = `
+const CreateTrackTabTableQuery = `
 	CREATE TABLE IF NOT EXISTS track_tab  (
 	   track_id UUID REFERENCES tracks (id),
 	   tab_id UUID REFERENCES tabs (id),
@@ -87,6 +84,7 @@ const createTrackTabTableQuery = `
 `
 
 /*
+CreateTabsTableQuery is a query to create a tracks table.
 +--------------------------------------+---------------+---------------+------------------+
 |                  id                  | instrument_id | difficulty_id |   description    |
 +--------------------------------------+---------------+---------------+------------------+
@@ -94,15 +92,13 @@ const createTrackTabTableQuery = `
 | 123e4567-e89b-12d3-a456-426614174001 |      590      |      420      | Mick Mars        |
 +--------------------------------------+---------------+---------------+------------------+
 
-This table is used to store Tracks in our system.
-
 It contains the following columns:
   - 'id': This is the UUID that uniquely identifies a record.
   - 'instrument_id': This column represents the ID of the instrument from a lookup table.
   - 'difficulty_id': This column represents the ID of the difficulty level from a lookup table.
   - 'description': This column records the description of the tab.
 */
-const createTabsTableQuery = `
+const CreateTabsTableQuery = `
 	CREATE TABLE IF NOT EXISTS tabs (
 	   id UUID PRIMARY KEY,
 	   instrument_id INT NOT NULL,
@@ -114,6 +110,7 @@ const createTabsTableQuery = `
 `
 
 /*
+CreateInstrumentsTableQuery is a query to create an instruments lookup table.
 +----+---------------------+
 | id |         name        |
 +----+---------------------+
@@ -121,13 +118,11 @@ const createTabsTableQuery = `
 | 2  |  acoustic guitar    |
 +----+---------------------+
 
-This table is used to store Instruments in our system.
-
 It contains the following columns:
   - 'id': This is an auto-incrementing integer that uniquely identifies a record.
   - 'name': This column records the name of the instrument.
 */
-const createInstrumentsTableQuery = `
+const CreateInstrumentsTableQuery = `
 	CREATE TABLE IF NOT EXISTS instruments (
 	   id SERIAL PRIMARY KEY,
 	   name VARCHAR(255) NOT NULL
@@ -135,6 +130,7 @@ const createInstrumentsTableQuery = `
 `
 
 /*
+CreateDifficultiesTableQuery is a query to create a difficulties lookup table.
 +----+---------------------+
 | id |         name        |
 +----+---------------------+
@@ -143,13 +139,11 @@ const createInstrumentsTableQuery = `
 | 3  |  hard               |
 +----+---------------------+
 
-This table is used to store Difficulty Levels in our system.
-
 It contains the following columns:
   - 'id': This is an auto-incrementing integer that uniquely identifies a record.
   - 'name': This column records the name of the difficulty level.
 */
-const createDifficultiesTableQuery = `
+const CreateDifficultiesTableQuery = `
 	CREATE TABLE IF NOT EXISTS difficulties (
 	   id SERIAL PRIMARY KEY,
 	   name VARCHAR(255) NOT NULL
@@ -157,6 +151,8 @@ const createDifficultiesTableQuery = `
 `
 
 /*
+CreateReferencesTableQuery is a query to create a references table.
+It is used to store references of various external sources to link them to internal records.
 +-------------------------------------------------------------------------------------+
 |           internal_id            |   source_id  | category   | type  | reference    |
 +-------------------------------------------------------------------------------------+
@@ -167,8 +163,6 @@ const createDifficultiesTableQuery = `
 | 123e4567-e89b-12d3-a456-42661422 | 1003         | tab        | id    | UG123        |
 +-------------------------------------------------------------------------------------+
 
-The table 'references' is used to store references of various references for internal records.
-
 It contains the following columns:
   - 'internal_id': This is the UUID of a record in our system.
   - 'source_id': This is the ID of the external source from which the data was referenced.
@@ -176,7 +170,7 @@ It contains the following columns:
   - 'type': This denotes the type of the reference.
   - 'reference': This stores the actual reference data.
 */
-const createReferencesTableQuery = `
+const CreateReferencesTableQuery = `
 	CREATE TABLE IF NOT EXISTS "references" (
 	   internal_id UUID NOT NULL,
 	   source_id INT NOT NULL,
@@ -189,6 +183,8 @@ const createReferencesTableQuery = `
 `
 
 /*
+CreateSourcesTableQuery is a query to create sources table.
+It is used to store external sources.
 +-------+-------------------+-------------+
 | id    |       name        |  category   |
 +-------+-------------------+-------------+
@@ -198,14 +194,12 @@ const createReferencesTableQuery = `
 | 1004  | Tab Provider 2    |   tabs      |
 +-------+-------------------+-------------+
 
-The table named 'sources' has the purpose of storing unique source names.
-
 It contains the following columns:
   - 'id': An auto-incrementing integer that uniquely identifies a record.
   - 'name': The name of the source.
   - 'category': The category of the source.
 */
-const createSourcesTableQuery = `
+const CreateSourcesTableQuery = `
 	CREATE TABLE IF NOT EXISTS sources(
 	   id int PRIMARY KEY,
 	   name VARCHAR(250) NOT NULL,
@@ -215,6 +209,8 @@ const createSourcesTableQuery = `
 `
 
 /*
+CreateEndpointsTableQuery is a query to create the endpoints table.
+It is used to store endpoints, taken from external sources.
 +---------------------------------------------------------------+
 |   source_id  | category   | type      | url                   |
 +---------------------------------------------------------------+
@@ -223,15 +219,13 @@ const createSourcesTableQuery = `
 | 1003         | tab        | api       | /tab/{trackID}        |
 +---------------------------------------------------------------+
 
-The table 'endpoints' is used to store various endpoints for internal records.
-
 It contains the following columns:
   - 'source_id': This is the ID of the external source from which the data was referenced.
   - 'category': This denotes the category of an external reference.
   - 'type': This denotes the type.
   - 'url': This is the endpoint, which has to be formatted with the corresponding IDs/references, as stored in the 'references' table.
 */
-const createEndpointsTableQuery = `
+const CreateEndpointsTableQuery = `
 	CREATE TABLE IF NOT EXISTS "endpoints" (
 	   source_id INT NOT NULL,
 	   category VARCHAR(250) NOT NULL,
@@ -243,6 +237,7 @@ const createEndpointsTableQuery = `
 `
 
 /*
+CreateUsersTableQuery is a query to create a users table.
 +--------------------------------------+---------------+-------------+
 |                   id                 |     email     | password 	 |
 +--------------------------------------+---------------+-------------+
@@ -250,14 +245,12 @@ const createEndpointsTableQuery = `
 | 123e4567-e89b-12d3-a456-426614174001 | jane@doe.com  | hashedPw456 |
 +--------------------------------------+---------------+-------------+
 
-This table is used to store a user with their credentials in our system.
-
 It consists of the following columns:
   - 'id': This is the UUID that uniquely identifies a user in our system.
   - 'email': This is the user's email address.
   - 'password': This stores the hashed password of the user.
 */
-const createUsersTableQuery = `
+const CreateUsersTableQuery = `
 	CREATE TABLE IF NOT EXISTS users  (
 	   id UUID PRIMARY KEY,
 	   email VARCHAR(255) UNIQUE NOT NULL,
@@ -266,6 +259,9 @@ const createUsersTableQuery = `
 `
 
 /*
+CreateSessionsTableQuery is a query to create the sessions table.
+It follows the implementation of the postgresstore, from the 'scs' library (https://github.com/alexedwards/scs/tree/master/postgresstore).
+It provides Postgres-based storage for HTTP sessions.
 +-----------------+----------------------------------------------+---------------------+
 |      Token      |                     Data                     |        Expiry       |
 +-----------------+----------------------------------------------+---------------------+
@@ -273,16 +269,12 @@ const createUsersTableQuery = `
 | ghijkl789012    | 0x4465636f646572736c... (Byte array data)    | 2023-04-11 14:45:00 |
 +-----------------+----------------------------------------------+---------------------+
 
-This table is used to store session details in our system.
-It follows the implementation of the postgresstore from the 'scs' library (https://github.com/alexedwards/scs/tree/master/postgresstore).
-It provides Postgres-based storage for HTTP sessions.
-
 It consists of the following columns:
   - 'Token': A unique session token that serves as the primary key for each session. It matches the sessionID in the scs library.
   - 'Data': Session data stored as binary data (BYTEA). This information corresponds to the encoded and signed session data.
   - 'Expiry': This is the timestamp at which the session is set to expire. It matches the expiry time of the session as handled by the scs library.
 */
-const createSessionsTableQuery = `
+const CreateSessionsTableQuery = `
 	CREATE TABLE IF NOT EXISTS sessions  (
 		token TEXT PRIMARY KEY,
 		data BYTEA NOT NULL,
@@ -290,8 +282,8 @@ const createSessionsTableQuery = `
 	);
 	`
 
-// createSessionExpiryIndexQuery is a SQL query to create an index on the 'sessions' table in the 'expiry' column, if it does not already exist.
-const createSessionExpiryIndexQuery = `
+// CreateSessionExpiryIndexQuery is a SQL query to create an index on the 'sessions' table in the 'expiry' column, if it does not already exist.
+const CreateSessionExpiryIndexQuery = `
 	DO $$ BEGIN
 		IF NOT EXISTS (
 			SELECT 1
