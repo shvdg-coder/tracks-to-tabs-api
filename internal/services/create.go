@@ -1,24 +1,24 @@
-package internal
+package services
 
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	"github.com/shvdg-dev/tunes-to-tabs-api/internal/services"
+	"github.com/shvdg-dev/tunes-to-tabs-api/internal"
 	"log"
 )
 
-// Creator helps with deleting data from the database
-type Creator struct {
-	Service *services.TableService
+// CreateService helps with deleting data from the database
+type CreateService struct {
+	Service *TableService
 }
 
-// NewCreator creates a new instance of Creator
-func NewCreator(service *services.TableService) *Creator {
-	return &Creator{Service: service}
+// NewCreateService creates a new instance of CreateService
+func NewCreateService(service *TableService) *CreateService {
+	return &CreateService{Service: service}
 }
 
-// Create when permitted, creates tables in the database
-func (c *Creator) Create() {
-	if !logic.GetEnvValueAsBoolean(KeyDatabaseEnableCreatingCommand) {
+// CreateAll when permitted, creates tables in the database
+func (c *CreateService) CreateAll() {
+	if !logic.GetEnvValueAsBoolean(internal.KeyDatabaseEnableCreatingCommand) {
 		log.Fatalf("Did not create new tables for the database, as it was disabled")
 	}
 	c.CreateLookupTables()
@@ -27,7 +27,7 @@ func (c *Creator) Create() {
 }
 
 // CreateLookupTables creates the lookup tables.
-func (c *Creator) CreateLookupTables() {
+func (c *CreateService) CreateLookupTables() {
 	c.Service.CreateInstrumentsTable()
 	c.Service.CreateDifficultiesTable()
 	c.Service.CreateSourcesTable()
@@ -35,7 +35,7 @@ func (c *Creator) CreateLookupTables() {
 }
 
 // CreateStorageTables creates tables.
-func (c *Creator) CreateStorageTables() {
+func (c *CreateService) CreateStorageTables() {
 	c.Service.CreateArtistsTable()
 	c.Service.CreateReferencesTable()
 	c.Service.CreateSessionsTable()
@@ -45,7 +45,7 @@ func (c *Creator) CreateStorageTables() {
 }
 
 // CreateRelationLinkTables removes the relationship links between artists and tracks by creating and dropping the necessary tables.
-func (c *Creator) CreateRelationLinkTables() {
+func (c *CreateService) CreateRelationLinkTables() {
 	c.Service.CreateArtistTrackTable()
 	c.Service.CreateTrackTabTable()
 }

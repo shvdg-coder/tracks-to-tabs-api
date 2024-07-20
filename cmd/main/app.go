@@ -11,16 +11,16 @@ import (
 )
 
 var (
-	config  *inter.Config
-	service *services.TableService
-	api     *pkg.API
+	config *inter.Config
+	tables *services.TableService
+	api    *pkg.API
 )
 
 // init instantiates all app requirements.
 func init() {
 	config = initConfig()
 	database := initDatabase()
-	service = services.NewTableService(database)
+	tables = services.NewTableService(database)
 	api = pkg.NewAPI(database)
 }
 
@@ -56,11 +56,11 @@ func handleArgs(args []string) {
 func handleArg(arg string) {
 	switch arg {
 	case inter.CommandCreate:
-		inter.NewCreator(service).Create()
+		services.NewCreateService(tables).CreateAll()
 	case inter.CommandPurge:
-		inter.NewPurger(service).Purge()
+		services.NewPurgeService(tables).Purge()
 	case inter.CommandSeed:
-		inter.NewSeeder(config.Seeding, api).Seed()
+		services.NewSeedService(config.Seeding, api).Seed()
 	default:
 		printErrorAndExit()
 	}

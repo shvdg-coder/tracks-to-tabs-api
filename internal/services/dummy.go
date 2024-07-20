@@ -1,10 +1,11 @@
-package internal
+package services
 
 import (
 	"errors"
 	"fmt"
 	faker "github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
+	"github.com/shvdg-dev/tunes-to-tabs-api/internal"
 	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
 	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
@@ -14,24 +15,24 @@ import (
 	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 )
 
-// DummyFactory helps with creating dummy entities.
-type DummyFactory struct {
+// DummyService helps with creating dummy entities.
+type DummyService struct {
 	Sources      []*src.Source
 	Instruments  []*inst.Instrument
 	Difficulties []*diff.Difficulty
 }
 
-// NewFactory creates a new DummyFactory instance.
-func NewFactory(sources []*src.Source, instruments []*inst.Instrument, difficulties []*diff.Difficulty) *DummyFactory {
-	return &DummyFactory{
+// NewDummyService creates a new DummyService instance.
+func NewDummyService(sources []*src.Source, instruments []*inst.Instrument, difficulties []*diff.Difficulty) *DummyService {
+	return &DummyService{
 		Sources:      sources,
 		Instruments:  instruments,
 		Difficulties: difficulties,
 	}
 }
 
-// GetRandomSource returns a random source that has the provided category, from the DummyFactory's list of sources.
-func (d *DummyFactory) GetRandomSource(category string) (*src.Source, error) {
+// GetRandomSource returns a random source that has the provided category, from the DummyService's list of sources.
+func (d *DummyService) GetRandomSource(category string) (*src.Source, error) {
 	var matchingSources []*src.Source
 	for _, source := range d.Sources {
 		if source.HasCategory(category) {
@@ -44,18 +45,18 @@ func (d *DummyFactory) GetRandomSource(category string) (*src.Source, error) {
 	return matchingSources[faker.Number(0, len(matchingSources)-1)], nil
 }
 
-// GetRandomInstrument returns a random instrument from the DummyFactory's list of instruments.
-func (d *DummyFactory) GetRandomInstrument() *inst.Instrument {
+// GetRandomInstrument returns a random instrument from the DummyService's list of instruments.
+func (d *DummyService) GetRandomInstrument() *inst.Instrument {
 	return d.Instruments[faker.Number(0, len(d.Instruments)-1)]
 }
 
-// GetRandomDifficulty returns a random difficulty from the DummyFactory's list of difficulties.
-func (d *DummyFactory) GetRandomDifficulty() *diff.Difficulty {
+// GetRandomDifficulty returns a random difficulty from the DummyService's list of difficulties.
+func (d *DummyService) GetRandomDifficulty() *diff.Difficulty {
 	return d.Difficulties[faker.Number(0, len(d.Difficulties)-1)]
 }
 
 // CreateReferenceID creates a new reference ID, based on the provided internal ID and categories.
-func (d *DummyFactory) CreateReferenceID(internalId uuid.UUID, sourceCategory, referenceCategory string) *references.Reference {
+func (d *DummyService) CreateReferenceID(internalId uuid.UUID, sourceCategory, referenceCategory string) *references.Reference {
 	sourceId, _ := d.GetRandomSource(sourceCategory)
 	return references.NewReference(
 		internalId,
@@ -67,8 +68,8 @@ func (d *DummyFactory) CreateReferenceID(internalId uuid.UUID, sourceCategory, r
 }
 
 // CreateArtists creates a specified amount of dummy artists.
-func (d *DummyFactory) CreateArtists(artists *ArtistsConfig) []*art.Artist {
-	dummyArtists := make([]*art.Artist, artists.randomAmount())
+func (d *DummyService) CreateArtists(artists *internal.ArtistsConfig) []*art.Artist {
+	dummyArtists := make([]*art.Artist, artists.RandomAmount())
 	for i := range dummyArtists {
 		dummyArtists[i] = d.CreateArtist(artists.Tracks)
 	}
@@ -76,15 +77,15 @@ func (d *DummyFactory) CreateArtists(artists *ArtistsConfig) []*art.Artist {
 }
 
 // CreateArtist creates a dummy artist with a random name and tracks.
-func (d *DummyFactory) CreateArtist(tracks *TracksConfig) *art.Artist {
+func (d *DummyService) CreateArtist(tracks *internal.TracksConfig) *art.Artist {
 	return art.NewArtist(
 		faker.HipsterWord(),
 		art.WithTracks(d.CreateTracks(tracks)))
 }
 
 // CreateTracks creates a specified amount of dummy tracks.
-func (d *DummyFactory) CreateTracks(tracks *TracksConfig) []*trk.Track {
-	dummyTracks := make([]*trk.Track, tracks.randomAmount())
+func (d *DummyService) CreateTracks(tracks *internal.TracksConfig) []*trk.Track {
+	dummyTracks := make([]*trk.Track, tracks.RandomAmount())
 	for i := range dummyTracks {
 		dummyTracks[i] = d.CreateTrack(tracks.Tabs)
 	}
@@ -92,15 +93,15 @@ func (d *DummyFactory) CreateTracks(tracks *TracksConfig) []*trk.Track {
 }
 
 // CreateTrack creates a dummy track with a random title, duration, and tabs.
-func (d *DummyFactory) CreateTrack(tabs *TabsConfig) *trk.Track {
+func (d *DummyService) CreateTrack(tabs *internal.TabsConfig) *trk.Track {
 	return trk.NewTrack(
 		faker.HipsterSentence(faker.Number(1, 6)),
 		uint(faker.Number(10000, 3000000)), // 1 to 5 minutes
-		trk.WithTabs(d.CreateTabs(tabs.randomAmount())))
+		trk.WithTabs(d.CreateTabs(tabs.RandomAmount())))
 }
 
 // CreateTabs creates a specified amount of dummy tabs.
-func (d *DummyFactory) CreateTabs(amount uint) []*tabs.Tab {
+func (d *DummyService) CreateTabs(amount uint) []*tabs.Tab {
 	dummyTabs := make([]*tabs.Tab, amount)
 	for i := range dummyTabs {
 		dummyTabs[i] = d.CreateTab()
@@ -109,6 +110,6 @@ func (d *DummyFactory) CreateTabs(amount uint) []*tabs.Tab {
 }
 
 // CreateTab creates a new dummy tab with a random instrument, difficulty, and description
-func (d *DummyFactory) CreateTab() *tabs.Tab {
+func (d *DummyService) CreateTab() *tabs.Tab {
 	return tabs.NewTab(d.GetRandomInstrument(), d.GetRandomDifficulty(), faker.Name())
 }

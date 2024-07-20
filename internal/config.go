@@ -36,7 +36,7 @@ type ArtistsConfig struct {
 	Tracks *TracksConfig `yaml:"tracks"`
 }
 
-func (a *ArtistsConfig) randomAmount() uint {
+func (a *ArtistsConfig) RandomAmount() uint {
 	return uint(faker.Number(a.Min, a.Max))
 }
 
@@ -47,7 +47,7 @@ type TracksConfig struct {
 	Tabs *TabsConfig `yaml:"tabs"`
 }
 
-func (t *TracksConfig) randomAmount() uint {
+func (t *TracksConfig) RandomAmount() uint {
 	return uint(faker.Number(t.Min, t.Max))
 }
 
@@ -57,7 +57,7 @@ type TabsConfig struct {
 	Max int `yaml:"max"`
 }
 
-func (t *TabsConfig) randomAmount() uint {
+func (t *TabsConfig) RandomAmount() uint {
 	return uint(faker.Number(t.Min, t.Max))
 }
 

@@ -1,24 +1,24 @@
-package internal
+package services
 
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	"github.com/shvdg-dev/tunes-to-tabs-api/internal/services"
+	"github.com/shvdg-dev/tunes-to-tabs-api/internal"
 	"log"
 )
 
-// Purger helps with deleting data from the database
-type Purger struct {
-	Service *services.TableService
+// PurgeService helps with deleting data from the database
+type PurgeService struct {
+	Service *TableService
 }
 
-// NewPurger creates a new instance of Purger
-func NewPurger(service *services.TableService) *Purger {
-	return &Purger{Service: service}
+// NewPurgeService creates a new instance of PurgeService
+func NewPurgeService(service *TableService) *PurgeService {
+	return &PurgeService{Service: service}
 }
 
 // Purge when permitted, drops the tables in the database
-func (p *Purger) Purge() {
-	if !logic.GetEnvValueAsBoolean(KeyDatabaseEnablePurgingCommand) {
+func (p *PurgeService) Purge() {
+	if !logic.GetEnvValueAsBoolean(internal.KeyDatabaseEnablePurgingCommand) {
 		log.Fatalf("It is not allowed to purge the database")
 	}
 	p.DropRelationLinkTables()
@@ -27,13 +27,13 @@ func (p *Purger) Purge() {
 }
 
 // DropRelationLinkTables drops the tables that hold relation links.
-func (p *Purger) DropRelationLinkTables() {
+func (p *PurgeService) DropRelationLinkTables() {
 	p.Service.DropArtistTrackTable()
 	p.Service.DropTrackTabTable()
 }
 
 // DropStorageTables drops tables.
-func (p *Purger) DropStorageTables() {
+func (p *PurgeService) DropStorageTables() {
 	p.Service.DropArtistsTable()
 	p.Service.DropEndpointsTable()
 	p.Service.DropReferencesTable()
@@ -45,7 +45,7 @@ func (p *Purger) DropStorageTables() {
 }
 
 // DropLookupTables drops the lookup tables.
-func (p *Purger) DropLookupTables() {
+func (p *PurgeService) DropLookupTables() {
 	p.Service.DropInstrumentsTable()
 	p.Service.DropDifficultiesTable()
 	p.Service.DropSourcesTable()
