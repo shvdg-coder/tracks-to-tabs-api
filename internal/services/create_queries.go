@@ -22,6 +22,27 @@ const createArtistsTableQuery = `
 `
 
 /*
++--------------------------------------+--------------------------------------+
+|              artist_id               |              track_id                |
++--------------------------------------+--------------------------------------+
+| 123e4567-e89b-12d3-a456-426614174050 | 123e4567-e89b-12d3-a456-426614174000 |
+| 123e4567-e89b-12d3-a456-426614174051 | 123e4567-e89b-12d3-a456-426614174001 |
++--------------------------------------+--------------------------------------+
+
+This table is linking the 'artists' table and the 'tracks' table.
+
+- 'artist_id': The UUID that uniquely identifies an artist in the 'artists' table.
+- 'track_id': The UUID that uniquely identifies a track in the 'tracks' table.
+*/
+const createArtistTrackTableQuery = `
+	CREATE TABLE IF NOT EXISTS artist_track  (
+	   artist_id UUID REFERENCES artists (id),
+	   track_id UUID REFERENCES tracks (id),
+	   PRIMARY KEY (artist_id, track_id)
+	);
+`
+
+/*
 +--------------------------------------+--------------------+------------+
 |                 id                   |       title        |  duration  |
 +--------------------------------------+--------------------+------------+
@@ -45,52 +66,50 @@ const createTracksTableQuery = `
 `
 
 /*
-+----+---------------------+
-| id |         name        |
-+----+---------------------+
-| 1  |  easy               |
-| 2  |  intermediate       |
-| 3  |  hard               |
-+----+---------------------+
++--------------------------------------+--------------------------------------+
+|               track_id               |                tab_id                |
++--------------------------------------+--------------------------------------+
+| 123e4567-e89b-12d3-a456-426614174050 | 123e4567-e89b-12d3-a456-426614174000 |
+| 123e4567-e89b-12d3-a456-426614174051 | 123e4567-e89b-12d3-a456-426614174001 |
++--------------------------------------+--------------------------------------+
 
-This table is used to store Difficulty Levels in our system.
+This table is used to link the 'tracks' table and the 'tabs' table.
 
-It contains the following columns:
-  - 'id': This is an auto-incrementing integer that uniquely identifies a record.
-  - 'name': This column records the name of the difficulty level.
+- 'track_id': The UUID that uniquely identifies a track from the 'tracks' table.
+- 'tab_id': The UUID that uniquely identifies a tab from the 'tabs' table.
 */
-const createDifficultiesTableQuery = `
-	CREATE TABLE IF NOT EXISTS difficulties (
-	   id SERIAL PRIMARY KEY,
-	   name VARCHAR(255) NOT NULL
+const createTrackTabTableQuery = `
+	CREATE TABLE IF NOT EXISTS track_tab  (
+	   track_id UUID REFERENCES tracks (id),
+	   tab_id UUID REFERENCES tabs (id),
+	   PRIMARY KEY (track_id, tab_id)
 	);
 `
 
 /*
-+---------------------------------------------------------------+
-|   source_id  | category   | type      | url                   |
-+---------------------------------------------------------------+
-| 1001         | artist     | web       | /artist/{artistID}    |
-| 1001         | track      | web       | /track/{trackID}      |
-| 1003         | tab        | api       | /tab/{trackID}        |
-+---------------------------------------------------------------+
++--------------------------------------+---------------+---------------+------------------+
+|                  id                  | instrument_id | difficulty_id |   description    |
++--------------------------------------+---------------+---------------+------------------+
+| 123e4567-e89b-12d3-a456-426614174000 |      580      |      423      | James Hetfield   |
+| 123e4567-e89b-12d3-a456-426614174001 |      590      |      420      | Mick Mars        |
++--------------------------------------+---------------+---------------+------------------+
 
-The table 'endpoints' is used to store various endpoints for internal records.
+This table is used to store Tracks in our system.
 
 It contains the following columns:
-  - 'source_id': This is the ID of the external source from which the data was referenced.
-  - 'category': This denotes the category of an external reference.
-  - 'type': This denotes the type.
-  - 'url': This is the endpoint, which has to be formatted with the corresponding IDs/references, as stored in the 'references' table.
+  - 'id': This is the UUID that uniquely identifies a record.
+  - 'instrument_id': This column represents the ID of the instrument from a lookup table.
+  - 'difficulty_id': This column represents the ID of the difficulty level from a lookup table.
+  - 'description': This column records the description of the tab.
 */
-const createEndpointsTableQuery = `
-	CREATE TABLE IF NOT EXISTS "endpoints" (
-	   source_id INT NOT NULL,
-	   category VARCHAR(250) NOT NULL,
-	   type VARCHAR(250) NOT NULL,
-	   url VARCHAR(250) NOT NULL,
-	   UNIQUE(source_id, category, type, URL),  
-	   CONSTRAINT fk_source FOREIGN KEY(source_id) REFERENCES sources(id)
+const createTabsTableQuery = `
+	CREATE TABLE IF NOT EXISTS tabs (
+	   id UUID PRIMARY KEY,
+	   instrument_id INT NOT NULL,
+	   difficulty_id INT NOT NULL,
+	   description TEXT,
+	   CONSTRAINT fk_instrument FOREIGN KEY(instrument_id) REFERENCES instruments(id),
+	   CONSTRAINT fk_difficulty	FOREIGN KEY(difficulty_id) REFERENCES difficulties(id)
 	);
 `
 
@@ -110,6 +129,28 @@ It contains the following columns:
 */
 const createInstrumentsTableQuery = `
 	CREATE TABLE IF NOT EXISTS instruments (
+	   id SERIAL PRIMARY KEY,
+	   name VARCHAR(255) NOT NULL
+	);
+`
+
+/*
++----+---------------------+
+| id |         name        |
++----+---------------------+
+| 1  |  easy               |
+| 2  |  intermediate       |
+| 3  |  hard               |
++----+---------------------+
+
+This table is used to store Difficulty Levels in our system.
+
+It contains the following columns:
+  - 'id': This is an auto-incrementing integer that uniquely identifies a record.
+  - 'name': This column records the name of the difficulty level.
+*/
+const createDifficultiesTableQuery = `
+	CREATE TABLE IF NOT EXISTS difficulties (
 	   id SERIAL PRIMARY KEY,
 	   name VARCHAR(255) NOT NULL
 	);
@@ -144,6 +185,83 @@ const createReferencesTableQuery = `
 	   reference VARCHAR(250) NOT NULL,
 	   UNIQUE(internal_id, source_id, category, type),
        CONSTRAINT fk_source FOREIGN KEY(source_id) REFERENCES sources(id)
+	);
+`
+
+/*
++-------+-------------------+-------------+
+| id    |       name        |  category   |
++-------+-------------------+-------------+
+| 1001  | Music Provider 1  |   music     |
+| 1002  | Music Provider 2  |   music     |
+| 1003  | Tab Provider 1    |   tabs      |
+| 1004  | Tab Provider 2    |   tabs      |
++-------+-------------------+-------------+
+
+The table named 'sources' has the purpose of storing unique source names.
+
+It contains the following columns:
+  - 'id': An auto-incrementing integer that uniquely identifies a record.
+  - 'name': The name of the source.
+  - 'category': The category of the source.
+*/
+const createSourcesTableQuery = `
+	CREATE TABLE IF NOT EXISTS sources(
+	   id int PRIMARY KEY,
+	   name VARCHAR(250) NOT NULL,
+	   category VARCHAR(100) NOT NULL,
+	   UNIQUE(name)                                    
+	);
+`
+
+/*
++---------------------------------------------------------------+
+|   source_id  | category   | type      | url                   |
++---------------------------------------------------------------+
+| 1001         | artist     | web       | /artist/{artistID}    |
+| 1001         | track      | web       | /track/{trackID}      |
+| 1003         | tab        | api       | /tab/{trackID}        |
++---------------------------------------------------------------+
+
+The table 'endpoints' is used to store various endpoints for internal records.
+
+It contains the following columns:
+  - 'source_id': This is the ID of the external source from which the data was referenced.
+  - 'category': This denotes the category of an external reference.
+  - 'type': This denotes the type.
+  - 'url': This is the endpoint, which has to be formatted with the corresponding IDs/references, as stored in the 'references' table.
+*/
+const createEndpointsTableQuery = `
+	CREATE TABLE IF NOT EXISTS "endpoints" (
+	   source_id INT NOT NULL,
+	   category VARCHAR(250) NOT NULL,
+	   type VARCHAR(250) NOT NULL,
+	   url VARCHAR(250) NOT NULL,
+	   UNIQUE(source_id, category, type, URL),  
+	   CONSTRAINT fk_source FOREIGN KEY(source_id) REFERENCES sources(id)
+	);
+`
+
+/*
++--------------------------------------+---------------+-------------+
+|                   id                 |     email     | password 	 |
++--------------------------------------+---------------+-------------+
+| 123e4567-e89b-12d3-a456-426614174000 | john@doe.com  | hashedPw123 |
+| 123e4567-e89b-12d3-a456-426614174001 | jane@doe.com  | hashedPw456 |
++--------------------------------------+---------------+-------------+
+
+This table is used to store a user with their credentials in our system.
+
+It consists of the following columns:
+  - 'id': This is the UUID that uniquely identifies a user in our system.
+  - 'email': This is the user's email address.
+  - 'password': This stores the hashed password of the user.
+*/
+const createUsersTableQuery = `
+	CREATE TABLE IF NOT EXISTS users  (
+	   id UUID PRIMARY KEY,
+	   email VARCHAR(255) UNIQUE NOT NULL,
+	   password VARCHAR(60) NOT NULL
 	);
 `
 
@@ -185,121 +303,3 @@ const createSessionExpiryIndexQuery = `
 			CREATE INDEX sessions_expiry_idx ON sessions (expiry);
 		END IF;
 	END $$`
-
-/*
-+-------+-------------------+-------------+
-| id    |       name        |  category   |
-+-------+-------------------+-------------+
-| 1001  | Music Provider 1  |   music     |
-| 1002  | Music Provider 2  |   music     |
-| 1003  | Tab Provider 1    |   tabs      |
-| 1004  | Tab Provider 2    |   tabs      |
-+-------+-------------------+-------------+
-
-The table named 'sources' has the purpose of storing unique source names.
-
-It contains the following columns:
-  - 'id': An auto-incrementing integer that uniquely identifies a record.
-  - 'name': The name of the source.
-  - 'category': The category of the source.
-*/
-const createSourcesTableQuery = `
-	CREATE TABLE IF NOT EXISTS sources(
-	   id int PRIMARY KEY,
-	   name VARCHAR(250) NOT NULL,
-	   category VARCHAR(100) NOT NULL,
-	   UNIQUE(name)                                    
-	);
-`
-
-/*
-+--------------------------------------+---------------+---------------+------------------+
-|                  id                  | instrument_id | difficulty_id |   description    |
-+--------------------------------------+---------------+---------------+------------------+
-| 123e4567-e89b-12d3-a456-426614174000 |      580      |      423      | James Hetfield   |
-| 123e4567-e89b-12d3-a456-426614174001 |      590      |      420      | Mick Mars        |
-+--------------------------------------+---------------+---------------+------------------+
-
-This table is used to store Tracks in our system.
-
-It contains the following columns:
-  - 'id': This is the UUID that uniquely identifies a record.
-  - 'instrument_id': This column represents the ID of the instrument from a lookup table.
-  - 'difficulty_id': This column represents the ID of the difficulty level from a lookup table.
-  - 'description': This column records the description of the tab.
-*/
-const createTabsTableQuery = `
-	CREATE TABLE IF NOT EXISTS tabs (
-	   id UUID PRIMARY KEY,
-	   instrument_id INT NOT NULL,
-	   difficulty_id INT NOT NULL,
-	   description TEXT,
-	   CONSTRAINT fk_instrument FOREIGN KEY(instrument_id) REFERENCES instruments(id),
-	   CONSTRAINT fk_difficulty	FOREIGN KEY(difficulty_id) REFERENCES difficulties(id)
-	);
-`
-
-/*
-+--------------------------------------+--------------------------------------+
-|               track_id               |                tab_id                |
-+--------------------------------------+--------------------------------------+
-| 123e4567-e89b-12d3-a456-426614174050 | 123e4567-e89b-12d3-a456-426614174000 |
-| 123e4567-e89b-12d3-a456-426614174051 | 123e4567-e89b-12d3-a456-426614174001 |
-+--------------------------------------+--------------------------------------+
-
-This table is used to link the 'tracks' table and the 'tabs' table.
-
-- 'track_id': The UUID that uniquely identifies a track from the 'tracks' table.
-- 'tab_id': The UUID that uniquely identifies a tab from the 'tabs' table.
-*/
-const createTrackTabTableQuery = `
-	CREATE TABLE IF NOT EXISTS track_tab  (
-	   track_id UUID REFERENCES tracks (id),
-	   tab_id UUID REFERENCES tabs (id),
-	   PRIMARY KEY (track_id, tab_id)
-	);
-`
-
-/*
-+--------------------------------------+---------------+-------------+
-|                   id                 |     email     | password 	 |
-+--------------------------------------+---------------+-------------+
-| 123e4567-e89b-12d3-a456-426614174000 | john@doe.com  | hashedPw123 |
-| 123e4567-e89b-12d3-a456-426614174001 | jane@doe.com  | hashedPw456 |
-+--------------------------------------+---------------+-------------+
-
-This table is used to store a user with their credentials in our system.
-
-It consists of the following columns:
-  - 'id': This is the UUID that uniquely identifies a user in our system.
-  - 'email': This is the user's email address.
-  - 'password': This stores the hashed password of the user.
-*/
-const createUsersTableQuery = `
-	CREATE TABLE IF NOT EXISTS users  (
-	   id UUID PRIMARY KEY,
-	   email VARCHAR(255) UNIQUE NOT NULL,
-	   password VARCHAR(60) NOT NULL
-	);
-`
-
-/*
-+--------------------------------------+--------------------------------------+
-|              artist_id               |              track_id                |
-+--------------------------------------+--------------------------------------+
-| 123e4567-e89b-12d3-a456-426614174050 | 123e4567-e89b-12d3-a456-426614174000 |
-| 123e4567-e89b-12d3-a456-426614174051 | 123e4567-e89b-12d3-a456-426614174001 |
-+--------------------------------------+--------------------------------------+
-
-This table is linking the 'artists' table and the 'tracks' table.
-
-- 'artist_id': The UUID that uniquely identifies an artist in the 'artists' table.
-- 'track_id': The UUID that uniquely identifies a track in the 'tracks' table.
-*/
-const createArtistTrackTableQuery = `
-	CREATE TABLE IF NOT EXISTS artist_track  (
-	   artist_id UUID REFERENCES artists (id),
-	   track_id UUID REFERENCES tracks (id),
-	   PRIMARY KEY (artist_id, track_id)
-	);
-`
