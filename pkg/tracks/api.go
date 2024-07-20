@@ -2,17 +2,21 @@ package tracks
 
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
 	"log"
 )
 
 // API is for managing tracks of songs.
 type API struct {
 	Database *logic.DatabaseManager
+	TrackTab *tracktab.API
+	Tabs     *tabs.API
 }
 
 // NewAPI creates a new instance of the API struct.
-func NewAPI(database *logic.DatabaseManager) *API {
-	return &API{Database: database}
+func NewAPI(database *logic.DatabaseManager, trackTab *tracktab.API, tabs *tabs.API) *API {
+	return &API{Database: database, TrackTab: trackTab, Tabs: tabs}
 }
 
 // CreateTracksTable creates the tracks table if it doesn't already exist.
@@ -74,9 +78,17 @@ func (a *API) GetTracks(trackID ...string) ([]*Track, error) {
 
 // GetTracksCascading retrieves the tracks, with references to other entities.
 func (a *API) GetTracksCascading(trackID ...string) ([]*Track, error) {
-	//tracks, err := a.GetTracks(trackID...)
-	//if err != nil {
-	//	return nil, err
-	//}
-	return nil, nil
+	tracks, err := a.GetTracks(trackID...)
+	if err != nil {
+		return nil, err
+	}
+	tabIDs, err := a.TrackTab.GetTabIDs(trackID...)
+	if err != nil {
+		return nil, err
+	}
+	_, err = a.Tabs.GetTabs(tabIDs...)
+	if err != nil {
+		return nil, err
+	}
+	return tracks, nil
 }

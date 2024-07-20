@@ -3,17 +3,21 @@ package artists
 import (
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
+	at "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists/artisttrack"
+	trcks "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 	"log"
 )
 
 // API is for managing artists.
 type API struct {
-	Database *logic.DatabaseManager
+	Database    *logic.DatabaseManager
+	ArtistTrack *at.API
+	Tracks      *trcks.API
 }
 
 // NewAPI creates a new instance of the API struct.
-func NewAPI(database *logic.DatabaseManager) *API {
-	return &API{Database: database}
+func NewAPI(database *logic.DatabaseManager, artistTrack *at.API, tracks *trcks.API) *API {
+	return &API{Database: database, ArtistTrack: artistTrack, Tracks: tracks}
 }
 
 // CreateArtistsTable creates an artists table if it doesn't already exist.
@@ -73,11 +77,20 @@ func (a *API) GetArtists(artistID ...string) ([]*Artist, error) {
 	return artists, nil
 }
 
-// GetArtistsCascading retrieves artists, with references to other entities.
+// GetArtistsCascading retrieves artists with the provided internal artist IDs, with references to other entities.
 func (a *API) GetArtistsCascading(artistID ...string) ([]*Artist, error) {
-	//artists, err := a.GetArtists(artistID...)
-	//if err != nil {
-	//	return nil, err
-	//}
-	return nil, nil
+	artists, err := a.GetArtists(artistID...)
+	if err != nil {
+		return nil, err
+	}
+	trackIDs, err := a.ArtistTrack.GetTrackIDs(artistID...)
+	if err != nil {
+		return nil, err
+	}
+	_, err = a.Tracks.GetTracksCascading(trackIDs...)
+	if err != nil {
+		return nil, err
+	}
+
+	return artists, nil
 }

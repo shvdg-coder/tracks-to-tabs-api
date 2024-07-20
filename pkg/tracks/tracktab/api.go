@@ -44,3 +44,26 @@ func (a *API) LinkTrackToTab(trackId, tabId string) {
 		log.Printf("Successfully linked track with ID '%s' and tab with ID '%s'", trackId, tabId)
 	}
 }
+
+// GetTabIDs retrieves the tab IDs for the provided track IDs.
+func (a *API) GetTabIDs(trackID ...string) ([]string, error) {
+	rows, err := a.Database.DB.Query(getTabIDs, trackID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var tabIDs []string
+
+	for rows.Next() {
+		var tabID string
+		err := rows.Scan(&tabID)
+		if err != nil {
+			return nil, err
+		}
+		tabIDs = append(tabIDs, tabID)
+	}
+
+	return tabIDs, nil
+}

@@ -52,3 +52,8 @@ func (a *API) InsertTab(tab *Tab) {
 		log.Printf("Successfully inserted tab with '%s', '%s' & Description: '%s'", tab.Instrument.Name, tab.Difficulty.Name, tab.Description)
 	}
 }
+
+// GetTabs retrieves the tabs for the provided IDs.
+func (a *API) GetTabs(tabID ...string) ([]*Tab, error) {
+	return nil, nil
+}

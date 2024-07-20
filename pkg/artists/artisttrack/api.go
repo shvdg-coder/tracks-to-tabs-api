@@ -46,9 +46,9 @@ func (a *API) LinkArtistToTrack(artistId, trackId string) {
 	}
 }
 
-// GetLinkedTracks retrieves the track IDs for the provided internal artist IDs.
-func (a *API) GetLinkedTracks(internalArtistID ...string) ([]string, error) {
-	rows, err := a.Database.DB.Query(getArtistTrackFromIDs, internalArtistID)
+// GetTrackIDs retrieves the track IDs for the provided internal artist IDs.
+func (a *API) GetTrackIDs(artistID ...string) ([]string, error) {
+	rows, err := a.Database.DB.Query(getTrackIDs, artistID)
 	if err != nil {
 		return nil, err
 	}
@@ -56,8 +56,8 @@ func (a *API) GetLinkedTracks(internalArtistID ...string) ([]string, error) {
 	var trackIDs []string
 
 	for rows.Next() {
-		var artistID, trackID string
-		err := rows.Scan(&artistID, &trackID)
+		var trackID string
+		err := rows.Scan(&trackID)
 		if err != nil {
 			return nil, err
 		}
