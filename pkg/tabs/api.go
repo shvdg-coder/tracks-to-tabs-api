@@ -3,20 +3,16 @@ package tabs
 import (
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
-	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
 	"log"
 )
 
 // API is for managing tabs.
 type API struct {
-	Database        *logic.DatabaseManager
-	InstrumentsAPI  *inst.API
-	DifficultiesAPI *diff.API
+	Database *logic.DatabaseManager
 }
 
 // NewAPI creates a new instance of the API struct.
-func NewAPI(database *logic.DatabaseManager, instrumentsAPI *diff.API, difficultiesAPI *diff.API) *API {
+func NewAPI(database *logic.DatabaseManager) *API {
 	return &API{Database: database}
 }
 
