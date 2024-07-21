@@ -26,23 +26,37 @@ func (a *API) LinkArtistToTrack(artistId, trackId string) {
 	}
 }
 
-// GetTrackIDs retrieves the track IDs for the provided internal artist IDs.
-func (a *API) GetTrackIDs(artistID ...string) ([]string, error) {
-	rows, err := a.Database.DB.Query(getTrackIDs, artistID)
+// GetArtistToTrackLink retrieves the 'artist to track' link for the provided artist ID.
+func (a *API) GetArtistToTrackLink(artistID string) (*ArtistTrack, error) {
+	artistTracks, err := a.GetArtistToTrackLinks(artistID)
+	if err != nil {
+		return nil, err
+	}
+	return artistTracks[0], err
+}
+
+// GetArtistToTrackLinks retrieves the 'artist to track' link for the provided artist IDs.
+func (a *API) GetArtistToTrackLinks(artistID ...string) ([]*ArtistTrack, error) {
+	rows, err := a.Database.DB.Query(getArtistTrackLinks, artistID)
 	if err != nil {
 		return nil, err
 	}
 
-	var trackIDs []string
+	defer rows.Close()
 
+	var artistTrackLink []*ArtistTrack
 	for rows.Next() {
-		var trackID string
-		err := rows.Scan(&trackID)
+		var artistTrack *ArtistTrack
+		err := rows.Scan(&artistTrack.ArtistID, &artistTrack.TrackID)
 		if err != nil {
 			return nil, err
 		}
-		trackIDs = append(trackIDs, trackID)
+		artistTrackLink = append(artistTrackLink, artistTrack)
 	}
 
-	return trackIDs, nil
+	if rows.Err() != nil {
+		return nil, rows.Err()
+	}
+
+	return artistTrackLink, nil
 }

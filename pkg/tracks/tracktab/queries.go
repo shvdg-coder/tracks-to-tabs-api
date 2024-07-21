@@ -6,5 +6,5 @@ const insertTrackTabQuery = `
     VALUES ($1, $2) 
 `
 
-// getTabIDs retrieves the Tab IDs for the provided Track IDs.
-const getTabIDs = `SELECT tab_id FROM track_tab WHERE track_id = ($1)`
+// getTrackTabLinks retrieves the 'track to tab' links for the provided Track IDs.
+const getTrackTabLinks = `SELECT track_id, tab_id FROM track_tab WHERE track_id = ($1)`

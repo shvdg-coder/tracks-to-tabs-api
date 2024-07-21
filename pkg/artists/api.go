@@ -37,15 +37,25 @@ func (a *API) InsertArtist(artist *Artist) {
 	}
 }
 
-// GetArtists retrieves artists, without references to other entities.
+// GetArtist retrieves an artist, without entity references, for the provided ID.
+func (a *API) GetArtist(artistID string) (*Artist, error) {
+	artists, err := a.GetArtists(artistID)
+	if err != nil {
+		return nil, err
+	}
+	return artists[0], nil
+}
+
+// GetArtists retrieves artists, without entity references, for the provided IDs.
 func (a *API) GetArtists(artistID ...string) ([]*Artist, error) {
 	rows, err := a.Database.DB.Query(getArtistsFromIDs, artistID)
 	if err != nil {
 		return nil, err
 	}
 
-	var artists []*Artist
+	defer rows.Close()
 
+	var artists []*Artist
 	for rows.Next() {
 		artist := &Artist{}
 		err := rows.Scan(&artist.ID, &artist.Name)
@@ -54,22 +64,9 @@ func (a *API) GetArtists(artistID ...string) ([]*Artist, error) {
 		}
 		artists = append(artists, artist)
 	}
-	return artists, nil
-}
 
-// GetArtistsCascading retrieves artists with the provided internal artist IDs, with references to other entities.
-func (a *API) GetArtistsCascading(artistID ...string) ([]*Artist, error) {
-	artists, err := a.GetArtists(artistID...)
-	if err != nil {
-		return nil, err
-	}
-	trackIDs, err := a.ArtistTrack.GetTrackIDs(artistID...)
-	if err != nil {
-		return nil, err
-	}
-	_, err = a.Tracks.GetTracksCascading(trackIDs...)
-	if err != nil {
-		return nil, err
+	if rows.Err() != nil {
+		return nil, rows.Err()
 	}
 
 	return artists, nil

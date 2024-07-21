@@ -2,21 +2,21 @@ package tracks
 
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
+	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
+	trcktb "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
 	"log"
 )
 
 // API is for managing tracks of songs.
 type API struct {
-	Database *logic.DatabaseManager
-	TrackTab *tracktab.API
-	Tabs     *tabs.API
+	Database    *logic.DatabaseManager
+	TrackTabAPI *trcktb.API
+	TabsAPI     *tbs.API
 }
 
 // NewAPI creates a new instance of the API struct.
-func NewAPI(database *logic.DatabaseManager, trackTab *tracktab.API, tabs *tabs.API) *API {
-	return &API{Database: database, TrackTab: trackTab, Tabs: tabs}
+func NewAPI(database *logic.DatabaseManager, trackTabAPI *trcktb.API, tabsAPI *tbs.API) *API {
+	return &API{Database: database, TrackTabAPI: trackTabAPI, TabsAPI: tabsAPI}
 }
 
 // InsertTracks inserts multiple tracks into the tracks table.
@@ -36,15 +36,25 @@ func (a *API) InsertTrack(track *Track) {
 	}
 }
 
-// GetTracks retrieves the tracks, without references to other entities.
+// GetTrack retrieves the track, without entity references, for the provided ID.
+func (a *API) GetTrack(trackID string) (*Track, error) {
+	tracks, err := a.GetTracks(trackID)
+	if err != nil {
+		return nil, err
+	}
+	return tracks[0], nil
+}
+
+// GetTracks retrieves the tracks, without entity references, for the provided IDs.
 func (a *API) GetTracks(trackID ...string) ([]*Track, error) {
 	rows, err := a.Database.DB.Query(getTracksFromIDs, trackID)
 	if err != nil {
 		return nil, err
 	}
 
-	var tracks []*Track
+	defer rows.Close()
 
+	var tracks []*Track
 	for rows.Next() {
 		track := &Track{}
 		err := rows.Scan(&track.ID, &track.Title, &track.Duration)
@@ -53,22 +63,10 @@ func (a *API) GetTracks(trackID ...string) ([]*Track, error) {
 		}
 		tracks = append(tracks, track)
 	}
-	return nil, nil
-}
 
-// GetTracksCascading retrieves the tracks, with references to other entities.
-func (a *API) GetTracksCascading(trackID ...string) ([]*Track, error) {
-	tracks, err := a.GetTracks(trackID...)
-	if err != nil {
-		return nil, err
+	if rows.Err() != nil {
+		return nil, rows.Err()
 	}
-	tabIDs, err := a.TrackTab.GetTabIDs(trackID...)
-	if err != nil {
-		return nil, err
-	}
-	_, err = a.Tabs.GetTabs(tabIDs...)
-	if err != nil {
-		return nil, err
-	}
+
 	return tracks, nil
 }

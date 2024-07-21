@@ -32,3 +32,38 @@ func (a *API) InsertDifficulty(difficulty *Difficulty) {
 		log.Printf("Successfully inserted difficulty level with name: '%s'", difficulty.Name)
 	}
 }
+
+// GetDifficulty retrieves a difficulty for the provided ID.
+func (a *API) GetDifficulty(difficultyID string) (*Difficulty, error) {
+	difficulty, err := a.GetDifficulties(difficultyID)
+	if err != nil {
+		return nil, err
+	}
+	return difficulty[0], nil
+}
+
+// GetDifficulties retrieves difficulties for the provided IDs.
+func (a *API) GetDifficulties(difficultyID ...string) ([]*Difficulty, error) {
+	rows, err := a.Database.DB.Query(getDifficultiesQuery, difficultyID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var difficulties []*Difficulty
+	for rows.Next() {
+		var difficulty Difficulty
+		err := rows.Scan(&difficulty.ID, &difficulty.Name)
+		if err != nil {
+			return nil, err
+		}
+		difficulties = append(difficulties, &difficulty)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return difficulties, nil
+}

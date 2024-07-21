@@ -25,25 +25,37 @@ func (a *API) LinkTrackToTab(trackId, tabId string) {
 	}
 }
 
-// GetTabIDs retrieves the tab IDs for the provided track IDs.
-func (a *API) GetTabIDs(trackID ...string) ([]string, error) {
-	rows, err := a.Database.DB.Query(getTabIDs, trackID)
+// GetTrackToTabLink retrieves the 'track to tab' link for the provided ID.
+func (a *API) GetTrackToTabLink(trackID string) (*TrackTab, error) {
+	trackTabLinks, err := a.GetTrackToTabLinks(trackID)
+	if err != nil {
+		return nil, err
+	}
+	return trackTabLinks[0], nil
+}
+
+// GetTrackToTabLinks retrieves the 'track to tab' links for the provided track IDs.
+func (a *API) GetTrackToTabLinks(trackID ...string) ([]*TrackTab, error) {
+	rows, err := a.Database.DB.Query(getTrackTabLinks, trackID)
 	if err != nil {
 		return nil, err
 	}
 
 	defer rows.Close()
 
-	var tabIDs []string
-
+	var trackTabLinks []*TrackTab
 	for rows.Next() {
-		var tabID string
-		err := rows.Scan(&tabID)
+		var trackTabLink *TrackTab
+		err := rows.Scan(&trackTabLink.TrackID, &trackTabLink.TabID)
 		if err != nil {
 			return nil, err
 		}
-		tabIDs = append(tabIDs, tabID)
+		trackTabLinks = append(trackTabLinks, trackTabLink)
 	}
 
-	return tabIDs, nil
+	if rows.Err() != nil {
+		return nil, rows.Err()
+	}
+
+	return trackTabLinks, nil
 }
