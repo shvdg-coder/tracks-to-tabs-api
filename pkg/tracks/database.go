@@ -2,32 +2,36 @@ package tracks
 
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
-	trcktb "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
 	"log"
 )
 
-// API is for managing tracks of songs.
-type API struct {
-	Database    *logic.DatabaseManager
-	TrackTabAPI *trcktb.API
-	TabsAPI     *tbs.API
+// DatabaseOperations represents operations related to tracks.
+type DatabaseOperations interface {
+	InsertTracks(tracks ...*Track)
+	InsertTrack(track *Track)
+	GetTrack(trackID string) (*Track, error)
+	GetTracks(trackID ...string) ([]*Track, error)
 }
 
-// NewAPI creates a new instance of the API struct.
-func NewAPI(database *logic.DatabaseManager, trackTabAPI *trcktb.API, tabsAPI *tbs.API) *API {
-	return &API{Database: database, TrackTabAPI: trackTabAPI, TabsAPI: tabsAPI}
+// DatabaseService is for managing tracks of songs.
+type DatabaseService struct {
+	Database *logic.DatabaseManager
+}
+
+// NewDatabaseService creates a new instance of the DatabaseService struct.
+func NewDatabaseService(database *logic.DatabaseManager) *DatabaseService {
+	return &DatabaseService{Database: database}
 }
 
 // InsertTracks inserts multiple tracks into the tracks table.
-func (a *API) InsertTracks(tracks ...*Track) {
+func (a *DatabaseService) InsertTracks(tracks ...*Track) {
 	for _, track := range tracks {
 		a.InsertTrack(track)
 	}
 }
 
 // InsertTrack inserts a track into the tracks table.
-func (a *API) InsertTrack(track *Track) {
+func (a *DatabaseService) InsertTrack(track *Track) {
 	_, err := a.Database.DB.Exec(insertTrackQuery, track.ID, track.Title, track.Duration)
 	if err != nil {
 		log.Printf("Failed to insert track with title '%s': %s", track.Title, err.Error())
@@ -37,7 +41,7 @@ func (a *API) InsertTrack(track *Track) {
 }
 
 // GetTrack retrieves the track, without entity references, for the provided ID.
-func (a *API) GetTrack(trackID string) (*Track, error) {
+func (a *DatabaseService) GetTrack(trackID string) (*Track, error) {
 	tracks, err := a.GetTracks(trackID)
 	if err != nil {
 		return nil, err
@@ -46,7 +50,7 @@ func (a *API) GetTrack(trackID string) (*Track, error) {
 }
 
 // GetTracks retrieves the tracks, without entity references, for the provided IDs.
-func (a *API) GetTracks(trackID ...string) ([]*Track, error) {
+func (a *DatabaseService) GetTracks(trackID ...string) ([]*Track, error) {
 	rows, err := a.Database.DB.Query(getTracksFromIDs, trackID)
 	if err != nil {
 		return nil, err

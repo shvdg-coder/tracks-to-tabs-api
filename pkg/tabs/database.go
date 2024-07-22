@@ -6,25 +6,33 @@ import (
 	"log"
 )
 
-// API is for managing tabs.
-type API struct {
+// DatabaseOperations represents operations related to tabs.
+type DatabaseOperations interface {
+	InsertTabs(tabs ...*Tab)
+	InsertTab(tab *Tab)
+	GetTab(tabID string) (*Tab, error)
+	GetTabs(tabID ...string) ([]*Tab, error)
+}
+
+// DatabaseService is for managing tabs.
+type DatabaseService struct {
 	Database *logic.DatabaseManager
 }
 
-// NewAPI creates a new instance of the API struct.
-func NewAPI(database *logic.DatabaseManager) *API {
-	return &API{Database: database}
+// NewDatabaseService creates a new instance of the DatabaseService struct.
+func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+	return &DatabaseService{Database: database}
 }
 
 // InsertTabs inserts multiple tabs in the tabs table.
-func (a *API) InsertTabs(tabs ...*Tab) {
+func (a *DatabaseService) InsertTabs(tabs ...*Tab) {
 	for _, tab := range tabs {
 		a.InsertTab(tab)
 	}
 }
 
 // InsertTab inserts a new tab in the tabs table.
-func (a *API) InsertTab(tab *Tab) {
+func (a *DatabaseService) InsertTab(tab *Tab) {
 	_, err := a.Database.DB.Exec(insertTabQuery, tab.ID, tab.Instrument.ID, tab.Difficulty.ID, tab.Description)
 	if err != nil {
 		log.Printf("Failed to insert tab with '%s', '%s' & Description: '%s': %s", tab.Instrument.Name, tab.Difficulty.Name, tab.Description, err.Error())
@@ -34,7 +42,7 @@ func (a *API) InsertTab(tab *Tab) {
 }
 
 // GetTab retrieves the tab, without entity references, for the provided tab ID.
-func (a *API) GetTab(tabID string) (*Tab, error) {
+func (a *DatabaseService) GetTab(tabID string) (*Tab, error) {
 	tabs, err := a.GetTabs(tabID)
 	if err != nil {
 		return nil, err
@@ -43,7 +51,7 @@ func (a *API) GetTab(tabID string) (*Tab, error) {
 }
 
 // GetTabs retrieves the tabs, without entity references, for the provided IDs.
-func (a *API) GetTabs(tabID ...string) ([]*Tab, error) {
+func (a *DatabaseService) GetTabs(tabID ...string) ([]*Tab, error) {
 	rows, err := a.Database.DB.Query(getTabsQuery, tabID)
 	if err != nil {
 		return nil, err

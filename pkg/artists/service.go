@@ -2,14 +2,14 @@ package artists
 
 import arttrk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists/artisttrack"
 
-// Operations represents all operations related to Artists.
+// Operations represents all operations related to artists.
 type Operations interface {
 	DatabaseOperations
 	MappingOperations
 	arttrk.Operations
 }
 
-// Service is responsible for managing and retrieving Artists.
+// Service is responsible for managing and retrieving artists.
 type Service struct {
 	DatabaseOperations
 	MappingOperations
@@ -18,7 +18,11 @@ type Service struct {
 
 // NewService instantiates a Service.
 func NewService(database DatabaseOperations, mapping MappingOperations, artistTrack arttrk.Operations) Operations {
-	return &Service{DatabaseOperations: database, MappingOperations: mapping, ArtistTrackOps: artistTrack}
+	return &Service{
+		DatabaseOperations: database,
+		MappingOperations:  mapping,
+		ArtistTrackOps:     artistTrack,
+	}
 }
 
 // LinkArtistToTrack links an artist to a track.

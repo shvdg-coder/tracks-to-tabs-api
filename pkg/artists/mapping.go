@@ -1,8 +1,8 @@
 package artists
 
 import (
-	arttrck "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists/artisttrack"
-	trcks "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
+	arttrk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists/artisttrack"
+	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 )
 
 // MappingOperations represents operations related to data mapping.
@@ -12,14 +12,17 @@ type MappingOperations interface {
 
 // MappingService is responsible for mapping entities to artists.
 type MappingService struct {
-	ArtistAPI      *DatabaseService
-	ArtistTrackAPI *arttrck.DatabaseService
-	TrackAPI       *trcks.API
+	DatabaseOperations
+	ArtistTrackOps arttrk.Operations
+	TracksOps      trk.Operations
 }
 
 // NewMappingService creates a new instance of MappingService.
-func NewMappingService(artistAPI *DatabaseService, artistTrackAPI *arttrck.DatabaseService, tracksAPI *trcks.API) *MappingService {
-	return &MappingService{ArtistAPI: artistAPI, ArtistTrackAPI: artistTrackAPI, TrackAPI: tracksAPI}
+func NewMappingService(artists DatabaseOperations, artistTrack arttrk.Operations, tracks trk.Operations) MappingOperations {
+	return &MappingService{
+		DatabaseOperations: artists,
+		ArtistTrackOps:     artistTrack,
+		TracksOps:          tracks}
 }
 
 // GetArtistsCascading retrieves artists, with entity references, for the provided IDs.
