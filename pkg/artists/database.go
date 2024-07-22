@@ -6,6 +6,14 @@ import (
 	"log"
 )
 
+// DatabaseOperations represents operations related to artists.
+type DatabaseOperations interface {
+	InsertArtist(artist *Artist)
+	InsertArtists(artist ...*Artist)
+	GetArtist(artistID string) (*Artist, error)
+	GetArtists(artistID ...string) ([]*Artist, error)
+}
+
 // DatabaseService is for managing artists.
 type DatabaseService struct {
 	Database *logic.DatabaseManager

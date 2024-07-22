@@ -1,11 +1,16 @@
 package artisttrack
 
+// Operations represents all operations related to 'artist to track' links.
+type Operations interface {
+	DatabaseOperations
+}
+
 // Service is responsible for managing and retrieving 'artist to track' links.
 type Service struct {
-	*DatabaseService
+	DatabaseOperations
 }
 
 // NewService instantiates a Service.
-func NewService(database *DatabaseService) *Service {
-	return &Service{DatabaseService: database}
+func NewService(database DatabaseOperations) Operations {
+	return &Service{DatabaseOperations: database}
 }

@@ -6,7 +6,14 @@ import (
 	"log"
 )
 
-// DatabaseService is for managing artists.
+// DatabaseOperations represents operations related to 'artists to tracks' links.
+type DatabaseOperations interface {
+	LinkArtistToTrack(artistId, trackId string)
+	GetArtistToTrackLink(artistID string) (*ArtistTrack, error)
+	GetArtistToTrackLinks(artistID ...string) ([]*ArtistTrack, error)
+}
+
+// DatabaseService is for managing 'artists to tracks' links.
 type DatabaseService struct {
 	Database *logic.DatabaseManager
 }

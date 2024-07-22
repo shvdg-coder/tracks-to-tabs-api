@@ -5,6 +5,11 @@ import (
 	trcks "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 )
 
+// MappingOperations represents operations related to data mapping.
+type MappingOperations interface {
+	GetArtistsCascading(artistID ...string) ([]*Artist, error)
+}
+
 // MappingService is responsible for mapping entities to artists.
 type MappingService struct {
 	ArtistAPI      *DatabaseService
