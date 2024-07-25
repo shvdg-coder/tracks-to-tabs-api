@@ -50,7 +50,7 @@ func (s *SeedService) seedAdmin() {
 	email := logic.GetEnvValueAsString(internal.KeyAdminInitialEmail)
 	password := logic.GetEnvValueAsString(internal.KeyAdminInitialPassword)
 	if email != "" && password != "" {
-		s.API.UsersAPI().InsertUser(email, password)
+		s.API.Users().InsertUser(email, password)
 	} else {
 		log.Println("Did not insert the initial admin account as no credentials were defined")
 	}
@@ -58,22 +58,22 @@ func (s *SeedService) seedAdmin() {
 
 // seedInstruments seeds the instruments table with the default instruments.
 func (s *SeedService) seedInstruments() {
-	s.API.InstrumentsAPI().InsertInstruments(s.Seeding.Instruments...)
+	s.API.Instruments().InsertInstruments(s.Seeding.Instruments...)
 }
 
 // seedDifficulties seeds the difficulties table with the default difficulties.
 func (s *SeedService) seedDifficulties() {
-	s.API.DifficultiesAPI().InsertDifficulties(s.Seeding.Difficulties...)
+	s.API.Difficulties().InsertDifficulties(s.Seeding.Difficulties...)
 }
 
 // seedSources seeds the sources from the config file.
 func (s *SeedService) seedSources() {
-	s.API.SourcesAPI().InsertSources(s.Seeding.Sources...)
+	s.API.Sources().InsertSources(s.Seeding.Sources...)
 }
 
 // seedEndpoints seeds the endpoints from the config file.
 func (s *SeedService) seedEndpoints() {
-	s.API.EndpointsAPI().InsertEndpoints(s.Seeding.Endpoints...)
+	s.API.Endpoints().InsertEndpoints(s.Seeding.Endpoints...)
 }
 
 // dummySeed when enabled, seeds the database with dummy data.
@@ -89,9 +89,9 @@ func (s *SeedService) dummySeed() {
 // insertArtists inserts the given artists and references into the database.
 func (s *SeedService) insertArtists(artists []*art.Artist) {
 	for _, artist := range artists {
-		s.API.ArtistsAPI().InsertArtist(artist)
+		s.API.Artists().InsertArtist(artist)
 		artistRef := s.Dummy.CreateReferenceID(artist.ID, internal.CategoryMusic, internal.CategoryArtist)
-		s.API.ReferencesAPI().InsertReference(artistRef)
+		s.API.References().InsertReference(artistRef)
 		s.insertTracks(artist.Tracks, artist.ID)
 	}
 }
@@ -99,10 +99,10 @@ func (s *SeedService) insertArtists(artists []*art.Artist) {
 // insertTracks inserts the given tracks and references into the database.
 func (s *SeedService) insertTracks(tracks []*trk.Track, artistID uuid.UUID) {
 	for _, track := range tracks {
-		s.API.TracksAPI().InsertTrack(track)
-		s.API.ArtistTrackAPI().LinkArtistToTrack(artistID.String(), track.ID.String())
+		s.API.Tracks().InsertTrack(track)
+		s.API.Artists().LinkArtistToTrack(artistID.String(), track.ID.String())
 		trackRef := s.Dummy.CreateReferenceID(track.ID, internal.CategoryMusic, internal.CategoryTrack)
-		s.API.ReferencesAPI().InsertReference(trackRef)
+		s.API.References().InsertReference(trackRef)
 		s.insertTabs(track.Tabs, track.ID)
 	}
 }
@@ -110,9 +110,9 @@ func (s *SeedService) insertTracks(tracks []*trk.Track, artistID uuid.UUID) {
 // insertTabs inserts the given tabs and references into the database.
 func (s *SeedService) insertTabs(tabs []*tabs.Tab, trackID uuid.UUID) {
 	for _, tab := range tabs {
-		s.API.TabsAPI().InsertTab(tab)
-		s.API.TrackTabAPI().LinkTrackToTab(trackID.String(), tab.ID.String())
+		s.API.Tabs().InsertTab(tab)
+		s.API.Tracks().LinkTrackToTab(trackID.String(), tab.ID.String())
 		tabRef := s.Dummy.CreateReferenceID(tab.ID, internal.CategoryTabs, internal.CategoryTab)
-		s.API.ReferencesAPI().InsertReference(tabRef)
+		s.API.References().InsertReference(tabRef)
 	}
 }

@@ -15,6 +15,17 @@ import (
 	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 )
 
+// DummyOperations represents operations for creating dummy data.
+type DummyOperations interface {
+	CreateReferenceID(internalId uuid.UUID, sourceCategory, referenceCategory string) *references.Reference
+	CreateArtists(artists *internal.ArtistsConfig) []*art.Artist
+	CreateArtist(tracks *internal.TracksConfig) *art.Artist
+	CreateTracks(tracks *internal.TracksConfig) []*trk.Track
+	CreateTrack(tabs *internal.TabsConfig) *trk.Track
+	CreateTabs(amount uint) []*tabs.Tab
+	CreateTab() *tabs.Tab
+}
+
 // DummyService helps with creating dummy entities.
 type DummyService struct {
 	Sources      []*src.Source

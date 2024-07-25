@@ -6,25 +6,33 @@ import (
 	"log"
 )
 
-// API is for managing instruments.
-type API struct {
+// DatabaseOperations represents operations related to instruments in the database.
+type DatabaseOperations interface {
+	InsertInstruments(instruments ...*Instrument)
+	InsertInstrument(instrument *Instrument)
+	GetInstrument(instrumentID string) (*Instrument, error)
+	GetInstruments(instrumentID ...string) ([]*Instrument, error)
+}
+
+// DatabaseService is for managing instruments.
+type DatabaseService struct {
 	Database *logic.DatabaseManager
 }
 
-// NewAPI creates a new instance of the API struct.
-func NewAPI(database *logic.DatabaseManager) *API {
-	return &API{Database: database}
+// NewDatabaseService creates a new instance of the DatabaseService struct.
+func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+	return &DatabaseService{Database: database}
 }
 
 // InsertInstruments inserts multiple instruments in the instruments table.
-func (a *API) InsertInstruments(instruments ...*Instrument) {
+func (a *DatabaseService) InsertInstruments(instruments ...*Instrument) {
 	for _, instrument := range instruments {
 		a.InsertInstrument(instrument)
 	}
 }
 
 // InsertInstrument inserts a new instrument in the instruments table.
-func (a *API) InsertInstrument(instrument *Instrument) {
+func (a *DatabaseService) InsertInstrument(instrument *Instrument) {
 	_, err := a.Database.DB.Exec(insertInstrumentQuery, instrument.Name)
 	if err != nil {
 		log.Printf("Failed inserting instrument with name: '%s': %s", instrument.Name, err.Error())
@@ -34,7 +42,7 @@ func (a *API) InsertInstrument(instrument *Instrument) {
 }
 
 // GetInstrument retrieves an instrument for the provided ID.
-func (a *API) GetInstrument(instrumentID string) (*Instrument, error) {
+func (a *DatabaseService) GetInstrument(instrumentID string) (*Instrument, error) {
 	instruments, err := a.GetInstruments(instrumentID)
 	if err != nil {
 		return nil, err
@@ -43,7 +51,7 @@ func (a *API) GetInstrument(instrumentID string) (*Instrument, error) {
 }
 
 // GetInstruments retrieves instruments for the provided IDs.
-func (a *API) GetInstruments(instrumentID ...string) ([]*Instrument, error) {
+func (a *DatabaseService) GetInstruments(instrumentID ...string) ([]*Instrument, error) {
 	rows, err := a.Database.DB.Query(getInstrumentsQuery, instrumentID)
 	if err != nil {
 		return nil, err

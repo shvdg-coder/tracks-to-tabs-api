@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-// DatabaseOperations represents operations related to tracks.
+// DatabaseOperations represents operations related to tracks in the database.
 type DatabaseOperations interface {
 	InsertTracks(tracks ...*Track)
 	InsertTrack(track *Track)
@@ -19,7 +19,7 @@ type DatabaseService struct {
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) *DatabaseService {
+func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
 	return &DatabaseService{Database: database}
 }
 

@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-// DatabaseOperations represents operations related to tabs.
+// DatabaseOperations represents operations related to tabs in the database.
 type DatabaseOperations interface {
 	InsertTabs(tabs ...*Tab)
 	InsertTab(tab *Tab)

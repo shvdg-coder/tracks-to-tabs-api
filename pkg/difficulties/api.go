@@ -6,25 +6,33 @@ import (
 	"log"
 )
 
-// API is for managing difficulties.
-type API struct {
+// DatabaseOperations represents operations related to difficulties in the database.
+type DatabaseOperations interface {
+	InsertDifficulties(difficulties ...*Difficulty)
+	InsertDifficulty(difficulty *Difficulty)
+	GetDifficulty(difficultyID string) (*Difficulty, error)
+	GetDifficulties(difficultyID ...string) ([]*Difficulty, error)
+}
+
+// DatabaseService is for managing difficulties.
+type DatabaseService struct {
 	Database *logic.DatabaseManager
 }
 
-// NewAPI creates a new instance of the API struct.
-func NewAPI(database *logic.DatabaseManager) *API {
-	return &API{Database: database}
+// NewDatabaseService creates a new instance of the DatabaseService struct.
+func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+	return &DatabaseService{Database: database}
 }
 
 // InsertDifficulties inserts multiple difficulty levels.
-func (a *API) InsertDifficulties(difficulties ...*Difficulty) {
+func (a *DatabaseService) InsertDifficulties(difficulties ...*Difficulty) {
 	for _, difficulty := range difficulties {
 		a.InsertDifficulty(difficulty)
 	}
 }
 
 // InsertDifficulty inserts a new difficulty level.
-func (a *API) InsertDifficulty(difficulty *Difficulty) {
+func (a *DatabaseService) InsertDifficulty(difficulty *Difficulty) {
 	_, err := a.Database.DB.Exec(insertDifficultyQuery, difficulty.Name)
 	if err != nil {
 		log.Printf("Failed inserting difficulty level with name: '%s': %s", difficulty.Name, err.Error())
@@ -34,7 +42,7 @@ func (a *API) InsertDifficulty(difficulty *Difficulty) {
 }
 
 // GetDifficulty retrieves a difficulty for the provided ID.
-func (a *API) GetDifficulty(difficultyID string) (*Difficulty, error) {
+func (a *DatabaseService) GetDifficulty(difficultyID string) (*Difficulty, error) {
 	difficulty, err := a.GetDifficulties(difficultyID)
 	if err != nil {
 		return nil, err
@@ -43,7 +51,7 @@ func (a *API) GetDifficulty(difficultyID string) (*Difficulty, error) {
 }
 
 // GetDifficulties retrieves difficulties for the provided IDs.
-func (a *API) GetDifficulties(difficultyID ...string) ([]*Difficulty, error) {
+func (a *DatabaseService) GetDifficulties(difficultyID ...string) ([]*Difficulty, error) {
 	rows, err := a.Database.DB.Query(getDifficultiesQuery, difficultyID)
 	if err != nil {
 		return nil, err

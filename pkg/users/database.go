@@ -6,18 +6,24 @@ import (
 	"log"
 )
 
-// API is for managing users.
-type API struct {
+// DatabaseOperations represents operations related to users in the database.
+type DatabaseOperations interface {
+	InsertUser(email, password string)
+	IsPasswordCorrect(username, password string) bool
+}
+
+// DatabaseService is for managing users.
+type DatabaseService struct {
 	Database *logic.DatabaseManager
 }
 
-// NewAPI creates a new instance of the API struct.
-func NewAPI(database *logic.DatabaseManager) *API {
-	return &API{Database: database}
+// NewDatabaseService creates a new instance of the DatabaseService struct.
+func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+	return &DatabaseService{Database: database}
 }
 
 // InsertUser inserts a new user into the users table.
-func (a *API) InsertUser(email, plainPassword string) {
+func (a *DatabaseService) InsertUser(email, plainPassword string) {
 	hashedPassword, _ := logic.HashPassword(plainPassword)
 	_, err := a.Database.DB.Exec(insertUserQuery, email, hashedPassword)
 	if err != nil {
@@ -28,7 +34,7 @@ func (a *API) InsertUser(email, plainPassword string) {
 }
 
 // IsPasswordCorrect checks if the given password is correct for the user with the given email.
-func (a *API) IsPasswordCorrect(email, plainPassword string) bool {
+func (a *DatabaseService) IsPasswordCorrect(email, plainPassword string) bool {
 	if email == "" || plainPassword == "" {
 		return false
 	}

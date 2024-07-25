@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-// DatabaseOperations represents operations related to artists.
+// DatabaseOperations represents operations related to artists in the database.
 type DatabaseOperations interface {
 	InsertArtist(artist *Artist)
 	InsertArtists(artist ...*Artist)
@@ -20,7 +20,7 @@ type DatabaseService struct {
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) *DatabaseService {
+func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
 	return &DatabaseService{Database: database}
 }
 

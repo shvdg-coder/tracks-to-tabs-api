@@ -6,25 +6,31 @@ import (
 	"log"
 )
 
-// API is for managing sources.
-type API struct {
+// DatabaseOperations represents operations related to sources in the database.
+type DatabaseOperations interface {
+	InsertSources(sources ...*Source)
+	InsertSource(source *Source)
+}
+
+// DatabaseService is for managing sources.
+type DatabaseService struct {
 	Database *logic.DatabaseManager
 }
 
-// NewAPI creates a new instance of the API struct.
-func NewAPI(database *logic.DatabaseManager) *API {
-	return &API{Database: database}
+// NewDatabaseService creates a new instance of the DatabaseService struct.
+func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+	return &DatabaseService{Database: database}
 }
 
 // InsertSources inserts multiple sources in the sources table.
-func (a *API) InsertSources(sources ...*Source) {
+func (a *DatabaseService) InsertSources(sources ...*Source) {
 	for _, source := range sources {
 		a.InsertSource(source)
 	}
 }
 
 // InsertSource inserts a new source in the sources table.
-func (a *API) InsertSource(source *Source) {
+func (a *DatabaseService) InsertSource(source *Source) {
 	_, err := a.Database.DB.Exec(insertSourceQuery, source.ID, source.Name, source.Category)
 	if err != nil {
 		log.Printf("Failed inserting source with name: '%s': %s", source.Name, err.Error())

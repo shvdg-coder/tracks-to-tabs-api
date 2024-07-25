@@ -5,25 +5,31 @@ import (
 	"log"
 )
 
-// API is for managing endpoints.
-type API struct {
+// DatabaseOperations represents operations related to endpoints in the database.
+type DatabaseOperations interface {
+	InsertEndpoints(endpoints ...*Endpoint)
+	InsertEndpoint(endpoint *Endpoint)
+}
+
+// DatabaseService is for managing endpoints.
+type DatabaseService struct {
 	Database *logic.DatabaseManager
 }
 
-// NewAPI creates a new instance of the API struct.
-func NewAPI(database *logic.DatabaseManager) *API {
-	return &API{Database: database}
+// NewDatabaseService creates a new instance of DatabaseService.
+func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+	return &DatabaseService{Database: database}
 }
 
 // InsertEndpoints inserts multiple records into the endpoints table.
-func (a *API) InsertEndpoints(endpoints ...*Endpoint) {
+func (a *DatabaseService) InsertEndpoints(endpoints ...*Endpoint) {
 	for _, endpoint := range endpoints {
 		a.InsertEndpoint(endpoint)
 	}
 }
 
 // InsertEndpoint inserts a record into the endpoints table.
-func (a *API) InsertEndpoint(endpoint *Endpoint) {
+func (a *DatabaseService) InsertEndpoint(endpoint *Endpoint) {
 	_, err := a.Database.DB.Exec(insertEndpointQuery, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL)
 	if err != nil {
 		log.Printf(

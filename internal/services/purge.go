@@ -6,14 +6,21 @@ import (
 	"log"
 )
 
+// PurgeOperations represents operations for dropping tables.
+type PurgeOperations interface {
+	DropRelationLinkTables()
+	DropStorageTables()
+	DropLookupTables()
+}
+
 // PurgeService helps with deleting data from the database
 type PurgeService struct {
-	Service *TableService
+	TableService *TableService
 }
 
 // NewPurgeService creates a new instance of PurgeService
 func NewPurgeService(service *TableService) *PurgeService {
-	return &PurgeService{Service: service}
+	return &PurgeService{TableService: service}
 }
 
 // Purge when permitted, drops the tables in the database
@@ -28,25 +35,25 @@ func (p *PurgeService) Purge() {
 
 // DropRelationLinkTables drops the tables that hold relation links.
 func (p *PurgeService) DropRelationLinkTables() {
-	p.Service.DropArtistTrackTable()
-	p.Service.DropTrackTabTable()
+	p.TableService.DropArtistTrackTable()
+	p.TableService.DropTrackTabTable()
 }
 
 // DropStorageTables drops tables.
 func (p *PurgeService) DropStorageTables() {
-	p.Service.DropArtistsTable()
-	p.Service.DropEndpointsTable()
-	p.Service.DropReferencesTable()
-	p.Service.DropSessionsTable()
-	p.Service.DropTracksTable()
-	p.Service.DropTabsTable()
-	p.Service.DropInstrumentsTable()
-	p.Service.DropUsersTable()
+	p.TableService.DropArtistsTable()
+	p.TableService.DropEndpointsTable()
+	p.TableService.DropReferencesTable()
+	p.TableService.DropSessionsTable()
+	p.TableService.DropTracksTable()
+	p.TableService.DropTabsTable()
+	p.TableService.DropInstrumentsTable()
+	p.TableService.DropUsersTable()
 }
 
 // DropLookupTables drops the lookup tables.
 func (p *PurgeService) DropLookupTables() {
-	p.Service.DropInstrumentsTable()
-	p.Service.DropDifficultiesTable()
-	p.Service.DropSourcesTable()
+	p.TableService.DropInstrumentsTable()
+	p.TableService.DropDifficultiesTable()
+	p.TableService.DropSourcesTable()
 }

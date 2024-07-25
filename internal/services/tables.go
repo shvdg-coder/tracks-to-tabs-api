@@ -6,6 +6,34 @@ import (
 	"log"
 )
 
+// TableOperations represents operations for creating or dropping tables.
+type TableOperations interface {
+	CreateArtistsTable()
+	DropArtistsTable()
+	CreateTracksTable()
+	DropTracksTable()
+	CreateArtistTrackTable()
+	DropArtistTrackTable()
+	CreateDifficultiesTable()
+	DropDifficultiesTable()
+	CreateEndpointsTable()
+	DropEndpointsTable()
+	CreateInstrumentsTable()
+	DropInstrumentsTable()
+	CreateReferencesTable()
+	DropReferencesTable()
+	CreateSessionsTable()
+	DropSessionsTable()
+	CreateSourcesTable()
+	DropSourcesTable()
+	CreateTabsTable()
+	DropTabsTable()
+	CreateTrackTabTable()
+	DropTrackTabTable()
+	CreateUsersTable()
+	DropUsersTable()
+}
+
 // TableService is responsible for maintaining the tables for the database.
 type TableService struct {
 	Database *pkg.DatabaseManager
