@@ -1,6 +1,7 @@
 package tabs
 
 import (
+	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
@@ -10,8 +11,8 @@ import (
 type DatabaseOperations interface {
 	InsertTabs(tabs ...*Tab)
 	InsertTab(tab *Tab)
-	GetTab(tabID string) (*Tab, error)
-	GetTabs(tabID ...string) ([]*Tab, error)
+	GetTab(tabID uuid.UUID) (*Tab, error)
+	GetTabs(tabID ...uuid.UUID) ([]*Tab, error)
 }
 
 // DatabaseService is for managing tabs.
@@ -42,7 +43,7 @@ func (a *DatabaseService) InsertTab(tab *Tab) {
 }
 
 // GetTab retrieves the tab, without entity references, for the provided tab ID.
-func (a *DatabaseService) GetTab(tabID string) (*Tab, error) {
+func (a *DatabaseService) GetTab(tabID uuid.UUID) (*Tab, error) {
 	tabs, err := a.GetTabs(tabID)
 	if err != nil {
 		return nil, err
@@ -51,7 +52,7 @@ func (a *DatabaseService) GetTab(tabID string) (*Tab, error) {
 }
 
 // GetTabs retrieves the tabs, without entity references, for the provided IDs.
-func (a *DatabaseService) GetTabs(tabID ...string) ([]*Tab, error) {
+func (a *DatabaseService) GetTabs(tabID ...uuid.UUID) ([]*Tab, error) {
 	rows, err := a.Database.DB.Query(getTabsQuery, tabID)
 	if err != nil {
 		return nil, err

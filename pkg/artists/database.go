@@ -1,6 +1,7 @@
 package artists
 
 import (
+	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
@@ -10,8 +11,8 @@ import (
 type DatabaseOperations interface {
 	InsertArtist(artist *Artist)
 	InsertArtists(artist ...*Artist)
-	GetArtist(artistID string) (*Artist, error)
-	GetArtists(artistID ...string) ([]*Artist, error)
+	GetArtist(artistID uuid.UUID) (*Artist, error)
+	GetArtists(artistID ...uuid.UUID) ([]*Artist, error)
 }
 
 // DatabaseService is for managing artists.
@@ -42,7 +43,7 @@ func (d *DatabaseService) InsertArtist(artist *Artist) {
 }
 
 // GetArtist retrieves an artist, without entity references, for the provided ID.
-func (d *DatabaseService) GetArtist(artistID string) (*Artist, error) {
+func (d *DatabaseService) GetArtist(artistID uuid.UUID) (*Artist, error) {
 	artists, err := d.GetArtists(artistID)
 	if err != nil {
 		return nil, err
@@ -51,7 +52,7 @@ func (d *DatabaseService) GetArtist(artistID string) (*Artist, error) {
 }
 
 // GetArtists retrieves artists, without entity references, for the provided IDs.
-func (d *DatabaseService) GetArtists(artistID ...string) ([]*Artist, error) {
+func (d *DatabaseService) GetArtists(artistID ...uuid.UUID) ([]*Artist, error) {
 	rows, err := d.Database.DB.Query(getArtistsFromIDs, artistID)
 	if err != nil {
 		return nil, err

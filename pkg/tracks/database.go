@@ -1,6 +1,7 @@
 package tracks
 
 import (
+	"github.com/google/uuid"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
 )
@@ -9,8 +10,8 @@ import (
 type DatabaseOperations interface {
 	InsertTracks(tracks ...*Track)
 	InsertTrack(track *Track)
-	GetTrack(trackID string) (*Track, error)
-	GetTracks(trackID ...string) ([]*Track, error)
+	GetTrack(trackID uuid.UUID) (*Track, error)
+	GetTracks(trackID ...uuid.UUID) ([]*Track, error)
 }
 
 // DatabaseService is for managing tracks of songs.
@@ -41,7 +42,7 @@ func (a *DatabaseService) InsertTrack(track *Track) {
 }
 
 // GetTrack retrieves the track, without entity references, for the provided ID.
-func (a *DatabaseService) GetTrack(trackID string) (*Track, error) {
+func (a *DatabaseService) GetTrack(trackID uuid.UUID) (*Track, error) {
 	tracks, err := a.GetTracks(trackID)
 	if err != nil {
 		return nil, err
@@ -50,7 +51,7 @@ func (a *DatabaseService) GetTrack(trackID string) (*Track, error) {
 }
 
 // GetTracks retrieves the tracks, without entity references, for the provided IDs.
-func (a *DatabaseService) GetTracks(trackID ...string) ([]*Track, error) {
+func (a *DatabaseService) GetTracks(trackID ...uuid.UUID) ([]*Track, error) {
 	rows, err := a.Database.DB.Query(getTracksFromIDs, trackID)
 	if err != nil {
 		return nil, err

@@ -1,6 +1,7 @@
 package artisttrack
 
 import (
+	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
@@ -8,9 +9,9 @@ import (
 
 // DatabaseOperations represents operations related to 'artists to tracks' links.
 type DatabaseOperations interface {
-	LinkArtistToTrack(artistId, trackId string)
-	GetArtistToTrackLink(artistID string) (*ArtistTrack, error)
-	GetArtistToTrackLinks(artistID ...string) ([]*ArtistTrack, error)
+	LinkArtistToTrack(artistId, trackId uuid.UUID)
+	GetArtistToTrackLink(artistID uuid.UUID) (*ArtistTrack, error)
+	GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*ArtistTrack, error)
 }
 
 // DatabaseService is for managing 'artists to tracks' links.
@@ -19,12 +20,12 @@ type DatabaseService struct {
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) *DatabaseService {
+func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
 	return &DatabaseService{Database: database}
 }
 
 // LinkArtistToTrack inserts a link between an artist and a track into the artist_track table.
-func (d *DatabaseService) LinkArtistToTrack(artistId, trackId string) {
+func (d *DatabaseService) LinkArtistToTrack(artistId, trackId uuid.UUID) {
 	_, err := d.Database.DB.Exec(insertArtistTrackQuery, artistId, trackId)
 	if err != nil {
 		log.Printf("Failed linking artist with ID '%s' and track with ID '%s': %s", artistId, trackId, err.Error())
@@ -34,7 +35,7 @@ func (d *DatabaseService) LinkArtistToTrack(artistId, trackId string) {
 }
 
 // GetArtistToTrackLink retrieves the 'artist to track' link for the provided artist ID.
-func (d *DatabaseService) GetArtistToTrackLink(artistID string) (*ArtistTrack, error) {
+func (d *DatabaseService) GetArtistToTrackLink(artistID uuid.UUID) (*ArtistTrack, error) {
 	artistTracks, err := d.GetArtistToTrackLinks(artistID)
 	if err != nil {
 		return nil, err
@@ -43,7 +44,7 @@ func (d *DatabaseService) GetArtistToTrackLink(artistID string) (*ArtistTrack, e
 }
 
 // GetArtistToTrackLinks retrieves the 'artist to track' link for the provided artist IDs.
-func (d *DatabaseService) GetArtistToTrackLinks(artistID ...string) ([]*ArtistTrack, error) {
+func (d *DatabaseService) GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*ArtistTrack, error) {
 	rows, err := d.Database.DB.Query(getArtistTrackLinks, artistID)
 	if err != nil {
 		return nil, err

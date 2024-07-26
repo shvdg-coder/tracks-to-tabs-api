@@ -100,7 +100,7 @@ func (s *SeedService) insertArtists(artists []*art.Artist) {
 func (s *SeedService) insertTracks(tracks []*trk.Track, artistID uuid.UUID) {
 	for _, track := range tracks {
 		s.API.Tracks().InsertTrack(track)
-		s.API.Artists().LinkArtistToTrack(artistID.String(), track.ID.String())
+		s.API.Artists().LinkArtistToTrack(artistID, track.ID)
 		trackRef := s.Dummy.CreateReferenceID(track.ID, internal.CategoryMusic, internal.CategoryTrack)
 		s.API.References().InsertReference(trackRef)
 		s.insertTabs(track.Tabs, track.ID)
@@ -111,7 +111,7 @@ func (s *SeedService) insertTracks(tracks []*trk.Track, artistID uuid.UUID) {
 func (s *SeedService) insertTabs(tabs []*tabs.Tab, trackID uuid.UUID) {
 	for _, tab := range tabs {
 		s.API.Tabs().InsertTab(tab)
-		s.API.Tracks().LinkTrackToTab(trackID.String(), tab.ID.String())
+		s.API.Tracks().LinkTrackToTab(trackID, tab.ID)
 		tabRef := s.Dummy.CreateReferenceID(tab.ID, internal.CategoryTabs, internal.CategoryTab)
 		s.API.References().InsertReference(tabRef)
 	}

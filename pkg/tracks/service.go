@@ -1,6 +1,7 @@
 package tracks
 
 import (
+	"github.com/google/uuid"
 	trktab "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
 )
 
@@ -28,16 +29,16 @@ func NewService(database DatabaseOperations, mapping MappingOperations, trackTab
 }
 
 // LinkTrackToTab creates a link between a track and a tab using their IDs.
-func (s Service) LinkTrackToTab(trackID, tabID string) {
+func (s Service) LinkTrackToTab(trackID, tabID uuid.UUID) {
 	s.TrackTabsOps.LinkTrackToTab(trackID, tabID)
 }
 
 // GetTrackToTabLink retrieves the tab linked to a track using the track's ID.
-func (s Service) GetTrackToTabLink(trackID string) (*trktab.TrackTab, error) {
+func (s Service) GetTrackToTabLink(trackID uuid.UUID) (*trktab.TrackTab, error) {
 	return s.TrackTabsOps.GetTrackToTabLink(trackID)
 }
 
 // GetTrackToTabLinks retrieves the links between a list of track IDs and their associated tabs.
-func (s Service) GetTrackToTabLinks(trackID ...string) ([]*trktab.TrackTab, error) {
+func (s Service) GetTrackToTabLinks(trackID ...uuid.UUID) ([]*trktab.TrackTab, error) {
 	return s.TrackTabsOps.GetTrackToTabLinks(trackID...)
 }

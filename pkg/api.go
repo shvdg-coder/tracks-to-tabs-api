@@ -63,7 +63,8 @@ func (a *API) Tracks() trk.Operations {
 func (a *API) Tabs() tabs.Operations {
 	if a.tabsService == nil {
 		tabDatabaseService := tabs.NewDatabaseService(a.DatabaseManager)
-		tabService := tabs.NewService(tabDatabaseService)
+		tabsMappingService := tabs.NewMappingService(tabDatabaseService)
+		tabService := tabs.NewService(tabDatabaseService, tabsMappingService)
 		a.tabsService = tabService
 	}
 	return a.tabsService

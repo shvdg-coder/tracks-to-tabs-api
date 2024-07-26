@@ -1,6 +1,9 @@
 package artists
 
-import arttrk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists/artisttrack"
+import (
+	"github.com/google/uuid"
+	arttrk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists/artisttrack"
+)
 
 // Operations represents all operations related to artists.
 type Operations interface {
@@ -26,16 +29,16 @@ func NewService(database DatabaseOperations, mapping MappingOperations, artistTr
 }
 
 // LinkArtistToTrack links an artist to a track.
-func (s *Service) LinkArtistToTrack(artistId string, trackId string) {
+func (s *Service) LinkArtistToTrack(artistId uuid.UUID, trackId uuid.UUID) {
 	s.ArtistTrackOps.LinkArtistToTrack(artistId, trackId)
 }
 
 // GetArtistToTrackLink retrieves a link between an artist and a track.
-func (s *Service) GetArtistToTrackLink(artistID string) (*arttrk.ArtistTrack, error) {
+func (s *Service) GetArtistToTrackLink(artistID uuid.UUID) (*arttrk.ArtistTrack, error) {
 	return s.ArtistTrackOps.GetArtistToTrackLink(artistID)
 }
 
 // GetArtistToTrackLinks retrieves 'artist to track' links.
-func (s *Service) GetArtistToTrackLinks(artistID ...string) ([]*arttrk.ArtistTrack, error) {
+func (s *Service) GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*arttrk.ArtistTrack, error) {
 	return s.ArtistTrackOps.GetArtistToTrackLinks(artistID...)
 }
