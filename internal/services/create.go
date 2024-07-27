@@ -1,10 +1,12 @@
 package services
 
-import (
-	logic "github.com/shvdg-dev/base-logic/pkg"
-	"github.com/shvdg-dev/tunes-to-tabs-api/internal"
-	"log"
-)
+// CreateOperations represents operations for creating tables.
+type CreateOperations interface {
+	CreateAll()
+	CreateLookupTables()
+	CreateStorageTables()
+	CreateRelationLinkTables()
+}
 
 // CreateService helps with creating tables for the database
 type CreateService struct {
@@ -18,9 +20,6 @@ func NewCreateService(service *TableService) *CreateService {
 
 // CreateAll when permitted, creates tables in the database
 func (c *CreateService) CreateAll() {
-	if !logic.GetEnvValueAsBoolean(internal.KeyDatabaseEnableCreatingCommand) {
-		log.Fatalf("Did not create new tables for the database, as it was disabled")
-	}
 	c.CreateLookupTables()
 	c.CreateStorageTables()
 	c.CreateRelationLinkTables()

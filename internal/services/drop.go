@@ -1,46 +1,38 @@
 package services
 
-import (
-	logic "github.com/shvdg-dev/base-logic/pkg"
-	"github.com/shvdg-dev/tunes-to-tabs-api/internal"
-	"log"
-)
-
-// PurgeOperations represents operations for dropping tables.
-type PurgeOperations interface {
+// DropOperations represents operations for dropping tables.
+type DropOperations interface {
+	DropAll()
 	DropRelationLinkTables()
 	DropStorageTables()
 	DropLookupTables()
 }
 
-// PurgeService helps with deleting data from the database
-type PurgeService struct {
+// DropService helps with deleting data from the database
+type DropService struct {
 	TableService *TableService
 }
 
-// NewPurgeService creates a new instance of PurgeService
-func NewPurgeService(service *TableService) *PurgeService {
-	return &PurgeService{TableService: service}
+// NewDropService creates a new instance of DropService
+func NewDropService(service *TableService) *DropService {
+	return &DropService{TableService: service}
 }
 
-// Purge when permitted, drops the tables in the database
-func (p *PurgeService) Purge() {
-	if !logic.GetEnvValueAsBoolean(internal.KeyDatabaseEnablePurgingCommand) {
-		log.Fatalf("It is not allowed to purge the database")
-	}
+// DropAll when permitted, drops the tables in the database
+func (p *DropService) DropAll() {
 	p.DropRelationLinkTables()
 	p.DropStorageTables()
 	p.DropLookupTables()
 }
 
 // DropRelationLinkTables drops the tables that hold relation links.
-func (p *PurgeService) DropRelationLinkTables() {
+func (p *DropService) DropRelationLinkTables() {
 	p.TableService.DropArtistTrackTable()
 	p.TableService.DropTrackTabTable()
 }
 
 // DropStorageTables drops tables.
-func (p *PurgeService) DropStorageTables() {
+func (p *DropService) DropStorageTables() {
 	p.TableService.DropArtistsTable()
 	p.TableService.DropEndpointsTable()
 	p.TableService.DropReferencesTable()
@@ -52,7 +44,7 @@ func (p *PurgeService) DropStorageTables() {
 }
 
 // DropLookupTables drops the lookup tables.
-func (p *PurgeService) DropLookupTables() {
+func (p *DropService) DropLookupTables() {
 	p.TableService.DropInstrumentsTable()
 	p.TableService.DropDifficultiesTable()
 	p.TableService.DropSourcesTable()

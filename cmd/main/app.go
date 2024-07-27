@@ -58,9 +58,9 @@ func handleArg(arg string) {
 	case inter.CommandCreate:
 		services.NewCreateService(tables).CreateAll()
 	case inter.CommandPurge:
-		services.NewPurgeService(tables).Purge()
+		services.NewDropService(tables).DropAll()
 	case inter.CommandSeed:
-		services.NewSeedService(config.Seeding, api).Seed()
+		services.NewSeedService(config.Seeding, api).SeedAll()
 	default:
 		printErrorAndExit()
 	}

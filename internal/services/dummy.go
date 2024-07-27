@@ -5,7 +5,7 @@ import (
 	"fmt"
 	faker "github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/internal"
+	inl "github.com/shvdg-dev/tunes-to-tabs-api/internal"
 	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
 	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
@@ -17,11 +17,11 @@ import (
 
 // DummyOperations represents operations for creating dummy data.
 type DummyOperations interface {
-	CreateReferenceID(internalId uuid.UUID, sourceCategory, referenceCategory string) *references.Reference
-	CreateArtists(artists *internal.ArtistsConfig) []*art.Artist
-	CreateArtist(tracks *internal.TracksConfig) *art.Artist
-	CreateTracks(tracks *internal.TracksConfig) []*trk.Track
-	CreateTrack(tabs *internal.TabsConfig) *trk.Track
+	CreateReferenceID(internalID uuid.UUID, sourceCategory, referenceCategory string) *references.Reference
+	CreateArtists(config *inl.ArtistsConfig) []*art.Artist
+	CreateArtist(config *inl.TracksConfig) *art.Artist
+	CreateTracks(config *inl.TracksConfig) []*trk.Track
+	CreateTrack(config *inl.TabsConfig) *trk.Track
 	CreateTabs(amount uint) []*tabs.Tab
 	CreateTab() *tabs.Tab
 }
@@ -66,11 +66,11 @@ func (d *DummyService) GetRandomDifficulty() *diff.Difficulty {
 	return d.Difficulties[faker.Number(0, len(d.Difficulties)-1)]
 }
 
-// CreateReferenceID creates a new reference ID, based on the provided internal ID and categories.
-func (d *DummyService) CreateReferenceID(internalId uuid.UUID, sourceCategory, referenceCategory string) *references.Reference {
+// CreateReferenceID creates a new reference ID, based on the provided inl ID and categories.
+func (d *DummyService) CreateReferenceID(internalID uuid.UUID, sourceCategory, referenceCategory string) *references.Reference {
 	sourceId, _ := d.GetRandomSource(sourceCategory)
 	return references.NewReference(
-		internalId,
+		internalID,
 		sourceId.ID,
 		referenceCategory,
 		"ID",
@@ -79,32 +79,32 @@ func (d *DummyService) CreateReferenceID(internalId uuid.UUID, sourceCategory, r
 }
 
 // CreateArtists creates a specified amount of dummy artists.
-func (d *DummyService) CreateArtists(artists *internal.ArtistsConfig) []*art.Artist {
-	dummyArtists := make([]*art.Artist, artists.RandomAmount())
+func (d *DummyService) CreateArtists(config *inl.ArtistsConfig) []*art.Artist {
+	dummyArtists := make([]*art.Artist, config.RandomAmount())
 	for i := range dummyArtists {
-		dummyArtists[i] = d.CreateArtist(artists.Tracks)
+		dummyArtists[i] = d.CreateArtist(config.Tracks)
 	}
 	return dummyArtists
 }
 
 // CreateArtist creates a dummy artist with a random name and tracks.
-func (d *DummyService) CreateArtist(tracks *internal.TracksConfig) *art.Artist {
+func (d *DummyService) CreateArtist(config *inl.TracksConfig) *art.Artist {
 	return art.NewArtist(
 		faker.HipsterWord(),
-		art.WithTracks(d.CreateTracks(tracks)))
+		art.WithTracks(d.CreateTracks(config)))
 }
 
 // CreateTracks creates a specified amount of dummy tracks.
-func (d *DummyService) CreateTracks(tracks *internal.TracksConfig) []*trk.Track {
-	dummyTracks := make([]*trk.Track, tracks.RandomAmount())
+func (d *DummyService) CreateTracks(config *inl.TracksConfig) []*trk.Track {
+	dummyTracks := make([]*trk.Track, config.RandomAmount())
 	for i := range dummyTracks {
-		dummyTracks[i] = d.CreateTrack(tracks.Tabs)
+		dummyTracks[i] = d.CreateTrack(config.Tabs)
 	}
 	return dummyTracks
 }
 
 // CreateTrack creates a dummy track with a random title, duration, and tabs.
-func (d *DummyService) CreateTrack(tabs *internal.TabsConfig) *trk.Track {
+func (d *DummyService) CreateTrack(tabs *inl.TabsConfig) *trk.Track {
 	return trk.NewTrack(
 		faker.HipsterSentence(faker.Number(1, 6)),
 		uint(faker.Number(10000, 3000000)), // 1 to 5 minutes
