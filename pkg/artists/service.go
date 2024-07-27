@@ -63,7 +63,7 @@ func (s *Service) GetArtistsCascading(artistID ...uuid.UUID) ([]*Artist, error) 
 		return nil, err
 	}
 	trackIDs := s.ExtractTrackIDs(artistTracks)
-	tracks, err := s.TrackOps.GetTracks(trackIDs...)
+	tracks, err := s.TrackOps.GetTracksCascading(trackIDs...)
 	if err != nil {
 		return nil, err
 	}
