@@ -1,11 +1,10 @@
-package services
+package internal
 
 import (
 	"errors"
 	"fmt"
 	faker "github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
-	inl "github.com/shvdg-dev/tunes-to-tabs-api/internal"
 	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
 	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
@@ -18,10 +17,10 @@ import (
 // DummyOperations represents operations for creating dummy data.
 type DummyOperations interface {
 	CreateReferenceID(internalID uuid.UUID, sourceCategory, referenceCategory string) *references.Reference
-	CreateArtists(config *inl.ArtistsConfig) []*art.Artist
-	CreateArtist(config *inl.TracksConfig) *art.Artist
-	CreateTracks(config *inl.TracksConfig) []*trk.Track
-	CreateTrack(config *inl.TabsConfig) *trk.Track
+	CreateArtists(config *ArtistsConfig) []*art.Artist
+	CreateArtist(config *TracksConfig) *art.Artist
+	CreateTracks(config *TracksConfig) []*trk.Track
+	CreateTrack(config *TabsConfig) *trk.Track
 	CreateTabs(amount uint) []*tabs.Tab
 	CreateTab() *tabs.Tab
 }
@@ -79,7 +78,7 @@ func (d *DummyService) CreateReferenceID(internalID uuid.UUID, sourceCategory, r
 }
 
 // CreateArtists creates a specified amount of dummy artists.
-func (d *DummyService) CreateArtists(config *inl.ArtistsConfig) []*art.Artist {
+func (d *DummyService) CreateArtists(config *ArtistsConfig) []*art.Artist {
 	dummyArtists := make([]*art.Artist, config.RandomAmount())
 	for i := range dummyArtists {
 		dummyArtists[i] = d.CreateArtist(config.Tracks)
@@ -88,14 +87,14 @@ func (d *DummyService) CreateArtists(config *inl.ArtistsConfig) []*art.Artist {
 }
 
 // CreateArtist creates a dummy artist with a random name and tracks.
-func (d *DummyService) CreateArtist(config *inl.TracksConfig) *art.Artist {
+func (d *DummyService) CreateArtist(config *TracksConfig) *art.Artist {
 	return art.NewArtist(
 		faker.HipsterWord(),
 		art.WithTracks(d.CreateTracks(config)))
 }
 
 // CreateTracks creates a specified amount of dummy tracks.
-func (d *DummyService) CreateTracks(config *inl.TracksConfig) []*trk.Track {
+func (d *DummyService) CreateTracks(config *TracksConfig) []*trk.Track {
 	dummyTracks := make([]*trk.Track, config.RandomAmount())
 	for i := range dummyTracks {
 		dummyTracks[i] = d.CreateTrack(config.Tabs)
@@ -104,7 +103,7 @@ func (d *DummyService) CreateTracks(config *inl.TracksConfig) []*trk.Track {
 }
 
 // CreateTrack creates a dummy track with a random title, duration, and tabs.
-func (d *DummyService) CreateTrack(tabs *inl.TabsConfig) *trk.Track {
+func (d *DummyService) CreateTrack(tabs *TabsConfig) *trk.Track {
 	return trk.NewTrack(
 		faker.HipsterSentence(faker.Number(1, 6)),
 		uint(faker.Number(10000, 3000000)), // 1 to 5 minutes

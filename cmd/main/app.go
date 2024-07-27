@@ -4,7 +4,6 @@ import (
 	"fmt"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	inter "github.com/shvdg-dev/tunes-to-tabs-api/internal"
-	"github.com/shvdg-dev/tunes-to-tabs-api/internal/services"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg"
 	"log"
 	"os"
@@ -12,7 +11,7 @@ import (
 
 var (
 	config *inter.Config
-	tables *services.TableService
+	tables *inter.TableService
 	api    *pkg.API
 )
 
@@ -20,7 +19,7 @@ var (
 func init() {
 	config = initConfig()
 	database := initDatabase()
-	tables = services.NewTableService(database)
+	tables = inter.NewTableService(database)
 	api = pkg.NewAPI(database)
 }
 
@@ -56,11 +55,11 @@ func handleArgs(args []string) {
 func handleArg(arg string) {
 	switch arg {
 	case inter.CommandCreate:
-		services.NewCreateService(tables).CreateAll()
+		inter.NewCreateService(tables).CreateAll()
 	case inter.CommandPurge:
-		services.NewDropService(tables).DropAll()
+		inter.NewDropService(tables).DropAll()
 	case inter.CommandSeed:
-		services.NewSeedService(config.Seeding, api).SeedAll()
+		inter.NewSeedService(config.Seeding, api).SeedAll()
 	default:
 		printErrorAndExit()
 	}

@@ -1,4 +1,4 @@
-package services
+package internal
 
 // CreateOperations represents operations for creating tables.
 type CreateOperations interface {

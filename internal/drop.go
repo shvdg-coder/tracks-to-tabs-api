@@ -1,4 +1,4 @@
-package services
+package internal
 
 // DropOperations represents operations for dropping tables.
 type DropOperations interface {
