@@ -14,26 +14,26 @@ type DatabaseOperations interface {
 	GetTracks(trackID ...uuid.UUID) ([]*Track, error)
 }
 
-// DatabaseService is for managing tracks of songs.
-type DatabaseService struct {
+// DataService is for managing tracks of songs.
+type DataService struct {
 	*logic.DatabaseManager
 }
 
-// NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
-	return &DatabaseService{DatabaseManager: database}
+// NewDataService creates a new instance of the DataService struct.
+func NewDataService(database *logic.DatabaseManager) DatabaseOperations {
+	return &DataService{DatabaseManager: database}
 }
 
 // InsertTracks inserts multiple tracks into the tracks table.
-func (a *DatabaseService) InsertTracks(tracks ...*Track) {
+func (d *DataService) InsertTracks(tracks ...*Track) {
 	for _, track := range tracks {
-		a.InsertTrack(track)
+		d.InsertTrack(track)
 	}
 }
 
 // InsertTrack inserts a track into the tracks table.
-func (a *DatabaseService) InsertTrack(track *Track) {
-	_, err := a.DB.Exec(insertTrackQuery, track.ID, track.Title, track.Duration)
+func (d *DataService) InsertTrack(track *Track) {
+	_, err := d.DB.Exec(insertTrackQuery, track.ID, track.Title, track.Duration)
 	if err != nil {
 		log.Printf("Failed to insert track with title '%s': %s", track.Title, err.Error())
 	} else {
@@ -42,8 +42,8 @@ func (a *DatabaseService) InsertTrack(track *Track) {
 }
 
 // GetTrack retrieves the track, without entity references, for the provided ID.
-func (a *DatabaseService) GetTrack(trackID uuid.UUID) (*Track, error) {
-	tracks, err := a.GetTracks(trackID)
+func (d *DataService) GetTrack(trackID uuid.UUID) (*Track, error) {
+	tracks, err := d.GetTracks(trackID)
 	if err != nil {
 		return nil, err
 	}
@@ -51,8 +51,8 @@ func (a *DatabaseService) GetTrack(trackID uuid.UUID) (*Track, error) {
 }
 
 // GetTracks retrieves the tracks, without entity references, for the provided IDs.
-func (a *DatabaseService) GetTracks(trackID ...uuid.UUID) ([]*Track, error) {
-	rows, err := a.DB.Query(getTracksFromIDs, trackID)
+func (d *DataService) GetTracks(trackID ...uuid.UUID) ([]*Track, error) {
+	rows, err := d.DB.Query(getTracksFromIDs, trackID)
 	if err != nil {
 		return nil, err
 	}

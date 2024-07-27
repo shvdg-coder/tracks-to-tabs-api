@@ -14,19 +14,19 @@ type DataOperations interface {
 	GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*ArtistTrack, error)
 }
 
-// DatabaseService is for managing 'artists to tracks' links.
-type DatabaseService struct {
-	Database *logic.DatabaseManager
+// DataService is for managing 'artists to tracks' links.
+type DataService struct {
+	*logic.DatabaseManager
 }
 
-// NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
-	return &DatabaseService{Database: database}
+// NewDataService creates a new instance of the DataService struct.
+func NewDataService(database *logic.DatabaseManager) DataOperations {
+	return &DataService{DatabaseManager: database}
 }
 
 // LinkArtistToTrack inserts a link between an artist and a track into the artist_track table.
-func (d *DatabaseService) LinkArtistToTrack(artistId, trackId uuid.UUID) {
-	_, err := d.Database.DB.Exec(insertArtistTrackQuery, artistId, trackId)
+func (d *DataService) LinkArtistToTrack(artistId, trackId uuid.UUID) {
+	_, err := d.DB.Exec(insertArtistTrackQuery, artistId, trackId)
 	if err != nil {
 		log.Printf("Failed linking artist with ID '%s' and track with ID '%s': %s", artistId, trackId, err.Error())
 	} else {
@@ -35,7 +35,7 @@ func (d *DatabaseService) LinkArtistToTrack(artistId, trackId uuid.UUID) {
 }
 
 // GetArtistToTrackLink retrieves the 'artist to track' link for the provided artist ID.
-func (d *DatabaseService) GetArtistToTrackLink(artistID uuid.UUID) (*ArtistTrack, error) {
+func (d *DataService) GetArtistToTrackLink(artistID uuid.UUID) (*ArtistTrack, error) {
 	artistTracks, err := d.GetArtistToTrackLinks(artistID)
 	if err != nil {
 		return nil, err
@@ -44,8 +44,8 @@ func (d *DatabaseService) GetArtistToTrackLink(artistID uuid.UUID) (*ArtistTrack
 }
 
 // GetArtistToTrackLinks retrieves the 'artist to track' link for the provided artist IDs.
-func (d *DatabaseService) GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*ArtistTrack, error) {
-	rows, err := d.Database.DB.Query(getArtistTrackLinks, artistID)
+func (d *DataService) GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*ArtistTrack, error) {
+	rows, err := d.DB.Query(getArtistTrackLinks, artistID)
 	if err != nil {
 		return nil, err
 	}

@@ -14,26 +14,26 @@ type DataOperations interface {
 	GetInstruments(instrumentID ...string) ([]*Instrument, error)
 }
 
-// DatabaseService is for managing instruments.
-type DatabaseService struct {
-	Database *logic.DatabaseManager
+// DataService is for managing instruments.
+type DataService struct {
+	*logic.DatabaseManager
 }
 
-// NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
-	return &DatabaseService{Database: database}
+// NewDataService creates a new instance of the DataService struct.
+func NewDataService(database *logic.DatabaseManager) DataOperations {
+	return &DataService{DatabaseManager: database}
 }
 
 // InsertInstruments inserts multiple instruments in the instruments table.
-func (a *DatabaseService) InsertInstruments(instruments ...*Instrument) {
+func (d *DataService) InsertInstruments(instruments ...*Instrument) {
 	for _, instrument := range instruments {
-		a.InsertInstrument(instrument)
+		d.InsertInstrument(instrument)
 	}
 }
 
 // InsertInstrument inserts a new instrument in the instruments table.
-func (a *DatabaseService) InsertInstrument(instrument *Instrument) {
-	_, err := a.Database.DB.Exec(insertInstrumentQuery, instrument.Name)
+func (d *DataService) InsertInstrument(instrument *Instrument) {
+	_, err := d.DB.Exec(insertInstrumentQuery, instrument.Name)
 	if err != nil {
 		log.Printf("Failed inserting instrument with name: '%s': %s", instrument.Name, err.Error())
 	} else {
@@ -42,8 +42,8 @@ func (a *DatabaseService) InsertInstrument(instrument *Instrument) {
 }
 
 // GetInstrument retrieves an instrument for the provided ID.
-func (a *DatabaseService) GetInstrument(instrumentID string) (*Instrument, error) {
-	instruments, err := a.GetInstruments(instrumentID)
+func (d *DataService) GetInstrument(instrumentID string) (*Instrument, error) {
+	instruments, err := d.GetInstruments(instrumentID)
 	if err != nil {
 		return nil, err
 	}
@@ -51,8 +51,8 @@ func (a *DatabaseService) GetInstrument(instrumentID string) (*Instrument, error
 }
 
 // GetInstruments retrieves instruments for the provided IDs.
-func (a *DatabaseService) GetInstruments(instrumentID ...string) ([]*Instrument, error) {
-	rows, err := a.Database.DB.Query(getInstrumentsQuery, instrumentID)
+func (d *DataService) GetInstruments(instrumentID ...string) ([]*Instrument, error) {
+	rows, err := d.DB.Query(getInstrumentsQuery, instrumentID)
 	if err != nil {
 		return nil, err
 	}

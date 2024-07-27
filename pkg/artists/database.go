@@ -15,25 +15,25 @@ type DataOperations interface {
 	GetArtists(artistID ...uuid.UUID) ([]*Artist, error)
 }
 
-// DatabaseService is for managing artists.
-type DatabaseService struct {
+// DataService is for managing artists.
+type DataService struct {
 	*logic.DatabaseManager
 }
 
-// NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
-	return &DatabaseService{database}
+// NewDataService creates a new instance of the DataService struct.
+func NewDataService(database *logic.DatabaseManager) DataOperations {
+	return &DataService{database}
 }
 
 // InsertArtists inserts multiple artists into the artists table.
-func (d *DatabaseService) InsertArtists(artists ...*Artist) {
+func (d *DataService) InsertArtists(artists ...*Artist) {
 	for _, artist := range artists {
 		d.InsertArtist(artist)
 	}
 }
 
 // InsertArtist inserts an artist into the artists table.
-func (d *DatabaseService) InsertArtist(artist *Artist) {
+func (d *DataService) InsertArtist(artist *Artist) {
 	_, err := d.DB.Exec(insertArtistQuery, artist.ID, artist.Name)
 	if err != nil {
 		log.Printf("Failed inserting user with name '%s': %s", artist.Name, err.Error())
@@ -43,7 +43,7 @@ func (d *DatabaseService) InsertArtist(artist *Artist) {
 }
 
 // GetArtist retrieves an artist, without entity references, for the provided ID.
-func (d *DatabaseService) GetArtist(artistID uuid.UUID) (*Artist, error) {
+func (d *DataService) GetArtist(artistID uuid.UUID) (*Artist, error) {
 	artists, err := d.GetArtists(artistID)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (d *DatabaseService) GetArtist(artistID uuid.UUID) (*Artist, error) {
 }
 
 // GetArtists retrieves artists, without entity references, for the provided IDs.
-func (d *DatabaseService) GetArtists(artistID ...uuid.UUID) ([]*Artist, error) {
+func (d *DataService) GetArtists(artistID ...uuid.UUID) ([]*Artist, error) {
 	rows, err := d.DB.Query(getArtistsFromIDs, artistID)
 	if err != nil {
 		return nil, err

@@ -12,20 +12,20 @@ type DataOperations interface {
 	IsPasswordCorrect(username, password string) bool
 }
 
-// DatabaseService is for managing users.
-type DatabaseService struct {
-	Database *logic.DatabaseManager
+// DataService is for managing users.
+type DataService struct {
+	*logic.DatabaseManager
 }
 
-// NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
-	return &DatabaseService{Database: database}
+// NewDataService creates a new instance of the DataService struct.
+func NewDataService(database *logic.DatabaseManager) DataOperations {
+	return &DataService{database}
 }
 
 // InsertUser inserts a new user into the users table.
-func (a *DatabaseService) InsertUser(email, plainPassword string) {
+func (d *DataService) InsertUser(email, plainPassword string) {
 	hashedPassword, _ := logic.HashPassword(plainPassword)
-	_, err := a.Database.DB.Exec(insertUserQuery, email, hashedPassword)
+	_, err := d.DB.Exec(insertUserQuery, email, hashedPassword)
 	if err != nil {
 		log.Printf("Failed inserting user with email '%s': %s", email, err.Error())
 	} else {
@@ -34,12 +34,12 @@ func (a *DatabaseService) InsertUser(email, plainPassword string) {
 }
 
 // IsPasswordCorrect checks if the given password is correct for the user with the given email.
-func (a *DatabaseService) IsPasswordCorrect(email, plainPassword string) bool {
+func (d *DataService) IsPasswordCorrect(email, plainPassword string) bool {
 	if email == "" || plainPassword == "" {
 		return false
 	}
 	var foundHashedPassword string
-	err := a.Database.DB.QueryRow(selectUserPasswordQuery, email).Scan(&foundHashedPassword)
+	err := d.DB.QueryRow(selectUserPasswordQuery, email).Scan(&foundHashedPassword)
 	if err != nil {
 		log.Fatal(err)
 	}

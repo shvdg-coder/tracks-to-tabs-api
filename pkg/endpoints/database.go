@@ -11,26 +11,26 @@ type DataOperations interface {
 	InsertEndpoint(endpoint *Endpoint)
 }
 
-// DatabaseService is for managing endpoints.
-type DatabaseService struct {
-	Database *logic.DatabaseManager
+// DataService is for managing endpoints.
+type DataService struct {
+	*logic.DatabaseManager
 }
 
-// NewDatabaseService creates a new instance of DatabaseService.
-func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
-	return &DatabaseService{Database: database}
+// NewDataService creates a new instance of DataService.
+func NewDataService(database *logic.DatabaseManager) DataOperations {
+	return &DataService{DatabaseManager: database}
 }
 
 // InsertEndpoints inserts multiple records into the endpoints table.
-func (a *DatabaseService) InsertEndpoints(endpoints ...*Endpoint) {
+func (d *DataService) InsertEndpoints(endpoints ...*Endpoint) {
 	for _, endpoint := range endpoints {
-		a.InsertEndpoint(endpoint)
+		d.InsertEndpoint(endpoint)
 	}
 }
 
 // InsertEndpoint inserts a record into the endpoints table.
-func (a *DatabaseService) InsertEndpoint(endpoint *Endpoint) {
-	_, err := a.Database.DB.Exec(insertEndpointQuery, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL)
+func (d *DataService) InsertEndpoint(endpoint *Endpoint) {
+	_, err := d.DB.Exec(insertEndpointQuery, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL)
 	if err != nil {
 		log.Printf(
 			"Failed to insert endpoint with SourceID '%d', Category '%s', Type '%s', and URL '%s': %s",

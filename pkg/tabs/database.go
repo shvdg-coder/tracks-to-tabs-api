@@ -15,26 +15,26 @@ type DataOperations interface {
 	GetTabs(tabID ...uuid.UUID) ([]*Tab, error)
 }
 
-// DatabaseService is for managing tabs.
-type DatabaseService struct {
+// DataService is for managing tabs.
+type DataService struct {
 	*logic.DatabaseManager
 }
 
-// NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
-	return &DatabaseService{DatabaseManager: database}
+// NewDataService creates a new instance of the DataService struct.
+func NewDataService(database *logic.DatabaseManager) DataOperations {
+	return &DataService{DatabaseManager: database}
 }
 
 // InsertTabs inserts multiple tabs in the tabs table.
-func (a *DatabaseService) InsertTabs(tabs ...*Tab) {
+func (d *DataService) InsertTabs(tabs ...*Tab) {
 	for _, tab := range tabs {
-		a.InsertTab(tab)
+		d.InsertTab(tab)
 	}
 }
 
 // InsertTab inserts a new tab in the tabs table.
-func (a *DatabaseService) InsertTab(tab *Tab) {
-	_, err := a.DB.Exec(insertTabQuery, tab.ID, tab.Instrument.ID, tab.Difficulty.ID, tab.Description)
+func (d *DataService) InsertTab(tab *Tab) {
+	_, err := d.DB.Exec(insertTabQuery, tab.ID, tab.Instrument.ID, tab.Difficulty.ID, tab.Description)
 	if err != nil {
 		log.Printf("Failed to insert tab with '%s', '%s' & Description: '%s': %s", tab.Instrument.Name, tab.Difficulty.Name, tab.Description, err.Error())
 	} else {
@@ -43,8 +43,8 @@ func (a *DatabaseService) InsertTab(tab *Tab) {
 }
 
 // GetTab retrieves the tab, without entity references, for the provided tab ID.
-func (a *DatabaseService) GetTab(tabID uuid.UUID) (*Tab, error) {
-	tabs, err := a.GetTabs(tabID)
+func (d *DataService) GetTab(tabID uuid.UUID) (*Tab, error) {
+	tabs, err := d.GetTabs(tabID)
 	if err != nil {
 		return nil, err
 	}
@@ -52,8 +52,8 @@ func (a *DatabaseService) GetTab(tabID uuid.UUID) (*Tab, error) {
 }
 
 // GetTabs retrieves the tabs, without entity references, for the provided IDs.
-func (a *DatabaseService) GetTabs(tabID ...uuid.UUID) ([]*Tab, error) {
-	rows, err := a.DB.Query(getTabsQuery, tabID)
+func (d *DataService) GetTabs(tabID ...uuid.UUID) ([]*Tab, error) {
+	rows, err := d.DB.Query(getTabsQuery, tabID)
 	if err != nil {
 		return nil, err
 	}

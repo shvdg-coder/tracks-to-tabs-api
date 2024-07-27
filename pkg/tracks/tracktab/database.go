@@ -13,19 +13,19 @@ type DataOperations interface {
 	GetTrackToTabLinks(trackID ...uuid.UUID) ([]*TrackTab, error)
 }
 
-// DatabaseService is for managing tracks of songs.
-type DatabaseService struct {
+// DataService is for managing tracks of songs.
+type DataService struct {
 	*logic.DatabaseManager
 }
 
-// NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) *DatabaseService {
-	return &DatabaseService{DatabaseManager: database}
+// NewDataService creates a new instance of the DataService struct.
+func NewDataService(database *logic.DatabaseManager) *DataService {
+	return &DataService{DatabaseManager: database}
 }
 
 // LinkTrackToTab inserts a link between a track and a tab into the track_tab table.
-func (a *DatabaseService) LinkTrackToTab(trackId, tabId uuid.UUID) {
-	_, err := a.DB.Exec(insertTrackTabQuery, trackId, tabId)
+func (d *DataService) LinkTrackToTab(trackId, tabId uuid.UUID) {
+	_, err := d.DB.Exec(insertTrackTabQuery, trackId, tabId)
 	if err != nil {
 		log.Printf("Failed linking track with ID '%s' and tab with ID '%s': %s", trackId, tabId, err.Error())
 	} else {
@@ -34,8 +34,8 @@ func (a *DatabaseService) LinkTrackToTab(trackId, tabId uuid.UUID) {
 }
 
 // GetTrackToTabLink retrieves the 'track to tab' link for the provided ID.
-func (a *DatabaseService) GetTrackToTabLink(trackID uuid.UUID) (*TrackTab, error) {
-	trackTabLinks, err := a.GetTrackToTabLinks(trackID)
+func (d *DataService) GetTrackToTabLink(trackID uuid.UUID) (*TrackTab, error) {
+	trackTabLinks, err := d.GetTrackToTabLinks(trackID)
 	if err != nil {
 		return nil, err
 	}
@@ -43,8 +43,8 @@ func (a *DatabaseService) GetTrackToTabLink(trackID uuid.UUID) (*TrackTab, error
 }
 
 // GetTrackToTabLinks retrieves the 'track to tab' links for the provided track IDs.
-func (a *DatabaseService) GetTrackToTabLinks(trackID ...uuid.UUID) ([]*TrackTab, error) {
-	rows, err := a.DB.Query(getTrackTabLinks, trackID)
+func (d *DataService) GetTrackToTabLinks(trackID ...uuid.UUID) ([]*TrackTab, error) {
+	rows, err := d.DB.Query(getTrackTabLinks, trackID)
 	if err != nil {
 		return nil, err
 	}

@@ -12,26 +12,26 @@ type DataOperations interface {
 	InsertSource(source *Source)
 }
 
-// DatabaseService is for managing sources.
-type DatabaseService struct {
-	Database *logic.DatabaseManager
+// DataService is for managing sources.
+type DataService struct {
+	*logic.DatabaseManager
 }
 
-// NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
-	return &DatabaseService{Database: database}
+// NewDataService creates a new instance of the DataService struct.
+func NewDataService(database *logic.DatabaseManager) DataOperations {
+	return &DataService{DatabaseManager: database}
 }
 
 // InsertSources inserts multiple sources in the sources table.
-func (a *DatabaseService) InsertSources(sources ...*Source) {
+func (d *DataService) InsertSources(sources ...*Source) {
 	for _, source := range sources {
-		a.InsertSource(source)
+		d.InsertSource(source)
 	}
 }
 
 // InsertSource inserts a new source in the sources table.
-func (a *DatabaseService) InsertSource(source *Source) {
-	_, err := a.Database.DB.Exec(insertSourceQuery, source.ID, source.Name, source.Category)
+func (d *DataService) InsertSource(source *Source) {
+	_, err := d.DB.Exec(insertSourceQuery, source.ID, source.Name, source.Category)
 	if err != nil {
 		log.Printf("Failed inserting source with name: '%s': %s", source.Name, err.Error())
 	} else {

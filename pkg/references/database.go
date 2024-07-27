@@ -10,19 +10,19 @@ type DataOperations interface {
 	InsertReference(reference *Reference)
 }
 
-// DatabaseService is for managing references.
-type DatabaseService struct {
-	Database *logic.DatabaseManager
+// DataService is for managing references.
+type DataService struct {
+	*logic.DatabaseManager
 }
 
-// NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
-	return &DatabaseService{Database: database}
+// NewDataService creates a new instance of the DataService struct.
+func NewDataService(database *logic.DatabaseManager) DataOperations {
+	return &DataService{DatabaseManager: database}
 }
 
 // InsertReference inserts a record into the references table.
-func (a *DatabaseService) InsertReference(reference *Reference) {
-	_, err := a.Database.DB.Exec(insertReferenceQuery, reference.InternalID, reference.SourceID, reference.Category, reference.Type, reference.Reference)
+func (d *DataService) InsertReference(reference *Reference) {
+	_, err := d.DB.Exec(insertReferenceQuery, reference.InternalID, reference.SourceID, reference.Category, reference.Type, reference.Reference)
 	if err != nil {
 		log.Printf(
 			"Failed to insert reference with InternalID '%s', SourceID '%s', Category '%s', Type '%s', and Reference '%s': %s",
