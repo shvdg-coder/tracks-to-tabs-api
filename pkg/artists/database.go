@@ -17,12 +17,12 @@ type DatabaseOperations interface {
 
 // DatabaseService is for managing artists.
 type DatabaseService struct {
-	Database *logic.DatabaseManager
+	*logic.DatabaseManager
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
 func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
-	return &DatabaseService{Database: database}
+	return &DatabaseService{database}
 }
 
 // InsertArtists inserts multiple artists into the artists table.
@@ -34,7 +34,7 @@ func (d *DatabaseService) InsertArtists(artists ...*Artist) {
 
 // InsertArtist inserts an artist into the artists table.
 func (d *DatabaseService) InsertArtist(artist *Artist) {
-	_, err := d.Database.DB.Exec(insertArtistQuery, artist.ID, artist.Name)
+	_, err := d.DB.Exec(insertArtistQuery, artist.ID, artist.Name)
 	if err != nil {
 		log.Printf("Failed inserting user with name '%s': %s", artist.Name, err.Error())
 	} else {
@@ -53,7 +53,7 @@ func (d *DatabaseService) GetArtist(artistID uuid.UUID) (*Artist, error) {
 
 // GetArtists retrieves artists, without entity references, for the provided IDs.
 func (d *DatabaseService) GetArtists(artistID ...uuid.UUID) ([]*Artist, error) {
-	rows, err := d.Database.DB.Query(getArtistsFromIDs, artistID)
+	rows, err := d.DB.Query(getArtistsFromIDs, artistID)
 	if err != nil {
 		return nil, err
 	}

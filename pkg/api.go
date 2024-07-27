@@ -9,7 +9,7 @@ import (
 	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
 	ref "github.com/shvdg-dev/tunes-to-tabs-api/pkg/references"
 	src "github.com/shvdg-dev/tunes-to-tabs-api/pkg/sources"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
+	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
 	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 	trktab "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
 	usrs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/users"
@@ -21,7 +21,7 @@ type API struct {
 
 	artistsService      art.Operations
 	tracksService       trk.Operations
-	tabsService         tabs.Operations
+	tabsService         tbs.Operations
 	usersService        usrs.Operations
 	instrumentsService  inst.Operations
 	difficultiesService diff.Operations
@@ -41,8 +41,8 @@ func (a *API) Artists() art.Operations {
 		artistDatabaseService := art.NewDatabaseService(a.DatabaseManager)
 		artistTrackDatabaseService := arttrk.NewDatabaseService(a.DatabaseManager)
 		artistTrackService := arttrk.NewService(artistTrackDatabaseService)
-		artistMappingService := art.NewMappingService(artistDatabaseService, artistTrackService, a.Tracks())
-		a.artistsService = art.NewService(artistDatabaseService, artistMappingService, artistTrackService)
+		artistMappingService := art.NewMappingService()
+		a.artistsService = art.NewService(artistDatabaseService, artistMappingService, artistTrackService, nil)
 	}
 	return a.artistsService
 }
@@ -53,18 +53,18 @@ func (a *API) Tracks() trk.Operations {
 		trackDatabaseService := trk.NewDatabaseService(a.DatabaseManager)
 		trackTabDatabaseService := trktab.NewDatabaseService(a.DatabaseManager)
 		trackTabService := trktab.NewService(trackTabDatabaseService)
-		trackMappingService := trk.NewMappingService(trackDatabaseService, trackTabService, a.Tabs())
-		a.tracksService = trk.NewService(trackDatabaseService, trackMappingService, trackTabService)
+		trackMappingService := trk.NewMappingService()
+		a.tracksService = trk.NewService(trackDatabaseService, trackMappingService, trackTabService, a.Tabs())
 	}
 	return a.tracksService
 }
 
 // Tabs instantiates upon first use and returns the tabs.Operations.
-func (a *API) Tabs() tabs.Operations {
+func (a *API) Tabs() tbs.Operations {
 	if a.tabsService == nil {
-		tabDatabaseService := tabs.NewDatabaseService(a.DatabaseManager)
-		tabsMappingService := tabs.NewMappingService(tabDatabaseService)
-		tabService := tabs.NewService(tabDatabaseService, tabsMappingService)
+		tabDatabaseService := tbs.NewDatabaseService(a.DatabaseManager)
+		tabsMappingService := tbs.NewMappingService()
+		tabService := tbs.NewService(tabDatabaseService, tabsMappingService)
 		a.tabsService = tabService
 	}
 	return a.tabsService

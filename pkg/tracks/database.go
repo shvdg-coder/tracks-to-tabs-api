@@ -16,12 +16,12 @@ type DatabaseOperations interface {
 
 // DatabaseService is for managing tracks of songs.
 type DatabaseService struct {
-	Database *logic.DatabaseManager
+	*logic.DatabaseManager
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
 func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
-	return &DatabaseService{Database: database}
+	return &DatabaseService{DatabaseManager: database}
 }
 
 // InsertTracks inserts multiple tracks into the tracks table.
@@ -33,7 +33,7 @@ func (a *DatabaseService) InsertTracks(tracks ...*Track) {
 
 // InsertTrack inserts a track into the tracks table.
 func (a *DatabaseService) InsertTrack(track *Track) {
-	_, err := a.Database.DB.Exec(insertTrackQuery, track.ID, track.Title, track.Duration)
+	_, err := a.DB.Exec(insertTrackQuery, track.ID, track.Title, track.Duration)
 	if err != nil {
 		log.Printf("Failed to insert track with title '%s': %s", track.Title, err.Error())
 	} else {
@@ -52,7 +52,7 @@ func (a *DatabaseService) GetTrack(trackID uuid.UUID) (*Track, error) {
 
 // GetTracks retrieves the tracks, without entity references, for the provided IDs.
 func (a *DatabaseService) GetTracks(trackID ...uuid.UUID) ([]*Track, error) {
-	rows, err := a.Database.DB.Query(getTracksFromIDs, trackID)
+	rows, err := a.DB.Query(getTracksFromIDs, trackID)
 	if err != nil {
 		return nil, err
 	}

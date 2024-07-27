@@ -15,17 +15,17 @@ type DatabaseOperations interface {
 
 // DatabaseService is for managing tracks of songs.
 type DatabaseService struct {
-	Database *logic.DatabaseManager
+	*logic.DatabaseManager
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
 func NewDatabaseService(database *logic.DatabaseManager) *DatabaseService {
-	return &DatabaseService{Database: database}
+	return &DatabaseService{DatabaseManager: database}
 }
 
 // LinkTrackToTab inserts a link between a track and a tab into the track_tab table.
 func (a *DatabaseService) LinkTrackToTab(trackId, tabId uuid.UUID) {
-	_, err := a.Database.DB.Exec(insertTrackTabQuery, trackId, tabId)
+	_, err := a.DB.Exec(insertTrackTabQuery, trackId, tabId)
 	if err != nil {
 		log.Printf("Failed linking track with ID '%s' and tab with ID '%s': %s", trackId, tabId, err.Error())
 	} else {
@@ -44,7 +44,7 @@ func (a *DatabaseService) GetTrackToTabLink(trackID uuid.UUID) (*TrackTab, error
 
 // GetTrackToTabLinks retrieves the 'track to tab' links for the provided track IDs.
 func (a *DatabaseService) GetTrackToTabLinks(trackID ...uuid.UUID) ([]*TrackTab, error) {
-	rows, err := a.Database.DB.Query(getTrackTabLinks, trackID)
+	rows, err := a.DB.Query(getTrackTabLinks, trackID)
 	if err != nil {
 		return nil, err
 	}

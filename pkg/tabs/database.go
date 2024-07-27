@@ -17,12 +17,12 @@ type DatabaseOperations interface {
 
 // DatabaseService is for managing tabs.
 type DatabaseService struct {
-	Database *logic.DatabaseManager
+	*logic.DatabaseManager
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
 func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
-	return &DatabaseService{Database: database}
+	return &DatabaseService{DatabaseManager: database}
 }
 
 // InsertTabs inserts multiple tabs in the tabs table.
@@ -34,7 +34,7 @@ func (a *DatabaseService) InsertTabs(tabs ...*Tab) {
 
 // InsertTab inserts a new tab in the tabs table.
 func (a *DatabaseService) InsertTab(tab *Tab) {
-	_, err := a.Database.DB.Exec(insertTabQuery, tab.ID, tab.Instrument.ID, tab.Difficulty.ID, tab.Description)
+	_, err := a.DB.Exec(insertTabQuery, tab.ID, tab.Instrument.ID, tab.Difficulty.ID, tab.Description)
 	if err != nil {
 		log.Printf("Failed to insert tab with '%s', '%s' & Description: '%s': %s", tab.Instrument.Name, tab.Difficulty.Name, tab.Description, err.Error())
 	} else {
@@ -53,7 +53,7 @@ func (a *DatabaseService) GetTab(tabID uuid.UUID) (*Tab, error) {
 
 // GetTabs retrieves the tabs, without entity references, for the provided IDs.
 func (a *DatabaseService) GetTabs(tabID ...uuid.UUID) ([]*Tab, error) {
-	rows, err := a.Database.DB.Query(getTabsQuery, tabID)
+	rows, err := a.DB.Query(getTabsQuery, tabID)
 	if err != nil {
 		return nil, err
 	}

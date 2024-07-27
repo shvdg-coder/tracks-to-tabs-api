@@ -2,6 +2,7 @@ package tracks
 
 import (
 	"github.com/google/uuid"
+	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
 	trktab "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
 )
 
@@ -10,6 +11,7 @@ type Operations interface {
 	DatabaseOperations
 	MappingOperations
 	trktab.Operations
+	GetTracksCascading(tabID ...uuid.UUID) ([]*Track, error)
 }
 
 // Service is responsible for managing and retrieving tracks.
@@ -17,14 +19,16 @@ type Service struct {
 	DatabaseOperations
 	MappingOperations
 	TrackTabsOps trktab.Operations
+	TabsOps      tbs.Operations
 }
 
 // NewService instantiates a Service.
-func NewService(database DatabaseOperations, mapping MappingOperations, trackTabs trktab.Operations) Operations {
+func NewService(database DatabaseOperations, mapping MappingOperations, trackTabs trktab.Operations, tabs tbs.Operations) Operations {
 	return &Service{
 		DatabaseOperations: database,
 		MappingOperations:  mapping,
 		TrackTabsOps:       trackTabs,
+		TabsOps:            tabs,
 	}
 }
 
@@ -41,4 +45,30 @@ func (s Service) GetTrackToTabLink(trackID uuid.UUID) (*trktab.TrackTab, error) 
 // GetTrackToTabLinks retrieves the links between a list of track IDs and their associated tabs.
 func (s Service) GetTrackToTabLinks(trackID ...uuid.UUID) ([]*trktab.TrackTab, error) {
 	return s.TrackTabsOps.GetTrackToTabLinks(trackID...)
+}
+
+// ExtractTabIDs retrieves the tab IDs from each tracktab.TrackTab.
+func (s Service) ExtractTabIDs(trackTabs []*trktab.TrackTab) []uuid.UUID {
+	return s.TrackTabsOps.ExtractTabIDs(trackTabs)
+}
+
+// GetTracksCascading retrieves tabs, with entity references, for the provided IDs.
+func (s Service) GetTracksCascading(tabID ...uuid.UUID) ([]*Track, error) {
+	tracks, err := s.GetTracks(tabID...)
+	if err != nil {
+		return nil, err
+	}
+	trackTabs, err := s.GetTrackToTabLinks(tabID...)
+	if err != nil {
+		return nil, err
+	}
+	tabIDs := s.ExtractTabIDs(trackTabs)
+	tabs, err := s.TabsOps.GetTabs(tabIDs...)
+	if err != nil {
+		return nil, err
+	}
+	tracksMap := s.ToMap(tracks)
+	tabsMap := s.TabsOps.ToMap(tabs)
+	tracks = s.MapTabsToTracks(trackTabs, tracksMap, tabsMap)
+	return tracks, nil
 }
