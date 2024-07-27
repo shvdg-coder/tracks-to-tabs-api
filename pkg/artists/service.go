@@ -8,7 +8,7 @@ import (
 
 // Operations represents all operations related to artists.
 type Operations interface {
-	DatabaseOperations
+	DataOperations
 	MappingOperations
 	arttrk.Operations
 	GetArtistsCascading(artistID ...uuid.UUID) ([]*Artist, error)
@@ -16,19 +16,19 @@ type Operations interface {
 
 // Service is responsible for managing and retrieving artists.
 type Service struct {
-	DatabaseOperations
+	DataOperations
 	MappingOperations
 	ArtistTrackOps arttrk.Operations
 	TrackOps       trk.Operations
 }
 
 // NewService instantiates a Service.
-func NewService(database DatabaseOperations, mapping MappingOperations, artistTracks arttrk.Operations, tracks trk.Operations) Operations {
+func NewService(database DataOperations, mapping MappingOperations, artistTracks arttrk.Operations, tracks trk.Operations) Operations {
 	return &Service{
-		DatabaseOperations: database,
-		MappingOperations:  mapping,
-		ArtistTrackOps:     artistTracks,
-		TrackOps:           tracks,
+		DataOperations:    database,
+		MappingOperations: mapping,
+		ArtistTrackOps:    artistTracks,
+		TrackOps:          tracks,
 	}
 }
 

@@ -4,18 +4,18 @@ import "github.com/google/uuid"
 
 // Operations represents all operations related to 'track to tab' links.
 type Operations interface {
-	DatabaseOperations
+	DataOperations
 	ExtractTabIDs(trackTabs []*TrackTab) []uuid.UUID
 }
 
 // Service is responsible for managing and retrieving 'track to tab' links.
 type Service struct {
-	DatabaseOperations
+	DataOperations
 }
 
 // NewService instantiates a Service.
-func NewService(database DatabaseOperations) Operations {
-	return &Service{DatabaseOperations: database}
+func NewService(database DataOperations) Operations {
+	return &Service{DataOperations: database}
 }
 
 // ExtractTabIDs retrieves the tab IDs from each TrackTab.

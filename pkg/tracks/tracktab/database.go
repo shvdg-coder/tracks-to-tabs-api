@@ -6,8 +6,8 @@ import (
 	"log"
 )
 
-// DatabaseOperations represents operations related to 'track to tab' links.
-type DatabaseOperations interface {
+// DataOperations represents operations related to 'track to tab' links.
+type DataOperations interface {
 	LinkTrackToTab(trackID, tabID uuid.UUID)
 	GetTrackToTabLink(trackID uuid.UUID) (*TrackTab, error)
 	GetTrackToTabLinks(trackID ...uuid.UUID) ([]*TrackTab, error)

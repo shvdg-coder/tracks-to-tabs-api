@@ -2,20 +2,20 @@ package tabs
 
 // Operations represent all operations related to tabs.
 type Operations interface {
-	DatabaseOperations
+	DataOperations
 	MappingOperations
 }
 
 // Service is responsible for managing and retrieving tabs.
 type Service struct {
-	DatabaseOperations
+	DataOperations
 	MappingOperations
 }
 
 // NewService instantiates a Service.
-func NewService(database DatabaseOperations, mapping MappingOperations) Operations {
+func NewService(database DataOperations, mapping MappingOperations) Operations {
 	return &Service{
-		DatabaseOperations: database,
-		MappingOperations:  mapping,
+		DataOperations:    database,
+		MappingOperations: mapping,
 	}
 }

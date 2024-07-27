@@ -5,8 +5,8 @@ import (
 	"log"
 )
 
-// DatabaseOperations represents operations related to endpoints in the database.
-type DatabaseOperations interface {
+// DataOperations represents operations related to endpoints in the database.
+type DataOperations interface {
 	InsertEndpoints(endpoints ...*Endpoint)
 	InsertEndpoint(endpoint *Endpoint)
 }
@@ -17,7 +17,7 @@ type DatabaseService struct {
 }
 
 // NewDatabaseService creates a new instance of DatabaseService.
-func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
 	return &DatabaseService{Database: database}
 }
 

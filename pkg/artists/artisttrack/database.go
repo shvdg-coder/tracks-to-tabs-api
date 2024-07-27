@@ -7,8 +7,8 @@ import (
 	"log"
 )
 
-// DatabaseOperations represents operations related to 'artists to tracks' links.
-type DatabaseOperations interface {
+// DataOperations represents operations related to 'artists to tracks' links.
+type DataOperations interface {
 	LinkArtistToTrack(artistId, trackId uuid.UUID)
 	GetArtistToTrackLink(artistID uuid.UUID) (*ArtistTrack, error)
 	GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*ArtistTrack, error)
@@ -20,7 +20,7 @@ type DatabaseService struct {
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
 	return &DatabaseService{Database: database}
 }
 

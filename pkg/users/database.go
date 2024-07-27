@@ -6,8 +6,8 @@ import (
 	"log"
 )
 
-// DatabaseOperations represents operations related to users in the database.
-type DatabaseOperations interface {
+// DataOperations represents operations related to users in the database.
+type DataOperations interface {
 	InsertUser(email, password string)
 	IsPasswordCorrect(username, password string) bool
 }
@@ -18,7 +18,7 @@ type DatabaseService struct {
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
 	return &DatabaseService{Database: database}
 }
 

@@ -4,18 +4,18 @@ import "github.com/google/uuid"
 
 // Operations represents all operations related to 'artist to track' links.
 type Operations interface {
-	DatabaseOperations
+	DataOperations
 	ExtractTrackIDs(artistTracks []*ArtistTrack) []uuid.UUID
 }
 
 // Service is responsible for managing and retrieving 'artist to track' links.
 type Service struct {
-	DatabaseOperations
+	DataOperations
 }
 
 // NewService instantiates a Service.
-func NewService(database DatabaseOperations) Operations {
-	return &Service{DatabaseOperations: database}
+func NewService(database DataOperations) Operations {
+	return &Service{DataOperations: database}
 }
 
 // ExtractTrackIDs retrieves the track IDs from each ArtistTrack.

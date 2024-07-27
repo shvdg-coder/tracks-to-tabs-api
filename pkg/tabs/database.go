@@ -7,8 +7,8 @@ import (
 	"log"
 )
 
-// DatabaseOperations represents operations related to tabs in the database.
-type DatabaseOperations interface {
+// DataOperations represents operations related to tabs in the database.
+type DataOperations interface {
 	InsertTabs(tabs ...*Tab)
 	InsertTab(tab *Tab)
 	GetTab(tabID uuid.UUID) (*Tab, error)
@@ -21,7 +21,7 @@ type DatabaseService struct {
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
 	return &DatabaseService{DatabaseManager: database}
 }
 

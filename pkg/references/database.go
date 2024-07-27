@@ -5,8 +5,8 @@ import (
 	"log"
 )
 
-// DatabaseOperations represents operations related to references in the database.
-type DatabaseOperations interface {
+// DataOperations represents operations related to references in the database.
+type DataOperations interface {
 	InsertReference(reference *Reference)
 }
 
@@ -16,7 +16,7 @@ type DatabaseService struct {
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
 	return &DatabaseService{Database: database}
 }
 

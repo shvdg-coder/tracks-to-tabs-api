@@ -2,15 +2,15 @@ package instruments
 
 // Operations represents the operations related to instruments.
 type Operations interface {
-	DatabaseOperations
+	DataOperations
 }
 
 // Service is responsible for managing instruments.
 type Service struct {
-	DatabaseOperations
+	DataOperations
 }
 
 // NewService creates a new instance of Service.
-func NewService(database DatabaseOperations) Operations {
-	return &Service{DatabaseOperations: database}
+func NewService(database DataOperations) Operations {
+	return &Service{DataOperations: database}
 }

@@ -6,8 +6,8 @@ import (
 	"log"
 )
 
-// DatabaseOperations represents operations related to instruments in the database.
-type DatabaseOperations interface {
+// DataOperations represents operations related to instruments in the database.
+type DataOperations interface {
 	InsertInstruments(instruments ...*Instrument)
 	InsertInstrument(instrument *Instrument)
 	GetInstrument(instrumentID string) (*Instrument, error)
@@ -20,7 +20,7 @@ type DatabaseService struct {
 }
 
 // NewDatabaseService creates a new instance of the DatabaseService struct.
-func NewDatabaseService(database *logic.DatabaseManager) DatabaseOperations {
+func NewDatabaseService(database *logic.DatabaseManager) DataOperations {
 	return &DatabaseService{Database: database}
 }
 

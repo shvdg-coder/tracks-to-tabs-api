@@ -2,15 +2,15 @@ package endpoints
 
 // Operations represents operations related to endpoints.
 type Operations interface {
-	DatabaseOperations
+	DataOperations
 }
 
 // Service is responsible for managing endpoints.
 type Service struct {
-	DatabaseOperations
+	DataOperations
 }
 
 // NewService instantiates a new Service.
-func NewService(database DatabaseOperations) Operations {
-	return &Service{DatabaseOperations: database}
+func NewService(database DataOperations) Operations {
+	return &Service{DataOperations: database}
 }
