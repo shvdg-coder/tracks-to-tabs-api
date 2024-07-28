@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/docker/go-connections/nat"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
@@ -20,50 +21,81 @@ type TestDatabase struct {
 // NewTestDatabase creates a new instance of TestDatabase.
 func NewTestDatabase() (*TestDatabase, error) {
 	ctx := context.Background()
-	req := testcontainers.ContainerRequest{
-		Image:        "postgres:13",
-		ExposedPorts: []string{"5432/tcp"},
-		WaitingFor:   wait.ForListeningPort("5432/tcp"),
-		Env: map[string]string{
-			"POSTGRES_PASSWORD": "docker",
-			"POSTGRES_USER":     "docker",
-			"POSTGRES_DB":       "test",
-		},
-	}
 
-	postgres, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
-		ContainerRequest: req,
-		Started:          true,
-	})
+	container, err := NewPostgresContainer(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	ip, err := postgres.Host(ctx)
+	host, port, err := GetContainerInfo(ctx, container)
 	if err != nil {
 		return nil, err
 	}
 
-	port, err := postgres.MappedPort(ctx, "5432")
-	if err != nil {
-		return nil, err
-	}
-
-	dataSource := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", ip, port.Port(), "docker", "docker", "test")
-	db, err := sql.Open("postgres", dataSource)
+	db, err := NewPostgresConnection(host, port)
 	if err != nil {
 		return nil, err
 	}
 
 	return &TestDatabase{
-		Resource:      postgres,
+		Resource:      container,
 		DB:            db,
-		Host:          ip,
+		Host:          host,
 		Port:          port.Port(),
-		WritePassword: "docker",
-		WriteUser:     "docker",
-		WriteDBName:   "test",
+		WritePassword: PostgresPassword,
+		WriteUser:     PostgresUser,
+		WriteDBName:   PostgresDB,
 	}, nil
+}
+
+// NewPostgresContainer creates and starts a Postgres Docker container.
+func NewPostgresContainer(ctx context.Context) (testcontainers.Container, error) {
+	req := testcontainers.ContainerRequest{
+		Image:        PostgresImage,
+		ExposedPorts: []string{PostgresExposedPorts},
+		WaitingFor:   wait.ForListeningPort(PostgresExposedPorts),
+		Env: map[string]string{
+			"POSTGRES_PASSWORD": PostgresPassword,
+			"POSTGRES_USER":     PostgresUser,
+			"POSTGRES_DB":       PostgresDB,
+		},
+	}
+	return testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
+		ContainerRequest: req,
+		Started:          true,
+	})
+}
+
+// GetContainerInfo gets the IP and the port map from a running Docker container.
+func GetContainerInfo(ctx context.Context, container testcontainers.Container) (ip string, port nat.Port, err error) {
+	ip, err = container.Host(ctx)
+	if err != nil {
+		return "", "", err
+	}
+
+	port, err = container.MappedPort(ctx, PostgresPort)
+	if err != nil {
+		return "", "", err
+	}
+
+	return ip, port, nil
+}
+
+// NewPostgresConnection creates a new DB connection to a Postgres service.
+func NewPostgresConnection(host string, port nat.Port) (*sql.DB, error) {
+	dataSource := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		host, port.Port(), PostgresUser, PostgresPassword, PostgresDB)
+	return sql.Open("postgres", dataSource)
+}
+
+// CreateURL creates the URL to the database
+func (t *TestDatabase) CreateURL() string {
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		t.Host,
+		t.Port,
+		t.WriteUser,
+		t.WritePassword,
+		t.WriteDBName)
 }
 
 // Teardown brings the database down.
