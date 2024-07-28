@@ -5,17 +5,18 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/docker/go-connections/nat"
+	logic "github.com/shvdg-dev/base-logic/pkg"
+	inl "github.com/shvdg-dev/tunes-to-tabs-api/internal"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
-// TestDatabase holds data used to spin up a database for integration testing.
+// TestDatabase is used to spin up a database for integration testing.
 type TestDatabase struct {
-	Resource testcontainers.Container
+	testcontainers.Container
 	*sql.DB
-	Host                                  string
-	Port                                  string
-	WritePassword, WriteUser, WriteDBName string
+	inl.CreateOperations
+	inl.DropOperations
 }
 
 // NewTestDatabase creates a new instance of TestDatabase.
@@ -37,18 +38,18 @@ func NewTestDatabase() (*TestDatabase, error) {
 		return nil, err
 	}
 
+	databaseManager := logic.NewDatabaseManager("postgres", CreateURL(host, port.Port()))
+	tableService := inl.NewTableService(databaseManager)
+
 	return &TestDatabase{
-		Resource:      container,
-		DB:            db,
-		Host:          host,
-		Port:          port.Port(),
-		WritePassword: PostgresPassword,
-		WriteUser:     PostgresUser,
-		WriteDBName:   PostgresDB,
+		Container:        container,
+		DB:               db,
+		CreateOperations: inl.NewCreateService(tableService),
+		DropOperations:   inl.NewDropService(tableService),
 	}, nil
 }
 
-// NewPostgresContainer creates and starts a Postgres Docker container.
+// NewPostgresContainer sets up a new Postgres container in Docker and returns the container instance.
 func NewPostgresContainer(ctx context.Context) (testcontainers.Container, error) {
 	req := testcontainers.ContainerRequest{
 		Image:        PostgresImage,
@@ -66,7 +67,7 @@ func NewPostgresContainer(ctx context.Context) (testcontainers.Container, error)
 	})
 }
 
-// GetContainerInfo gets the IP and the port map from a running Docker container.
+// GetContainerInfo fetches and returns the host IP and mapped port from a running Docker container.
 func GetContainerInfo(ctx context.Context, container testcontainers.Container) (ip string, port nat.Port, err error) {
 	ip, err = container.Host(ctx)
 	if err != nil {
@@ -88,17 +89,17 @@ func NewPostgresConnection(host string, port nat.Port) (*sql.DB, error) {
 	return sql.Open("postgres", dataSource)
 }
 
-// CreateURL creates the URL to the database
-func (t *TestDatabase) CreateURL() string {
+// CreateURL constructs and returns the database connection URL using the constants and provided host and port.
+func CreateURL(host, port string) string {
 	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		t.Host,
-		t.Port,
-		t.WriteUser,
-		t.WritePassword,
-		t.WriteDBName)
+		host,
+		port,
+		PostgresUser,
+		PostgresPassword,
+		PostgresDB)
 }
 
-// Teardown brings the database down.
+// Teardown destroys the database container.
 func (t *TestDatabase) Teardown() error {
-	return t.Resource.Terminate(context.Background())
+	return t.Terminate(context.Background())
 }
