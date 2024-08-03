@@ -33,7 +33,7 @@ type DummyService struct {
 }
 
 // NewDummyService creates a new DummyService instance.
-func NewDummyService(sources []*src.Source, instruments []*inst.Instrument, difficulties []*diff.Difficulty) *DummyService {
+func NewDummyService(sources []*src.Source, instruments []*inst.Instrument, difficulties []*diff.Difficulty) DummyOperations {
 	return &DummyService{
 		Sources:      sources,
 		Instruments:  instruments,

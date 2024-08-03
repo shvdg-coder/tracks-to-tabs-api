@@ -10,12 +10,12 @@ type DropOperations interface {
 
 // DropService helps with deleting data from the database
 type DropService struct {
-	TableService *TableService
+	TableOps TableOperations
 }
 
 // NewDropService creates a new instance of DropService
-func NewDropService(service *TableService) *DropService {
-	return &DropService{TableService: service}
+func NewDropService(tableOps TableOperations) DropOperations {
+	return &DropService{TableOps: tableOps}
 }
 
 // DropAll when permitted, drops the tables in the database
@@ -27,25 +27,25 @@ func (p *DropService) DropAll() {
 
 // DropRelationLinkTables drops the tables that hold relation links.
 func (p *DropService) DropRelationLinkTables() {
-	p.TableService.DropArtistTrackTable()
-	p.TableService.DropTrackTabTable()
+	p.TableOps.DropArtistTrackTable()
+	p.TableOps.DropTrackTabTable()
 }
 
 // DropStorageTables drops tables.
 func (p *DropService) DropStorageTables() {
-	p.TableService.DropArtistsTable()
-	p.TableService.DropEndpointsTable()
-	p.TableService.DropReferencesTable()
-	p.TableService.DropSessionsTable()
-	p.TableService.DropTracksTable()
-	p.TableService.DropTabsTable()
-	p.TableService.DropInstrumentsTable()
-	p.TableService.DropUsersTable()
+	p.TableOps.DropArtistsTable()
+	p.TableOps.DropEndpointsTable()
+	p.TableOps.DropReferencesTable()
+	p.TableOps.DropSessionsTable()
+	p.TableOps.DropTracksTable()
+	p.TableOps.DropTabsTable()
+	p.TableOps.DropInstrumentsTable()
+	p.TableOps.DropUsersTable()
 }
 
 // DropLookupTables drops the lookup tables.
 func (p *DropService) DropLookupTables() {
-	p.TableService.DropInstrumentsTable()
-	p.TableService.DropDifficultiesTable()
-	p.TableService.DropSourcesTable()
+	p.TableOps.DropInstrumentsTable()
+	p.TableOps.DropDifficultiesTable()
+	p.TableOps.DropSourcesTable()
 }

@@ -29,11 +29,11 @@ type SeedingOperations interface {
 type SeedService struct {
 	Seeding *SeedingConfig
 	API     *api.API
-	Dummy   *DummyService
+	Dummy   DummyOperations
 }
 
 // NewSeedService creates a new instance of SeedService
-func NewSeedService(seeding *SeedingConfig, api *api.API) *SeedService {
+func NewSeedService(seeding *SeedingConfig, api *api.API) SeedingOperations {
 	return &SeedService{
 		Seeding: seeding,
 		API:     api,

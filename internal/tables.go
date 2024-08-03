@@ -16,6 +16,44 @@ import (
 	usrs "github.com/shvdg-dev/tunes-to-tabs-api/internal/users"
 )
 
+// CreateTableOperations represents operations related to creating tables in the database.
+type CreateTableOperations interface {
+	CreateArtistsTable()
+	CreateTracksTable()
+	CreateArtistTrackTable()
+	CreateTabsTable()
+	CreateTrackTabTable()
+	CreateUsersTable()
+	CreateSessionsTable()
+	CreateReferencesTable()
+	CreateDifficultiesTable()
+	CreateInstrumentsTable()
+	CreateSourcesTable()
+	CreateEndpointsTable()
+}
+
+// DropTableOperations represents operations related to dropping tables in the database.
+type DropTableOperations interface {
+	DropArtistsTable()
+	DropTracksTable()
+	DropArtistTrackTable()
+	DropTabsTable()
+	DropTrackTabTable()
+	DropUsersTable()
+	DropSessionsTable()
+	DropReferencesTable()
+	DropDifficultiesTable()
+	DropInstrumentsTable()
+	DropSourcesTable()
+	DropEndpointsTable()
+}
+
+// TableOperations represents all operations related to the tables in the database.
+type TableOperations interface {
+	CreateTableOperations
+	DropTableOperations
+}
+
 // TableService is responsible for maintaining the tables for the database.
 type TableService struct {
 	artistsOps      art.SetupOperations
