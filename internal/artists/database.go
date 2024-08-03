@@ -14,17 +14,17 @@ type SetupOperations interface {
 
 // SetupService is for managing artists.
 type SetupService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewSetupService creates a new instance of the SetupService struct.
-func NewSetupService(database *logic.DatabaseManager) SetupOperations {
+func NewSetupService(database logic.DbOperations) SetupOperations {
 	return &SetupService{database}
 }
 
 // CreateArtistsTable creates an artists table if it doesn't already exist.
 func (s *SetupService) CreateArtistsTable() {
-	_, err := s.DB.Exec(CreateArtistsTableQuery)
+	_, err := s.Exec(CreateArtistsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -34,7 +34,7 @@ func (s *SetupService) CreateArtistsTable() {
 
 // DropArtistsTable drops the artists table if it exists.
 func (s *SetupService) DropArtistsTable() {
-	_, err := s.DB.Exec(DropArtistsTableQuery)
+	_, err := s.Exec(DropArtistsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {

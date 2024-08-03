@@ -13,17 +13,17 @@ type SetupOperations interface {
 
 // SetupService is for managing tracks of songs.
 type SetupService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewSetupService creates a new instance of the SetupService struct.
-func NewSetupService(database *logic.DatabaseManager) SetupOperations {
-	return &SetupService{DatabaseManager: database}
+func NewSetupService(database logic.DbOperations) SetupOperations {
+	return &SetupService{DbOperations: database}
 }
 
 // CreateTracksTable creates the tracks table if it doesn't already exist.
 func (s *SetupService) CreateTracksTable() {
-	_, err := s.DB.Exec(CreateTracksTableQuery)
+	_, err := s.Exec(CreateTracksTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -33,7 +33,7 @@ func (s *SetupService) CreateTracksTable() {
 
 // DropTracksTable drops the tracks table if it exists.
 func (s *SetupService) DropTracksTable() {
-	_, err := s.DB.Exec(DropTracksTableQuery)
+	_, err := s.Exec(DropTracksTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {

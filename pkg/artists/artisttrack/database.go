@@ -16,17 +16,17 @@ type DataOperations interface {
 
 // DataService is for managing 'artists to tracks' links.
 type DataService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewDataService creates a new instance of the DataService struct.
-func NewDataService(database *logic.DatabaseManager) DataOperations {
-	return &DataService{DatabaseManager: database}
+func NewDataService(database logic.DbOperations) DataOperations {
+	return &DataService{DbOperations: database}
 }
 
 // LinkArtistToTrack inserts a link between an artist and a track into the artist_track table.
 func (d *DataService) LinkArtistToTrack(artistId, trackId uuid.UUID) {
-	_, err := d.DB.Exec(insertArtistTrackQuery, artistId, trackId)
+	_, err := d.Exec(insertArtistTrackQuery, artistId, trackId)
 	if err != nil {
 		log.Printf("Failed linking artist with ID '%s' and track with ID '%s': %s", artistId, trackId, err.Error())
 	} else {
@@ -45,7 +45,7 @@ func (d *DataService) GetArtistToTrackLink(artistID uuid.UUID) (*ArtistTrack, er
 
 // GetArtistToTrackLinks retrieves the 'artist to track' link for the provided artist IDs.
 func (d *DataService) GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*ArtistTrack, error) {
-	rows, err := d.DB.Query(getArtistTrackLinks, artistID)
+	rows, err := d.Query(getArtistTrackLinks, artistID)
 	if err != nil {
 		return nil, err
 	}

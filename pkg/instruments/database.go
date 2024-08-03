@@ -16,12 +16,12 @@ type DataOperations interface {
 
 // DataService is for managing instruments.
 type DataService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewDataService creates a new instance of the DataService struct.
-func NewDataService(database *logic.DatabaseManager) DataOperations {
-	return &DataService{DatabaseManager: database}
+func NewDataService(database logic.DbOperations) DataOperations {
+	return &DataService{DbOperations: database}
 }
 
 // InsertInstruments inserts multiple instruments in the instruments table.
@@ -33,7 +33,7 @@ func (d *DataService) InsertInstruments(instruments ...*Instrument) {
 
 // InsertInstrument inserts a new instrument in the instruments table.
 func (d *DataService) InsertInstrument(instrument *Instrument) {
-	_, err := d.DB.Exec(insertInstrumentQuery, instrument.Name)
+	_, err := d.Exec(insertInstrumentQuery, instrument.Name)
 	if err != nil {
 		log.Printf("Failed inserting instrument with name: '%s': %s", instrument.Name, err.Error())
 	} else {
@@ -52,7 +52,7 @@ func (d *DataService) GetInstrument(instrumentID string) (*Instrument, error) {
 
 // GetInstruments retrieves instruments for the provided IDs.
 func (d *DataService) GetInstruments(instrumentID ...string) ([]*Instrument, error) {
-	rows, err := d.DB.Query(getInstrumentsQuery, instrumentID)
+	rows, err := d.Query(getInstrumentsQuery, instrumentID)
 	if err != nil {
 		return nil, err
 	}

@@ -33,7 +33,7 @@ type TableService struct {
 }
 
 // NewTableService create a new instance of TableService.
-func NewTableService(database *pkg.DatabaseManager) *TableService {
+func NewTableService(database pkg.DbOperations) *TableService {
 	return &TableService{
 		artistsOps:      art.NewSetupService(database),
 		trackOps:        trk.NewSetupService(database),

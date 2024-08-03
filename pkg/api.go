@@ -17,7 +17,7 @@ import (
 
 // API represents the main entry point to interact with functionalities for the defined entities.
 type API struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 
 	artistsService      art.Operations
 	tracksService       trk.Operations
@@ -31,16 +31,16 @@ type API struct {
 }
 
 // NewAPI creates a new instance of the API.
-func NewAPI(database *logic.DatabaseManager) *API {
-	return &API{DatabaseManager: database}
+func NewAPI(database logic.DbOperations) *API {
+	return &API{DbOperations: database}
 }
 
 // Artists initiates upon first use and returns the artists.Operations.
 func (a *API) Artists() art.Operations {
 	if a.artistsService == nil {
 		artistMappingService := art.NewMappingService()
-		artistDataService := art.NewDataService(a.DatabaseManager)
-		artistTrackDataService := arttrk.NewDataService(a.DatabaseManager)
+		artistDataService := art.NewDataService(a.DbOperations)
+		artistTrackDataService := arttrk.NewDataService(a.DbOperations)
 		artistTrackService := arttrk.NewService(artistTrackDataService)
 		a.artistsService = art.NewService(artistDataService, artistMappingService, artistTrackService, a.Tracks())
 	}
@@ -51,8 +51,8 @@ func (a *API) Artists() art.Operations {
 func (a *API) Tracks() trk.Operations {
 	if a.tracksService == nil {
 		trackMappingService := trk.NewMappingService()
-		trackDataService := trk.NewDataService(a.DatabaseManager)
-		trackTabDataService := trktab.NewDataService(a.DatabaseManager)
+		trackDataService := trk.NewDataService(a.DbOperations)
+		trackTabDataService := trktab.NewDataService(a.DbOperations)
 		trackTabService := trktab.NewService(trackTabDataService)
 		a.tracksService = trk.NewService(trackDataService, trackMappingService, trackTabService, a.Tabs())
 	}
@@ -63,7 +63,7 @@ func (a *API) Tracks() trk.Operations {
 func (a *API) Tabs() tbs.Operations {
 	if a.tabsService == nil {
 		tabMappingService := tbs.NewMappingService()
-		tabDataService := tbs.NewDataService(a.DatabaseManager)
+		tabDataService := tbs.NewDataService(a.DbOperations)
 		a.tabsService = tbs.NewService(tabDataService, tabMappingService)
 	}
 	return a.tabsService
@@ -72,7 +72,7 @@ func (a *API) Tabs() tbs.Operations {
 // Users instantiates upon first use and returns the users.Operations.
 func (a *API) Users() usrs.Operations {
 	if a.usersService == nil {
-		usersDataService := usrs.NewDataService(a.DatabaseManager)
+		usersDataService := usrs.NewDataService(a.DbOperations)
 		a.usersService = usrs.NewService(usersDataService)
 	}
 	return a.usersService
@@ -81,7 +81,7 @@ func (a *API) Users() usrs.Operations {
 // Instruments instantiates upon first use and returns the instruments.Operations.
 func (a *API) Instruments() inst.Operations {
 	if a.instrumentsService == nil {
-		instrumentsDataService := inst.NewDataService(a.DatabaseManager)
+		instrumentsDataService := inst.NewDataService(a.DbOperations)
 		a.instrumentsService = inst.NewService(instrumentsDataService)
 	}
 	return a.instrumentsService
@@ -90,7 +90,7 @@ func (a *API) Instruments() inst.Operations {
 // Difficulties instantiates upon first use and returns the difficulties.Operations.
 func (a *API) Difficulties() diff.Operations {
 	if a.difficultiesService == nil {
-		difficultiesDataService := diff.NewDataService(a.DatabaseManager)
+		difficultiesDataService := diff.NewDataService(a.DbOperations)
 		a.difficultiesService = diff.NewService(difficultiesDataService)
 	}
 	return a.difficultiesService
@@ -99,7 +99,7 @@ func (a *API) Difficulties() diff.Operations {
 // Sources instantiates upon first use and returns the sources.Operations.
 func (a *API) Sources() src.Operations {
 	if a.sourcesService == nil {
-		sourceDataService := src.NewDataService(a.DatabaseManager)
+		sourceDataService := src.NewDataService(a.DbOperations)
 		a.sourcesService = src.NewService(sourceDataService)
 	}
 	return a.sourcesService
@@ -108,7 +108,7 @@ func (a *API) Sources() src.Operations {
 // Endpoints instantiates upon first use and returns the endpoints.Operations.
 func (a *API) Endpoints() end.Operations {
 	if a.endpointsService == nil {
-		endpointsDataService := end.NewDataService(a.DatabaseManager)
+		endpointsDataService := end.NewDataService(a.DbOperations)
 		a.endpointsService = end.NewService(endpointsDataService)
 	}
 	return a.endpointsService
@@ -117,7 +117,7 @@ func (a *API) Endpoints() end.Operations {
 // References instantiates upon first use and returns the references.Operations.
 func (a *API) References() ref.Operations {
 	if a.referencesService == nil {
-		referencesDataService := ref.NewDataService(a.DatabaseManager)
+		referencesDataService := ref.NewDataService(a.DbOperations)
 		a.referencesService = ref.NewService(referencesDataService)
 	}
 	return a.referencesService

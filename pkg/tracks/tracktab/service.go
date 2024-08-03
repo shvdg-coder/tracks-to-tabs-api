@@ -14,8 +14,8 @@ type Service struct {
 }
 
 // NewService instantiates a Service.
-func NewService(database DataOperations) Operations {
-	return &Service{DataOperations: database}
+func NewService(data DataOperations) Operations {
+	return &Service{DataOperations: data}
 }
 
 // ExtractTabIDs retrieves the tab IDs from each TrackTab.

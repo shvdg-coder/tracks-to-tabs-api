@@ -14,17 +14,17 @@ type SetupOperations interface {
 
 // SetupService is for setting up difficulties in the database.
 type SetupService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewSetupService creates a new instance of the SetupService struct.
-func NewSetupService(database *logic.DatabaseManager) SetupOperations {
-	return &SetupService{DatabaseManager: database}
+func NewSetupService(database logic.DbOperations) SetupOperations {
+	return &SetupService{DbOperations: database}
 }
 
 // CreateDifficultiesTable creates a difficulties table.
 func (s *SetupService) CreateDifficultiesTable() {
-	_, err := s.DB.Exec(CreateDifficultiesTableQuery)
+	_, err := s.Exec(CreateDifficultiesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -34,7 +34,7 @@ func (s *SetupService) CreateDifficultiesTable() {
 
 // DropDifficultiesTable drops the difficulties table.
 func (s *SetupService) DropDifficultiesTable() {
-	_, err := s.DB.Exec(DropDifficultiesTableQuery)
+	_, err := s.Exec(DropDifficultiesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {

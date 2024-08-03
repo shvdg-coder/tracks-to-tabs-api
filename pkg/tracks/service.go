@@ -8,7 +8,7 @@ import (
 
 // Operations represent all operations related to tracks.
 type Operations interface {
-	DatabaseOperations
+	DataOperations
 	MappingOperations
 	trktab.Operations
 	GetTracksCascading(tabID ...uuid.UUID) ([]*Track, error)
@@ -16,19 +16,19 @@ type Operations interface {
 
 // Service is responsible for managing and retrieving tracks.
 type Service struct {
-	DatabaseOperations
+	DataOperations
 	MappingOperations
 	TrackTabsOps trktab.Operations
 	TabsOps      tbs.Operations
 }
 
 // NewService instantiates a Service.
-func NewService(database DatabaseOperations, mapping MappingOperations, trackTabs trktab.Operations, tabs tbs.Operations) Operations {
+func NewService(data DataOperations, mapping MappingOperations, trackTabs trktab.Operations, tabs tbs.Operations) Operations {
 	return &Service{
-		DatabaseOperations: database,
-		MappingOperations:  mapping,
-		TrackTabsOps:       trackTabs,
-		TabsOps:            tabs,
+		DataOperations:    data,
+		MappingOperations: mapping,
+		TrackTabsOps:      trackTabs,
+		TabsOps:           tabs,
 	}
 }
 

@@ -13,12 +13,12 @@ type DataOperations interface {
 
 // DataService is for managing endpoints.
 type DataService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewDataService creates a new instance of DataService.
-func NewDataService(database *logic.DatabaseManager) DataOperations {
-	return &DataService{DatabaseManager: database}
+func NewDataService(database logic.DbOperations) DataOperations {
+	return &DataService{DbOperations: database}
 }
 
 // InsertEndpoints inserts multiple records into the endpoints table.
@@ -30,7 +30,7 @@ func (d *DataService) InsertEndpoints(endpoints ...*Endpoint) {
 
 // InsertEndpoint inserts a record into the endpoints table.
 func (d *DataService) InsertEndpoint(endpoint *Endpoint) {
-	_, err := d.DB.Exec(insertEndpointQuery, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL)
+	_, err := d.Exec(insertEndpointQuery, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL)
 	if err != nil {
 		log.Printf(
 			"Failed to insert endpoint with SourceID '%d', Category '%s', Type '%s', and URL '%s': %s",

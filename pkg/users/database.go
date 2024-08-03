@@ -14,18 +14,18 @@ type DataOperations interface {
 
 // DataService is for managing users.
 type DataService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewDataService creates a new instance of the DataService struct.
-func NewDataService(database *logic.DatabaseManager) DataOperations {
+func NewDataService(database logic.DbOperations) DataOperations {
 	return &DataService{database}
 }
 
 // InsertUser inserts a new user into the users table.
 func (d *DataService) InsertUser(email, plainPassword string) {
 	hashedPassword, _ := logic.HashPassword(plainPassword)
-	_, err := d.DB.Exec(insertUserQuery, email, hashedPassword)
+	_, err := d.Exec(insertUserQuery, email, hashedPassword)
 	if err != nil {
 		log.Printf("Failed inserting user with email '%s': %s", email, err.Error())
 	} else {
@@ -39,7 +39,7 @@ func (d *DataService) IsPasswordCorrect(email, plainPassword string) bool {
 		return false
 	}
 	var foundHashedPassword string
-	err := d.DB.QueryRow(selectUserPasswordQuery, email).Scan(&foundHashedPassword)
+	err := d.QueryRow(selectUserPasswordQuery, email).Scan(&foundHashedPassword)
 	if err != nil {
 		log.Fatal(err)
 	}

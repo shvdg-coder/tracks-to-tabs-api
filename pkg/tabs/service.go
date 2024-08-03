@@ -13,9 +13,9 @@ type Service struct {
 }
 
 // NewService instantiates a Service.
-func NewService(database DataOperations, mapping MappingOperations) Operations {
+func NewService(data DataOperations, mapping MappingOperations) Operations {
 	return &Service{
-		DataOperations:    database,
+		DataOperations:    data,
 		MappingOperations: mapping,
 	}
 }

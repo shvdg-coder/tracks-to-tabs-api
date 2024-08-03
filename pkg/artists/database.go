@@ -17,11 +17,11 @@ type DataOperations interface {
 
 // DataService is for managing artists.
 type DataService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewDataService creates a new instance of the DataService struct.
-func NewDataService(database *logic.DatabaseManager) DataOperations {
+func NewDataService(database logic.DbOperations) DataOperations {
 	return &DataService{database}
 }
 
@@ -34,7 +34,7 @@ func (d *DataService) InsertArtists(artists ...*Artist) {
 
 // InsertArtist inserts an artist into the artists table.
 func (d *DataService) InsertArtist(artist *Artist) {
-	_, err := d.DB.Exec(insertArtistQuery, artist.ID, artist.Name)
+	_, err := d.Exec(insertArtistQuery, artist.ID, artist.Name)
 	if err != nil {
 		log.Printf("Failed inserting user with name '%s': %s", artist.Name, err.Error())
 	} else {
@@ -53,7 +53,7 @@ func (d *DataService) GetArtist(artistID uuid.UUID) (*Artist, error) {
 
 // GetArtists retrieves artists, without entity references, for the provided IDs.
 func (d *DataService) GetArtists(artistID ...uuid.UUID) ([]*Artist, error) {
-	rows, err := d.DB.Query(getArtistsFromIDs, artistID)
+	rows, err := d.Query(getArtistsFromIDs, artistID)
 	if err != nil {
 		return nil, err
 	}

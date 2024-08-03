@@ -13,17 +13,17 @@ type SetupOperations interface {
 
 // SetupService is for setting up endpoints tables in the database.
 type SetupService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewSetupService creates a new instance of SetupService.
-func NewSetupService(database *logic.DatabaseManager) SetupOperations {
-	return &SetupService{DatabaseManager: database}
+func NewSetupService(database logic.DbOperations) SetupOperations {
+	return &SetupService{DbOperations: database}
 }
 
 // CreateEndpointsTable creates the endpoints table if it doesn't already exist.
 func (t *SetupService) CreateEndpointsTable() {
-	_, err := t.DB.Exec(CreateEndpointsTableQuery)
+	_, err := t.Exec(CreateEndpointsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -33,7 +33,7 @@ func (t *SetupService) CreateEndpointsTable() {
 
 // DropEndpointsTable drops the endpoints table if it exists.
 func (t *SetupService) DropEndpointsTable() {
-	_, err := t.DB.Exec(DropEndpointsTableQuery)
+	_, err := t.Exec(DropEndpointsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {

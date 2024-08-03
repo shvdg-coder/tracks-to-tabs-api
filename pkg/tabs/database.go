@@ -17,12 +17,12 @@ type DataOperations interface {
 
 // DataService is for managing tabs.
 type DataService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewDataService creates a new instance of the DataService struct.
-func NewDataService(database *logic.DatabaseManager) DataOperations {
-	return &DataService{DatabaseManager: database}
+func NewDataService(database logic.DbOperations) DataOperations {
+	return &DataService{DbOperations: database}
 }
 
 // InsertTabs inserts multiple tabs in the tabs table.
@@ -34,7 +34,7 @@ func (d *DataService) InsertTabs(tabs ...*Tab) {
 
 // InsertTab inserts a new tab in the tabs table.
 func (d *DataService) InsertTab(tab *Tab) {
-	_, err := d.DB.Exec(insertTabQuery, tab.ID, tab.Instrument.ID, tab.Difficulty.ID, tab.Description)
+	_, err := d.Exec(insertTabQuery, tab.ID, tab.Instrument.ID, tab.Difficulty.ID, tab.Description)
 	if err != nil {
 		log.Printf("Failed to insert tab with '%s', '%s' & Description: '%s': %s", tab.Instrument.Name, tab.Difficulty.Name, tab.Description, err.Error())
 	} else {
@@ -53,7 +53,7 @@ func (d *DataService) GetTab(tabID uuid.UUID) (*Tab, error) {
 
 // GetTabs retrieves the tabs, without entity references, for the provided IDs.
 func (d *DataService) GetTabs(tabID ...uuid.UUID) ([]*Tab, error) {
-	rows, err := d.DB.Query(getTabsQuery, tabID)
+	rows, err := d.Query(getTabsQuery, tabID)
 	if err != nil {
 		return nil, err
 	}

@@ -14,17 +14,17 @@ type SetupOperations interface {
 
 // SetupService is for setting up the users table.
 type SetupService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewSetupService creates a new instance of the SetupService struct.
-func NewSetupService(database *logic.DatabaseManager) SetupOperations {
+func NewSetupService(database logic.DbOperations) SetupOperations {
 	return &SetupService{database}
 }
 
 // CreateUsersTable creates a users table if it doesn't already exist.
 func (s *SetupService) CreateUsersTable() {
-	_, err := s.DB.Exec(CreateUsersTableQuery)
+	_, err := s.Exec(CreateUsersTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -34,7 +34,7 @@ func (s *SetupService) CreateUsersTable() {
 
 // DropUsersTable drops the users table if it exists.
 func (s *SetupService) DropUsersTable() {
-	_, err := s.DB.Exec(DropUsersTableQuery)
+	_, err := s.Exec(DropUsersTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {

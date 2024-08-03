@@ -16,12 +16,12 @@ type DataOperations interface {
 
 // DataService is for managing difficulties.
 type DataService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewDataService creates a new instance of the DataService struct.
-func NewDataService(database *logic.DatabaseManager) DataOperations {
-	return &DataService{DatabaseManager: database}
+func NewDataService(database logic.DbOperations) DataOperations {
+	return &DataService{DbOperations: database}
 }
 
 // InsertDifficulties inserts multiple difficulty levels.
@@ -33,7 +33,7 @@ func (d *DataService) InsertDifficulties(difficulties ...*Difficulty) {
 
 // InsertDifficulty inserts a new difficulty level.
 func (d *DataService) InsertDifficulty(difficulty *Difficulty) {
-	_, err := d.DB.Exec(insertDifficultyQuery, difficulty.Name)
+	_, err := d.Exec(insertDifficultyQuery, difficulty.Name)
 	if err != nil {
 		log.Printf("Failed inserting difficulty level with name: '%s': %s", difficulty.Name, err.Error())
 	} else {
@@ -52,7 +52,7 @@ func (d *DataService) GetDifficulty(difficultyID string) (*Difficulty, error) {
 
 // GetDifficulties retrieves difficulties for the provided IDs.
 func (d *DataService) GetDifficulties(difficultyID ...string) ([]*Difficulty, error) {
-	rows, err := d.DB.Query(getDifficultiesQuery, difficultyID)
+	rows, err := d.Query(getDifficultiesQuery, difficultyID)
 	if err != nil {
 		return nil, err
 	}

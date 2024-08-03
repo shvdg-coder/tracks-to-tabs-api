@@ -13,17 +13,17 @@ type SetupOperations interface {
 
 // SetupService is for setting up references table in the database.
 type SetupService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewSetupService creates a new instance of the SetupService struct.
-func NewSetupService(database *logic.DatabaseManager) SetupOperations {
-	return &SetupService{DatabaseManager: database}
+func NewSetupService(database logic.DbOperations) SetupOperations {
+	return &SetupService{DbOperations: database}
 }
 
 // CreateReferencesTable creates the references table if it doesn't already exist.
 func (s *SetupService) CreateReferencesTable() {
-	_, err := s.DB.Exec(CreateReferencesTableQuery)
+	_, err := s.Exec(CreateReferencesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -33,7 +33,7 @@ func (s *SetupService) CreateReferencesTable() {
 
 // DropReferencesTable drops the references table if it exists.
 func (s *SetupService) DropReferencesTable() {
-	_, err := s.DB.Exec(DropReferencesTableQuery)
+	_, err := s.Exec(DropReferencesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {

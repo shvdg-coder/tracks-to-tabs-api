@@ -14,17 +14,17 @@ type SetupOperations interface {
 
 // SetupService is for setting up the sources table in the database.
 type SetupService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewSetupService creates a new instance of the SetupService struct.
-func NewSetupService(database *logic.DatabaseManager) SetupOperations {
-	return &SetupService{DatabaseManager: database}
+func NewSetupService(database logic.DbOperations) SetupOperations {
+	return &SetupService{DbOperations: database}
 }
 
 // CreateSourcesTable creates a sources table if it doesn't already exist.
 func (s *SetupService) CreateSourcesTable() {
-	_, err := s.DB.Exec(CreateSourcesTableQuery)
+	_, err := s.Exec(CreateSourcesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -34,7 +34,7 @@ func (s *SetupService) CreateSourcesTable() {
 
 // DropSourcesTable drops the sources table if it exists.
 func (s *SetupService) DropSourcesTable() {
-	_, err := s.DB.Exec(DropSourcesTableQuery)
+	_, err := s.Exec(DropSourcesTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {

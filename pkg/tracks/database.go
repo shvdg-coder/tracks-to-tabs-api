@@ -6,8 +6,8 @@ import (
 	"log"
 )
 
-// DatabaseOperations represents operations related to tracks in the database.
-type DatabaseOperations interface {
+// DataOperations represents operations related to tracks in the database.
+type DataOperations interface {
 	InsertTracks(tracks ...*Track)
 	InsertTrack(track *Track)
 	GetTrack(trackID uuid.UUID) (*Track, error)
@@ -16,12 +16,12 @@ type DatabaseOperations interface {
 
 // DataService is for managing tracks of songs.
 type DataService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewDataService creates a new instance of the DataService struct.
-func NewDataService(database *logic.DatabaseManager) DatabaseOperations {
-	return &DataService{DatabaseManager: database}
+func NewDataService(database logic.DbOperations) DataOperations {
+	return &DataService{DbOperations: database}
 }
 
 // InsertTracks inserts multiple tracks into the tracks table.
@@ -33,7 +33,7 @@ func (d *DataService) InsertTracks(tracks ...*Track) {
 
 // InsertTrack inserts a track into the tracks table.
 func (d *DataService) InsertTrack(track *Track) {
-	_, err := d.DB.Exec(insertTrackQuery, track.ID, track.Title, track.Duration)
+	_, err := d.Exec(insertTrackQuery, track.ID, track.Title, track.Duration)
 	if err != nil {
 		log.Printf("Failed to insert track with title '%s': %s", track.Title, err.Error())
 	} else {
@@ -52,7 +52,7 @@ func (d *DataService) GetTrack(trackID uuid.UUID) (*Track, error) {
 
 // GetTracks retrieves the tracks, without entity references, for the provided IDs.
 func (d *DataService) GetTracks(trackID ...uuid.UUID) ([]*Track, error) {
-	rows, err := d.DB.Query(getTracksFromIDs, trackID)
+	rows, err := d.Query(getTracksFromIDs, trackID)
 	if err != nil {
 		return nil, err
 	}

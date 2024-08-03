@@ -14,17 +14,17 @@ type SetupOperations interface {
 
 // SetupService is for setting up the instruments table in the database.
 type SetupService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewSetupService creates a new instance of the SetupService struct.
-func NewSetupService(database *logic.DatabaseManager) SetupOperations {
-	return &SetupService{DatabaseManager: database}
+func NewSetupService(database logic.DbOperations) SetupOperations {
+	return &SetupService{DbOperations: database}
 }
 
 // CreateInstrumentsTable creates an instruments table if it doesn't already exist.
 func (t *SetupService) CreateInstrumentsTable() {
-	_, err := t.DB.Exec(CreateInstrumentsTableQuery)
+	_, err := t.Exec(CreateInstrumentsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -34,7 +34,7 @@ func (t *SetupService) CreateInstrumentsTable() {
 
 // DropInstrumentsTable drops the instruments table if it exists.
 func (t *SetupService) DropInstrumentsTable() {
-	_, err := t.DB.Exec(DropInstrumentsTableQuery)
+	_, err := t.Exec(DropInstrumentsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {

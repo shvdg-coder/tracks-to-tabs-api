@@ -13,21 +13,21 @@ type SetupOperations interface {
 
 // SetupService is for setting up the users table.
 type SetupService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewSetupService creates a new instance of the SetupService struct.
-func NewSetupService(database *logic.DatabaseManager) SetupOperations {
+func NewSetupService(database logic.DbOperations) SetupOperations {
 	return &SetupService{database}
 }
 
 // CreateSessionsTable creates the sessions table in the database and adds an expiry index.
 func (s *SetupService) CreateSessionsTable() {
-	_, err := s.DB.Exec(CreateSessionsTableQuery)
+	_, err := s.Exec(CreateSessionsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = s.DB.Exec(CreateSessionExpiryIndexQuery)
+	_, err = s.Exec(CreateSessionExpiryIndexQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -37,7 +37,7 @@ func (s *SetupService) CreateSessionsTable() {
 
 // DropSessionsTable drops the sessions table if it exists.
 func (s *SetupService) DropSessionsTable() {
-	_, err := s.DB.Exec(DropSessionsTableQuery)
+	_, err := s.Exec(DropSessionsTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {

@@ -33,9 +33,9 @@ func initConfig() *inter.Config {
 }
 
 // initDatabase initializes the database manager.
-func initDatabase() *logic.DatabaseManager {
+func initDatabase() logic.DbOperations {
 	URL := logic.GetEnvValueAsString(inter.KeyDatabaseURL)
-	database := logic.NewDatabaseManager(inter.ValueDatabaseDriver, URL)
+	database := logic.NewDbManager(inter.ValueDatabaseDriver, URL)
 	return database
 }
 

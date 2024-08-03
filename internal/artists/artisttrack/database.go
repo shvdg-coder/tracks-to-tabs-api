@@ -14,17 +14,17 @@ type SetupOperations interface {
 
 // SetupService is for managing 'artists to tracks' links.
 type SetupService struct {
-	*logic.DatabaseManager
+	logic.DbOperations
 }
 
 // NewSetupService creates a new instance of the SetupService struct.
-func NewSetupService(database *logic.DatabaseManager) SetupOperations {
-	return &SetupService{DatabaseManager: database}
+func NewSetupService(database logic.DbOperations) SetupOperations {
+	return &SetupService{DbOperations: database}
 }
 
 // CreateArtistTrackTable creates an artist_track table if it doesn't already exist.
 func (s *SetupService) CreateArtistTrackTable() {
-	_, err := s.DB.Exec(CreateArtistTrackTableQuery)
+	_, err := s.Exec(CreateArtistTrackTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -34,7 +34,7 @@ func (s *SetupService) CreateArtistTrackTable() {
 
 // DropArtistTrackTable drops the artist_track table if it exists.
 func (s *SetupService) DropArtistTrackTable() {
-	_, err := s.DB.Exec(DropArtistTrackTableQuery)
+	_, err := s.Exec(DropArtistTrackTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	} else {
