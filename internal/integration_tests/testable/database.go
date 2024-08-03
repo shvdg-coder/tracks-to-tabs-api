@@ -1,37 +1,43 @@
 package testable
 
 import (
+	"github.com/shvdg-dev/base-logic/pkg/testable/database"
 	inl "github.com/shvdg-dev/tunes-to-tabs-api/internal"
 )
 
-// TestDbOps represents operations for a test database, used during integration tests.
-type TestDbOps interface {
+// TestEnvOperations represents operations for a test environment, used during integration tests.
+type TestEnvOperations interface {
+	database.ContainerOperations
 	inl.CreateOperations
 	inl.DropOperations
 	Setup()
-	Teardown()
+	Breakdown()
 }
 
-// TestDb is used to spin up a database for integration testing.
-type TestDb struct {
+// TestEnv is used to spin up a database container for integration testing.
+type TestEnv struct {
+	database.ContainerOperations
 	inl.CreateOperations
 	inl.DropOperations
 }
 
-// NewTestDb creates a new instance of TestDb.
-func NewTestDb(create inl.CreateOperations, drop inl.DropOperations) TestDbOps {
-	return &TestDb{
-		CreateOperations: create,
-		DropOperations:   drop,
+// NewTestEnv creates a new instance of TestEnv.
+func NewTestEnv(dbContainer database.ContainerOperations, create inl.CreateOperations, drop inl.DropOperations) TestEnvOperations {
+	return &TestEnv{
+		ContainerOperations: dbContainer,
+		CreateOperations:    create,
+		DropOperations:      drop,
 	}
 }
 
-// Setup prepares the TestDb.
-func (t *TestDb) Setup() {
+// Setup prepares the TestEnv.
+func (t *TestEnv) Setup() {
 	t.CreateAll()
 }
 
-// Teardown cleans up and breaks down the TestDb.
-func (t *TestDb) Teardown() {
+// Breakdown cleans up and breaks down the TestEnv.
+func (t *TestEnv) Breakdown() {
 	t.DropAll()
+	t.Disconnect()
+	t.Teardown()
 }

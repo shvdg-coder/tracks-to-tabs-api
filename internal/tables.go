@@ -71,7 +71,7 @@ type TableService struct {
 }
 
 // NewTableService create a new instance of TableService.
-func NewTableService(database pkg.DbOperations) *TableService {
+func NewTableService(database pkg.DbOperations) TableOperations {
 	return &TableService{
 		artistsOps:      art.NewSetupService(database),
 		trackOps:        trk.NewSetupService(database),
