@@ -6,7 +6,7 @@ require (
 	github.com/brianvoe/gofakeit/v7 v7.0.3
 	github.com/google/uuid v1.6.0
 	github.com/lib/pq v1.10.9
-	github.com/shvdg-dev/base-logic v0.0.13
+	github.com/shvdg-dev/base-logic v0.0.17
 	gopkg.in/yaml.v2 v2.4.0
 )
 
