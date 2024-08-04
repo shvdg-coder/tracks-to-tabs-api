@@ -11,7 +11,7 @@ func TestEnvSetup(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
 	defer dbEnv.Breakdown()
+
 	dbEnv.Setup()
 }
