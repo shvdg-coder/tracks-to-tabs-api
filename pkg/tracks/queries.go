@@ -7,4 +7,4 @@ const insertTrackQuery = `
 `
 
 // getTracksFromIDs is a SQL query to retrieve the tracks with the provided track IDs from the 'tracks' table.
-const getTracksFromIDs = `SELECT id, title, duration FROM tracks WHERE id IN ($1)`
+const getTracksFromIDs = `SELECT id, title, duration FROM tracks WHERE id = ANY($1::uuid[])`

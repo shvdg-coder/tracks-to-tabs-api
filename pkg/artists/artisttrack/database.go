@@ -2,6 +2,7 @@ package artisttrack
 
 import (
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
@@ -45,7 +46,7 @@ func (d *DataService) GetArtistToTrackLink(artistID uuid.UUID) (*ArtistTrack, er
 
 // GetArtistToTrackLinks retrieves the 'artist to track' link for the provided artist IDs.
 func (d *DataService) GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*ArtistTrack, error) {
-	rows, err := d.Query(getArtistTrackLinks, artistID)
+	rows, err := d.Query(getArtistTrackLinks, pq.Array(artistID))
 	if err != nil {
 		return nil, err
 	}

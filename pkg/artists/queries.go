@@ -7,4 +7,4 @@ const insertArtistQuery = `
 `
 
 // getArtistsFromIDs is a SQL query string to retrieve the artists with the provided IDs from the 'artists' table.
-const getArtistsFromIDs = `SELECT id, name FROM artists WHERE id IN ($1)`
+const getArtistsFromIDs = `SELECT id, name FROM artists WHERE id = ANY($1::uuid[])`

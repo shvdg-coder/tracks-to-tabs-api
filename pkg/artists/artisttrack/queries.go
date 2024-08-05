@@ -7,4 +7,4 @@ const insertArtistTrackQuery = `
 `
 
 // getArtistTrackLinks is for retrieving 'artist to track' links for the provided artist IDs.
-const getArtistTrackLinks = `SELECT artist_id, track_id FROM artist_track WHERE artist_id IN ($1)`
+const getArtistTrackLinks = `SELECT artist_id, track_id FROM artist_track WHERE artist_id = ANY($1::uuid[])`

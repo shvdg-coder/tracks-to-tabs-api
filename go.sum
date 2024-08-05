@@ -120,6 +120,8 @@ github.com/shvdg-dev/base-logic v0.0.16 h1:Rry3QQTs5NgoNvr1wPLs9o+vphpwSe4BZ7Vsh
 github.com/shvdg-dev/base-logic v0.0.16/go.mod h1:gQHHeJXWtVgz/HJwz9Lm08bGKyKPoBNy/CU92fSasIU=
 github.com/shvdg-dev/base-logic v0.0.17 h1:/Pd7UnoiDCjAiHMQ51RvdZvKD7QBQgmhSKDrBUmGTD0=
 github.com/shvdg-dev/base-logic v0.0.17/go.mod h1:gQHHeJXWtVgz/HJwz9Lm08bGKyKPoBNy/CU92fSasIU=
+github.com/shvdg-dev/base-logic v0.0.18 h1:+h4qjSoLXO/XrMrqW653B/bxZiyq4p1PuKt0yBJGWjI=
+github.com/shvdg-dev/base-logic v0.0.18/go.mod h1:gQHHeJXWtVgz/HJwz9Lm08bGKyKPoBNy/CU92fSasIU=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

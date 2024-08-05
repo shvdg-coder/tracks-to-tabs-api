@@ -2,6 +2,7 @@ package tabs
 
 import (
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
@@ -53,7 +54,7 @@ func (d *DataService) GetTab(tabID uuid.UUID) (*Tab, error) {
 
 // GetTabs retrieves the tabs, without entity references, for the provided IDs.
 func (d *DataService) GetTabs(tabID ...uuid.UUID) ([]*Tab, error) {
-	rows, err := d.Query(getTabsQuery, tabID)
+	rows, err := d.Query(getTabsQuery, pq.Array(tabID))
 	if err != nil {
 		return nil, err
 	}

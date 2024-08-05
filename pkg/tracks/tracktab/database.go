@@ -2,6 +2,7 @@ package tracktab
 
 import (
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
 )
@@ -44,7 +45,7 @@ func (d *DataService) GetTrackToTabLink(trackID uuid.UUID) (*TrackTab, error) {
 
 // GetTrackToTabLinks retrieves the 'track to tab' links for the provided track IDs.
 func (d *DataService) GetTrackToTabLinks(trackID ...uuid.UUID) ([]*TrackTab, error) {
-	rows, err := d.Query(getTrackTabLinks, trackID)
+	rows, err := d.Query(getTrackTabLinks, pq.Array(trackID))
 	if err != nil {
 		return nil, err
 	}

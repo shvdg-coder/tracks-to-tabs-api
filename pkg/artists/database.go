@@ -2,6 +2,7 @@ package artists
 
 import (
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
@@ -53,7 +54,7 @@ func (d *DataService) GetArtist(artistID uuid.UUID) (*Artist, error) {
 
 // GetArtists retrieves artists, without entity references, for the provided IDs.
 func (d *DataService) GetArtists(artistID ...uuid.UUID) ([]*Artist, error) {
-	rows, err := d.Query(getArtistsFromIDs, artistID)
+	rows, err := d.Query(getArtistsFromIDs, pq.Array(artistID))
 	if err != nil {
 		return nil, err
 	}

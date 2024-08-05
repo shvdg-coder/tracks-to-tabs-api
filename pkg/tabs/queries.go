@@ -7,4 +7,4 @@ const insertTabQuery = `
 `
 
 // getTabsQuery is a SQL query sting used to retrieve tabs for the provided IDs.
-const getTabsQuery = `SELECT id, instrument_id, difficulty_id, description FROM tabs WHERE id IN ($1)`
+const getTabsQuery = `SELECT id, instrument_id, difficulty_id, description FROM tabs WHERE id = ANY($1::uuid[])`

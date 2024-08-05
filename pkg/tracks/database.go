@@ -2,6 +2,7 @@ package tracks
 
 import (
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
 )
@@ -52,7 +53,7 @@ func (d *DataService) GetTrack(trackID uuid.UUID) (*Track, error) {
 
 // GetTracks retrieves the tracks, without entity references, for the provided IDs.
 func (d *DataService) GetTracks(trackID ...uuid.UUID) ([]*Track, error) {
-	rows, err := d.Query(getTracksFromIDs, trackID)
+	rows, err := d.Query(getTracksFromIDs, pq.Array(trackID))
 	if err != nil {
 		return nil, err
 	}
