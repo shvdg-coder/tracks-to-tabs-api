@@ -63,7 +63,7 @@ func (d *DataService) GetTabs(tabID ...uuid.UUID) ([]*Tab, error) {
 
 	var tabs []*Tab
 	for rows.Next() {
-		var tab *Tab
+		tab := &Tab{}
 		var instrumentID, difficultyID string
 		err := rows.Scan(&tab.ID, instrumentID, difficultyID, &tab.Description)
 		if err != nil {

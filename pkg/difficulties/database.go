@@ -61,12 +61,12 @@ func (d *DataService) GetDifficulties(difficultyID ...string) ([]*Difficulty, er
 
 	var difficulties []*Difficulty
 	for rows.Next() {
-		var difficulty Difficulty
+		difficulty := &Difficulty{}
 		err := rows.Scan(&difficulty.ID, &difficulty.Name)
 		if err != nil {
 			return nil, err
 		}
-		difficulties = append(difficulties, &difficulty)
+		difficulties = append(difficulties, difficulty)
 	}
 
 	if err := rows.Err(); err != nil {

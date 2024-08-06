@@ -54,7 +54,7 @@ func (d *DataService) GetTrackToTabLinks(trackID ...uuid.UUID) ([]*TrackTab, err
 
 	var trackTabLinks []*TrackTab
 	for rows.Next() {
-		var trackTabLink *TrackTab
+		trackTabLink := &TrackTab{}
 		err := rows.Scan(&trackTabLink.TrackID, &trackTabLink.TabID)
 		if err != nil {
 			return nil, err

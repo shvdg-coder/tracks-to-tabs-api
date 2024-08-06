@@ -61,12 +61,12 @@ func (d *DataService) GetInstruments(instrumentID ...string) ([]*Instrument, err
 
 	var instruments []*Instrument
 	for rows.Next() {
-		var instrument Instrument
+		instrument := &Instrument{}
 		err := rows.Scan(&instrument.ID, &instrument.Name)
 		if err != nil {
 			return nil, err
 		}
-		instruments = append(instruments, &instrument)
+		instruments = append(instruments, instrument)
 	}
 
 	if err := rows.Err(); err != nil {

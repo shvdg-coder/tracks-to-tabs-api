@@ -55,7 +55,7 @@ func (d *DataService) GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*ArtistTra
 
 	var artistTrackLink []*ArtistTrack
 	for rows.Next() {
-		var artistTrack *ArtistTrack
+		artistTrack := &ArtistTrack{}
 		err := rows.Scan(&artistTrack.ArtistID, &artistTrack.TrackID)
 		if err != nil {
 			return nil, err
