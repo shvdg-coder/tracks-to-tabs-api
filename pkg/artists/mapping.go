@@ -3,6 +3,7 @@ package artists
 import (
 	"github.com/google/uuid"
 	arttrk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists/artisttrack"
+	ref "github.com/shvdg-dev/tunes-to-tabs-api/pkg/references"
 	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 )
 
@@ -48,5 +49,10 @@ func (m *MappingService) MapTracksToArtists(artistTracks []*arttrk.ArtistTrack, 
 	for _, artist := range artistsMap {
 		artists = append(artists, artist)
 	}
+	return artists
+}
+
+// MapLinksToArtists TODO:
+func (m *MappingService) MapLinksToArtists(artists []*Artist, references []*ref.Reference) []*Artist {
 	return artists
 }

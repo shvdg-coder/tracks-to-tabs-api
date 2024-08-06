@@ -22,16 +22,16 @@ func NewDataService(database logic.DbOperations) DataOperations {
 
 // InsertReference inserts a record into the references table.
 func (d *DataService) InsertReference(reference *Reference) {
-	_, err := d.Exec(insertReferenceQuery, reference.InternalID, reference.SourceID, reference.Category, reference.Type, reference.Reference)
+	_, err := d.Exec(insertReferenceQuery, reference.InternalID, reference.Source.ID, reference.Category, reference.Type, reference.Reference)
 	if err != nil {
 		log.Printf(
-			"Failed to insert reference with InternalID '%s', SourceID '%s', Category '%s', Type '%s', and Reference '%s': %s",
-			reference.InternalID, reference.SourceID, reference.Category, reference.Type, reference.Reference, err.Error(),
+			"Failed to insert reference with InternalID '%s', SourceID '%d', Category '%s', Type '%s', and Reference '%s': %s",
+			reference.InternalID, reference.Source.ID, reference.Category, reference.Type, reference.Reference, err.Error(),
 		)
 	} else {
 		log.Printf(
-			"Successfully inserted reference into the 'references' table with InternalID '%s', SourceID '%s', Category '%s', Type '%s', and Reference '%s'",
-			reference.InternalID, reference.SourceID, reference.Category, reference.Type, reference.Reference,
+			"Successfully inserted reference into the 'references' table with InternalID '%s', SourceID '%d', Category '%s', Type '%s', and Reference '%s'",
+			reference.InternalID, reference.Source.ID, reference.Category, reference.Type, reference.Reference,
 		)
 	}
 }

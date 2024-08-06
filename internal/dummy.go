@@ -67,10 +67,10 @@ func (d *DummyService) GetRandomDifficulty() *diff.Difficulty {
 
 // CreateReferenceID creates a new reference ID, based on the provided inl ID and categories.
 func (d *DummyService) CreateReferenceID(internalID uuid.UUID, sourceCategory, referenceCategory string) *references.Reference {
-	sourceId, _ := d.GetRandomSource(sourceCategory)
+	source, _ := d.GetRandomSource(sourceCategory)
 	return references.NewReference(
 		internalID,
-		sourceId.ID,
+		source,
 		referenceCategory,
 		"ID",
 		faker.UUID(),

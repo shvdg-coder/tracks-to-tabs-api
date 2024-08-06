@@ -15,13 +15,31 @@ import (
 	usrs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/users"
 )
 
+// DataOperations represents all API data operations.
+type DataOperations interface {
+	art.DataOperations
+	trk.DataOperations
+	tbs.DataOperations
+	arttrk.DataOperations
+	trktab.DataOperations
+	usrs.DataOperations
+	inst.DataOperations
+	diff.DataOperations
+	src.DataOperations
+	end.DataOperations
+	ref.DataOperations
+}
+
 // API represents the main entry point to interact with functionalities for the defined entities.
 type API struct {
+	DataOperations
 	logic.DbOperations
 
 	artistsService      art.Operations
 	tracksService       trk.Operations
 	tabsService         tbs.Operations
+	artistTrackService  arttrk.Operations
+	trackTabService     trktab.Operations
 	usersService        usrs.Operations
 	instrumentsService  inst.Operations
 	difficultiesService diff.Operations
@@ -31,94 +49,92 @@ type API struct {
 }
 
 // NewAPI creates a new instance of the API.
-func NewAPI(database logic.DbOperations) *API {
-	return &API{DbOperations: database}
+func NewAPI(database logic.DbOperations) DataOperations {
+	api := &API{DbOperations: database}
+	api.initServices()
+	return api
 }
 
-// Artists initiates upon first use and returns the artists.Operations.
-func (a *API) Artists() art.Operations {
-	if a.artistsService == nil {
-		artistMappingService := art.NewMappingService()
-		artistDataService := art.NewDataService(a.DbOperations)
-		artistTrackDataService := arttrk.NewDataService(a.DbOperations)
-		artistTrackService := arttrk.NewService(artistTrackDataService)
-		a.artistsService = art.NewService(artistDataService, artistMappingService, artistTrackService, a.Tracks())
-	}
-	return a.artistsService
+// initServices initializes the services for the API.
+func (a *API) initServices() {
+	a.initArtistTrack()
+	a.initTrackTab()
+	a.initTabs()
+	a.initTracks()
+	a.initArtists()
+	a.initInstruments()
+	a.initDifficulties()
+	a.initSources()
+	a.initEndpoints()
+	a.initReferences()
+	a.initUsers()
 }
 
-// Tracks instantiates upon first use and returns the tracks.Operations.
-func (a *API) Tracks() trk.Operations {
-	if a.tracksService == nil {
-		trackMappingService := trk.NewMappingService()
-		trackDataService := trk.NewDataService(a.DbOperations)
-		trackTabDataService := trktab.NewDataService(a.DbOperations)
-		trackTabService := trktab.NewService(trackTabDataService)
-		a.tracksService = trk.NewService(trackDataService, trackMappingService, trackTabService, a.Tabs())
-	}
-	return a.tracksService
+// initArtists initiates an artists.Service during the creation of the API.
+func (a *API) initArtists() {
+	artistDataService := art.NewDataService(a.DbOperations)
+	artistMappingService := art.NewMappingService()
+	a.artistsService = art.NewService(artistDataService, artistMappingService, a.artistTrackService, a.tracksService)
 }
 
-// Tabs instantiates upon first use and returns the tabs.Operations.
-func (a *API) Tabs() tbs.Operations {
-	if a.tabsService == nil {
-		tabMappingService := tbs.NewMappingService()
-		tabDataService := tbs.NewDataService(a.DbOperations)
-		a.tabsService = tbs.NewService(tabDataService, tabMappingService)
-	}
-	return a.tabsService
+// initTracks initializes the track service during the creation of the API.
+func (a *API) initTracks() {
+	trackDataService := trk.NewDataService(a.DbOperations)
+	trackMappingService := trk.NewMappingService()
+	a.tracksService = trk.NewService(trackDataService, trackMappingService, a.trackTabService, a.tabsService)
 }
 
-// Users instantiates upon first use and returns the users.Operations.
-func (a *API) Users() usrs.Operations {
-	if a.usersService == nil {
-		usersDataService := usrs.NewDataService(a.DbOperations)
-		a.usersService = usrs.NewService(usersDataService)
-	}
-	return a.usersService
+// initTabs initializes the tab service at the creation of the API.
+func (a *API) initTabs() {
+	tabDataService := tbs.NewDataService(a.DbOperations)
+	tabMappingService := tbs.NewMappingService()
+	a.tabsService = tbs.NewService(tabDataService, tabMappingService)
 }
 
-// Instruments instantiates upon first use and returns the instruments.Operations.
-func (a *API) Instruments() inst.Operations {
-	if a.instrumentsService == nil {
-		instrumentsDataService := inst.NewDataService(a.DbOperations)
-		a.instrumentsService = inst.NewService(instrumentsDataService)
-	}
-	return a.instrumentsService
+// initArtistTrack initializes the 'artist to track' link service at the creation of the API.
+func (a *API) initArtistTrack() {
+	artistTrackDataService := arttrk.NewDataService(a.DbOperations)
+	a.artistTrackService = arttrk.NewService(artistTrackDataService)
 }
 
-// Difficulties instantiates upon first use and returns the difficulties.Operations.
-func (a *API) Difficulties() diff.Operations {
-	if a.difficultiesService == nil {
-		difficultiesDataService := diff.NewDataService(a.DbOperations)
-		a.difficultiesService = diff.NewService(difficultiesDataService)
-	}
-	return a.difficultiesService
+// initTrackTab initializes the 'track to tab' link service at the creation of the API.
+func (a *API) initTrackTab() {
+	trackTabDataService := trktab.NewDataService(a.DbOperations)
+	a.trackTabService = trktab.NewService(trackTabDataService)
 }
 
-// Sources instantiates upon first use and returns the sources.Operations.
-func (a *API) Sources() src.Operations {
-	if a.sourcesService == nil {
-		sourceDataService := src.NewDataService(a.DbOperations)
-		a.sourcesService = src.NewService(sourceDataService)
-	}
-	return a.sourcesService
+// initUsers initializes the user service during the creation of the API.
+func (a *API) initUsers() {
+	usersDataService := usrs.NewDataService(a.DbOperations)
+	a.usersService = usrs.NewService(usersDataService)
 }
 
-// Endpoints instantiates upon first use and returns the endpoints.Operations.
-func (a *API) Endpoints() end.Operations {
-	if a.endpointsService == nil {
-		endpointsDataService := end.NewDataService(a.DbOperations)
-		a.endpointsService = end.NewService(endpointsDataService)
-	}
-	return a.endpointsService
+// initInstruments initializes the instrument service at the creation of the API.
+func (a *API) initInstruments() {
+	instrumentsDataService := inst.NewDataService(a.DbOperations)
+	a.instrumentsService = inst.NewService(instrumentsDataService)
 }
 
-// References instantiates upon first use and returns the references.Operations.
-func (a *API) References() ref.Operations {
-	if a.referencesService == nil {
-		referencesDataService := ref.NewDataService(a.DbOperations)
-		a.referencesService = ref.NewService(referencesDataService)
-	}
-	return a.referencesService
+// initDifficulties initializes the difficulty service during the creation of the API.
+func (a *API) initDifficulties() {
+	difficultiesDataService := diff.NewDataService(a.DbOperations)
+	a.difficultiesService = diff.NewService(difficultiesDataService)
+}
+
+// initSources initializes the source service during the creation of the API.
+func (a *API) initSources() {
+	sourceDataService := src.NewDataService(a.DbOperations)
+	a.sourcesService = src.NewService(sourceDataService)
+}
+
+// initEndpoints initializes the endpoint service at the creation of the API.
+func (a *API) initEndpoints() {
+	endpointsDataService := end.NewDataService(a.DbOperations)
+	a.endpointsService = end.NewService(endpointsDataService)
+}
+
+// initReferences initializes the reference service during creation of the API.
+func (a *API) initReferences() {
+	referencesDataService := ref.NewDataService(a.DbOperations)
+	a.referencesService = ref.NewService(referencesDataService)
 }

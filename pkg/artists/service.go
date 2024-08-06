@@ -10,7 +10,6 @@ import (
 type Operations interface {
 	DataOperations
 	MappingOperations
-	arttrk.Operations
 	GetArtistsCascading(artistID ...uuid.UUID) ([]*Artist, error)
 }
 
@@ -32,37 +31,17 @@ func NewService(data DataOperations, mapping MappingOperations, artistTracks art
 	}
 }
 
-// LinkArtistToTrack links an artist to a track.
-func (s *Service) LinkArtistToTrack(artistId, trackId uuid.UUID) {
-	s.ArtistTrackOps.LinkArtistToTrack(artistId, trackId)
-}
-
-// GetArtistToTrackLink retrieves a link between an artist and a track.
-func (s *Service) GetArtistToTrackLink(artistID uuid.UUID) (*arttrk.ArtistTrack, error) {
-	return s.ArtistTrackOps.GetArtistToTrackLink(artistID)
-}
-
-// GetArtistToTrackLinks retrieves 'artist to track' links.
-func (s *Service) GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*arttrk.ArtistTrack, error) {
-	return s.ArtistTrackOps.GetArtistToTrackLinks(artistID...)
-}
-
-// ExtractTrackIDs retrieves the track IDs from each artisttrack.ArtistTrack.
-func (s *Service) ExtractTrackIDs(artistTracks []*arttrk.ArtistTrack) []uuid.UUID {
-	return s.ArtistTrackOps.ExtractTrackIDs(artistTracks)
-}
-
 // GetArtistsCascading retrieves artists, with entity references, for the provided IDs.
 func (s *Service) GetArtistsCascading(artistID ...uuid.UUID) ([]*Artist, error) {
 	artists, err := s.GetArtists(artistID...)
 	if err != nil {
 		return nil, err
 	}
-	artistTracks, err := s.GetArtistToTrackLinks(artistID...)
+	artistTracks, err := s.ArtistTrackOps.GetArtistToTrackLinks(artistID...)
 	if err != nil {
 		return nil, err
 	}
-	trackIDs := s.ExtractTrackIDs(artistTracks)
+	trackIDs := s.ArtistTrackOps.ExtractTrackIDs(artistTracks)
 	tracks, err := s.TrackOps.GetTracksCascading(trackIDs...)
 	if err != nil {
 		return nil, err

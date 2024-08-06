@@ -33,12 +33,12 @@ func (d *DataService) InsertEndpoint(endpoint *Endpoint) {
 	_, err := d.Exec(insertEndpointQuery, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL)
 	if err != nil {
 		log.Printf(
-			"Failed to insert endpoint with SourceID '%d', Category '%s', Type '%s', and URL '%s': %s",
+			"Failed to insert endpoint with Source '%d', Category '%s', Type '%s', and URL '%s': %s",
 			endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL, err.Error(),
 		)
 	} else {
 		log.Printf(
-			"Successfully inserted endpoint into the 'endpoints' table with SourceID '%d', Category '%s', Type '%s', and URL '%s'",
+			"Successfully inserted endpoint into the 'endpoints' table with Source '%d', Category '%s', Type '%s', and URL '%s'",
 			endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL,
 		)
 	}
