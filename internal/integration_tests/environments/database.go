@@ -14,7 +14,7 @@ type DbEnvOperations interface {
 	Breakdown()
 }
 
-// DbEnv is used to spin up a database container for integration testing.
+// DbEnv is used to spin up a Database container for integration testing.
 type DbEnv struct {
 	database.ContainerOperations
 	inl.CreateOperations

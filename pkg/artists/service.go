@@ -46,8 +46,8 @@ func (s *Service) GetArtistsCascading(artistID ...uuid.UUID) ([]*Artist, error) 
 	if err != nil {
 		return nil, err
 	}
-	artistsMap := s.ToMap(artists)
-	tracksMap := s.TrackOps.ToMap(tracks)
+	artistsMap := s.ArtistsToMap(artists)
+	tracksMap := s.TrackOps.TracksToMap(tracks)
 	artists = s.MapTracksToArtists(artistTracks, artistsMap, tracksMap)
 	return artists, nil
 }

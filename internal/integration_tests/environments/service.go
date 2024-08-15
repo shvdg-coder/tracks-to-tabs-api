@@ -14,24 +14,24 @@ type EnvManagement interface {
 // Service is responsible for managing different environments required for integration testing.
 type Service struct {
 	EnvManagement
-	database tstdb.ContainerManagement
+	Database tstdb.ContainerManagement
 }
 
 // NewService instantiates a new Service.
 func NewService() EnvManagement {
 	return &Service{
-		database: tstdb.NewContainerService(),
+		Database: tstdb.NewContainerService(),
 	}
 }
 
-// CreatePostgresEnv creates a database environment for Postgres, with default configurations.
+// CreatePostgresEnv creates a Database environment for Postgres, with default configurations.
 func (s *Service) CreatePostgresEnv() (DbEnvOperations, error) {
 	return s.CreateDbEnv(tstdb.NewPostgresContainerConfig())
 }
 
-// CreateDbEnv creates an database environment.
+// CreateDbEnv creates a Database environment.
 func (s *Service) CreateDbEnv(config *tstdb.ContainerConfig) (DbEnvOperations, error) {
-	dbContainer, err := s.database.CreateContainer(config)
+	dbContainer, err := s.Database.CreateContainer(config)
 	if err != nil {
 		return nil, err
 	}

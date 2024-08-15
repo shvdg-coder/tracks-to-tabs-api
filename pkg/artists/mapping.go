@@ -9,7 +9,7 @@ import (
 
 // MappingOperations represents operations related to artist data mapping.
 type MappingOperations interface {
-	ToMap(artists []*Artist) map[uuid.UUID]*Artist
+	ArtistsToMap(artists []*Artist) map[uuid.UUID]*Artist
 	MapTracksToArtists(artistTracks []*arttrk.ArtistTrack, artistsMap map[uuid.UUID]*Artist, tracksMap map[uuid.UUID]*trk.Track) []*Artist
 }
 
@@ -23,8 +23,8 @@ func NewMappingService() MappingOperations {
 	return &MappingService{}
 }
 
-// ToMap transforms a slice of artists into a map where the key is the ID and the value the Artist.
-func (m *MappingService) ToMap(artists []*Artist) map[uuid.UUID]*Artist {
+// ArtistsToMap transforms a slice of artists into a map where the key is the ID and the value the Artist.
+func (m *MappingService) ArtistsToMap(artists []*Artist) map[uuid.UUID]*Artist {
 	artistMap := make(map[uuid.UUID]*Artist)
 	for _, artist := range artists {
 		artistMap[artist.ID] = artist

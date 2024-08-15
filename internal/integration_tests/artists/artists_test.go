@@ -21,9 +21,10 @@ func TestArtistsCascading(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	api := pkg.NewAPI(dbEnv)
 
 	// Tests
-	artists, err := pkg.NewAPI(dbEnv).Artists().GetArtistsCascading(artistIDs...)
+	artists, err := api.GetArtistsCascading(artistIDs...)
 	if err != nil {
 		t.Fatalf("error occurred during retrieval of artist cascading: %s", err.Error())
 	}

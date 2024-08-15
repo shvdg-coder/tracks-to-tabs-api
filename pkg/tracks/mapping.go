@@ -8,7 +8,7 @@ import (
 
 // MappingOperations represents operations related to track data mapping.
 type MappingOperations interface {
-	ToMap(tracks []*Track) map[uuid.UUID]*Track
+	TracksToMap(tracks []*Track) map[uuid.UUID]*Track
 	MapTabsToTracks(trackTabs []*trktab.TrackTab, tracksMap map[uuid.UUID]*Track, tabsMap map[uuid.UUID]*tbs.Tab) []*Track
 }
 
@@ -22,8 +22,8 @@ func NewMappingService() MappingOperations {
 	return &MappingService{}
 }
 
-// ToMap transforms a slice of tracks into a map where the key is the ID and the value the Track.
-func (m *MappingService) ToMap(tracks []*Track) map[uuid.UUID]*Track {
+// TracksToMap transforms a slice of tracks into a map where the key is the ID and the value the Track.
+func (m *MappingService) TracksToMap(tracks []*Track) map[uuid.UUID]*Track {
 	trackMap := make(map[uuid.UUID]*Track)
 	for _, track := range tracks {
 		trackMap[track.ID] = track

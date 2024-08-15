@@ -46,8 +46,8 @@ func (s Service) GetTracksCascading(tabID ...uuid.UUID) ([]*Track, error) {
 	if err != nil {
 		return nil, err
 	}
-	tracksMap := s.ToMap(tracks)
-	tabsMap := s.TabsOps.ToMap(tabs)
+	tracksMap := s.TracksToMap(tracks)
+	tabsMap := s.TabsOps.TabsToMap(tabs)
 	tracks = s.MapTabsToTracks(trackTabs, tracksMap, tabsMap)
 	return tracks, nil
 }
