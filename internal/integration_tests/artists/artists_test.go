@@ -59,4 +59,16 @@ func insertions(t *testing.T, dbEnv tstenv.DbEnvOperations) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	err = dbEnv.InsertCSVFile(sourcesCSV, sourcesTable, sourcesColumns)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = dbEnv.InsertCSVFile(endpointsCSV, endpointsTable, endpointsColumns)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = dbEnv.InsertCSVFile(referencesCSV, referencesTable, referencesColumns)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
