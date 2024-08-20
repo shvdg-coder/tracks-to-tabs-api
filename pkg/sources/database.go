@@ -4,6 +4,7 @@ import (
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
+	end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"
 	"log"
 )
 
@@ -62,6 +63,7 @@ func (d *DataService) GetSources(sourceID ...uint) ([]*Source, error) {
 
 	for rows.Next() {
 		source := &Source{}
+		source.Endpoints = make([]*end.Endpoint, 0)
 		err = rows.Scan(&source.ID, &source.Name, &source.Category)
 		if err != nil {
 			return nil, err

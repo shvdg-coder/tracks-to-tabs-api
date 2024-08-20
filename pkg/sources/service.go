@@ -5,32 +5,36 @@ import end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"
 // Operations represents operations related to sources.
 type Operations interface {
 	DataOperations
+	MappingOperations
 	GetSourcesCascading(sourceID ...uint) ([]*Source, error)
 }
 
 // Service is responsible for managing sources.
 type Service struct {
 	DataOperations
+	MappingOperations
 	EndpointsOps end.Operations
 }
 
 // NewService instantiates a new Service.
-func NewService(data DataOperations, endpoints end.Operations) Operations {
-	return &Service{DataOperations: data, EndpointsOps: endpoints}
+func NewService(data DataOperations, mapping MappingOperations, endpoints end.Operations) Operations {
+	return &Service{DataOperations: data, MappingOperations: mapping, EndpointsOps: endpoints}
 }
 
-// GetSourcesCascading todo:
+// GetSourcesCascading retrieves all sources with their references.
 func (s *Service) GetSourcesCascading(sourceID ...uint) ([]*Source, error) {
 	sources, err := s.GetSources(sourceID...)
 	if err != nil {
 		return nil, err
 	}
 
-	_, err = s.EndpointsOps.GetEndpoints(sourceID...)
+	endpoints, err := s.EndpointsOps.GetEndpoints(sourceID...)
 	if err != nil {
 		return nil, err
 	}
-	//TODO: use endpoints to complete sources objects
+
+	sourcesMap := s.SourcesToMap(sources)
+	sources = s.MapEndpointsToSources(sourcesMap, endpoints)
 
 	return sources, nil
 }

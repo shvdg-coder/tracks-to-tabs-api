@@ -30,6 +30,7 @@ func WithEndpoint(endpoints *end.Endpoint) SourceOptional {
 // NewSource instantiates a new Source.
 func NewSource(id uint, name string, options ...SourceOptional) *Source {
 	source := &Source{ID: id, Name: name}
+	source.Endpoints = make([]*end.Endpoint, 0)
 	for _, option := range options {
 		option(source)
 	}

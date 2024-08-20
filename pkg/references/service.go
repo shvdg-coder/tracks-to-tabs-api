@@ -1,16 +1,59 @@
 package references
 
+import (
+	"github.com/google/uuid"
+	src "github.com/shvdg-dev/tunes-to-tabs-api/pkg/sources"
+)
+
 // Operations represents operations related to references.
 type Operations interface {
 	DataOperations
+	MappingOperations
+	GetReferencesCascading(internalID ...uuid.UUID) ([]*Reference, error)
 }
 
 // Service is responsible for managing references.
 type Service struct {
 	DataOperations
+	MappingOperations
+	SourcesOps src.Operations
 }
 
 // NewService instantiates a new Service.
-func NewService(data DataOperations) Operations {
-	return &Service{DataOperations: data}
+func NewService(data DataOperations, mapping MappingOperations, sources src.Operations) Operations {
+	return &Service{DataOperations: data, MappingOperations: mapping, SourcesOps: sources}
+}
+
+// GetReferencesCascading retrieves the Reference's with all their references.
+func (s *Service) GetReferencesCascading(internalID ...uuid.UUID) ([]*Reference, error) {
+	references, err := s.GetReferences(internalID...)
+	if err != nil {
+		return nil, err
+	}
+
+	sourceIDs := s.ExtractSourceIDs(references)
+	sources, err := s.SourcesOps.GetSourcesCascading(sourceIDs...)
+	if err != nil {
+		return nil, err
+	}
+
+	sourcesMap := s.SourcesOps.SourcesToMap(sources)
+	references = s.MapSourcesToReferences(references, sourcesMap)
+
+	return references, nil
+}
+
+// ExtractSourceIDs extracts the source ID from the Reference.
+func (s *Service) ExtractSourceIDs(references []*Reference) []uint {
+	sourceIDMap := make(map[uint]bool)
+	for _, reference := range references {
+		if reference.Source != nil {
+			sourceIDMap[reference.Source.ID] = true
+		}
+	}
+	sourceIDs := make([]uint, 0)
+	for key, _ := range sourceIDMap {
+		sourceIDs = append(sourceIDs, key)
+	}
+	return sourceIDs
 }
