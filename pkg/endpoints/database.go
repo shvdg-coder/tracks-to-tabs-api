@@ -1,6 +1,7 @@
 package endpoints
 
 import (
+	"github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
 )
@@ -9,6 +10,8 @@ import (
 type DataOperations interface {
 	InsertEndpoints(endpoints ...*Endpoint)
 	InsertEndpoint(endpoint *Endpoint)
+	GetEndpoint(sourceID uint) (*Endpoint, error)
+	GetEndpoints(sourceID ...uint) ([]*Endpoint, error)
 }
 
 // DataService is for managing endpoints.
@@ -42,4 +45,39 @@ func (d *DataService) InsertEndpoint(endpoint *Endpoint) {
 			endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL,
 		)
 	}
+}
+
+// GetEndpoint retrieves the endpoint for the provided ID from the database.
+func (d *DataService) GetEndpoint(sourceID uint) (*Endpoint, error) {
+	endpoints, err := d.GetEndpoints(sourceID)
+	if err != nil {
+		return nil, err
+	}
+	return endpoints[0], nil
+}
+
+// GetEndpoints retrieves the endpoints for the provided IDs from the database.
+func (d *DataService) GetEndpoints(sourceID ...uint) ([]*Endpoint, error) {
+	rows, err := d.Query(getEndpointsFromIDs, pq.Array(sourceID))
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var endpoints []*Endpoint
+	for rows.Next() {
+		endpoint := &Endpoint{}
+		err := rows.Scan(&endpoint.SourceID, &endpoint.Category, &endpoint.Type, &endpoint.URL)
+		if err != nil {
+			return nil, err
+		}
+		endpoints = append(endpoints, endpoint)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return endpoints, nil
 }

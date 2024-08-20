@@ -52,7 +52,8 @@ func (m *MappingService) MapTracksToArtists(artistTracks []*arttrk.ArtistTrack, 
 	return artists
 }
 
-// MapLinksToArtists TODO:
-func (m *MappingService) MapLinksToArtists(artists []*Artist, references []*ref.Reference) []*Artist {
+// MapReferencesToArtists TODO:
+func (m *MappingService) MapReferencesToArtists(artists []*Artist, references []*ref.Reference) []*Artist {
+
 	return artists
 }

@@ -23,7 +23,7 @@ const CreateEndpointsTableQuery = `
 	   category VARCHAR(250) NOT NULL,
 	   type VARCHAR(250) NOT NULL,
 	   url VARCHAR(250) NOT NULL,
-	   UNIQUE(source_id, category, type, URL),  
+	   UNIQUE(source_id, category, type, url),  
 	   CONSTRAINT fk_source FOREIGN KEY(source_id) REFERENCES sources(id)
 	);
 `
