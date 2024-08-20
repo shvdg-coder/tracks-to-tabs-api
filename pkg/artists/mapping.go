@@ -11,6 +11,7 @@ import (
 type MappingOperations interface {
 	ArtistsToMap(artists []*Artist) map[uuid.UUID]*Artist
 	MapTracksToArtists(artistTracks []*arttrk.ArtistTrack, artistsMap map[uuid.UUID]*Artist, tracksMap map[uuid.UUID]*trk.Track) []*Artist
+	MapReferencesToArtists(artistsMap map[uuid.UUID]*Artist, references []*ref.Reference) []*Artist
 }
 
 // MappingService is responsible for mapping entities to artists.
@@ -52,8 +53,18 @@ func (m *MappingService) MapTracksToArtists(artistTracks []*arttrk.ArtistTrack, 
 	return artists
 }
 
-// MapReferencesToArtists TODO:
-func (m *MappingService) MapReferencesToArtists(artists []*Artist, references []*ref.Reference) []*Artist {
-
+// MapReferencesToArtists maps references.Reference's to Artist's.
+func (m *MappingService) MapReferencesToArtists(artistsMap map[uuid.UUID]*Artist, references []*ref.Reference) []*Artist {
+	for _, reference := range references {
+		artist, ok := artistsMap[reference.InternalID]
+		if !ok {
+			continue
+		}
+		artist.References = append(artist.References, reference)
+	}
+	var artists []*Artist
+	for _, artist := range artistsMap {
+		artists = append(artists, artist)
+	}
 	return artists
 }

@@ -2,16 +2,16 @@ package artists
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/commons"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
+	ref "github.com/shvdg-dev/tunes-to-tabs-api/pkg/references"
+	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 )
 
 // Artist represents an artist
 type Artist struct {
-	ID     uuid.UUID
-	Name   string
-	Tracks []*tracks.Track
-	Links  []*commons.Link
+	ID         uuid.UUID
+	Name       string
+	Tracks     []*trk.Track
+	References []*ref.Reference
 }
 
 // Option modifies an Artist with configuration options.
@@ -25,7 +25,7 @@ func WithID(id uuid.UUID) Option {
 }
 
 // WithTracks sets the tracks of an Artist.
-func WithTracks(tracks []*tracks.Track) Option {
+func WithTracks(tracks []*trk.Track) Option {
 	return func(a *Artist) {
 		a.Tracks = tracks
 	}
