@@ -33,16 +33,16 @@ func (d *DataService) InsertEndpoints(endpoints ...*Endpoint) {
 
 // InsertEndpoint inserts a record into the endpoints table.
 func (d *DataService) InsertEndpoint(endpoint *Endpoint) {
-	_, err := d.Exec(insertEndpointQuery, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL)
+	_, err := d.Exec(insertEndpointQuery, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.UnformattedURL)
 	if err != nil {
 		log.Printf(
-			"Failed to insert endpoint with Source '%d', Category '%s', Type '%s', and URL '%s': %s",
-			endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL, err.Error(),
+			"Failed to insert endpoint with Source '%d', Category '%s', Type '%s', and UnformattedURL '%s': %s",
+			endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.UnformattedURL, err.Error(),
 		)
 	} else {
 		log.Printf(
-			"Successfully inserted endpoint into the 'endpoints' table with Source '%d', Category '%s', Type '%s', and URL '%s'",
-			endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.URL,
+			"Successfully inserted endpoint into the 'endpoints' table with Source '%d', Category '%s', Type '%s', and UnformattedURL '%s'",
+			endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.UnformattedURL,
 		)
 	}
 }
@@ -68,7 +68,7 @@ func (d *DataService) GetEndpoints(sourceID ...uint) ([]*Endpoint, error) {
 	var endpoints []*Endpoint
 	for rows.Next() {
 		endpoint := &Endpoint{}
-		err := rows.Scan(&endpoint.SourceID, &endpoint.Category, &endpoint.Type, &endpoint.URL)
+		err := rows.Scan(&endpoint.SourceID, &endpoint.Category, &endpoint.Type, &endpoint.UnformattedURL)
 		if err != nil {
 			return nil, err
 		}
