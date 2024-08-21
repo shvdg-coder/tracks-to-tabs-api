@@ -4,6 +4,8 @@ package integration_tests
 const artistsCSV = "./resources/artists.csv"
 const tracksCSV = "./resources/tracks.csv"
 const artisttrackCSV = "./resources/artisttrack.csv"
+const tabsCSV = "./resources/tabs.csv"
+const tracktabCSV = "./resources/tracktab.csv"
 const endpointsCSV = "./resources/endpoints.csv"
 const referencesCSV = "./resources/references.csv"
 const sourcesCSV = "./resources/sources.csv"
@@ -13,7 +15,9 @@ const difficultiesCSV = "./resources/difficulties.csv"
 // Tables
 const artistsTable = "artists"
 const tracksTable = "tracks"
-const artisttrackTable = "artist_track"
+const artistTrackTable = "artist_track"
+const tabsTable = "tabs"
+const tabTrackTable = "track_tab"
 const endpointsTable = "endpoints"
 const referencesTable = "references"
 const sourcesTable = "sources"
@@ -59,6 +63,16 @@ const instrumentsColumnName = "name"
 const difficultiesColumnID = "id"
 const difficultiesColumnName = "name"
 
+// Columns: Tabs
+const tabsColumnID = "id"
+const tabsColumnInstrumentID = "instrument_id"
+const tabsColumnDifficultyID = "difficulty_id"
+const tabsColumnDescription = "description"
+
+// Columns: Track Tabs
+const trackTabColumnTrackID = "track_id"
+const trackTabColumnTabID = "tab_id"
+
 var artistsColumns = []string{artistsColumnID, artistsColumnName}
 var tracksColumns = []string{tracksColumnID, tracksColumnTitle, tracksColumnDuration}
 var artisttrackColumns = []string{artistTrackColumnArtistID, artistTrackColumnTrackID}
@@ -67,3 +81,5 @@ var referencesColumns = []string{referencesColumnInternalID, referencesColumnSou
 var sourcesColumns = []string{sourcesColumnSourceID, sourcesColumnSourceName, sourcesColumnSourceCategory}
 var instrumentsColumns = []string{instrumentsColumnID, instrumentsColumnName}
 var difficultiesColumns = []string{difficultiesColumnID, difficultiesColumnName}
+var tabsColumns = []string{tabsColumnID, tabsColumnInstrumentID, tabsColumnDifficultyID, tabsColumnDescription}
+var trackTabColumns = []string{trackTabColumnTrackID, trackTabColumnTabID}

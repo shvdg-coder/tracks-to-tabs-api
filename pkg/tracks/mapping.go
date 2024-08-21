@@ -2,6 +2,7 @@ package tracks
 
 import (
 	"github.com/google/uuid"
+	ref "github.com/shvdg-dev/tunes-to-tabs-api/pkg/references"
 	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
 	trktab "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
 )
@@ -10,6 +11,7 @@ import (
 type MappingOperations interface {
 	TracksToMap(tracks []*Track) map[uuid.UUID]*Track
 	MapTabsToTracks(trackTabs []*trktab.TrackTab, tracksMap map[uuid.UUID]*Track, tabsMap map[uuid.UUID]*tbs.Tab) []*Track
+	MapReferencesToTracks(trackMap map[uuid.UUID]*Track, references []*ref.Reference) []*Track
 }
 
 // MappingService is responsible for mapping entities to tracks.
@@ -47,6 +49,22 @@ func (m *MappingService) MapTabsToTracks(trackTabs []*trktab.TrackTab, tracksMap
 	var tracks []*Track
 	for _, track := range tracksMap {
 		tracks = append(tracks, track)
+	}
+	return tracks
+}
+
+// MapReferencesToTracks maps references.Reference's to Track's.
+func (m *MappingService) MapReferencesToTracks(trackMap map[uuid.UUID]*Track, references []*ref.Reference) []*Track {
+	for _, reference := range references {
+		track, ok := trackMap[reference.InternalID]
+		if !ok {
+			continue
+		}
+		track.References = append(track.References, reference)
+	}
+	var tracks []*Track
+	for _, artist := range trackMap {
+		tracks = append(tracks, artist)
 	}
 	return tracks
 }

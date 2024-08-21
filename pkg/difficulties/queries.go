@@ -7,4 +7,4 @@ const insertDifficultyQuery = `
 `
 
 // getDifficultiesQuery retrieves the difficulties for the provided IDs.
-const getDifficultiesQuery = `SELECT id, name FROM difficulties WHERE id IN ($1)`
+const getDifficultiesQuery = `SELECT id, name FROM difficulties WHERE id = ANY($1::int[])`

@@ -7,4 +7,4 @@ const insertInstrumentQuery = `
 `
 
 // getInstrumentsQuery is a SQL query string to select an instrument.
-const getInstrumentsQuery = `SELECT id, name FROM instruments WHERE id IN ($1)`
+const getInstrumentsQuery = `SELECT id, name FROM instruments WHERE id = ANY($1::int[])`

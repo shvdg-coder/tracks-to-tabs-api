@@ -5,6 +5,8 @@ import (
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
+	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
+	ins "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
 	"log"
 )
 
@@ -64,11 +66,15 @@ func (d *DataService) GetTabs(tabID ...uuid.UUID) ([]*Tab, error) {
 	var tabs []*Tab
 	for rows.Next() {
 		tab := &Tab{}
-		var instrumentID, difficultyID string
-		err := rows.Scan(&tab.ID, instrumentID, difficultyID, &tab.Description)
+		instrument := &ins.Instrument{}
+		difficulty := &diff.Difficulty{}
+		err := rows.Scan(&tab.ID, &instrument.ID, &difficulty.ID, &tab.Description)
 		if err != nil {
 			return nil, err
 		}
+
+		tab.Instrument = instrument
+		tab.Difficulty = difficulty
 
 		tabs = append(tabs, tab)
 	}

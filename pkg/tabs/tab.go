@@ -2,9 +2,9 @@ package tabs
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/commons"
 	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
+	ref "github.com/shvdg-dev/tunes-to-tabs-api/pkg/references"
 )
 
 // Tab represents a tab.
@@ -13,7 +13,7 @@ type Tab struct {
 	Instrument  *inst.Instrument
 	Difficulty  *diff.Difficulty
 	Description string
-	Links       []*commons.Link
+	References  []*ref.Reference
 }
 
 // Option modifies a Tab with configuration options.

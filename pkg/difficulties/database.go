@@ -1,6 +1,7 @@
 package difficulties
 
 import (
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
@@ -10,8 +11,8 @@ import (
 type DataOperations interface {
 	InsertDifficulties(difficulties ...*Difficulty)
 	InsertDifficulty(difficulty *Difficulty)
-	GetDifficulty(difficultyID string) (*Difficulty, error)
-	GetDifficulties(difficultyID ...string) ([]*Difficulty, error)
+	GetDifficulty(difficultyID uint) (*Difficulty, error)
+	GetDifficulties(difficultyID ...uint) ([]*Difficulty, error)
 }
 
 // DataService is for managing difficulties.
@@ -42,7 +43,7 @@ func (d *DataService) InsertDifficulty(difficulty *Difficulty) {
 }
 
 // GetDifficulty retrieves a difficulty for the provided ID.
-func (d *DataService) GetDifficulty(difficultyID string) (*Difficulty, error) {
+func (d *DataService) GetDifficulty(difficultyID uint) (*Difficulty, error) {
 	difficulty, err := d.GetDifficulties(difficultyID)
 	if err != nil {
 		return nil, err
@@ -51,8 +52,8 @@ func (d *DataService) GetDifficulty(difficultyID string) (*Difficulty, error) {
 }
 
 // GetDifficulties retrieves difficulties for the provided IDs.
-func (d *DataService) GetDifficulties(difficultyID ...string) ([]*Difficulty, error) {
-	rows, err := d.Query(getDifficultiesQuery, difficultyID)
+func (d *DataService) GetDifficulties(difficultyID ...uint) ([]*Difficulty, error) {
+	rows, err := d.Query(getDifficultiesQuery, pq.Array(difficultyID))
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package instruments
 
 import (
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"log"
@@ -10,8 +11,8 @@ import (
 type DataOperations interface {
 	InsertInstruments(instruments ...*Instrument)
 	InsertInstrument(instrument *Instrument)
-	GetInstrument(instrumentID string) (*Instrument, error)
-	GetInstruments(instrumentID ...string) ([]*Instrument, error)
+	GetInstrument(instrumentID uint) (*Instrument, error)
+	GetInstruments(instrumentID ...uint) ([]*Instrument, error)
 }
 
 // DataService is for managing instruments.
@@ -42,7 +43,7 @@ func (d *DataService) InsertInstrument(instrument *Instrument) {
 }
 
 // GetInstrument retrieves an instrument for the provided ID.
-func (d *DataService) GetInstrument(instrumentID string) (*Instrument, error) {
+func (d *DataService) GetInstrument(instrumentID uint) (*Instrument, error) {
 	instruments, err := d.GetInstruments(instrumentID)
 	if err != nil {
 		return nil, err
@@ -51,8 +52,8 @@ func (d *DataService) GetInstrument(instrumentID string) (*Instrument, error) {
 }
 
 // GetInstruments retrieves instruments for the provided IDs.
-func (d *DataService) GetInstruments(instrumentID ...string) ([]*Instrument, error) {
-	rows, err := d.Query(getInstrumentsQuery, instrumentID)
+func (d *DataService) GetInstruments(instrumentID ...uint) ([]*Instrument, error) {
+	rows, err := d.Query(getInstrumentsQuery, pq.Array(instrumentID))
 	if err != nil {
 		return nil, err
 	}

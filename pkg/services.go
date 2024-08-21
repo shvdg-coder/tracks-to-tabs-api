@@ -61,15 +61,17 @@ type ServiceManager struct {
 func NewServiceManager(database logic.DbOperations) Operations {
 	artistTrackService := createArtistTrackService(database)
 	trackTabService := createTrackTabService(database)
-	tabsService := createTabsService(database)
-	tracksService := createTracksService(database, trackTabService, tabsService)
 	endpointsService := createEndpointsService(database)
 	sourcesService := createSourcesService(database, endpointsService)
 	referencesService := createReferencesService(database, sourcesService)
+	instrumentsService := createInstrumentsService(database)
+	difficultiesService := createDifficultiesService(database)
+	tabsService := createTabsService(database, instrumentsService, difficultiesService, referencesService)
+	tracksService := createTracksService(database, trackTabService, tabsService, referencesService)
 
 	return &ServiceManager{
 		ArtistsService:      createArtistsService(database, artistTrackService, tracksService, referencesService),
-		TracksService:       createTracksService(database, trackTabService, tabsService),
+		TracksService:       createTracksService(database, trackTabService, tabsService, referencesService),
 		TabsService:         tabsService,
 		ArtistTrackService:  artistTrackService,
 		TrackTabService:     trackTabService,
@@ -90,17 +92,17 @@ func createArtistsService(db logic.DbOperations, artistTrack *ArtistTrackService
 }
 
 // createTracksService creates a TracksService.
-func createTracksService(db logic.DbOperations, trackTab *TrackTabService, tabs *TabsService) *TracksService {
+func createTracksService(db logic.DbOperations, trackTab *TrackTabService, tabs *TabsService, references *ReferencesService) *TracksService {
 	trackDataService := trk.NewDataService(db)
 	trackMappingService := trk.NewMappingService()
-	return &TracksService{trk.NewService(trackDataService, trackMappingService, trackTab, tabs)}
+	return &TracksService{trk.NewService(trackDataService, trackMappingService, trackTab, tabs, references)}
 }
 
 // createTabsService creates a TabsService.
-func createTabsService(db logic.DbOperations) *TabsService {
+func createTabsService(db logic.DbOperations, instruments *InstrumentsService, difficulties *DifficultiesService, references *ReferencesService) *TabsService {
 	tabDataService := tbs.NewDataService(db)
 	tabMappingService := tbs.NewMappingService()
-	return &TabsService{tbs.NewService(tabDataService, tabMappingService)}
+	return &TabsService{tbs.NewService(tabDataService, tabMappingService, instruments, difficulties, references)}
 }
 
 // createArtistTrackService creates an ArtistTrackService.

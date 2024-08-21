@@ -2,17 +2,17 @@ package tracks
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/commons"
+	ref "github.com/shvdg-dev/tunes-to-tabs-api/pkg/references"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
 )
 
 // Track represents a track.
 type Track struct {
-	ID       uuid.UUID
-	Title    string
-	Duration uint // in milliseconds
-	Tabs     []*tabs.Tab
-	Links    []*commons.Link
+	ID         uuid.UUID
+	Title      string
+	Duration   uint // in milliseconds
+	Tabs       []*tabs.Tab
+	References []*ref.Reference
 }
 
 // TrackConfig modifies a Track with configuration options.
