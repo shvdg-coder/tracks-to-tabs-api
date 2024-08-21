@@ -7,6 +7,8 @@ const artisttrackCSV = "./resources/artisttrack.csv"
 const endpointsCSV = "./resources/endpoints.csv"
 const referencesCSV = "./resources/references.csv"
 const sourcesCSV = "./resources/sources.csv"
+const instrumentsCSV = "./resources/instruments.csv"
+const difficultiesCSV = "./resources/difficulties.csv"
 
 // Tables
 const artistsTable = "artists"
@@ -15,6 +17,8 @@ const artisttrackTable = "artist_track"
 const endpointsTable = "endpoints"
 const referencesTable = "references"
 const sourcesTable = "sources"
+const instrumentsTable = "instruments"
+const difficultiesTable = "difficulties"
 
 // Columns: Artists
 const artistsColumnID = "id"
@@ -47,9 +51,19 @@ const sourcesColumnSourceID = "id"
 const sourcesColumnSourceName = "name"
 const sourcesColumnSourceCategory = "category"
 
+// Columns: Instruments
+const instrumentsColumnID = "id"
+const instrumentsColumnName = "name"
+
+// Columns: Difficulties
+const difficultiesColumnID = "id"
+const difficultiesColumnName = "name"
+
 var artistsColumns = []string{artistsColumnID, artistsColumnName}
 var tracksColumns = []string{tracksColumnID, tracksColumnTitle, tracksColumnDuration}
 var artisttrackColumns = []string{artistTrackColumnArtistID, artistTrackColumnTrackID}
 var endpointsColumns = []string{endpointsColumnSourceID, endpointsColumnCategory, endpointsColumnType, endpointsColumnURL}
 var referencesColumns = []string{referencesColumnInternalID, referencesColumnSourceID, referencesColumnCategory, referencesColumnType, referencesColumnReference}
 var sourcesColumns = []string{sourcesColumnSourceID, sourcesColumnSourceName, sourcesColumnSourceCategory}
+var instrumentsColumns = []string{instrumentsColumnID, instrumentsColumnName}
+var difficultiesColumns = []string{difficultiesColumnID, difficultiesColumnName}
