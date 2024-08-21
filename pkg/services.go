@@ -63,9 +63,12 @@ func NewServiceManager(database logic.DbOperations) Operations {
 	trackTabService := createTrackTabService(database)
 	tabsService := createTabsService(database)
 	tracksService := createTracksService(database, trackTabService, tabsService)
+	endpointsService := createEndpointsService(database)
+	sourcesService := createSourcesService(database, endpointsService)
+	referencesService := createReferencesService(database, sourcesService)
 
 	return &ServiceManager{
-		ArtistsService:      createArtistsService(database, artistTrackService, tracksService),
+		ArtistsService:      createArtistsService(database, artistTrackService, tracksService, referencesService),
 		TracksService:       createTracksService(database, trackTabService, tabsService),
 		TabsService:         tabsService,
 		ArtistTrackService:  artistTrackService,
@@ -73,17 +76,17 @@ func NewServiceManager(database logic.DbOperations) Operations {
 		UsersService:        createUsersService(database),
 		InstrumentsService:  createInstrumentsService(database),
 		DifficultiesService: createDifficultiesService(database),
-		SourcesService:      createSourcesService(database),
-		EndpointsService:    createEndpointsService(database),
-		ReferencesService:   createReferencesService(database),
+		EndpointsService:    endpointsService,
+		SourcesService:      sourcesService,
+		ReferencesService:   referencesService,
 	}
 }
 
 // createArtistsService creates an ArtistsService.
-func createArtistsService(db logic.DbOperations, artistTrack *ArtistTrackService, tracks *TracksService) *ArtistsService {
+func createArtistsService(db logic.DbOperations, artistTrack *ArtistTrackService, tracks *TracksService, references *ReferencesService) *ArtistsService {
 	artistDataService := art.NewDataService(db)
 	artistMappingService := art.NewMappingService()
-	return &ArtistsService{art.NewService(artistDataService, artistMappingService, artistTrack, tracks)}
+	return &ArtistsService{art.NewService(artistDataService, artistMappingService, artistTrack, tracks, references)}
 }
 
 // createTracksService creates a TracksService.
@@ -131,9 +134,10 @@ func createDifficultiesService(db logic.DbOperations) *DifficultiesService {
 }
 
 // createSourcesService creates a SourcesService.
-func createSourcesService(db logic.DbOperations) *SourcesService {
+func createSourcesService(db logic.DbOperations, endpoints *EndpointsService) *SourcesService {
 	sourceDataService := src.NewDataService(db)
-	return &SourcesService{src.NewService(sourceDataService)}
+	sourceMappingService := src.NewMappingService()
+	return &SourcesService{src.NewService(sourceDataService, sourceMappingService, endpoints)}
 }
 
 // createEndpointsService creates an EndpointsService.
@@ -143,7 +147,8 @@ func createEndpointsService(db logic.DbOperations) *EndpointsService {
 }
 
 // createReferencesService creates a ReferencesService.
-func createReferencesService(db logic.DbOperations) *ReferencesService {
+func createReferencesService(db logic.DbOperations, sources *SourcesService) *ReferencesService {
 	referencesDataService := ref.NewDataService(db)
-	return &ReferencesService{ref.NewService(referencesDataService)}
+	referencesMappingService := ref.NewMappingService()
+	return &ReferencesService{ref.NewService(referencesDataService, referencesMappingService, sources)}
 }

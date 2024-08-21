@@ -1,6 +1,6 @@
 source_id,category,type,url
 1000,artist,web,https://www.songify/artist/{artistID}
 1000,track,web,https://www.songify/track/{trackID}
-2000,artist,web,https://www.songers/web/{artistName}-tabs-{artistID}
-2000,tab,web,https://www.songers/web/arist/{artistID}/track/{trackID}
-2000,artist,api,https://www.songers/api/artist/{artistID}/songs?from={from}&size={size}
+2000,artist,web,https://www.tabsters/web/{artistName}-tabs-{artistID}
+2000,tab,web,https://www.tabsters/web/{artistName}-{trackName}-tab-{tabID}
+2000,artist,api,https://www.tabsters/api/artist/{artistID}/tracks?from={from}&size={size}
