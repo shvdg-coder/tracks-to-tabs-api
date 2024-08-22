@@ -2,44 +2,37 @@ package pkg
 
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/artisttrack"
-	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
-	end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"
-	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
-	ref "github.com/shvdg-dev/tunes-to-tabs-api/pkg/references"
-	src "github.com/shvdg-dev/tunes-to-tabs-api/pkg/sources"
-	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/database"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
+	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/services"
 	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracktab"
-	usrs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/users"
 )
 
 type ArtistsService struct{ art.Operations }
-type TracksService struct{ trk.Operations }
-type TabsService struct{ tbs.Operations }
-type ArtistTrackService struct{ artisttrack.Operations }
-type TrackTabService struct{ tracktab.Operations }
-type UsersService struct{ usrs.Operations }
-type InstrumentsService struct{ inst.Operations }
-type DifficultiesService struct{ diff.Operations }
-type SourcesService struct{ src.Operations }
-type EndpointsService struct{ end.Operations }
-type ReferencesService struct{ ref.Operations }
+type TracksService struct{ art.Operations }
+type TabsService struct{ art.Operations }
+type ArtistTrackService struct{ art.Operations }
+type TrackTabService struct{ art.Operations }
+type UsersService struct{ art.Operations }
+type InstrumentsService struct{ art.Operations }
+type DifficultiesService struct{ art.Operations }
+type SourcesService struct{ art.Operations }
+type EndpointsService struct{ art.Operations }
+type ReferencesService struct{ art.Operations }
 
 // Operations represents operations regarding all the services.
 type Operations interface {
 	art.Operations
-	trk.Operations
-	tbs.Operations
-	artisttrack.Operations
-	tracktab.Operations
-	usrs.Operations
-	inst.Operations
-	diff.Operations
-	src.Operations
-	end.Operations
-	ref.Operations
+	art.Operations
+	art.Operations
+	art.Operations
+	art.Operations
+	art.Operations
+	art.Operations
+	art.Operations
+	art.Operations
+	art.Operations
+	art.Operations
 }
 
 // ServiceManager instantiates and handles the different services.
@@ -86,71 +79,71 @@ func NewServiceManager(database logic.DbOperations) Operations {
 
 // createArtistsService creates an ArtistsService.
 func createArtistsService(db logic.DbOperations, artistTrack *ArtistTrackService, tracks *TracksService, references *ReferencesService) *ArtistsService {
-	artistDataService := art.NewDataService(db)
-	artistMappingService := art.NewMappingService()
+	artistDataService := database.NewTabSvc(db)
+	artistMappingService := mappers.NewArtistServ()
 	return &ArtistsService{art.NewService(artistDataService, artistMappingService, artistTrack, tracks, references)}
 }
 
 // createTracksService creates a TracksService.
 func createTracksService(db logic.DbOperations, trackTab *TrackTabService, tabs *TabsService, references *ReferencesService) *TracksService {
 	trackDataService := trk.NewDataService(db)
-	trackMappingService := trk.NewMappingService()
-	return &TracksService{trk.NewService(trackDataService, trackMappingService, trackTab, tabs, references)}
+	trackMappingService := mappers.NewMappingService()
+	return &TracksService{art.NewService(trackDataService, trackMappingService, trackTab, tabs, references)}
 }
 
 // createTabsService creates a TabsService.
 func createTabsService(db logic.DbOperations, instruments *InstrumentsService, difficulties *DifficultiesService, references *ReferencesService) *TabsService {
-	tabDataService := tbs.NewDataService(db)
-	tabMappingService := tbs.NewMappingService()
-	return &TabsService{tbs.NewService(tabDataService, tabMappingService, instruments, difficulties, references)}
+	tabDataService := database.NewTabSvc(db)
+	tabMappingService := mappers.NewMappingService()
+	return &TabsService{art.NewService(tabDataService, tabMappingService, instruments, difficulties, references)}
 }
 
 // createArtistTrackService creates an ArtistTrackService.
 func createArtistTrackService(db logic.DbOperations) *ArtistTrackService {
-	artistTrackDataService := artisttrack.NewDataService(db)
-	return &ArtistTrackService{artisttrack.NewService(artistTrackDataService)}
+	artistTrackDataService := database.NewTabSvc(db)
+	return &ArtistTrackService{art.NewService(artistTrackDataService)}
 }
 
 // createTrackTabService creates a TrackTabService.
 func createTrackTabService(db logic.DbOperations) *TrackTabService {
-	trackTabDataService := tracktab.NewDataService(db)
-	return &TrackTabService{tracktab.NewService(trackTabDataService)}
+	trackTabDataService := database.NewTabSvc(db)
+	return &TrackTabService{art.NewService(trackTabDataService)}
 }
 
 // createUsersService creates a UsersService.
 func createUsersService(db logic.DbOperations) *UsersService {
-	usersDataService := usrs.NewDataService(db)
-	return &UsersService{usrs.NewService(usersDataService)}
+	usersDataService := database.NewUserSvc(db)
+	return &UsersService{art.NewService(usersDataService)}
 }
 
 // createInstrumentsService creates an InstrumentsService.
 func createInstrumentsService(db logic.DbOperations) *InstrumentsService {
-	instrumentsDataService := inst.NewDataService(db)
-	return &InstrumentsService{inst.NewService(instrumentsDataService)}
+	instrumentsDataService := database.NewTabSvc(db)
+	return &InstrumentsService{art.NewService(instrumentsDataService)}
 }
 
 // createDifficultiesService creates a DifficultiesService.
 func createDifficultiesService(db logic.DbOperations) *DifficultiesService {
-	difficultiesDataService := diff.NewDataService(db)
-	return &DifficultiesService{diff.NewService(difficultiesDataService)}
+	difficultiesDataService := database.NewTabSvc(db)
+	return &DifficultiesService{art.NewService(difficultiesDataService)}
 }
 
 // createSourcesService creates a SourcesService.
 func createSourcesService(db logic.DbOperations, endpoints *EndpointsService) *SourcesService {
-	sourceDataService := src.NewDataService(db)
-	sourceMappingService := src.NewMappingService()
-	return &SourcesService{src.NewService(sourceDataService, sourceMappingService, endpoints)}
+	sourceDataService := database.NewTabSvc(db)
+	sourceMappingService := mappers.NewMappingService()
+	return &SourcesService{art.NewService(sourceDataService, sourceMappingService, endpoints)}
 }
 
 // createEndpointsService creates an EndpointsService.
 func createEndpointsService(db logic.DbOperations) *EndpointsService {
-	endpointsDataService := end.NewDataService(db)
-	return &EndpointsService{end.NewService(endpointsDataService)}
+	endpointsDataService := database.NewTabSvc(db)
+	return &EndpointsService{art.NewService(endpointsDataService)}
 }
 
 // createReferencesService creates a ReferencesService.
 func createReferencesService(db logic.DbOperations, sources *SourcesService) *ReferencesService {
-	referencesDataService := ref.NewDataService(db)
-	referencesMappingService := ref.NewMappingService()
-	return &ReferencesService{ref.NewService(referencesDataService, referencesMappingService, sources)}
+	referencesDataService := database.NewTabSvc(db)
+	referencesMappingService := mappers.NewMappingService()
+	return &ReferencesService{art.NewService(referencesDataService, referencesMappingService, sources)}
 }

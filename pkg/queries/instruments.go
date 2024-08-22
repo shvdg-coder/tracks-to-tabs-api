@@ -1,0 +1,10 @@
+package queries
+
+// InsertInstrument is a SQL query string used to insert an instrument into the 'instruments' table.
+const InsertInstrument = `
+	INSERT INTO instruments (name)
+    VALUES ($1) 
+`
+
+// GetInstruments is a SQL query string to select an instrument.
+const GetInstruments = `SELECT id, name FROM instruments WHERE id = ANY($1::int[])`

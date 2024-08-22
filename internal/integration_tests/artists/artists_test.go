@@ -4,9 +4,7 @@ import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	tstenv "github.com/shvdg-dev/tunes-to-tabs-api/internal/integration_tests/environments"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg"
-	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
-	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
-	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
+	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 	"testing"
 )
 
@@ -43,7 +41,7 @@ func TestArtistsCascading(t *testing.T) {
 }
 
 // testArtists todo:
-func testArtists(t *testing.T, artists []*art.Artist) {
+func testArtists(t *testing.T, artists []*trk.ArtistEntry) {
 	if len(artists) != 2 {
 		t.Fatalf("expected number of artists found in the database (%d) to be equal to those in the CSV (%d)", len(artists), 2)
 	}
@@ -57,14 +55,14 @@ func testTracks(t *testing.T, tracks []*trk.Track) {
 }
 
 // testTabs todo:
-func testTabs(t *testing.T, tabs []*tbs.Tab) {
+func testTabs(t *testing.T, tabs []*trk.Tab) {
 	if len(tabs) != 4 {
 		t.Fatalf("expected number of tabs found in the database (%d) to be equal to those in the CSV (%d)", len(tabs), 4)
 	}
 }
 
-// extractTracks extracts the tracks.Track's from the artists.Artist.
-func extractTracks(artists []*art.Artist) []*trk.Track {
+// extractTracks extracts the tracks.Track's from the artists.ArtistEntry.
+func extractTracks(artists []*trk.ArtistEntry) []*trk.Track {
 	var tracks []*trk.Track
 	for _, artist := range artists {
 		tracks = append(tracks, artist.Tracks...)
@@ -73,8 +71,8 @@ func extractTracks(artists []*art.Artist) []*trk.Track {
 }
 
 // extractTabs extracts the tabs.Tab's from the tracks.Track.
-func extractTabs(tracks []*trk.Track) []*tbs.Tab {
-	var tabs []*tbs.Tab
+func extractTabs(tracks []*trk.Track) []*trk.Tab {
+	var tabs []*trk.Tab
 	for _, track := range tracks {
 		tabs = append(tabs, track.Tabs...)
 	}

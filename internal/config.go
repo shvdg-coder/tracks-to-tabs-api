@@ -2,10 +2,7 @@ package internal
 
 import (
 	faker "github.com/brianvoe/gofakeit/v7"
-	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
-	end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"
-	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
-	src "github.com/shvdg-dev/tunes-to-tabs-api/pkg/sources"
+	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 	"gopkg.in/yaml.v2"
 	"os"
 )
@@ -17,11 +14,11 @@ type Config struct {
 
 // SeedingConfig represents the configuration with predefined seeds.
 type SeedingConfig struct {
-	Dummies      *DummiesConfig     `yaml:"dummies"`
-	Instruments  []*inst.Instrument `yaml:"instruments"`
-	Difficulties []*diff.Difficulty `yaml:"difficulties"`
-	Sources      []*src.Source      `yaml:"sources"`
-	Endpoints    []*end.Endpoint    `yaml:"endpoints"`
+	Dummies      *DummiesConfig          `yaml:"dummies"`
+	Instruments  []*diff.InstrumentEntry `yaml:"instruments"`
+	Difficulties []*diff.DifficultyEntry `yaml:"difficulties"`
+	Sources      []*diff.Source          `yaml:"sources"`
+	Endpoints    []*diff.EndpointEntry   `yaml:"endpoints"`
 }
 
 // DummiesConfig represents the configuration for generating dummies.

@@ -59,7 +59,6 @@ func handleArg(arg string) {
 	case inter.CommandPurge:
 		inter.NewDropService(tables).DropAll()
 	case inter.CommandSeed:
-		inter.NewSeedService(config.Seeding, api).SeedAll()
 	default:
 		printErrorAndExit()
 	}
