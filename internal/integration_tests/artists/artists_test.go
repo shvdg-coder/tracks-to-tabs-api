@@ -4,6 +4,9 @@ import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	tstenv "github.com/shvdg-dev/tunes-to-tabs-api/internal/integration_tests/environments"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg"
+	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
+	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
+	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 	"testing"
 )
 
@@ -23,15 +26,59 @@ func TestArtistsCascading(t *testing.T) {
 	}
 	api := pkg.NewAPI(dbEnv)
 
-	// Tests
+	// Execute
 	artists, err := api.GetArtistsCascading(artistIDs...)
 	if err != nil {
 		t.Fatalf("error occurred during retrieval of artist cascading: %s", err.Error())
 	}
 
-	if len(artists) != len(artistIDs) {
-		t.Fatalf("expected number of artists found in the database (%d) to be equal to those in the CSV (%d)", len(artists), len(artistIDs))
+	// Extract
+	tracks := extractTracks(artists)
+	tabs := extractTabs(tracks)
+
+	// Tests
+	testArtists(t, artists)
+	testTracks(t, tracks)
+	testTabs(t, tabs)
+}
+
+// testArtists todo:
+func testArtists(t *testing.T, artists []*art.Artist) {
+	if len(artists) != 2 {
+		t.Fatalf("expected number of artists found in the database (%d) to be equal to those in the CSV (%d)", len(artists), 2)
 	}
+}
+
+// testTracks todo:
+func testTracks(t *testing.T, tracks []*trk.Track) {
+	if len(tracks) != 4 {
+		t.Fatalf("expected number of tracks found in the database (%d) to be equal to those in the CSV (%d)", len(tracks), 4)
+	}
+}
+
+// testTabs todo:
+func testTabs(t *testing.T, tabs []*tbs.Tab) {
+	if len(tabs) != 4 {
+		t.Fatalf("expected number of tabs found in the database (%d) to be equal to those in the CSV (%d)", len(tabs), 4)
+	}
+}
+
+// extractTracks extracts the tracks.Track's from the artists.Artist.
+func extractTracks(artists []*art.Artist) []*trk.Track {
+	var tracks []*trk.Track
+	for _, artist := range artists {
+		tracks = append(tracks, artist.Tracks...)
+	}
+	return tracks
+}
+
+// extractTabs extracts the tabs.Tab's from the tracks.Track.
+func extractTabs(tracks []*trk.Track) []*tbs.Tab {
+	var tabs []*tbs.Tab
+	for _, track := range tracks {
+		tabs = append(tabs, track.Tabs...)
+	}
+	return tabs
 }
 
 // setup prepares the tests by performing the minimally required steps.
