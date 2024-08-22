@@ -13,6 +13,7 @@ type TabEntry struct {
 // Tab represents a tab.
 type Tab struct {
 	*TabEntry
+	Track      *Track
 	Instrument *InstrumentEntry
 	Difficulty *DifficultyEntry
 	References []*Reference
