@@ -7,3 +7,8 @@ type UserEntry struct {
 	ID    uuid.UUID
 	Email string
 }
+
+// User represents a user with entity references.
+type User struct {
+	*UserEntry
+}

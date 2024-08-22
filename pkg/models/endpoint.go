@@ -18,3 +18,9 @@ func (e *EndpointEntry) CreateLink(replacements map[string]string) string {
 	}
 	return url
 }
+
+// Endpoint represents an endpoint with entity references
+type Endpoint struct {
+	*EndpointEntry
+	Source *Source
+}

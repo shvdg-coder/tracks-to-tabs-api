@@ -1,6 +1,14 @@
 package models
 
-// ArtistTrack represents an 'artist track' link with entity references.
+import "github.com/google/uuid"
+
+// ArtistTrackEntry represents a 'artist to track' link from the database.
+type ArtistTrackEntry struct {
+	ArtistID uuid.UUID
+	TrackID  uuid.UUID
+}
+
+// ArtistTrack represents an 'artist to track' link with entity references.
 type ArtistTrack struct {
 	Artist *Artist
 	Track  *Track
