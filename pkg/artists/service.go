@@ -2,7 +2,7 @@ package artists
 
 import (
 	"github.com/google/uuid"
-	arttrk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists/artisttrack"
+	arttrk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artisttrack"
 	ref "github.com/shvdg-dev/tunes-to-tabs-api/pkg/references"
 	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
 )

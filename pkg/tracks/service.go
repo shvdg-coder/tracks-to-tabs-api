@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 	ref "github.com/shvdg-dev/tunes-to-tabs-api/pkg/references"
 	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
-	trktab "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
+	trktab "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracktab"
 )
 
 // Operations represent all operations related to tracks.

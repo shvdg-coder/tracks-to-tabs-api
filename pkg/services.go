@@ -3,7 +3,7 @@ package pkg
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
-	arttrk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists/artisttrack"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/artisttrack"
 	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"
 	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
@@ -11,15 +11,15 @@ import (
 	src "github.com/shvdg-dev/tunes-to-tabs-api/pkg/sources"
 	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
 	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
-	trktab "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracktab"
 	usrs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/users"
 )
 
 type ArtistsService struct{ art.Operations }
 type TracksService struct{ trk.Operations }
 type TabsService struct{ tbs.Operations }
-type ArtistTrackService struct{ arttrk.Operations }
-type TrackTabService struct{ trktab.Operations }
+type ArtistTrackService struct{ artisttrack.Operations }
+type TrackTabService struct{ tracktab.Operations }
 type UsersService struct{ usrs.Operations }
 type InstrumentsService struct{ inst.Operations }
 type DifficultiesService struct{ diff.Operations }
@@ -32,8 +32,8 @@ type Operations interface {
 	art.Operations
 	trk.Operations
 	tbs.Operations
-	arttrk.Operations
-	trktab.Operations
+	artisttrack.Operations
+	tracktab.Operations
 	usrs.Operations
 	inst.Operations
 	diff.Operations
@@ -107,14 +107,14 @@ func createTabsService(db logic.DbOperations, instruments *InstrumentsService, d
 
 // createArtistTrackService creates an ArtistTrackService.
 func createArtistTrackService(db logic.DbOperations) *ArtistTrackService {
-	artistTrackDataService := arttrk.NewDataService(db)
-	return &ArtistTrackService{arttrk.NewService(artistTrackDataService)}
+	artistTrackDataService := artisttrack.NewDataService(db)
+	return &ArtistTrackService{artisttrack.NewService(artistTrackDataService)}
 }
 
 // createTrackTabService creates a TrackTabService.
 func createTrackTabService(db logic.DbOperations) *TrackTabService {
-	trackTabDataService := trktab.NewDataService(db)
-	return &TrackTabService{trktab.NewService(trackTabDataService)}
+	trackTabDataService := tracktab.NewDataService(db)
+	return &TrackTabService{tracktab.NewService(trackTabDataService)}
 }
 
 // createUsersService creates a UsersService.

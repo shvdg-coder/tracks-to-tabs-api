@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
-	arttrk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists/artisttrack"
+	arttrk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artisttrack"
 	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
 	end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"
 	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
@@ -12,7 +12,7 @@ import (
 	src "github.com/shvdg-dev/tunes-to-tabs-api/pkg/sources"
 	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
 	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
-	trktab "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
+	trktab "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracktab"
 	usrs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/users"
 )
 
