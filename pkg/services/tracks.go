@@ -36,5 +36,34 @@ func NewTrackSvc(data data.TrackData, mapper mappers.TrackMapper, trackTabs Trac
 
 // GetTracks retrieves tabs, with entity references, for the provided IDs.
 func (t TrackSvc) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
-	return nil, nil
+	trackEntries, err := t.GetTrackEntries(trackID...)
+	if err != nil {
+		return nil, err
+	}
+
+	trackTabEntries, err := t.GetTrackToTabLinks(trackID...)
+	if err != nil {
+		return nil, err
+	}
+
+	tabIDs := t.ExtractTabIDs(trackTabEntries)
+	tabs, err := t.GetTabs(tabIDs...)
+	if err != nil {
+		return nil, err
+	}
+
+	references, err := t.GetReferences(trackID...)
+	if err != nil {
+		return nil, err
+	}
+
+	tracks := t.TrackEntriesToTracks(trackEntries)
+	tracksMap := t.TracksToMap(tracks)
+	tabsMap := t.TabsToMap(tabs)
+
+	tracksMap = t.MapTabsToTracks(trackTabEntries, tracksMap, tabsMap)
+	tracksMap = t.MapReferencesToTracks(tracksMap, references)
+	tracks = t.MapToTracks(tracksMap)
+
+	return tracks, nil
 }

@@ -46,7 +46,7 @@ func (a *ArtistSvc) ArtistsToMap(artists []*models.Artist) map[uuid.UUID]*models
 	return artistMap
 }
 
-// MapToArtists transforms a map of Artists into a slice of models.Artist.
+// MapToArtists transforms a map of Artists into a slice of models.Artist's.
 func (a *ArtistSvc) MapToArtists(artistsMap map[uuid.UUID]*models.Artist) []*models.Artist {
 	artists := make([]*models.Artist, len(artistsMap))
 	for _, artist := range artistsMap {
