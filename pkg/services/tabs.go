@@ -2,32 +2,32 @@ package services
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/database"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
-// ArtistTrackOps represent all operations related to tabs.
-type Operations interface {
-	database.TabsOps
+// TabOps represent all operations related to tabs.
+type TabOps interface {
+	data.TabData
 	mappers.TabMapper
 	GetTabsCascading(tabID ...uuid.UUID) ([]*models.Tab, error)
 }
 
-// ArtistTrackSvc is responsible for managing and retrieving tabs.
-type Service struct {
-	database.TabsOps
+// TabSvc is responsible for managing and retrieving tabs.
+type TabSvc struct {
+	data.TabData
 	mappers.TabMapper
-	InstrumentOps Operations
-	DifficultyOps Operations
-	ReferenceOps  Operations
+	InstrumentOps
+	DifficultyOps
+	ReferenceOps
 }
 
-// NewTrackSvc instantiates a ArtistTrackSvc.
-func NewService(data database.TabsOps, mapping mappers.TabMapper, instruments Operations, difficulties Operations, references Operations) Operations {
-	return &Service{
-		TabsOps:       data,
-		TabMapper:     mapping,
+// NewTabSvc instantiates a TabSvc.
+func NewTabSvc(data data.TabData, mapper mappers.TabMapper, instruments InstrumentOps, difficulties DifficultyOps, references ReferenceOps) TabOps {
+	return &TabSvc{
+		TabData:       data,
+		TabMapper:     mapper,
 		InstrumentOps: instruments,
 		DifficultyOps: difficulties,
 		ReferenceOps:  references,
@@ -35,42 +35,12 @@ func NewService(data database.TabsOps, mapping mappers.TabMapper, instruments Op
 }
 
 // GetTabsCascading retrieves tabs, with entity references, for the provided IDs.
-func (s *Service) GetTabsCascading(tabID ...uuid.UUID) ([]*models.Tab, error) {
-	tabs, err := s.GetTabs(tabID...)
-	if err != nil {
-		return nil, err
-	}
-
-	references, err := s.ReferenceOps.GetReferences(tabID...)
-	if err != nil {
-		return nil, err
-	}
-
-	instrumentIDs, difficultyIDs := s.ExtractIDs(tabs)
-
-	instruments, err := s.InstrumentOps.GetInstruments(instrumentIDs...)
-	if err != nil {
-		return nil, err
-	}
-
-	difficulties, err := s.DifficultyOps.GetDifficulties(difficultyIDs...)
-	if err != nil {
-		return nil, err
-	}
-
-	tabsMap := s.TabsToMap(tabs)
-	instrumentsMap := s.InstrumentOps.InstrumentsToMap(instruments)
-	difficultiesMap := s.DifficultyOps.DifficultiesToMap(difficulties)
-
-	tabs = s.MapInstrumentsToTabs(tabsMap, instrumentsMap)
-	tabs = s.MapDifficultiesToTabs(tabsMap, difficultiesMap)
-	tabs = s.MapReferencesToTabs(tabsMap, references)
-
-	return tabs, nil
+func (t *TabSvc) GetTabsCascading(tabID ...uuid.UUID) ([]*models.Tab, error) {
+	return nil, nil
 }
 
 // ExtractIDs extracts the instrument and difficulties IDs from tabs.
-func (s *Service) ExtractIDs(tabs []*models.Tab) (instrumentIDs []uint, difficultyIDs []uint) {
+func (t *TabSvc) ExtractIDs(tabs []*models.Tab) (instrumentIDs []uint, difficultyIDs []uint) {
 	instrumentIDs = make([]uint, 0)
 	difficultyIDs = make([]uint, 0)
 	for _, tab := range tabs {

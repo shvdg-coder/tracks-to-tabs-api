@@ -12,7 +12,7 @@ import (
 var (
 	config *inter.Config
 	tables inter.TableOperations
-	api    pkg.DataOperations
+	api    pkg.DataOps
 )
 
 // init instantiates all app requirements.

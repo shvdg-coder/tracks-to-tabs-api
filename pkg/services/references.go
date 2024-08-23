@@ -2,56 +2,40 @@ package services
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/database"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
-// ArtistTrackOps represents operations related to references.
-type Operations interface {
-	database.TabsOps
-	mappers.TabMapper
+// ReferenceOps represents operations related to references.
+type ReferenceOps interface {
+	data.ReferenceData
+	mappers.ReferenceMapper
 	GetReferencesCascading(internalID ...uuid.UUID) ([]*models.Reference, error)
 }
 
-// ArtistTrackSvc is responsible for managing references.
-type Service struct {
-	database.TabsOps
-	mappers.TabMapper
-	SourcesOps Operations
+// ReferenceSvc is responsible for managing references.
+type ReferenceSvc struct {
+	data.ReferenceData
+	mappers.ReferenceMapper
+	SourceOps
 }
 
-// NewTrackSvc instantiates a new ArtistTrackSvc.
-func NewService(data database.TabsOps, mapping mappers.TabMapper, sources Operations) Operations {
-	return &Service{TabsOps: data, TabMapper: mapping, SourcesOps: sources}
+// NewReferenceSvc instantiates a new ReferenceSvc.
+func NewReferenceSvc(data data.ReferenceData, mapper mappers.ReferenceMapper, sources SourceOps) ReferenceOps {
+	return &ReferenceSvc{ReferenceData: data, ReferenceMapper: mapper, SourceOps: sources}
 }
 
 // GetReferencesCascading retrieves the Reference's with all their references.
-func (s *Service) GetReferencesCascading(internalID ...uuid.UUID) ([]*models.Reference, error) {
-	references, err := s.GetReferences(internalID...)
-	if err != nil {
-		return nil, err
-	}
-
-	sourceIDs := s.ExtractSourceIDs(references)
-	sources, err := s.SourcesOps.GetSourcesCascading(sourceIDs...)
-	if err != nil {
-		return nil, err
-	}
-
-	sourcesMap := s.SourcesOps.SourcesToMap(sources)
-	references = s.MapSourcesToReferences(references, sourcesMap)
-
-	return references, nil
+func (r *ReferenceSvc) GetReferencesCascading(internalID ...uuid.UUID) ([]*models.Reference, error) {
+	return nil, nil
 }
 
 // ExtractSourceIDs extracts the source ID from the Reference.
-func (s *Service) ExtractSourceIDs(references []*models.Reference) []uint {
+func (r *ReferenceSvc) ExtractSourceIDs(references []*models.Reference) []uint {
 	sourceIDMap := make(map[uint]bool)
 	for _, reference := range references {
-		if reference.Source != nil {
-			sourceIDMap[reference.Source.ID] = true
-		}
+		sourceIDMap[reference.Source.ID] = true
 	}
 	sourceIDs := make([]uint, 0)
 	for key, _ := range sourceIDMap {

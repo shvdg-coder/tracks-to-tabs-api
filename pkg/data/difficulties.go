@@ -1,4 +1,4 @@
-package database
+package data
 
 import (
 	"github.com/lib/pq"
@@ -9,8 +9,8 @@ import (
 	"log"
 )
 
-// DifficultyOps represents operations related to difficulties in the database.
-type DifficultyOps interface {
+// DifficultyData represents operations related to difficulties in the database.
+type DifficultyData interface {
 	InsertDifficulties(difficulties ...*models.DifficultyEntry)
 	InsertDifficulty(difficulty *models.DifficultyEntry)
 	GetDifficulty(difficultyID uint) (*models.DifficultyEntry, error)
@@ -23,7 +23,7 @@ type DifficultySvc struct {
 }
 
 // NewDifficultySvc creates a new instance of the DifficultySvc struct.
-func NewDifficultySvc(database logic.DbOperations) DifficultyOps {
+func NewDifficultySvc(database logic.DbOperations) DifficultyData {
 	return &DifficultySvc{DbOperations: database}
 }
 

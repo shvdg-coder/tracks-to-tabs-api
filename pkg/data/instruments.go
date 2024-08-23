@@ -1,4 +1,4 @@
-package database
+package data
 
 import (
 	"github.com/lib/pq"
@@ -9,8 +9,8 @@ import (
 	"log"
 )
 
-// InstrumentOps represents operations related to instruments in the database.
-type InstrumentOps interface {
+// InstrumentData represents operations related to instruments in the database.
+type InstrumentData interface {
 	InsertInstruments(instruments ...*models.InstrumentEntry)
 	InsertInstrument(instrument *models.InstrumentEntry)
 	GetInstrument(instrumentID uint) (*models.InstrumentEntry, error)
@@ -23,7 +23,7 @@ type InstrumentSvc struct {
 }
 
 // NewInstrumentSvc creates a new instance of the InstrumentSvc struct.
-func NewInstrumentSvc(database logic.DbOperations) InstrumentOps {
+func NewInstrumentSvc(database logic.DbOperations) InstrumentData {
 	return &InstrumentSvc{DbOperations: database}
 }
 

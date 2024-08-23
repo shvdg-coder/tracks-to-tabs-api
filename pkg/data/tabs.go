@@ -1,4 +1,4 @@
-package database
+package data
 
 import (
 	"github.com/google/uuid"
@@ -10,8 +10,8 @@ import (
 	"log"
 )
 
-// TabsOps represents operations related to tabs in the database.
-type TabsOps interface {
+// TabData represents operations related to tabs in the database.
+type TabData interface {
 	InsertTabs(tabs ...*models.Tab)
 	InsertTab(tab *models.Tab)
 	GetTab(tabID uuid.UUID) (*models.Tab, error)
@@ -24,7 +24,7 @@ type TabSvc struct {
 }
 
 // NewTabSvc creates a new instance of the TabSvc struct.
-func NewTabSvc(database logic.DbOperations) TabsOps {
+func NewTabSvc(database logic.DbOperations) TabData {
 	return &TabSvc{DbOperations: database}
 }
 

@@ -1,4 +1,4 @@
-package database
+package data
 
 import (
 	"github.com/google/uuid"
@@ -9,8 +9,8 @@ import (
 	"log"
 )
 
-// TrackOps represents operations related to tracks in the database.
-type TrackOps interface {
+// TrackData represents operations related to tracks in the database.
+type TrackData interface {
 	InsertTracks(tracks ...*models.TrackEntry)
 	InsertTrack(track *models.TrackEntry)
 	GetTrack(trackID uuid.UUID) (*models.TrackEntry, error)
@@ -23,7 +23,7 @@ type TrackSvc struct {
 }
 
 // NewTrackSvc creates a new instance of the TrackSvc struct.
-func NewTrackSvc(database logic.DbOperations) TrackOps {
+func NewTrackSvc(database logic.DbOperations) TrackData {
 	return &TrackSvc{DbOperations: database}
 }
 

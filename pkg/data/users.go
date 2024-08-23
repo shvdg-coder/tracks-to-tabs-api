@@ -1,4 +1,4 @@
-package database
+package data
 
 import (
 	_ "github.com/lib/pq"
@@ -7,8 +7,8 @@ import (
 	"log"
 )
 
-// UserOps represents operations related to users in the database.
-type UserOps interface {
+// UserData represents operations related to users in the database.
+type UserData interface {
 	InsertUser(email, password string)
 	IsPasswordCorrect(username, password string) bool
 }
@@ -19,14 +19,14 @@ type UserSvc struct {
 }
 
 // NewUserSvc creates a new instance of the UserSvc struct.
-func NewUserSvc(database logic.DbOperations) UserOps {
+func NewUserSvc(database logic.DbOperations) UserData {
 	return &UserSvc{database}
 }
 
 // InsertUser inserts a new user into the users table.
 func (d *UserSvc) InsertUser(email, plainPassword string) {
 	hashedPassword, _ := logic.HashPassword(plainPassword)
-	_, err := d.Exec(queries.InsertUserQuery, email, hashedPassword)
+	_, err := d.Exec(queries.InsertUser, email, hashedPassword)
 	if err != nil {
 		log.Printf("Failed inserting user with email '%s': %s", email, err.Error())
 	} else {
@@ -40,7 +40,7 @@ func (d *UserSvc) IsPasswordCorrect(email, plainPassword string) bool {
 		return false
 	}
 	var foundHashedPassword string
-	err := d.QueryRow(queries.SelectUserPasswordQuery, email).Scan(&foundHashedPassword)
+	err := d.QueryRow(queries.SelectUserPassword, email).Scan(&foundHashedPassword)
 	if err != nil {
 		log.Fatal(err)
 	}

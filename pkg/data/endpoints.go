@@ -1,4 +1,4 @@
-package database
+package data
 
 import (
 	"github.com/lib/pq"
@@ -8,8 +8,8 @@ import (
 	"log"
 )
 
-// EndpointsOps represents operations related to endpoints in the database.
-type EndpointsOps interface {
+// EndpointsData represents operations related to endpoints in the database.
+type EndpointsData interface {
 	InsertEndpoints(endpoints ...*models.EndpointEntry)
 	InsertEndpoint(endpoint *models.EndpointEntry)
 	GetEndpoint(sourceID uint) (*models.EndpointEntry, error)
@@ -22,7 +22,7 @@ type EndpointSvc struct {
 }
 
 // NewEndpointSvc creates a new instance of EndpointSvc.
-func NewEndpointSvc(database logic.DbOperations) EndpointsOps {
+func NewEndpointSvc(database logic.DbOperations) EndpointsData {
 	return &EndpointSvc{DbOperations: database}
 }
 

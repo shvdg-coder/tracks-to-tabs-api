@@ -1,4 +1,4 @@
-package database
+package data
 
 import (
 	"github.com/google/uuid"
@@ -9,8 +9,8 @@ import (
 	"log"
 )
 
-// ReferenceOps represents operations related to references in the database.
-type ReferenceOps interface {
+// ReferenceData represents operations related to references in the database.
+type ReferenceData interface {
 	InsertReference(reference *models.Reference)
 	GetReference(internalID uuid.UUID) (*models.Reference, error)
 	GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error)
@@ -22,7 +22,7 @@ type ReferenceSvc struct {
 }
 
 // NewReferenceSvc creates a new instance of the ReferenceSvc struct.
-func NewReferenceSvc(database logic.DbOperations) ReferenceOps {
+func NewReferenceSvc(database logic.DbOperations) ReferenceData {
 	return &ReferenceSvc{DbOperations: database}
 }
 

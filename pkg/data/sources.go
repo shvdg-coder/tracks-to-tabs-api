@@ -1,4 +1,4 @@
-package database
+package data
 
 import (
 	"github.com/lib/pq"
@@ -9,8 +9,8 @@ import (
 	"log"
 )
 
-// SourceOps represents operations related to sources in the database.
-type SourceOps interface {
+// SourceData represents operations related to sources in the database.
+type SourceData interface {
 	InsertSources(sources ...*models.Source)
 	InsertSource(source *models.Source)
 	GetSource(id uint) (*models.Source, error)
@@ -23,7 +23,7 @@ type SourceSvc struct {
 }
 
 // NewSourceSvc creates a new instance of the SourceSvc struct.
-func NewSourceSvc(database logic.DbOperations) SourceOps {
+func NewSourceSvc(database logic.DbOperations) SourceData {
 	return &SourceSvc{DbOperations: database}
 }
 

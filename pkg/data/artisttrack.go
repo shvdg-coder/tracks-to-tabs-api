@@ -1,4 +1,4 @@
-package database
+package data
 
 import (
 	"github.com/google/uuid"
@@ -10,8 +10,8 @@ import (
 	"log"
 )
 
-// ArtistTrackOps represents operations related to 'artists to tracks' links.
-type ArtistTrackOps interface {
+// ArtistTrackData represents operations related to 'artists to tracks' links.
+type ArtistTrackData interface {
 	LinkArtistToTrack(artistId, trackId uuid.UUID)
 	GetArtistToTrackLink(artistID uuid.UUID) (*models.ArtistTrackEntry, error)
 	GetArtistToTrackLinks(artistID ...uuid.UUID) ([]*models.ArtistTrackEntry, error)
@@ -23,7 +23,7 @@ type ArtistTrackSvc struct {
 }
 
 // NewArtistTrackSvc creates a new instance of the ArtistTrackSvc struct.
-func NewArtistTrackSvc(database logic.DbOperations) ArtistTrackOps {
+func NewArtistTrackSvc(database logic.DbOperations) ArtistTrackData {
 	return &ArtistTrackSvc{DbOperations: database}
 }
 

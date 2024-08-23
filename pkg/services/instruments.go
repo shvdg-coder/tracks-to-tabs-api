@@ -1,31 +1,23 @@
 package services
 
 import (
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/database"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
 )
 
-// ArtistTrackOps represents the operations related to instruments.
-type Operations interface {
-	database.TabsOps
-	InstrumentsToMap(instruments []*models.InstrumentEntry) map[uint]*models.InstrumentEntry
+// InstrumentOps represents the operations related to instruments.
+type InstrumentOps interface {
+	data.InstrumentData
+	mappers.InstrumentMapper
 }
 
-// ArtistTrackSvc is responsible for managing instruments.
-type Service struct {
-	database.TabsOps
+// InstrumentSvc is responsible for managing instruments.
+type InstrumentSvc struct {
+	data.InstrumentData
+	mappers.InstrumentMapper
 }
 
-// NewTrackSvc creates a new instance of ArtistTrackSvc.
-func NewService(data database.TabsOps) Operations {
-	return &Service{TabsOps: data}
-}
-
-// InstrumentsToMap transforms a slice of InstrumentEntry's into map, where the key is the ID and the value the InstrumentEntry.
-func (s *Service) InstrumentsToMap(instruments []*models.InstrumentEntry) map[uint]*models.InstrumentEntry {
-	instrumentMap := make(map[uint]*models.InstrumentEntry)
-	for _, instrument := range instruments {
-		instrumentMap[instrument.ID] = instrument
-	}
-	return instrumentMap
+// NewInstrumentSvc creates a new instance of InstrumentSvc.
+func NewInstrumentSvc(data data.InstrumentData, mapper mappers.InstrumentMapper) InstrumentOps {
+	return &InstrumentSvc{InstrumentData: data, InstrumentMapper: mapper}
 }

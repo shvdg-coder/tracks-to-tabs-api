@@ -1,18 +1,18 @@
 package services
 
-import "github.com/shvdg-dev/tunes-to-tabs-api/pkg/database"
+import "github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 
-// ArtistTrackOps represents operations related to endpoints.
-type Operations interface {
-	database.TabsOps
+// EndpointOps represents operations related to endpoints.
+type EndpointOps interface {
+	data.EndpointsData
 }
 
-// ArtistTrackSvc is responsible for managing endpoints.
-type Service struct {
-	database.TabsOps
+// EndpointSvc is responsible for managing endpoints.
+type EndpointSvc struct {
+	data.EndpointsData
 }
 
-// NewTrackSvc instantiates a new ArtistTrackSvc.
-func NewService(data database.TabsOps) Operations {
-	return &Service{TabsOps: data}
+// NewEndpointSvc instantiates a new EndpointSvc.
+func NewEndpointSvc(data data.EndpointsData) EndpointOps {
+	return &EndpointSvc{EndpointsData: data}
 }

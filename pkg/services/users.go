@@ -1,18 +1,18 @@
 package services
 
-import "github.com/shvdg-dev/tunes-to-tabs-api/pkg/database"
+import "github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 
-// Operations represents the operations related to users.
-type Operations interface {
-	database.UserOps
+// UserOps represents the operations related to users.
+type UserOps interface {
+	data.UserData
 }
 
-// Service is responsible for managing users.
-type Service struct {
-	database.UserOps
+// UserSvc is responsible for managing users.
+type UserSvc struct {
+	data.UserData
 }
 
-// NewService creates a new instance of Service
-func NewService(data database.UserOps) Operations {
-	return &Service{UserOps: data}
+// NewUserSvc creates a new instance of UserSvc.
+func NewUserSvc(data data.UserData) UserOps {
+	return &UserSvc{UserData: data}
 }

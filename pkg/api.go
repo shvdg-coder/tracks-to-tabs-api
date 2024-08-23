@@ -1,36 +1,31 @@
 package pkg
 
 import (
-	"github.com/google/uuid"
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/database"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
-	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 )
 
-// DataOperations represents all API data operations.
-type DataOperations interface {
-	database.ArtistOps
-	GetArtistsCascading(artistID ...uuid.UUID) ([]*models.ArtistEntry, error)
-	trk.DataOperations
-	GetTracksCascading(tabID ...uuid.UUID) ([]*models.Track, error)
-	database.TabsOps
-	database.TrackOps
-	database.TabsOps
-	database.UserOps
-	database.TabsOps
-	database.TabsOps
-	database.TabsOps
-	database.TabsOps
-	database.TabsOps
+// DataOps represents all API data operations.
+type DataOps interface {
+	data.ArtistData
+	data.TrackData
+	data.TabData
+	data.DifficultyData
+	data.InstrumentData
+	data.ReferenceData
+	data.SourceData
+	data.EndpointsData
+	data.ArtistTrackData
+	data.TrackTabData
+	data.UserData
 }
 
 // API represents the main entry point to interact with functionalities for the defined entities.
 type API struct {
-	Operations
+	SvcOps
 }
 
 // NewAPI creates a new instance of the API.
-func NewAPI(database logic.DbOperations) DataOperations {
-	return &API{Operations: NewServiceManager(database)}
+func NewAPI(database logic.DbOperations) DataOps {
+	return &API{SvcOps: NewSvcManager(database)}
 }

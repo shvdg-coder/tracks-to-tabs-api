@@ -2,148 +2,137 @@ package pkg
 
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/database"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
-	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/services"
-	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/services"
 )
 
-type ArtistsService struct{ art.Operations }
-type TracksService struct{ art.Operations }
-type TabsService struct{ art.Operations }
-type ArtistTrackService struct{ art.Operations }
-type TrackTabService struct{ art.Operations }
-type UsersService struct{ art.Operations }
-type InstrumentsService struct{ art.Operations }
-type DifficultiesService struct{ art.Operations }
-type SourcesService struct{ art.Operations }
-type EndpointsService struct{ art.Operations }
-type ReferencesService struct{ art.Operations }
-
-// Operations represents operations regarding all the services.
-type Operations interface {
-	art.Operations
-	art.Operations
-	art.Operations
-	art.Operations
-	art.Operations
-	art.Operations
-	art.Operations
-	art.Operations
-	art.Operations
-	art.Operations
-	art.Operations
+// SvcOps represents operations regarding all the services.
+type SvcOps interface {
+	services.ArtistOps
+	services.TrackOps
+	services.TabOps
+	services.InstrumentOps
+	services.DifficultyOps
+	services.ReferenceOps
+	services.SourceOps
+	services.EndpointOps
+	services.ArtistTrackOps
+	services.TrackTabOps
+	services.UserOps
 }
 
-// ServiceManager instantiates and handles the different services.
-type ServiceManager struct {
-	*ArtistsService
-	*TracksService
-	*TabsService
-	*ArtistTrackService
-	*TrackTabService
-	*UsersService
-	*InstrumentsService
-	*DifficultiesService
-	*SourcesService
-	*EndpointsService
-	*ReferencesService
+// SvcManager instantiates and handles the different services.
+type SvcManager struct {
+	services.ArtistOps
+	services.TrackOps
+	services.TabOps
+	services.InstrumentOps
+	services.DifficultyOps
+	services.ReferenceOps
+	services.SourceOps
+	services.EndpointOps
+	services.ArtistTrackOps
+	services.TrackTabOps
+	services.UserOps
 }
 
-// NewServiceManager creates a new instance of the ServiceManager.
-func NewServiceManager(database logic.DbOperations) Operations {
-	artistTrackService := createArtistTrackService(database)
-	trackTabService := createTrackTabService(database)
-	endpointsService := createEndpointsService(database)
-	sourcesService := createSourcesService(database, endpointsService)
-	referencesService := createReferencesService(database, sourcesService)
-	instrumentsService := createInstrumentsService(database)
-	difficultiesService := createDifficultiesService(database)
-	tabsService := createTabsService(database, instrumentsService, difficultiesService, referencesService)
-	tracksService := createTracksService(database, trackTabService, tabsService, referencesService)
+// NewSvcManager creates a new instance of the SvcManager.
+func NewSvcManager(database logic.DbOperations) SvcOps {
+	artistTrackSvc := createArtistTrackService(database)
+	trackTabSvc := createTrackTabSvc(database)
+	endpointsSvc := createEndpointsSvc(database)
+	sourcesSvc := createSourcesSvc(database, endpointsSvc)
+	referencesSvc := createReferencesSvc(database, sourcesSvc)
+	instrumentsSvc := createInstrumentsSvc(database)
+	difficultiesSvc := createDifficultiesSvc(database)
+	tabsSvc := createTabsSvc(database, instrumentsSvc, difficultiesSvc, referencesSvc)
+	tracksSvc := createTracksSvc(database, trackTabSvc, tabsSvc, referencesSvc)
 
-	return &ServiceManager{
-		ArtistsService:      createArtistsService(database, artistTrackService, tracksService, referencesService),
-		TracksService:       createTracksService(database, trackTabService, tabsService, referencesService),
-		TabsService:         tabsService,
-		ArtistTrackService:  artistTrackService,
-		TrackTabService:     trackTabService,
-		UsersService:        createUsersService(database),
-		InstrumentsService:  createInstrumentsService(database),
-		DifficultiesService: createDifficultiesService(database),
-		EndpointsService:    endpointsService,
-		SourcesService:      sourcesService,
-		ReferencesService:   referencesService,
+	return &SvcManager{
+		ArtistOps:      createArtistsSvc(database, artistTrackSvc, tracksSvc, referencesSvc),
+		TrackOps:       createTracksSvc(database, trackTabSvc, tabsSvc, referencesSvc),
+		TabOps:         tabsSvc,
+		ArtistTrackOps: artistTrackSvc,
+		TrackTabOps:    trackTabSvc,
+		UserOps:        createUsersService(database),
+		InstrumentOps:  createInstrumentsSvc(database),
+		DifficultyOps:  createDifficultiesSvc(database),
+		EndpointOps:    endpointsSvc,
+		SourceOps:      sourcesSvc,
+		ReferenceOps:   referencesSvc,
 	}
 }
 
-// createArtistsService creates an ArtistsService.
-func createArtistsService(db logic.DbOperations, artistTrack *ArtistTrackService, tracks *TracksService, references *ReferencesService) *ArtistsService {
-	artistDataService := database.NewTabSvc(db)
-	artistMappingService := mappers.NewArtistSvc()
-	return &ArtistsService{art.NewService(artistDataService, artistMappingService, artistTrack, tracks, references)}
+// createArtistsSvc creates a services.ArtistOps.
+func createArtistsSvc(db logic.DbOperations, artistTrack services.ArtistTrackOps, tracks services.TrackOps, references services.ReferenceOps) services.ArtistOps {
+	artistDataSvc := data.NewArtistSvc(db)
+	artistMappingSvc := mappers.NewArtistSvc()
+	return services.NewArtistSvc(artistDataSvc, artistMappingSvc, artistTrack, tracks, references)
 }
 
-// createTracksService creates a TracksService.
-func createTracksService(db logic.DbOperations, trackTab *TrackTabService, tabs *TabsService, references *ReferencesService) *TracksService {
-	trackDataService := trk.NewDataService(db)
-	trackMappingService := mappers.NewTabSvc()
-	return &TracksService{art.NewService(trackDataService, trackMappingService, trackTab, tabs, references)}
+// createTracksSvc creates a services.TrackOps.
+func createTracksSvc(db logic.DbOperations, trackTab services.TrackTabOps, tabs services.TabOps, references services.ReferenceOps) services.TrackOps {
+	trackDataSvc := data.NewTrackSvc(db)
+	trackMappingSvc := mappers.NewTrackSvc()
+	return services.NewTrackSvc(trackDataSvc, trackMappingSvc, trackTab, tabs, references)
 }
 
-// createTabsService creates a TabsService.
-func createTabsService(db logic.DbOperations, instruments *InstrumentsService, difficulties *DifficultiesService, references *ReferencesService) *TabsService {
-	tabDataService := database.NewTabSvc(db)
-	tabMappingService := mappers.NewTabSvc()
-	return &TabsService{art.NewService(tabDataService, tabMappingService, instruments, difficulties, references)}
+// createTabsSvc creates a services.TabOps.
+func createTabsSvc(db logic.DbOperations, instruments services.InstrumentOps, difficulties services.DifficultyOps, references services.ReferenceOps) services.TabOps {
+	tabDataSvc := data.NewTabSvc(db)
+	tabMappingSvc := mappers.NewTabSvc()
+	return services.NewTabSvc(tabDataSvc, tabMappingSvc, instruments, difficulties, references)
 }
 
-// createArtistTrackService creates an ArtistTrackService.
-func createArtistTrackService(db logic.DbOperations) *ArtistTrackService {
-	artistTrackDataService := database.NewTabSvc(db)
-	return &ArtistTrackService{art.NewService(artistTrackDataService)}
+// createArtistTrackService creates an services.ArtistTrackOps.
+func createArtistTrackService(db logic.DbOperations) services.ArtistTrackOps {
+	artistTrackDataSvc := data.NewArtistTrackSvc(db)
+	return services.NewArtistTrackSvc(artistTrackDataSvc)
 }
 
-// createTrackTabService creates a TrackTabService.
-func createTrackTabService(db logic.DbOperations) *TrackTabService {
-	trackTabDataService := database.NewTabSvc(db)
-	return &TrackTabService{art.NewService(trackTabDataService)}
+// createTrackTabSvc creates a services.TrackTabOps.
+func createTrackTabSvc(db logic.DbOperations) services.TrackTabOps {
+	trackTabDataSvc := data.NewTrackTabSvc(db)
+	return services.NewTrackTabSvc(trackTabDataSvc)
 }
 
-// createUsersService creates a UsersService.
-func createUsersService(db logic.DbOperations) *UsersService {
-	usersDataService := database.NewUserSvc(db)
-	return &UsersService{art.NewService(usersDataService)}
+// createUsersService creates a services.UserOps.
+func createUsersService(db logic.DbOperations) services.UserOps {
+	usersDataSvc := data.NewUserSvc(db)
+	return services.NewUserSvc(usersDataSvc)
 }
 
-// createInstrumentsService creates an InstrumentsService.
-func createInstrumentsService(db logic.DbOperations) *InstrumentsService {
-	instrumentsDataService := database.NewTabSvc(db)
-	return &InstrumentsService{art.NewService(instrumentsDataService)}
+// createInstrumentsSvc creates a services.InstrumentOps.
+func createInstrumentsSvc(db logic.DbOperations) services.InstrumentOps {
+	instrumentsDataSvc := data.NewInstrumentSvc(db)
+	instrumentMappingSvc := mappers.NewInstrumentSvc()
+	return services.NewInstrumentSvc(instrumentsDataSvc, instrumentMappingSvc)
 }
 
-// createDifficultiesService creates a DifficultiesService.
-func createDifficultiesService(db logic.DbOperations) *DifficultiesService {
-	difficultiesDataService := database.NewTabSvc(db)
-	return &DifficultiesService{art.NewService(difficultiesDataService)}
+// createDifficultiesSvc creates a services.DifficultyOps.
+func createDifficultiesSvc(db logic.DbOperations) services.DifficultyOps {
+	difficultiesDataSvc := data.NewDifficultySvc(db)
+	difficultiesMappingSvc := mappers.NewDifficultySvc()
+	return services.NewDifficultySvc(difficultiesDataSvc, difficultiesMappingSvc)
 }
 
-// createSourcesService creates a SourcesService.
-func createSourcesService(db logic.DbOperations, endpoints *EndpointsService) *SourcesService {
-	sourceDataService := database.NewTabSvc(db)
-	sourceMappingService := mappers.NewTabSvc()
-	return &SourcesService{art.NewService(sourceDataService, sourceMappingService, endpoints)}
+// createSourcesSvc creates a services.SourceOps.
+func createSourcesSvc(db logic.DbOperations, endpoints services.EndpointOps) services.SourceOps {
+	sourceDataSvc := data.NewSourceSvc(db)
+	sourceMappingSvc := mappers.NewSourceSvc()
+	return services.NewSourceSvc(sourceDataSvc, sourceMappingSvc, endpoints)
 }
 
-// createEndpointsService creates an EndpointsService.
-func createEndpointsService(db logic.DbOperations) *EndpointsService {
-	endpointsDataService := database.NewTabSvc(db)
-	return &EndpointsService{art.NewService(endpointsDataService)}
+// createEndpointsSvc creates a services.EndpointOps.
+func createEndpointsSvc(db logic.DbOperations) services.EndpointOps {
+	endpointsDataSvc := data.NewEndpointSvc(db)
+	return services.NewEndpointSvc(endpointsDataSvc)
 }
 
-// createReferencesService creates a ReferencesService.
-func createReferencesService(db logic.DbOperations, sources *SourcesService) *ReferencesService {
-	referencesDataService := database.NewTabSvc(db)
-	referencesMappingService := mappers.NewTabSvc()
-	return &ReferencesService{art.NewService(referencesDataService, referencesMappingService, sources)}
+// createReferencesSvc creates a services.ReferenceOps.
+func createReferencesSvc(db logic.DbOperations, sources services.SourceOps) services.ReferenceOps {
+	referencesDataSvc := data.NewReferenceSvc(db)
+	referencesMappingSvc := mappers.NewReferenceSvc()
+	return services.NewReferenceSvc(referencesDataSvc, referencesMappingSvc, sources)
 }

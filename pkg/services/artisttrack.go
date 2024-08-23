@@ -2,28 +2,28 @@ package services
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/database"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
 // ArtistTrackOps represents all operations related to 'artist to track' links.
-type Operations interface {
-	database.TrackOps
+type ArtistTrackOps interface {
+	data.ArtistTrackData
 	ExtractTrackIDs(artistTracks []*models.ArtistTrackEntry) []uuid.UUID
 }
 
 // ArtistTrackSvc is responsible for managing and retrieving 'artist to track' links.
-type Service struct {
-	database.TrackOps
+type ArtistTrackSvc struct {
+	data.ArtistTrackData
 }
 
-// NewTrackSvc instantiates a ArtistTrackSvc.
-func NewService(data database.TrackOps) Operations {
-	return &Service{TrackOps: data}
+// NewArtistTrackSvc instantiates a ArtistTrackSvc.
+func NewArtistTrackSvc(data data.ArtistTrackData) ArtistTrackOps {
+	return &ArtistTrackSvc{ArtistTrackData: data}
 }
 
-// ExtractTrackIDs retrieves the track IDs from each ArtistTrackEntry.
-func (s *Service) ExtractTrackIDs(artistTracks []*models.ArtistTrackEntry) []uuid.UUID {
+// ExtractTrackIDs retrieves the track IDs from the models.ArtistTrackEntry's.
+func (at *ArtistTrackSvc) ExtractTrackIDs(artistTracks []*models.ArtistTrackEntry) []uuid.UUID {
 	var trackIDs []uuid.UUID
 	for _, link := range artistTracks {
 		trackIDs = append(trackIDs, link.TrackID)

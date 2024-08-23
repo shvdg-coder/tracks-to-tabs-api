@@ -2,32 +2,32 @@ package services
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/database"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
-// ArtistTrackOps represents all operations related to artists.
-type Operations interface {
-	database.ArtistOps
+// ArtistOps represents all operations related to artists.
+type ArtistOps interface {
+	data.ArtistData
 	mappers.ArtistMapper
 	GetArtistsCascading(artistID ...uuid.UUID) ([]*models.ArtistEntry, error)
 }
 
-// ArtistTrackSvc is responsible for managing and retrieving artists.
-type Service struct {
-	database.ArtistOps
+// ArtistSvc is responsible for managing and retrieving artists.
+type ArtistSvc struct {
+	data.ArtistData
 	mappers.ArtistMapper
-	ArtistTrackOps Operations
-	TrackOps       Operations
-	ReferenceOps   Operations
+	ArtistTrackOps ArtistTrackOps
+	TrackOps       TrackOps
+	ReferenceOps   ReferenceOps
 }
 
-// NewTrackSvc instantiates a ArtistTrackSvc.
-func NewService(data database.ArtistOps, mapping mappers.ArtistMapper, artistTracks Operations, tracks Operations, references Operations) Operations {
-	return &Service{
-		ArtistOps:      data,
-		ArtistOps:      mapping,
+// NewArtistSvc instantiates a ArtistSvc.
+func NewArtistSvc(data data.ArtistData, mapper mappers.ArtistMapper, artistTracks ArtistTrackOps, tracks TrackOps, references ReferenceOps) ArtistOps {
+	return &ArtistSvc{
+		ArtistData:     data,
+		ArtistMapper:   mapper,
 		ArtistTrackOps: artistTracks,
 		TrackOps:       tracks,
 		ReferenceOps:   references,
@@ -35,33 +35,6 @@ func NewService(data database.ArtistOps, mapping mappers.ArtistMapper, artistTra
 }
 
 // GetArtistsCascading retrieves artists, with entity references, for the provided IDs.
-func (s *Service) GetArtistsCascading(artistID ...uuid.UUID) ([]*models.ArtistEntry, error) {
-	artists, err := s.GetArtists(artistID...)
-	if err != nil {
-		return nil, err
-	}
-
-	artistTracks, err := s.ArtistTrackOps.GetArtistToTrackLinks(artistID...)
-	if err != nil {
-		return nil, err
-	}
-
-	trackIDs := s.ArtistTrackOps.ExtractTrackIDs(artistTracks)
-	tracks, err := s.TrackOps.GetTracksCascading(trackIDs...)
-	if err != nil {
-		return nil, err
-	}
-
-	references, err := s.ReferenceOps.GetReferencesCascading(artistID...)
-	if err != nil {
-		return nil, err
-	}
-
-	artistsMap := s.ArtistsToMap(artists)
-	tracksMap := s.TrackOps.TracksToMap(tracks)
-
-	artists = s.MapTracksToArtists(artistTracks, artistsMap, tracksMap)
-	artists = s.MapReferencesToArtists(artistsMap, references)
-
-	return artists, nil
+func (a *ArtistSvc) GetArtistsCascading(artistID ...uuid.UUID) ([]*models.ArtistEntry, error) {
+	return nil, nil
 }

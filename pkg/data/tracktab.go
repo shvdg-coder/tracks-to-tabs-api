@@ -1,4 +1,4 @@
-package database
+package data
 
 import (
 	"github.com/google/uuid"
@@ -9,8 +9,8 @@ import (
 	"log"
 )
 
-// TrackTabOps represents operations related to 'track to tab' links.
-type TrackTabOps interface {
+// TrackTabData represents operations related to 'track to tab' links.
+type TrackTabData interface {
 	LinkTrackToTab(trackID, tabID uuid.UUID)
 	GetTrackToTabLink(trackID uuid.UUID) (*models.TrackTabEntry, error)
 	GetTrackToTabLinks(trackID ...uuid.UUID) ([]*models.TrackTabEntry, error)
