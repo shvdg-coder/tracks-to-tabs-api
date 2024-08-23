@@ -4,34 +4,28 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
-// MappingOperations represents operations related to reference data mapping.
-type MappingOperations interface {
+// ReferenceMapper represents operations related to reference data mapping.
+type ReferenceMapper interface {
 	MapSourcesToReferences(references []*models.Reference, sourcesMap map[uint]*models.Source) []*models.Reference
 }
 
-// MappingService is responsible for mapping entities to references.
-type MappingService struct {
-	MappingOperations
+// ReferenceSvc is responsible for mapping entities to references.
+type ReferenceSvc struct {
+	ReferenceMapper
 }
 
-// NewMappingService creates a new instance of MappingService.
-func NewMappingService() MappingOperations {
-	return &MappingService{}
+// NewReferenceSvc creates a new instance of ReferenceSvc.
+func NewReferenceSvc() ReferenceMapper {
+	return &ReferenceSvc{}
 }
 
 // MapSourcesToReferences maps the sources.Source's to the Reference's.
-func (m *MappingService) MapSourcesToReferences(references []*models.Reference, sourcesMap map[uint]*models.Source) []*models.Reference {
+func (m *ReferenceSvc) MapSourcesToReferences(references []*models.Reference, sourcesMap map[uint]*models.Source) []*models.Reference {
 	for _, reference := range references {
-		if reference.Source == nil {
-			continue
-		}
-		source, ok := sourcesMap[reference.Source.ID]
-		if !ok {
-			continue
-		}
+		source := sourcesMap[reference.Source.ID]
 		reference.Source = source
 	}
-	var referencesResult []*references.Reference
+	var referencesResult []*models.Reference
 	for _, reference := range references {
 		referencesResult = append(referencesResult, reference)
 	}

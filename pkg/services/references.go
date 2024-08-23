@@ -10,20 +10,20 @@ import (
 // ArtistTrackOps represents operations related to references.
 type Operations interface {
 	database.TabsOps
-	mappers.MappingOperations
+	mappers.TabMapper
 	GetReferencesCascading(internalID ...uuid.UUID) ([]*models.Reference, error)
 }
 
 // ArtistTrackSvc is responsible for managing references.
 type Service struct {
 	database.TabsOps
-	mappers.MappingOperations
+	mappers.TabMapper
 	SourcesOps Operations
 }
 
 // NewTrackSvc instantiates a new ArtistTrackSvc.
-func NewService(data database.TabsOps, mapping mappers.MappingOperations, sources Operations) Operations {
-	return &Service{TabsOps: data, MappingOperations: mapping, SourcesOps: sources}
+func NewService(data database.TabsOps, mapping mappers.TabMapper, sources Operations) Operations {
+	return &Service{TabsOps: data, TabMapper: mapping, SourcesOps: sources}
 }
 
 // GetReferencesCascading retrieves the Reference's with all their references.

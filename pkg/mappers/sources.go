@@ -1,28 +1,28 @@
 package mappers
 
 import (
-	end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
-// MappingOperations represents operations related to source data mapping.
-type MappingOperations interface {
-	SourcesToMap(sources []*end.Source) map[uint]*end.Source
-	MapEndpointsToSources(map[uint]*end.Source, []*end.EndpointEntry) []*end.Source
+// SourceMapper represents operations related to source data mapping.
+type SourceMapper interface {
+	SourcesToMap(sources []*models.Source) map[uint]*models.Source
+	MapEndpointsToSources(map[uint]*models.Source, []*models.EndpointEntry) []*models.Source
 }
 
-// MappingService is responsible for mapping entities to sources.
-type MappingService struct {
-	MappingOperations
+// SourceSvc is responsible for mapping entities to sources.
+type SourceSvc struct {
+	SourceMapper
 }
 
-// NewMappingService creates a new instance of MappingService.
-func NewMappingService() MappingOperations {
-	return &MappingService{}
+// NewSourceSvc creates a new instance of ReferenceSvc.
+func NewSourceSvc() SourceMapper {
+	return &SourceSvc{}
 }
 
 // SourcesToMap transforms a slice of sources into a map where the key is the ID and the value the Source.
-func (m *MappingService) SourcesToMap(sources []*end.Source) map[uint]*end.Source {
-	sourcesMap := make(map[uint]*sources.Source)
+func (m *SourceSvc) SourcesToMap(sources []*models.Source) map[uint]*models.Source {
+	sourcesMap := make(map[uint]*models.Source)
 	for _, source := range sources {
 		sourcesMap[source.ID] = source
 	}
@@ -30,14 +30,12 @@ func (m *MappingService) SourcesToMap(sources []*end.Source) map[uint]*end.Sourc
 }
 
 // MapEndpointsToSources maps the endpoints.EndpointEntry's to the Source's.
-func (m *MappingService) MapEndpointsToSources(sourcesMap map[uint]*end.Source, endpoints []*end.EndpointEntry) []*end.Source {
+func (m *SourceSvc) MapEndpointsToSources(sourcesMap map[uint]*models.Source, endpoints []*models.EndpointEntry) []*models.Source {
 	for _, endpoint := range endpoints {
-		source, ok := sourcesMap[endpoint.SourceID]
-		if ok {
-			source.Endpoints = append(source.Endpoints, endpoint)
-		}
+		source := sourcesMap[endpoint.SourceID]
+		source.Endpoints = append(source.Endpoints, endpoint)
 	}
-	var sources []*end.Source
+	var sources []*models.Source
 	for _, source := range sourcesMap {
 		sources = append(sources, source)
 	}

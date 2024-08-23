@@ -5,26 +5,26 @@ import (
 	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
-// ArtistOps represents operations related to artist data mapping.
-type ArtistOps interface {
-	ArtistsToMap(artists []*trk.ArtistEntry) map[uuid.UUID]*trk.ArtistEntry
-	MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, artistsMap map[uuid.UUID]*trk.ArtistEntry, tracksMap map[uuid.UUID]*trk.Track) []*trk.ArtistEntry
-	MapReferencesToArtists(artistsMap map[uuid.UUID]*trk.ArtistEntry, references []*trk.Reference) []*trk.ArtistEntry
+// ArtistMapper represents operations related to artist data mapping.
+type ArtistMapper interface {
+	ArtistsToMap(artists []*trk.Artist) map[uuid.UUID]*trk.Artist
+	MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, artistsMap map[uuid.UUID]*trk.Artist, tracksMap map[uuid.UUID]*trk.Track) []*trk.Artist
+	MapReferencesToArtists(artistsMap map[uuid.UUID]*trk.Artist, references []*trk.Reference) []*trk.Artist
 }
 
-// ArtistServ is responsible for mapping entities to artists.
-type ArtistServ struct {
-	ArtistOps
+// ArtistSvc is responsible for mapping entities to artists.
+type ArtistSvc struct {
+	ArtistMapper
 }
 
-// NewArtistServ creates a new instance of ArtistServ.
-func NewArtistServ() ArtistOps {
-	return &ArtistServ{}
+// NewArtistSvc creates a new instance of ArtistSvc.
+func NewArtistSvc() ArtistMapper {
+	return &ArtistSvc{}
 }
 
 // ArtistsToMap transforms a slice of artists into a map where the key is the ID and the value the ArtistEntry.
-func (m *ArtistServ) ArtistsToMap(artists []*trk.ArtistEntry) map[uuid.UUID]*trk.ArtistEntry {
-	artistMap := make(map[uuid.UUID]*trk.ArtistEntry)
+func (m *ArtistSvc) ArtistsToMap(artists []*trk.Artist) map[uuid.UUID]*trk.Artist {
+	artistMap := make(map[uuid.UUID]*trk.Artist)
 	for _, artist := range artists {
 		artistMap[artist.ID] = artist
 	}
@@ -32,19 +32,13 @@ func (m *ArtistServ) ArtistsToMap(artists []*trk.ArtistEntry) map[uuid.UUID]*trk
 }
 
 // MapTracksToArtists adds the tracks to the artist.
-func (m *ArtistServ) MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, artistsMap map[uuid.UUID]*trk.ArtistEntry, tracksMap map[uuid.UUID]*trk.Track) []*trk.ArtistEntry {
+func (m *ArtistSvc) MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, artistsMap map[uuid.UUID]*trk.Artist, tracksMap map[uuid.UUID]*trk.Track) []*trk.Artist {
 	for _, link := range artistTracks {
-		artist, ok := artistsMap[link.ArtistID]
-		if !ok {
-			continue
-		}
-		track, ok := tracksMap[link.TrackID]
-		if !ok {
-			continue
-		}
+		artist := artistsMap[link.ArtistID]
+		track := tracksMap[link.TrackID]
 		artist.Tracks = append(artist.Tracks, track)
 	}
-	var artists []*trk.ArtistEntry
+	var artists []*trk.Artist
 	for _, artist := range artistsMap {
 		artists = append(artists, artist)
 	}
@@ -52,15 +46,12 @@ func (m *ArtistServ) MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, ar
 }
 
 // MapReferencesToArtists maps references.Reference's to ArtistEntry's.
-func (m *ArtistServ) MapReferencesToArtists(artistsMap map[uuid.UUID]*trk.ArtistEntry, references []*trk.Reference) []*trk.ArtistEntry {
+func (m *ArtistSvc) MapReferencesToArtists(artistsMap map[uuid.UUID]*trk.Artist, references []*trk.Reference) []*trk.Artist {
 	for _, reference := range references {
-		artist, ok := artistsMap[reference.InternalID]
-		if !ok {
-			continue
-		}
+		artist := artistsMap[reference.InternalID]
 		artist.References = append(artist.References, reference)
 	}
-	var artists []*trk.ArtistEntry
+	var artists []*trk.Artist
 	for _, artist := range artistsMap {
 		artists = append(artists, artist)
 	}

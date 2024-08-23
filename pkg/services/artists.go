@@ -10,21 +10,21 @@ import (
 // ArtistTrackOps represents all operations related to artists.
 type Operations interface {
 	database.ArtistOps
-	mappers.ArtistOps
+	mappers.ArtistMapper
 	GetArtistsCascading(artistID ...uuid.UUID) ([]*models.ArtistEntry, error)
 }
 
 // ArtistTrackSvc is responsible for managing and retrieving artists.
 type Service struct {
 	database.ArtistOps
-	mappers.ArtistOps
+	mappers.ArtistMapper
 	ArtistTrackOps Operations
 	TrackOps       Operations
 	ReferenceOps   Operations
 }
 
 // NewTrackSvc instantiates a ArtistTrackSvc.
-func NewService(data database.ArtistOps, mapping mappers.ArtistOps, artistTracks Operations, tracks Operations, references Operations) Operations {
+func NewService(data database.ArtistOps, mapping mappers.ArtistMapper, artistTracks Operations, tracks Operations, references Operations) Operations {
 	return &Service{
 		ArtistOps:      data,
 		ArtistOps:      mapping,

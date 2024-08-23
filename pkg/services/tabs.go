@@ -10,27 +10,27 @@ import (
 // ArtistTrackOps represent all operations related to tabs.
 type Operations interface {
 	database.TabsOps
-	mappers.MappingOperations
+	mappers.TabMapper
 	GetTabsCascading(tabID ...uuid.UUID) ([]*models.Tab, error)
 }
 
 // ArtistTrackSvc is responsible for managing and retrieving tabs.
 type Service struct {
 	database.TabsOps
-	mappers.MappingOperations
+	mappers.TabMapper
 	InstrumentOps Operations
 	DifficultyOps Operations
 	ReferenceOps  Operations
 }
 
 // NewTrackSvc instantiates a ArtistTrackSvc.
-func NewService(data database.TabsOps, mapping mappers.MappingOperations, instruments Operations, difficulties Operations, references Operations) Operations {
+func NewService(data database.TabsOps, mapping mappers.TabMapper, instruments Operations, difficulties Operations, references Operations) Operations {
 	return &Service{
-		TabsOps:           data,
-		MappingOperations: mapping,
-		InstrumentOps:     instruments,
-		DifficultyOps:     difficulties,
-		ReferenceOps:      references,
+		TabsOps:       data,
+		TabMapper:     mapping,
+		InstrumentOps: instruments,
+		DifficultyOps: difficulties,
+		ReferenceOps:  references,
 	}
 }
 

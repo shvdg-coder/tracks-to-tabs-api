@@ -80,21 +80,21 @@ func NewServiceManager(database logic.DbOperations) Operations {
 // createArtistsService creates an ArtistsService.
 func createArtistsService(db logic.DbOperations, artistTrack *ArtistTrackService, tracks *TracksService, references *ReferencesService) *ArtistsService {
 	artistDataService := database.NewTabSvc(db)
-	artistMappingService := mappers.NewArtistServ()
+	artistMappingService := mappers.NewArtistSvc()
 	return &ArtistsService{art.NewService(artistDataService, artistMappingService, artistTrack, tracks, references)}
 }
 
 // createTracksService creates a TracksService.
 func createTracksService(db logic.DbOperations, trackTab *TrackTabService, tabs *TabsService, references *ReferencesService) *TracksService {
 	trackDataService := trk.NewDataService(db)
-	trackMappingService := mappers.NewMappingService()
+	trackMappingService := mappers.NewTabSvc()
 	return &TracksService{art.NewService(trackDataService, trackMappingService, trackTab, tabs, references)}
 }
 
 // createTabsService creates a TabsService.
 func createTabsService(db logic.DbOperations, instruments *InstrumentsService, difficulties *DifficultiesService, references *ReferencesService) *TabsService {
 	tabDataService := database.NewTabSvc(db)
-	tabMappingService := mappers.NewMappingService()
+	tabMappingService := mappers.NewTabSvc()
 	return &TabsService{art.NewService(tabDataService, tabMappingService, instruments, difficulties, references)}
 }
 
@@ -131,7 +131,7 @@ func createDifficultiesService(db logic.DbOperations) *DifficultiesService {
 // createSourcesService creates a SourcesService.
 func createSourcesService(db logic.DbOperations, endpoints *EndpointsService) *SourcesService {
 	sourceDataService := database.NewTabSvc(db)
-	sourceMappingService := mappers.NewMappingService()
+	sourceMappingService := mappers.NewTabSvc()
 	return &SourcesService{art.NewService(sourceDataService, sourceMappingService, endpoints)}
 }
 
@@ -144,6 +144,6 @@ func createEndpointsService(db logic.DbOperations) *EndpointsService {
 // createReferencesService creates a ReferencesService.
 func createReferencesService(db logic.DbOperations, sources *SourcesService) *ReferencesService {
 	referencesDataService := database.NewTabSvc(db)
-	referencesMappingService := mappers.NewMappingService()
+	referencesMappingService := mappers.NewTabSvc()
 	return &ReferencesService{art.NewService(referencesDataService, referencesMappingService, sources)}
 }
