@@ -41,8 +41,6 @@ func (a *ArtistSvc) GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error) 
 		return nil, err
 	}
 
-	artists := a.ArtistEntriesToArtists(artistEntries)
-
 	artistTracksEntries, err := a.GetArtistToTrackEntries(artistID...)
 	if err != nil {
 		return nil, err
@@ -54,15 +52,16 @@ func (a *ArtistSvc) GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error) 
 		return nil, err
 	}
 
-	artistsMap := a.ArtistsToMap(artists)
-	tracksMap := a.TracksToMap(tracks)
-	artistsMap = a.MapTracksToArtists(artistsMap, tracksMap, artistTracksEntries)
-
 	references, err := a.GetReferences(artistID...)
 	if err != nil {
 		return nil, err
 	}
 
+	artists := a.ArtistEntriesToArtists(artistEntries)
+	artistsMap := a.ArtistsToMap(artists)
+	tracksMap := a.TracksToMap(tracks)
+
+	artistsMap = a.MapTracksToArtists(artistsMap, tracksMap, artistTracksEntries)
 	artistsMap = a.MapReferencesToArtists(artistsMap, references)
 	artists = a.MapToArtists(artistsMap)
 
