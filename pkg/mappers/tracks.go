@@ -8,8 +8,8 @@ import (
 // TrackMapper represents operations related to track data mapping.
 type TrackMapper interface {
 	TracksToMap(tracks []*models.Track) map[uuid.UUID]*models.Track
-	MapTabsToTracks(trackTabs []*models.TrackTabEntry, tracksMap map[uuid.UUID]*models.Track, tabsMap map[uuid.UUID]*models.Tab) []*models.Track
-	MapReferencesToTracks(trackMap map[uuid.UUID]*models.Track, references []*models.Reference) []*models.Track
+	MapTabsToTracks(trackTabs []*models.TrackTabEntry, tracksMap map[uuid.UUID]*models.Track, tabsMap map[uuid.UUID]*models.Tab) map[uuid.UUID]*models.Track
+	MapReferencesToTracks(tracksMap map[uuid.UUID]*models.Track, references []*models.Reference) map[uuid.UUID]*models.Track
 }
 
 // TrackSvc is responsible for mapping entities to tracks.
@@ -32,28 +32,20 @@ func (m *TrackSvc) TracksToMap(tracks []*models.Track) map[uuid.UUID]*models.Tra
 }
 
 // MapTabsToTracks adds the tabs to the tracks.
-func (m *TrackSvc) MapTabsToTracks(trackTabs []*models.TrackTabEntry, tracksMap map[uuid.UUID]*models.Track, tabsMap map[uuid.UUID]*models.Tab) []*models.Track {
+func (m *TrackSvc) MapTabsToTracks(trackTabs []*models.TrackTabEntry, tracksMap map[uuid.UUID]*models.Track, tabsMap map[uuid.UUID]*models.Tab) map[uuid.UUID]*models.Track {
 	for _, link := range trackTabs {
 		track := tracksMap[link.TrackID]
 		tab := tabsMap[link.TabID]
 		track.Tabs = append(track.Tabs, tab)
 	}
-	var tracks []*models.Track
-	for _, track := range tracksMap {
-		tracks = append(tracks, track)
-	}
-	return tracks
+	return tracksMap
 }
 
 // MapReferencesToTracks maps references.Reference's to TrackEntry's.
-func (m *TrackSvc) MapReferencesToTracks(trackMap map[uuid.UUID]*models.Track, references []*models.Reference) []*models.Track {
+func (m *TrackSvc) MapReferencesToTracks(tracksMap map[uuid.UUID]*models.Track, references []*models.Reference) map[uuid.UUID]*models.Track {
 	for _, reference := range references {
-		track := trackMap[reference.InternalID]
+		track := tracksMap[reference.InternalID]
 		track.References = append(track.References, reference)
 	}
-	var tracks []*models.Track
-	for _, artist := range trackMap {
-		tracks = append(tracks, artist)
-	}
-	return tracks
+	return tracksMap
 }

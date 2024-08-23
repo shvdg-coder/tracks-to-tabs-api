@@ -25,9 +25,5 @@ func (m *ReferenceSvc) MapSourcesToReferences(references []*models.Reference, so
 		source := sourcesMap[reference.Source.ID]
 		reference.Source = source
 	}
-	var referencesResult []*models.Reference
-	for _, reference := range references {
-		referencesResult = append(referencesResult, reference)
-	}
-	return referencesResult
+	return references
 }

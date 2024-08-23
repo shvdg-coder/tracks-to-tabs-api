@@ -8,8 +8,8 @@ import (
 // ArtistMapper represents operations related to artist data mapping.
 type ArtistMapper interface {
 	ArtistsToMap(artists []*trk.Artist) map[uuid.UUID]*trk.Artist
-	MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, artistsMap map[uuid.UUID]*trk.Artist, tracksMap map[uuid.UUID]*trk.Track) []*trk.Artist
-	MapReferencesToArtists(artistsMap map[uuid.UUID]*trk.Artist, references []*trk.Reference) []*trk.Artist
+	MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, artistsMap map[uuid.UUID]*trk.Artist, tracksMap map[uuid.UUID]*trk.Track) map[uuid.UUID]*trk.Artist
+	MapReferencesToArtists(artistsMap map[uuid.UUID]*trk.Artist, references []*trk.Reference) map[uuid.UUID]*trk.Artist
 }
 
 // ArtistSvc is responsible for mapping entities to artists.
@@ -32,28 +32,20 @@ func (m *ArtistSvc) ArtistsToMap(artists []*trk.Artist) map[uuid.UUID]*trk.Artis
 }
 
 // MapTracksToArtists adds the tracks to the artist.
-func (m *ArtistSvc) MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, artistsMap map[uuid.UUID]*trk.Artist, tracksMap map[uuid.UUID]*trk.Track) []*trk.Artist {
-	for _, link := range artistTracks {
-		artist := artistsMap[link.ArtistID]
-		track := tracksMap[link.TrackID]
+func (m *ArtistSvc) MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, artistsMap map[uuid.UUID]*trk.Artist, tracksMap map[uuid.UUID]*trk.Track) map[uuid.UUID]*trk.Artist {
+	for _, artistTrack := range artistTracks {
+		artist := artistsMap[artistTrack.ArtistID]
+		track := tracksMap[artistTrack.TrackID]
 		artist.Tracks = append(artist.Tracks, track)
 	}
-	var artists []*trk.Artist
-	for _, artist := range artistsMap {
-		artists = append(artists, artist)
-	}
-	return artists
+	return artistsMap
 }
 
 // MapReferencesToArtists maps references.Reference's to ArtistEntry's.
-func (m *ArtistSvc) MapReferencesToArtists(artistsMap map[uuid.UUID]*trk.Artist, references []*trk.Reference) []*trk.Artist {
+func (m *ArtistSvc) MapReferencesToArtists(artistsMap map[uuid.UUID]*trk.Artist, references []*trk.Reference) map[uuid.UUID]*trk.Artist {
 	for _, reference := range references {
 		artist := artistsMap[reference.InternalID]
 		artist.References = append(artist.References, reference)
 	}
-	var artists []*trk.Artist
-	for _, artist := range artistsMap {
-		artists = append(artists, artist)
-	}
-	return artists
+	return artistsMap
 }

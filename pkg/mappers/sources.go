@@ -7,7 +7,7 @@ import (
 // SourceMapper represents operations related to source data mapping.
 type SourceMapper interface {
 	SourcesToMap(sources []*models.Source) map[uint]*models.Source
-	MapEndpointsToSources(map[uint]*models.Source, []*models.EndpointEntry) []*models.Source
+	MapEndpointsToSources(map[uint]*models.Source, []*models.EndpointEntry) map[uint]*models.Source
 }
 
 // SourceSvc is responsible for mapping entities to sources.
@@ -30,14 +30,10 @@ func (m *SourceSvc) SourcesToMap(sources []*models.Source) map[uint]*models.Sour
 }
 
 // MapEndpointsToSources maps the endpoints.EndpointEntry's to the Source's.
-func (m *SourceSvc) MapEndpointsToSources(sourcesMap map[uint]*models.Source, endpoints []*models.EndpointEntry) []*models.Source {
+func (m *SourceSvc) MapEndpointsToSources(sourcesMap map[uint]*models.Source, endpoints []*models.EndpointEntry) map[uint]*models.Source {
 	for _, endpoint := range endpoints {
 		source := sourcesMap[endpoint.SourceID]
 		source.Endpoints = append(source.Endpoints, endpoint)
 	}
-	var sources []*models.Source
-	for _, source := range sourcesMap {
-		sources = append(sources, source)
-	}
-	return sources
+	return sourcesMap
 }

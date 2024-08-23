@@ -8,9 +8,9 @@ import (
 // TabMapper represents operations related to tab data mapping.
 type TabMapper interface {
 	TabsToMap(tabs []*models.Tab) map[uuid.UUID]*models.Tab
-	MapInstrumentsToTabs(tabsMap map[uuid.UUID]*models.Tab, instruments map[uint]*models.InstrumentEntry) []*models.Tab
-	MapDifficultiesToTabs(tabsMap map[uuid.UUID]*models.Tab, difficulties map[uint]*models.DifficultyEntry) []*models.Tab
-	MapReferencesToTabs(tabsMap map[uuid.UUID]*models.Tab, references []*models.Reference) []*models.Tab
+	MapInstrumentsToTabs(tabsMap map[uuid.UUID]*models.Tab, instruments map[uint]*models.InstrumentEntry) map[uuid.UUID]*models.Tab
+	MapDifficultiesToTabs(tabsMap map[uuid.UUID]*models.Tab, difficulties map[uint]*models.DifficultyEntry) map[uuid.UUID]*models.Tab
+	MapReferencesToTabs(tabsMap map[uuid.UUID]*models.Tab, references []*models.Reference) map[uuid.UUID]*models.Tab
 }
 
 // TabSvc is responsible for mapping entities to tabs.
@@ -32,41 +32,29 @@ func (m *TabSvc) TabsToMap(tabs []*models.Tab) map[uuid.UUID]*models.Tab {
 	return tabsMap
 }
 
-// MapInstrumentsToTabs todo:
-func (m *TabSvc) MapInstrumentsToTabs(tabsMap map[uuid.UUID]*models.Tab, instruments map[uint]*models.InstrumentEntry) []*models.Tab {
+// MapInstrumentsToTabs maps models.Instrument's to models.Tab's.
+func (m *TabSvc) MapInstrumentsToTabs(tabsMap map[uuid.UUID]*models.Tab, instruments map[uint]*models.InstrumentEntry) map[uuid.UUID]*models.Tab {
 	for _, tab := range tabsMap {
 		instrument := instruments[tab.Instrument.ID]
 		tab.Instrument = instrument
 	}
-	var tabs []*models.Tab
-	for _, tab := range tabsMap {
-		tabs = append(tabs, tab)
-	}
-	return tabs
+	return tabsMap
 }
 
-// MapDifficultiesToTabs todo:
-func (m *TabSvc) MapDifficultiesToTabs(tabsMap map[uuid.UUID]*models.Tab, difficulties map[uint]*models.DifficultyEntry) []*models.Tab {
+// MapDifficultiesToTabs maps models.Difficulty's to models.Tab's.
+func (m *TabSvc) MapDifficultiesToTabs(tabsMap map[uuid.UUID]*models.Tab, difficulties map[uint]*models.DifficultyEntry) map[uuid.UUID]*models.Tab {
 	for _, tab := range tabsMap {
 		difficulty := difficulties[tab.Difficulty.ID]
 		tab.Difficulty = difficulty
 	}
-	var tabs []*models.Tab
-	for _, tab := range tabsMap {
-		tabs = append(tabs, tab)
-	}
-	return tabs
+	return tabsMap
 }
 
-// MapReferencesToTabs maps references.Reference's to Tab's.
-func (m *TabSvc) MapReferencesToTabs(tabsMap map[uuid.UUID]*models.Tab, references []*models.Reference) []*models.Tab {
+// MapReferencesToTabs maps models.Reference's to models.Tab's.
+func (m *TabSvc) MapReferencesToTabs(tabsMap map[uuid.UUID]*models.Tab, references []*models.Reference) map[uuid.UUID]*models.Tab {
 	for _, reference := range references {
 		tab := tabsMap[reference.InternalID]
 		tab.References = append(tab.References, reference)
 	}
-	var tabs []*models.Tab
-	for _, tab := range tabsMap {
-		tabs = append(tabs, tab)
-	}
-	return tabs
+	return tabsMap
 }
