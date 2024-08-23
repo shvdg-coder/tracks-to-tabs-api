@@ -11,16 +11,16 @@ import (
 type ArtistOps interface {
 	data.ArtistData
 	mappers.ArtistMapper
-	GetArtistsCascading(artistID ...uuid.UUID) ([]*models.ArtistEntry, error)
+	GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error)
 }
 
 // ArtistSvc is responsible for managing and retrieving artists.
 type ArtistSvc struct {
 	data.ArtistData
 	mappers.ArtistMapper
-	ArtistTrackOps ArtistTrackOps
-	TrackOps       TrackOps
-	ReferenceOps   ReferenceOps
+	ArtistTrackOps
+	TrackOps
+	ReferenceOps
 }
 
 // NewArtistSvc instantiates a ArtistSvc.
@@ -34,7 +34,37 @@ func NewArtistSvc(data data.ArtistData, mapper mappers.ArtistMapper, artistTrack
 	}
 }
 
-// GetArtistsCascading retrieves artists, with entity references, for the provided IDs.
-func (a *ArtistSvc) GetArtistsCascading(artistID ...uuid.UUID) ([]*models.ArtistEntry, error) {
-	return nil, nil
+// GetArtists retrieves artists, with entity references, for the provided IDs.
+func (a *ArtistSvc) GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error) {
+	artistEntries, err := a.GetArtistsEntries(artistID...)
+	if err != nil {
+		return nil, err
+	}
+
+	artists := a.ArtistEntriesToArtists(artistEntries)
+
+	artistTracksEntries, err := a.GetArtistToTrackEntries(artistID...)
+	if err != nil {
+		return nil, err
+	}
+
+	trackIDs := a.ExtractTrackIDs(artistTracksEntries)
+	tracks, err := a.GetTracks(trackIDs...)
+	if err != nil {
+		return nil, err
+	}
+
+	artistsMap := a.ArtistsToMap(artists)
+	tracksMap := a.TracksToMap(tracks)
+	artistsMap = a.MapTracksToArtists(artistsMap, tracksMap, artistTracksEntries)
+
+	references, err := a.GetReferences(artistID...)
+	if err != nil {
+		return nil, err
+	}
+
+	artistsMap = a.MapReferencesToArtists(artistsMap, references)
+	artists = a.MapToArtists(artistsMap)
+
+	return artists, nil
 }

@@ -10,7 +10,7 @@ import (
 type SourceOps interface {
 	data.SourceData
 	mappers.SourceMapper
-	GetSourcesCascading(sourceID ...uint) ([]*models.Source, error)
+	GetSources(sourceID ...uint) ([]*models.Source, error)
 }
 
 // SourceSvc is responsible for managing sources.
@@ -25,7 +25,7 @@ func NewSourceSvc(data data.SourceData, mapper mappers.SourceMapper, endpoints E
 	return &SourceSvc{SourceData: data, SourceMapper: mapper, EndpointOps: endpoints}
 }
 
-// GetSourcesCascading retrieves all sources with their references.
-func (s *SourceSvc) GetSourcesCascading(sourceID ...uint) ([]*models.Source, error) {
+// GetSources retrieves sources with their entity references.
+func (s *SourceSvc) GetSources(sourceID ...uint) ([]*models.Source, error) {
 	return nil, nil
 }

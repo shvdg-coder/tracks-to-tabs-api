@@ -11,9 +11,9 @@ import (
 
 // ReferenceData represents operations related to references in the database.
 type ReferenceData interface {
-	InsertReference(reference *models.Reference)
-	GetReference(internalID uuid.UUID) (*models.Reference, error)
-	GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error)
+	InsertReferenceEntry(reference *models.ReferenceEntry)
+	GetReferenceEntries(internalID ...uuid.UUID) ([]*models.ReferenceEntry, error)
+	GetReferenceEntry(internalID uuid.UUID) (*models.ReferenceEntry, error)
 }
 
 // ReferenceSvc is for managing references.
@@ -26,33 +26,27 @@ func NewReferenceSvc(database logic.DbOperations) ReferenceData {
 	return &ReferenceSvc{DbOperations: database}
 }
 
-// InsertReference inserts a record into the references table.
-func (d *ReferenceSvc) InsertReference(reference *models.Reference) {
-	_, err := d.Exec(queries.InsertReference, reference.InternalID, reference.Source.ID, reference.Category, reference.Type, reference.Reference)
+// InsertReferenceEntry inserts a record into the references table.
+func (d *ReferenceSvc) InsertReferenceEntry(reference *models.ReferenceEntry) {
+	_, err := d.Exec(queries.InsertReference, reference.InternalID, reference.SourceID, reference.Category, reference.Type, reference.Reference)
 	if err != nil {
-		log.Printf(
-			"Failed to insert reference with InternalID '%s', SourceID '%d', Category '%s', Type '%s', and Reference '%s': %s",
-			reference.InternalID, reference.Source.ID, reference.Category, reference.Type, reference.Reference, err.Error(),
-		)
+		log.Printf("Failed to insert reference: %s", err.Error())
 	} else {
-		log.Printf(
-			"Successfully inserted reference into the 'references' table with InternalID '%s', SourceID '%d', Category '%s', Type '%s', and Reference '%s'",
-			reference.InternalID, reference.Source.ID, reference.Category, reference.Type, reference.Reference,
-		)
+		log.Print("Successfully inserted reference")
 	}
 }
 
-// GetReference retrieves a reference
-func (d *ReferenceSvc) GetReference(internalID uuid.UUID) (*models.Reference, error) {
-	references, err := d.GetReferences(internalID)
+// GetReferenceEntry retrieves a reference entry, without entity references, for the provided internal ID.
+func (d *ReferenceSvc) GetReferenceEntry(internalID uuid.UUID) (*models.ReferenceEntry, error) {
+	references, err := d.GetReferenceEntries(internalID)
 	if err != nil {
 		return nil, err
 	}
 	return references[0], nil
 }
 
-// GetReferences retrieves the references from the provided internal IDs.
-func (d *ReferenceSvc) GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error) {
+// GetReferenceEntries retrieves reference entries, without entity references, for the provided internal IDs.
+func (d *ReferenceSvc) GetReferenceEntries(internalID ...uuid.UUID) ([]*models.ReferenceEntry, error) {
 	rows, err := d.Query(queries.GetReferences, pq.Array(internalID))
 	if err != nil {
 		return nil, err
@@ -60,15 +54,13 @@ func (d *ReferenceSvc) GetReferences(internalID ...uuid.UUID) ([]*models.Referen
 
 	defer rows.Close()
 
-	var references []*models.Reference
+	var references []*models.ReferenceEntry
 	for rows.Next() {
-		reference := &models.Reference{}
-		source := &models.Source{}
-		err := rows.Scan(&reference.InternalID, &source.ID, &reference.Category, &reference.Type, &reference.Reference)
+		reference := &models.ReferenceEntry{}
+		err := rows.Scan(&reference.InternalID, &reference.SourceID, &reference.Category, &reference.Type, &reference.Reference)
 		if err != nil {
 			return nil, err
 		}
-		reference.Source = source
 		references = append(references, reference)
 	}
 

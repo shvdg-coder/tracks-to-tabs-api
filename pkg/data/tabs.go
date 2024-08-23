@@ -12,10 +12,10 @@ import (
 
 // TabData represents operations related to tabs in the database.
 type TabData interface {
-	InsertTabs(tabs ...*models.Tab)
-	InsertTab(tab *models.Tab)
-	GetTab(tabID uuid.UUID) (*models.Tab, error)
-	GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error)
+	InsertTabEntries(tabs ...*models.TabEntry)
+	InsertTabEntry(tab *models.TabEntry)
+	GetTabEntries(tabID ...uuid.UUID) ([]*models.TabEntry, error)
+	GetTabEntry(tabID uuid.UUID) (*models.TabEntry, error)
 }
 
 // TabSvc is for managing queries.
@@ -28,34 +28,34 @@ func NewTabSvc(database logic.DbOperations) TabData {
 	return &TabSvc{DbOperations: database}
 }
 
-// InsertTabs inserts multiple tabs in the tabs table.
-func (d *TabSvc) InsertTabs(tabs ...*models.Tab) {
+// InsertTabEntries inserts multiple tabs in the tabs table.
+func (d *TabSvc) InsertTabEntries(tabs ...*models.TabEntry) {
 	for _, tab := range tabs {
-		d.InsertTab(tab)
+		d.InsertTabEntry(tab)
 	}
 }
 
-// InsertTab inserts a new tab in the tabs table.
-func (d *TabSvc) InsertTab(tab *models.Tab) {
-	_, err := d.Exec(queries.InsertTab, tab.ID, tab.Instrument.ID, tab.Difficulty.ID, tab.Description)
+// InsertTabEntry inserts a new tab in the tabs table.
+func (d *TabSvc) InsertTabEntry(tab *models.TabEntry) {
+	_, err := d.Exec(queries.InsertTab, tab.ID, tab.InstrumentID, tab.DifficultyID, tab.Description)
 	if err != nil {
-		log.Printf("Failed to insert tab with '%s', '%s' & Description: '%s': %s", tab.Instrument.Name, tab.Difficulty.Name, tab.Description, err.Error())
+		log.Printf("Failed to insert tab: %s", err.Error())
 	} else {
-		log.Printf("Successfully inserted tab with '%s', '%s' & Description: '%s'", tab.Instrument.Name, tab.Difficulty.Name, tab.Description)
+		log.Printf("Successfully inserted tab")
 	}
 }
 
-// GetTab retrieves the tab, without entity references, for the provided tab ID.
-func (d *TabSvc) GetTab(tabID uuid.UUID) (*models.Tab, error) {
-	tabs, err := d.GetTabs(tabID)
+// GetTabEntry retrieves a tab entry, without entity references, for the provided tab ID.
+func (d *TabSvc) GetTabEntry(tabID uuid.UUID) (*models.TabEntry, error) {
+	tabs, err := d.GetTabEntries(tabID)
 	if err != nil {
 		return nil, err
 	}
 	return tabs[0], nil
 }
 
-// GetTabs retrieves the tabs, without entity references, for the provided IDs.
-func (d *TabSvc) GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error) {
+// GetTabEntries retrieves tab entries, without entity references, for the provided IDs.
+func (d *TabSvc) GetTabEntries(tabID ...uuid.UUID) ([]*models.TabEntry, error) {
 	rows, err := d.Query(queries.GetTabs, pq.Array(tabID))
 	if err != nil {
 		return nil, err
@@ -63,19 +63,13 @@ func (d *TabSvc) GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error) {
 
 	defer rows.Close()
 
-	var tabs []*models.Tab
+	var tabs []*models.TabEntry
 	for rows.Next() {
-		tab := &models.Tab{}
-		instrument := &models.InstrumentEntry{}
-		difficulty := &models.DifficultyEntry{}
-		err := rows.Scan(&tab.ID, &instrument.ID, &difficulty.ID, &tab.Description)
+		tab := &models.TabEntry{}
+		err := rows.Scan(&tab.ID, &tab.InstrumentID, &tab.DifficultyID, &tab.Description)
 		if err != nil {
 			return nil, err
 		}
-
-		tab.Instrument = instrument
-		tab.Difficulty = difficulty
-
 		tabs = append(tabs, tab)
 	}
 

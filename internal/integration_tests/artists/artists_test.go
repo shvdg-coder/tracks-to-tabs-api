@@ -25,7 +25,7 @@ func TestArtistsCascading(t *testing.T) {
 	api := pkg.NewAPI(dbEnv)
 
 	// Execute
-	artists, err := api.GetArtistsCascading(artistIDs...)
+	artists, err := api.GetArtists(artistIDs...)
 	if err != nil {
 		t.Fatalf("error occurred during retrieval of artist cascading: %s", err.Error())
 	}
@@ -41,7 +41,7 @@ func TestArtistsCascading(t *testing.T) {
 }
 
 // testArtists todo:
-func testArtists(t *testing.T, artists []*trk.ArtistEntry) {
+func testArtists(t *testing.T, artists []*trk.Artist) {
 	if len(artists) != 2 {
 		t.Fatalf("expected number of artists found in the database (%d) to be equal to those in the CSV (%d)", len(artists), 2)
 	}
@@ -62,7 +62,7 @@ func testTabs(t *testing.T, tabs []*trk.Tab) {
 }
 
 // extractTracks extracts the tracks.Track's from the artists.ArtistEntry.
-func extractTracks(artists []*trk.ArtistEntry) []*trk.Track {
+func extractTracks(artists []*trk.Artist) []*trk.Track {
 	var tracks []*trk.Track
 	for _, artist := range artists {
 		tracks = append(tracks, artist.Tracks...)

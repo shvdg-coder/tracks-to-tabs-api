@@ -11,7 +11,7 @@ import (
 type ReferenceOps interface {
 	data.ReferenceData
 	mappers.ReferenceMapper
-	GetReferencesCascading(internalID ...uuid.UUID) ([]*models.Reference, error)
+	GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error)
 }
 
 // ReferenceSvc is responsible for managing references.
@@ -26,12 +26,12 @@ func NewReferenceSvc(data data.ReferenceData, mapper mappers.ReferenceMapper, so
 	return &ReferenceSvc{ReferenceData: data, ReferenceMapper: mapper, SourceOps: sources}
 }
 
-// GetReferencesCascading retrieves the Reference's with all their references.
-func (r *ReferenceSvc) GetReferencesCascading(internalID ...uuid.UUID) ([]*models.Reference, error) {
+// GetReferences retrieves the models.Reference's with entity references, for the provided internal IDs.
+func (r *ReferenceSvc) GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error) {
 	return nil, nil
 }
 
-// ExtractSourceIDs extracts the source ID from the Reference.
+// ExtractSourceIDs extracts the source ID from the models.Reference.
 func (r *ReferenceSvc) ExtractSourceIDs(references []*models.Reference) []uint {
 	sourceIDMap := make(map[uint]bool)
 	for _, reference := range references {

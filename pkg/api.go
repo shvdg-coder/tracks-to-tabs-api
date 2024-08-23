@@ -1,23 +1,18 @@
 package pkg
 
 import (
+	"github.com/google/uuid"
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
 // DataOps represents all API data operations.
 type DataOps interface {
-	data.ArtistData
-	data.TrackData
-	data.TabData
-	data.DifficultyData
-	data.InstrumentData
-	data.ReferenceData
-	data.SourceData
-	data.EndpointsData
-	data.ArtistTrackData
-	data.TrackTabData
-	data.UserData
+	GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error)
+	GetTracks(trackID ...uuid.UUID) ([]*models.Track, error)
+	GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error)
+	GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error)
+	GetSources(sourceID ...uint) ([]*models.Source, error)
 }
 
 // API represents the main entry point to interact with functionalities for the defined entities.

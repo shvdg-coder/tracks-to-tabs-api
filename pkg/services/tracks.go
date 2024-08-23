@@ -11,7 +11,7 @@ import (
 type TrackOps interface {
 	data.TrackData
 	mappers.TrackMapper
-	GetTracksCascading(trackID ...uuid.UUID) ([]*models.Track, error)
+	GetTracks(trackID ...uuid.UUID) ([]*models.Track, error)
 }
 
 // TrackSvc is responsible for managing and retrieving tracks.
@@ -34,7 +34,7 @@ func NewTrackSvc(data data.TrackData, mapper mappers.TrackMapper, trackTabs Trac
 	}
 }
 
-// GetTracksCascading retrieves tabs, with entity references, for the provided IDs.
-func (t TrackSvc) GetTracksCascading(trackID ...uuid.UUID) ([]*models.Track, error) {
+// GetTracks retrieves tabs, with entity references, for the provided IDs.
+func (t TrackSvc) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
 	return nil, nil
 }

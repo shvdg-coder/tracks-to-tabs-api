@@ -12,10 +12,10 @@ import (
 
 // ArtistData represents operations related to artists in the database.
 type ArtistData interface {
-	InsertArtist(artist *models.ArtistEntry)
-	InsertArtists(artist ...*models.ArtistEntry)
-	GetArtist(artistID uuid.UUID) (*models.ArtistEntry, error)
-	GetArtists(artistID ...uuid.UUID) ([]*models.ArtistEntry, error)
+	InsertArtistEntries(artist ...*models.ArtistEntry)
+	InsertArtistEntry(artist *models.ArtistEntry)
+	GetArtistsEntries(artistID ...uuid.UUID) ([]*models.ArtistEntry, error)
+	GetArtistEntry(artistID uuid.UUID) (*models.ArtistEntry, error)
 }
 
 // ArtistSvc is for managing artists.
@@ -28,15 +28,15 @@ func NewArtistSvc(database logic.DbOperations) ArtistData {
 	return &ArtistSvc{database}
 }
 
-// InsertArtists inserts multiple ArtistEntry's into the artists table.
-func (d *ArtistSvc) InsertArtists(artists ...*models.ArtistEntry) {
+// InsertArtistEntries inserts multiple ArtistEntry's into the artists table.
+func (d *ArtistSvc) InsertArtistEntries(artists ...*models.ArtistEntry) {
 	for _, artist := range artists {
-		d.InsertArtist(artist)
+		d.InsertArtistEntry(artist)
 	}
 }
 
-// InsertArtist inserts an ArtistEntry into the artists table.
-func (d *ArtistSvc) InsertArtist(artist *models.ArtistEntry) {
+// InsertArtistEntry inserts an ArtistEntry into the artists table.
+func (d *ArtistSvc) InsertArtistEntry(artist *models.ArtistEntry) {
 	_, err := d.Exec(queries.InsertArtist, artist.ID, artist.Name)
 	if err != nil {
 		log.Printf("Failed inserting user with name '%s': %s", artist.Name, err.Error())
@@ -45,17 +45,17 @@ func (d *ArtistSvc) InsertArtist(artist *models.ArtistEntry) {
 	}
 }
 
-// GetArtist retrieves an artist entry, without entity references, for the provided ID.
-func (d *ArtistSvc) GetArtist(artistID uuid.UUID) (*models.ArtistEntry, error) {
-	artists, err := d.GetArtists(artistID)
+// GetArtistEntry retrieves an artist entry, without entity references, for the provided ID.
+func (d *ArtistSvc) GetArtistEntry(artistID uuid.UUID) (*models.ArtistEntry, error) {
+	artists, err := d.GetArtistsEntries(artistID)
 	if err != nil {
 		return nil, err
 	}
 	return artists[0], nil
 }
 
-// GetArtists retrieves artist entries, without entity references, for the provided IDs.
-func (d *ArtistSvc) GetArtists(artistID ...uuid.UUID) ([]*models.ArtistEntry, error) {
+// GetArtistsEntries retrieves artist entries, without entity references, for the provided IDs.
+func (d *ArtistSvc) GetArtistsEntries(artistID ...uuid.UUID) ([]*models.ArtistEntry, error) {
 	rows, err := d.Query(queries.GetArtistsFromIDs, pq.Array(artistID))
 	if err != nil {
 		return nil, err
@@ -65,12 +65,12 @@ func (d *ArtistSvc) GetArtists(artistID ...uuid.UUID) ([]*models.ArtistEntry, er
 
 	var artists []*models.ArtistEntry
 	for rows.Next() {
-		artist := &models.ArtistEntry{}
-		err := rows.Scan(&artist.ID, &artist.Name)
+		artistEntry := &models.ArtistEntry{}
+		err := rows.Scan(&artistEntry.ID, &artistEntry.Name)
 		if err != nil {
 			return nil, err
 		}
-		artists = append(artists, artist)
+		artists = append(artists, artistEntry)
 	}
 
 	if rows.Err() != nil {

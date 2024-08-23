@@ -11,10 +11,10 @@ import (
 
 // SourceData represents operations related to sources in the database.
 type SourceData interface {
-	InsertSources(sources ...*models.Source)
-	InsertSource(source *models.Source)
-	GetSource(id uint) (*models.Source, error)
-	GetSources(id ...uint) ([]*models.Source, error)
+	InsertSourceEntries(sources ...*models.SourceEntry)
+	InsertSourceEntry(source *models.SourceEntry)
+	GetSourceEntries(id ...uint) ([]*models.SourceEntry, error)
+	GetSourceEntry(id uint) (*models.SourceEntry, error)
 }
 
 // SourceSvc is for managing sources.
@@ -27,44 +27,43 @@ func NewSourceSvc(database logic.DbOperations) SourceData {
 	return &SourceSvc{DbOperations: database}
 }
 
-// InsertSources inserts multiple sources in the sources table.
-func (d *SourceSvc) InsertSources(sources ...*models.Source) {
+// InsertSourceEntries inserts multiple sources in the sources table.
+func (d *SourceSvc) InsertSourceEntries(sources ...*models.SourceEntry) {
 	for _, source := range sources {
-		d.InsertSource(source)
+		d.InsertSourceEntry(source)
 	}
 }
 
-// InsertSource inserts a new source in the sources table.
-func (d *SourceSvc) InsertSource(source *models.Source) {
+// InsertSourceEntry inserts a new source in the sources table.
+func (d *SourceSvc) InsertSourceEntry(source *models.SourceEntry) {
 	_, err := d.Exec(queries.InsertSource, source.ID, source.Name, source.Category)
 	if err != nil {
-		log.Printf("Failed inserting source with name: '%s': %s", source.Name, err.Error())
+		log.Printf("Failed inserting source: %s", err.Error())
 	} else {
-		log.Printf("Successfully inserted source with name: '%s'", source.Name)
+		log.Printf("Successfully inserted source")
 	}
 }
 
-// GetSource retrieves a source from the database.
-func (d *SourceSvc) GetSource(id uint) (*models.Source, error) {
-	sources, err := d.GetSources(id)
+// GetSourceEntry retrieves a source from the database.
+func (d *SourceSvc) GetSourceEntry(id uint) (*models.SourceEntry, error) {
+	sources, err := d.GetSourceEntries(id)
 	if err != nil {
 		return nil, err
 	}
 	return sources[0], nil
 }
 
-// GetSources retrieves multiple sources from the database.
-func (d *SourceSvc) GetSources(sourceID ...uint) ([]*models.Source, error) {
+// GetSourceEntries retrieves multiple sources from the database.
+func (d *SourceSvc) GetSourceEntries(sourceID ...uint) ([]*models.SourceEntry, error) {
 	rows, err := d.Query(queries.GetSourcesFromIDs, pq.Array(sourceID))
 	if err != nil {
 		return nil, err
 	}
 
-	var sources []*models.Source
+	var sources []*models.SourceEntry
 
 	for rows.Next() {
-		source := &models.Source{}
-		source.Endpoints = make([]*models.EndpointEntry, 0)
+		source := &models.SourceEntry{}
 		err = rows.Scan(&source.ID, &source.Name, &source.Category)
 		if err != nil {
 			return nil, err

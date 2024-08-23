@@ -11,10 +11,10 @@ import (
 
 // TrackData represents operations related to tracks in the database.
 type TrackData interface {
-	InsertTracks(tracks ...*models.TrackEntry)
-	InsertTrack(track *models.TrackEntry)
-	GetTrack(trackID uuid.UUID) (*models.TrackEntry, error)
-	GetTracks(trackID ...uuid.UUID) ([]*models.TrackEntry, error)
+	InsertTrackEntry(track *models.TrackEntry)
+	InsertTrackEntries(tracks ...*models.TrackEntry)
+	GetTrackEntry(trackID uuid.UUID) (*models.TrackEntry, error)
+	GetTrackEntries(trackID ...uuid.UUID) ([]*models.TrackEntry, error)
 }
 
 // TrackSvc is for managing tracks of songs.
@@ -27,15 +27,15 @@ func NewTrackSvc(database logic.DbOperations) TrackData {
 	return &TrackSvc{DbOperations: database}
 }
 
-// InsertTracks inserts multiple tracks into the tracks table.
-func (d *TrackSvc) InsertTracks(tracks ...*models.TrackEntry) {
+// InsertTrackEntries inserts multiple tracks into the tracks table.
+func (d *TrackSvc) InsertTrackEntries(tracks ...*models.TrackEntry) {
 	for _, track := range tracks {
-		d.InsertTrack(track)
+		d.InsertTrackEntry(track)
 	}
 }
 
-// InsertTrack inserts a track into the tracks table.
-func (d *TrackSvc) InsertTrack(track *models.TrackEntry) {
+// InsertTrackEntry inserts a track into the tracks table.
+func (d *TrackSvc) InsertTrackEntry(track *models.TrackEntry) {
 	_, err := d.Exec(queries.InsertTrack, track.ID, track.Title, track.Duration)
 	if err != nil {
 		log.Printf("Failed to insert track with title '%s': %s", track.Title, err.Error())
@@ -44,17 +44,17 @@ func (d *TrackSvc) InsertTrack(track *models.TrackEntry) {
 	}
 }
 
-// GetTrack retrieves the track, without entity references, for the provided ID.
-func (d *TrackSvc) GetTrack(trackID uuid.UUID) (*models.TrackEntry, error) {
-	tracks, err := d.GetTracks(trackID)
+// GetTrackEntry retrieves a track entry, without entity references, for the provided ID.
+func (d *TrackSvc) GetTrackEntry(trackID uuid.UUID) (*models.TrackEntry, error) {
+	tracks, err := d.GetTrackEntries(trackID)
 	if err != nil {
 		return nil, err
 	}
 	return tracks[0], nil
 }
 
-// GetTracks retrieves the tracks, without entity references, for the provided IDs.
-func (d *TrackSvc) GetTracks(trackID ...uuid.UUID) ([]*models.TrackEntry, error) {
+// GetTrackEntries retrieves tracks entries, without entity references, for the provided IDs.
+func (d *TrackSvc) GetTrackEntries(trackID ...uuid.UUID) ([]*models.TrackEntry, error) {
 	rows, err := d.Query(queries.GetTracksFromIDs, pq.Array(trackID))
 	if err != nil {
 		return nil, err

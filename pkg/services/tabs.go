@@ -11,7 +11,7 @@ import (
 type TabOps interface {
 	data.TabData
 	mappers.TabMapper
-	GetTabsCascading(tabID ...uuid.UUID) ([]*models.Tab, error)
+	GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error)
 }
 
 // TabSvc is responsible for managing and retrieving tabs.
@@ -34,8 +34,8 @@ func NewTabSvc(data data.TabData, mapper mappers.TabMapper, instruments Instrume
 	}
 }
 
-// GetTabsCascading retrieves tabs, with entity references, for the provided IDs.
-func (t *TabSvc) GetTabsCascading(tabID ...uuid.UUID) ([]*models.Tab, error) {
+// GetTabs retrieves tabs, with entity references, for the provided IDs.
+func (t *TabSvc) GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error) {
 	return nil, nil
 }
 

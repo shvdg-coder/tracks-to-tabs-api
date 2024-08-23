@@ -2,14 +2,16 @@ package mappers
 
 import (
 	"github.com/google/uuid"
-	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
 // ArtistMapper represents operations related to artist data mapping.
 type ArtistMapper interface {
-	ArtistsToMap(artists []*trk.Artist) map[uuid.UUID]*trk.Artist
-	MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, artistsMap map[uuid.UUID]*trk.Artist, tracksMap map[uuid.UUID]*trk.Track) map[uuid.UUID]*trk.Artist
-	MapReferencesToArtists(artistsMap map[uuid.UUID]*trk.Artist, references []*trk.Reference) map[uuid.UUID]*trk.Artist
+	ArtistEntriesToArtists(artistEntries []*models.ArtistEntry) []*models.Artist
+	ArtistsToMap(artists []*models.Artist) map[uuid.UUID]*models.Artist
+	MapToArtists(artistsMap map[uuid.UUID]*models.Artist) []*models.Artist
+	MapTracksToArtists(artistsMap map[uuid.UUID]*models.Artist, tracksMap map[uuid.UUID]*models.Track, artistTracks []*models.ArtistTrackEntry) map[uuid.UUID]*models.Artist
+	MapReferencesToArtists(artistsMap map[uuid.UUID]*models.Artist, references []*models.Reference) map[uuid.UUID]*models.Artist
 }
 
 // ArtistSvc is responsible for mapping entities to artists.
@@ -22,17 +24,39 @@ func NewArtistSvc() ArtistMapper {
 	return &ArtistSvc{}
 }
 
-// ArtistsToMap transforms a slice of artists into a map where the key is the ID and the value the ArtistEntry.
-func (m *ArtistSvc) ArtistsToMap(artists []*trk.Artist) map[uuid.UUID]*trk.Artist {
-	artistMap := make(map[uuid.UUID]*trk.Artist)
+// ArtistEntriesToArtists transforms the models.ArtistEntry's to models.Artist's, with default values where needed.
+func (a *ArtistSvc) ArtistEntriesToArtists(artistEntries []*models.ArtistEntry) []*models.Artist {
+	artists := make([]*models.Artist, len(artistEntries))
+	for i, artistEntry := range artistEntries {
+		artists[i] = &models.Artist{
+			ArtistEntry: artistEntry,
+			Tracks:      make([]*models.Track, 0),
+			References:  make([]*models.Reference, 0),
+		}
+	}
+	return artists
+}
+
+// ArtistsToMap transforms a slice of models.Artist's into a map where the key is the ID and the value the models.Artist.
+func (a *ArtistSvc) ArtistsToMap(artists []*models.Artist) map[uuid.UUID]*models.Artist {
+	artistMap := make(map[uuid.UUID]*models.Artist, len(artists))
 	for _, artist := range artists {
 		artistMap[artist.ID] = artist
 	}
 	return artistMap
 }
 
-// MapTracksToArtists adds the tracks to the artist.
-func (m *ArtistSvc) MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, artistsMap map[uuid.UUID]*trk.Artist, tracksMap map[uuid.UUID]*trk.Track) map[uuid.UUID]*trk.Artist {
+// MapToArtists transforms a map of Artists into a slice of models.Artist.
+func (a *ArtistSvc) MapToArtists(artistsMap map[uuid.UUID]*models.Artist) []*models.Artist {
+	artists := make([]*models.Artist, len(artistsMap))
+	for _, artist := range artistsMap {
+		artists = append(artists, artist)
+	}
+	return artists
+}
+
+// MapTracksToArtists maps models.Track's to models.Artist's, by updating the provided Artist map and returning it.
+func (a *ArtistSvc) MapTracksToArtists(artistsMap map[uuid.UUID]*models.Artist, tracksMap map[uuid.UUID]*models.Track, artistTracks []*models.ArtistTrackEntry) map[uuid.UUID]*models.Artist {
 	for _, artistTrack := range artistTracks {
 		artist := artistsMap[artistTrack.ArtistID]
 		track := tracksMap[artistTrack.TrackID]
@@ -41,8 +65,8 @@ func (m *ArtistSvc) MapTracksToArtists(artistTracks []*trk.ArtistTrackEntry, art
 	return artistsMap
 }
 
-// MapReferencesToArtists maps references.Reference's to ArtistEntry's.
-func (m *ArtistSvc) MapReferencesToArtists(artistsMap map[uuid.UUID]*trk.Artist, references []*trk.Reference) map[uuid.UUID]*trk.Artist {
+// MapReferencesToArtists maps models.Reference's to models.Artist's, by updating the provided Artist map and returning it.
+func (a *ArtistSvc) MapReferencesToArtists(artistsMap map[uuid.UUID]*models.Artist, references []*models.Reference) map[uuid.UUID]*models.Artist {
 	for _, reference := range references {
 		artist := artistsMap[reference.InternalID]
 		artist.References = append(artist.References, reference)
