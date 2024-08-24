@@ -22,9 +22,9 @@ type DbEnv struct {
 }
 
 // NewDbEnv creates a new instance of DbEnv.
-func NewDbEnv(dbContainer database.ContainerOperations, create pkg.CreateOps, drop pkg.DropOps) DbEnvOperations {
+func NewDbEnv(container database.ContainerOperations, create pkg.CreateOps, drop pkg.DropOps) DbEnvOperations {
 	return &DbEnv{
-		ContainerOperations: dbContainer,
+		ContainerOperations: container,
 		CreateOps:           create,
 		DropOps:             drop,
 	}

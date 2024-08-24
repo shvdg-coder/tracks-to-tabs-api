@@ -22,15 +22,16 @@ func NewDropAPI(database logic.DbOperations) DropOps {
 
 // DropAll when permitted, drops the tables in the database.
 func (d *DropAPI) DropAll() {
-	d.DropLookupTables()
-	d.DropStorageTables()
 	d.DropRelationLinkTables()
+	d.DropStorageTables()
+	d.DropLookupTables()
 }
 
 // DropLookupTables drops the lookup tables.
 func (d *DropAPI) DropLookupTables() {
 	d.DropInstrumentsTable()
 	d.DropDifficultiesTable()
+	d.DropEndpointsTable()
 	d.DropSourcesTable()
 }
 
