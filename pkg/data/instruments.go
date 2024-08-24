@@ -11,10 +11,10 @@ import (
 
 // InstrumentData represents operations related to instruments in the database.
 type InstrumentData interface {
-	InsertInstruments(instruments ...*models.InstrumentEntry)
-	InsertInstrument(instrument *models.InstrumentEntry)
-	GetInstrument(instrumentID uint) (*models.InstrumentEntry, error)
-	GetInstruments(instrumentID ...uint) ([]*models.InstrumentEntry, error)
+	InsertInstrumentEntries(instruments ...*models.InstrumentEntry)
+	InsertInstrumentEntry(instrument *models.InstrumentEntry)
+	GetInstrumentEntries(instrumentID ...uint) ([]*models.InstrumentEntry, error)
+	GetInstrumentEntry(instrumentID uint) (*models.InstrumentEntry, error)
 }
 
 // InstrumentSvc is for managing instruments.
@@ -27,34 +27,34 @@ func NewInstrumentSvc(database logic.DbOperations) InstrumentData {
 	return &InstrumentSvc{DbOperations: database}
 }
 
-// InsertInstruments inserts multiple instruments in the instruments table.
-func (d *InstrumentSvc) InsertInstruments(instruments ...*models.InstrumentEntry) {
+// InsertInstrumentEntries inserts multiple instruments in the instruments table.
+func (d *InstrumentSvc) InsertInstrumentEntries(instruments ...*models.InstrumentEntry) {
 	for _, instrument := range instruments {
-		d.InsertInstrument(instrument)
+		d.InsertInstrumentEntry(instrument)
 	}
 }
 
-// InsertInstrument inserts a new instrument in the instruments table.
-func (d *InstrumentSvc) InsertInstrument(instrument *models.InstrumentEntry) {
+// InsertInstrumentEntry inserts a new instrument in the instruments table.
+func (d *InstrumentSvc) InsertInstrumentEntry(instrument *models.InstrumentEntry) {
 	_, err := d.Exec(queries.InsertInstrument, instrument.Name)
 	if err != nil {
-		log.Printf("Failed inserting instrument with name: '%s': %s", instrument.Name, err.Error())
+		log.Printf("Failed inserting instrument: %s", err.Error())
 	} else {
-		log.Printf("Successfully inserted instrument with name: '%s'", instrument.Name)
+		log.Printf("Successfully inserted instrument")
 	}
 }
 
-// GetInstrument retrieves an instrument for the provided ID.
-func (d *InstrumentSvc) GetInstrument(instrumentID uint) (*models.InstrumentEntry, error) {
-	instruments, err := d.GetInstruments(instrumentID)
+// GetInstrumentEntry retrieves an instrument for the provided ID.
+func (d *InstrumentSvc) GetInstrumentEntry(instrumentID uint) (*models.InstrumentEntry, error) {
+	instruments, err := d.GetInstrumentEntries(instrumentID)
 	if err != nil {
 		return nil, err
 	}
 	return instruments[0], nil
 }
 
-// GetInstruments retrieves instruments for the provided IDs.
-func (d *InstrumentSvc) GetInstruments(instrumentID ...uint) ([]*models.InstrumentEntry, error) {
+// GetInstrumentEntries retrieves instruments for the provided IDs.
+func (d *InstrumentSvc) GetInstrumentEntries(instrumentID ...uint) ([]*models.InstrumentEntry, error) {
 	rows, err := d.Query(queries.GetInstruments, pq.Array(instrumentID))
 	if err != nil {
 		return nil, err

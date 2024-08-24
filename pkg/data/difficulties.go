@@ -11,10 +11,10 @@ import (
 
 // DifficultyData represents operations related to difficulties in the database.
 type DifficultyData interface {
-	InsertDifficulties(difficulties ...*models.DifficultyEntry)
-	InsertDifficulty(difficulty *models.DifficultyEntry)
-	GetDifficulty(difficultyID uint) (*models.DifficultyEntry, error)
-	GetDifficulties(difficultyID ...uint) ([]*models.DifficultyEntry, error)
+	InsertDifficultyEntries(difficulties ...*models.DifficultyEntry)
+	InsertDifficultyEntry(difficulty *models.DifficultyEntry)
+	GetDifficultyEntries(difficultyID ...uint) ([]*models.DifficultyEntry, error)
+	GetDifficultyEntry(difficultyID uint) (*models.DifficultyEntry, error)
 }
 
 // DifficultySvc is for managing difficulties.
@@ -27,15 +27,15 @@ func NewDifficultySvc(database logic.DbOperations) DifficultyData {
 	return &DifficultySvc{DbOperations: database}
 }
 
-// InsertDifficulties inserts multiple difficulty levels.
-func (d *DifficultySvc) InsertDifficulties(difficulties ...*models.DifficultyEntry) {
+// InsertDifficultyEntries inserts multiple difficulty levels.
+func (d *DifficultySvc) InsertDifficultyEntries(difficulties ...*models.DifficultyEntry) {
 	for _, difficulty := range difficulties {
-		d.InsertDifficulty(difficulty)
+		d.InsertDifficultyEntry(difficulty)
 	}
 }
 
-// InsertDifficulty inserts a new difficulty level.
-func (d *DifficultySvc) InsertDifficulty(difficulty *models.DifficultyEntry) {
+// InsertDifficultyEntry inserts a new difficulty level.
+func (d *DifficultySvc) InsertDifficultyEntry(difficulty *models.DifficultyEntry) {
 	_, err := d.Exec(queries.InsertDifficulty, difficulty.Name)
 	if err != nil {
 		log.Printf("Failed inserting difficulty level with name: '%s': %s", difficulty.Name, err.Error())
@@ -44,17 +44,17 @@ func (d *DifficultySvc) InsertDifficulty(difficulty *models.DifficultyEntry) {
 	}
 }
 
-// GetDifficulty retrieves a difficulty for the provided ID.
-func (d *DifficultySvc) GetDifficulty(difficultyID uint) (*models.DifficultyEntry, error) {
-	difficulty, err := d.GetDifficulties(difficultyID)
+// GetDifficultyEntry retrieves a difficulty entry, without the entity references, for the provided ID.
+func (d *DifficultySvc) GetDifficultyEntry(difficultyID uint) (*models.DifficultyEntry, error) {
+	difficulty, err := d.GetDifficultyEntries(difficultyID)
 	if err != nil {
 		return nil, err
 	}
 	return difficulty[0], nil
 }
 
-// GetDifficulties retrieves difficulties for the provided IDs.
-func (d *DifficultySvc) GetDifficulties(difficultyID ...uint) ([]*models.DifficultyEntry, error) {
+// GetDifficultyEntries retrieves difficulty entries, without entity references, for the provided IDs.
+func (d *DifficultySvc) GetDifficultyEntries(difficultyID ...uint) ([]*models.DifficultyEntry, error) {
 	rows, err := d.Query(queries.GetDifficulties, pq.Array(difficultyID))
 	if err != nil {
 		return nil, err

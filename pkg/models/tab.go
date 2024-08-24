@@ -14,7 +14,7 @@ type TabEntry struct {
 type Tab struct {
 	*TabEntry
 	Track      *Track
-	Instrument *InstrumentEntry
-	Difficulty *DifficultyEntry
+	Instrument *Instrument
+	Difficulty *Difficulty
 	References []*Reference
 }

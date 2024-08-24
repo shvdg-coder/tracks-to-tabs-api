@@ -20,7 +20,7 @@ func NewReferenceSvc() ReferenceMapper {
 }
 
 // MapSourcesToReferences maps the sources.Source's to the Reference's.
-func (m *ReferenceSvc) MapSourcesToReferences(references []*models.Reference, sourcesMap map[uint]*models.Source) []*models.Reference {
+func (r *ReferenceSvc) MapSourcesToReferences(references []*models.Reference, sourcesMap map[uint]*models.Source) []*models.Reference {
 	for _, reference := range references {
 		source := sourcesMap[reference.Source.ID]
 		reference.Source = source

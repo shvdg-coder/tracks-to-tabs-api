@@ -24,15 +24,11 @@ func NewArtistSvc() ArtistMapper {
 	return &ArtistSvc{}
 }
 
-// ArtistEntriesToArtists transforms the models.ArtistEntry's to models.Artist's, with default values where needed.
+// ArtistEntriesToArtists transforms the models.ArtistEntry's to models.Artist's.
 func (a *ArtistSvc) ArtistEntriesToArtists(artistEntries []*models.ArtistEntry) []*models.Artist {
 	artists := make([]*models.Artist, len(artistEntries))
 	for i, artistEntry := range artistEntries {
-		artists[i] = &models.Artist{
-			ArtistEntry: artistEntry,
-			Tracks:      make([]*models.Track, 0),
-			References:  make([]*models.Reference, 0),
-		}
+		artists[i] = &models.Artist{ArtistEntry: artistEntry}
 	}
 	return artists
 }
@@ -46,7 +42,7 @@ func (a *ArtistSvc) ArtistsToMap(artists []*models.Artist) map[uuid.UUID]*models
 	return artistMap
 }
 
-// MapToArtists transforms a map of Artists into a slice of models.Artist's.
+// MapToArtists transforms a map of models.Artist's into a slice of models.Artist's.
 func (a *ArtistSvc) MapToArtists(artistsMap map[uuid.UUID]*models.Artist) []*models.Artist {
 	artists := make([]*models.Artist, len(artistsMap))
 	for _, artist := range artistsMap {
@@ -55,7 +51,7 @@ func (a *ArtistSvc) MapToArtists(artistsMap map[uuid.UUID]*models.Artist) []*mod
 	return artists
 }
 
-// MapTracksToArtists maps models.Track's to models.Artist's, by updating the provided Artist map and returning it.
+// MapTracksToArtists adds the models.Track's to the models.Artist, by updating the provided models.Artist's map and returning it.
 func (a *ArtistSvc) MapTracksToArtists(artistsMap map[uuid.UUID]*models.Artist, tracksMap map[uuid.UUID]*models.Track, artistTracks []*models.ArtistTrackEntry) map[uuid.UUID]*models.Artist {
 	for _, artistTrack := range artistTracks {
 		artist := artistsMap[artistTrack.ArtistID]
@@ -65,7 +61,7 @@ func (a *ArtistSvc) MapTracksToArtists(artistsMap map[uuid.UUID]*models.Artist, 
 	return artistsMap
 }
 
-// MapReferencesToArtists maps models.Reference's to models.Artist's, by updating the provided Artist map and returning it.
+// MapReferencesToArtists maps models.Reference's to models.Artist's, by updating the provided models.Artist's map and returning it.
 func (a *ArtistSvc) MapReferencesToArtists(artistsMap map[uuid.UUID]*models.Artist, references []*models.Reference) map[uuid.UUID]*models.Artist {
 	for _, reference := range references {
 		artist := artistsMap[reference.InternalID]

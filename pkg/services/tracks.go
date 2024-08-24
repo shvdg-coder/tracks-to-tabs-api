@@ -61,7 +61,7 @@ func (t TrackSvc) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
 	tracksMap := t.TracksToMap(tracks)
 	tabsMap := t.TabsToMap(tabs)
 
-	tracksMap = t.MapTabsToTracks(trackTabEntries, tracksMap, tabsMap)
+	tracksMap = t.MapTabsToTracks(tracksMap, tabsMap, trackTabEntries)
 	tracksMap = t.MapReferencesToTracks(tracksMap, references)
 	tracks = t.MapToTracks(tracksMap)
 

@@ -4,7 +4,7 @@ import "github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 
 // InstrumentMapper represents operations related to instrument data mapping.
 type InstrumentMapper interface {
-	InstrumentsToMap(instruments []*models.InstrumentEntry) map[uint]*models.InstrumentEntry
+	InstrumentsToMap(instruments []*models.Instrument) map[uint]*models.Instrument
 }
 
 // InstrumentSvc is responsible for mapping entities to instruments.
@@ -17,9 +17,9 @@ func NewInstrumentSvc() InstrumentMapper {
 	return &InstrumentSvc{}
 }
 
-// InstrumentsToMap transforms a slice of InstrumentEntry's into map, where the key is the ID and the value the InstrumentEntry.
-func (i *InstrumentSvc) InstrumentsToMap(instruments []*models.InstrumentEntry) map[uint]*models.InstrumentEntry {
-	instrumentMap := make(map[uint]*models.InstrumentEntry)
+// InstrumentsToMap transforms a slice of models.Instrument's into map, where the key is the ID and the value the models.Instrument.
+func (i *InstrumentSvc) InstrumentsToMap(instruments []*models.Instrument) map[uint]*models.Instrument {
+	instrumentMap := make(map[uint]*models.Instrument, len(instruments))
 	for _, instrument := range instruments {
 		instrumentMap[instrument.ID] = instrument
 	}

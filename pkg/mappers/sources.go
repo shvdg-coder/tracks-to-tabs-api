@@ -20,7 +20,7 @@ func NewSourceSvc() SourceMapper {
 }
 
 // MapEndpointsToSources maps the endpoints.EndpointEntry's to the Source's.
-func (m *SourceSvc) MapEndpointsToSources(sourcesMap map[uint]*models.Source, endpoints []*models.EndpointEntry) map[uint]*models.Source {
+func (s *SourceSvc) MapEndpointsToSources(sourcesMap map[uint]*models.Source, endpoints []*models.EndpointEntry) map[uint]*models.Source {
 	for _, endpoint := range endpoints {
 		source := sourcesMap[endpoint.SourceID]
 		source.Endpoints = append(source.Endpoints, endpoint)
