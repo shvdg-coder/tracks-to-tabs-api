@@ -8,8 +8,8 @@ import (
 	"testing"
 )
 
-// TestArtistsCascading tests whether artists can be inserted and retrieved cascading.
-func TestArtistsCascading(t *testing.T) {
+// TestRetrievingArtists tests whether artists can be inserted and retrieved cascading.
+func TestRetrievingArtists(t *testing.T) {
 	dbEnv := setup(t)
 	defer dbEnv.Breakdown()
 

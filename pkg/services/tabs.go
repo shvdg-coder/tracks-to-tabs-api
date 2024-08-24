@@ -72,12 +72,23 @@ func (t *TabSvc) GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error) {
 }
 
 // ExtractEntityIDs extracts the instrument and difficulties IDs from models.TabEntry's.
-func (t *TabSvc) ExtractEntityIDs(tabs []*models.TabEntry) (instrumentIDs []uint, difficultyIDs []uint) {
-	instrumentIDs = make([]uint, len(tabs))
-	difficultyIDs = make([]uint, len(tabs))
-	for _, tab := range tabs {
-		instrumentIDs = append(instrumentIDs, tab.InstrumentID)
-		difficultyIDs = append(difficultyIDs, tab.DifficultyID)
+func (t *TabSvc) ExtractEntityIDs(tabEntries []*models.TabEntry) (instrumentIDs []uint, difficultyIDs []uint) {
+	instrumentIDMap, difficultyIDMap := make(map[uint]bool), make(map[uint]bool)
+	for _, tabEntry := range tabEntries {
+		instrumentIDMap[tabEntry.InstrumentID] = true
+		difficultyIDMap[tabEntry.DifficultyID] = true
 	}
+
+	keysToSlice := func(inputMap map[uint]bool) []uint {
+		outputSlice := make([]uint, 0)
+		for key, _ := range inputMap {
+			outputSlice = append(outputSlice, key)
+		}
+		return outputSlice
+	}
+
+	instrumentIDs = keysToSlice(instrumentIDMap)
+	difficultyIDs = keysToSlice(difficultyIDMap)
+
 	return instrumentIDs, difficultyIDs
 }

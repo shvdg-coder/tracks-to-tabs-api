@@ -10,6 +10,12 @@ type EndpointEntry struct {
 	UnformattedURL string `yaml:"url"`
 }
 
+// Endpoint represents an endpoint with entity references
+type Endpoint struct {
+	*EndpointEntry
+	Source *Source
+}
+
 // CreateLink formats the endpoint UnformattedURL with the corresponding values.
 func (e *EndpointEntry) CreateLink(replacements map[string]string) string {
 	url := e.UnformattedURL
@@ -17,10 +23,4 @@ func (e *EndpointEntry) CreateLink(replacements map[string]string) string {
 		url = strings.Replace(url, old, replacement, 1)
 	}
 	return url
-}
-
-// Endpoint represents an endpoint with entity references
-type Endpoint struct {
-	*EndpointEntry
-	Source *Source
 }

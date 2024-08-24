@@ -10,10 +10,10 @@ import (
 
 // EndpointsData represents operations related to endpoints in the database.
 type EndpointsData interface {
-	InsertEndpoints(endpoints ...*models.EndpointEntry)
-	InsertEndpoint(endpoint *models.EndpointEntry)
-	GetEndpoint(sourceID uint) (*models.EndpointEntry, error)
-	GetEndpoints(sourceID ...uint) ([]*models.EndpointEntry, error)
+	InsertEndpointEntries(endpoints ...*models.EndpointEntry)
+	InsertEndpointEntry(endpoint *models.EndpointEntry)
+	GetEndpointEntries(sourceID ...uint) ([]*models.EndpointEntry, error)
+	GetEndpointEntry(sourceID uint) (*models.EndpointEntry, error)
 }
 
 // EndpointSvc is for managing endpoints.
@@ -26,15 +26,15 @@ func NewEndpointSvc(database logic.DbOperations) EndpointsData {
 	return &EndpointSvc{DbOperations: database}
 }
 
-// InsertEndpoints inserts multiple records into the endpoints table.
-func (d *EndpointSvc) InsertEndpoints(endpoints ...*models.EndpointEntry) {
+// InsertEndpointEntries inserts multiple records into the endpoints table.
+func (d *EndpointSvc) InsertEndpointEntries(endpoints ...*models.EndpointEntry) {
 	for _, endpoint := range endpoints {
-		d.InsertEndpoint(endpoint)
+		d.InsertEndpointEntry(endpoint)
 	}
 }
 
-// InsertEndpoint inserts a record into the endpoints table.
-func (d *EndpointSvc) InsertEndpoint(endpoint *models.EndpointEntry) {
+// InsertEndpointEntry inserts a record into the endpoints table.
+func (d *EndpointSvc) InsertEndpointEntry(endpoint *models.EndpointEntry) {
 	_, err := d.Exec(queries.InsertEndpoint, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.UnformattedURL)
 	if err != nil {
 		log.Printf(
@@ -49,17 +49,17 @@ func (d *EndpointSvc) InsertEndpoint(endpoint *models.EndpointEntry) {
 	}
 }
 
-// GetEndpoint retrieves the endpoint for the provided ID from the database.
-func (d *EndpointSvc) GetEndpoint(sourceID uint) (*models.EndpointEntry, error) {
-	endpoints, err := d.GetEndpoints(sourceID)
+// GetEndpointEntry retrieves the endpoint for the provided ID from the database.
+func (d *EndpointSvc) GetEndpointEntry(sourceID uint) (*models.EndpointEntry, error) {
+	endpoints, err := d.GetEndpointEntries(sourceID)
 	if err != nil {
 		return nil, err
 	}
 	return endpoints[0], nil
 }
 
-// GetEndpoints retrieves the endpoints for the provided IDs from the database.
-func (d *EndpointSvc) GetEndpoints(sourceID ...uint) ([]*models.EndpointEntry, error) {
+// GetEndpointEntries retrieves the endpoints for the provided IDs from the database.
+func (d *EndpointSvc) GetEndpointEntries(sourceID ...uint) ([]*models.EndpointEntry, error) {
 	rows, err := d.Query(queries.GetEndpointsFromIDs, pq.Array(sourceID))
 	if err != nil {
 		return nil, err

@@ -49,7 +49,7 @@ func (t *TabSvc) TabsToMap(tabs []*models.Tab) map[uuid.UUID]*models.Tab {
 
 // MapToTabs transforms a map of models.Tab's into a slice of models.Tab's.
 func (t *TabSvc) MapToTabs(tabsMap map[uuid.UUID]*models.Tab) []*models.Tab {
-	tabs := make([]*models.Tab, len(tabsMap))
+	tabs := make([]*models.Tab, 0)
 	for _, tab := range tabsMap {
 		tabs = append(tabs, tab)
 	}

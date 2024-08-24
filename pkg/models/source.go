@@ -10,7 +10,7 @@ type SourceEntry struct {
 // Source represents a source with its entity references.
 type Source struct {
 	*SourceEntry
-	Endpoints []*EndpointEntry
+	Endpoints []*Endpoint
 }
 
 // HasCategory checks if the Source has the provided category.

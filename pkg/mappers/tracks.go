@@ -44,7 +44,7 @@ func (t *TrackSvc) TracksToMap(tracks []*models.Track) map[uuid.UUID]*models.Tra
 
 // MapToTracks transforms a map of models.Track into a slice of models.Track's.
 func (t *TrackSvc) MapToTracks(tracksMap map[uuid.UUID]*models.Track) []*models.Track {
-	tracks := make([]*models.Track, len(tracksMap))
+	tracks := make([]*models.Track, 0)
 	for _, track := range tracksMap {
 		tracks = append(tracks, track)
 	}

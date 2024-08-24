@@ -127,7 +127,8 @@ func createSourcesSvc(db logic.DbOperations, endpoints services.EndpointOps) ser
 // createEndpointsSvc creates a services.EndpointOps.
 func createEndpointsSvc(db logic.DbOperations) services.EndpointOps {
 	endpointsDataSvc := data.NewEndpointSvc(db)
-	return services.NewEndpointSvc(endpointsDataSvc)
+	endpointsMappingSvc := mappers.NewEndpointSvc()
+	return services.NewEndpointSvc(endpointsDataSvc, endpointsMappingSvc)
 }
 
 // createReferencesSvc creates a services.ReferenceOps.

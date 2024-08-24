@@ -28,7 +28,23 @@ func NewReferenceSvc(data data.ReferenceData, mapper mappers.ReferenceMapper, so
 
 // GetReferences retrieves the models.Reference's with entity references, for the provided internal IDs.
 func (r *ReferenceSvc) GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error) {
-	return nil, nil
+	referenceEntries, err := r.GetReferenceEntries(internalID...)
+	if err != nil {
+		return nil, err
+	}
+
+	references := r.ReferenceEntriesToReferences(referenceEntries)
+
+	sourceIDs := r.ExtractSourceIDs(references)
+	sources, err := r.GetSources(sourceIDs...)
+	if err != nil {
+		return nil, err
+	}
+
+	sourcesMap := r.SourcesToMap(sources)
+	references = r.MapSourcesToReferences(references, sourcesMap)
+
+	return references, nil
 }
 
 // ExtractSourceIDs extracts the source ID from the models.Reference.

@@ -27,5 +27,20 @@ func NewSourceSvc(data data.SourceData, mapper mappers.SourceMapper, endpoints E
 
 // GetSources retrieves sources with their entity references.
 func (s *SourceSvc) GetSources(sourceID ...uint) ([]*models.Source, error) {
-	return nil, nil
+	sourceEntries, err := s.GetSourceEntries(sourceID...)
+	if err != nil {
+		return nil, err
+	}
+
+	endpoints, err := s.GetEndpoints(sourceID...)
+	if err != nil {
+		return nil, err
+	}
+
+	sources := s.SourceEntriesToSources(sourceEntries)
+	sourcesMap := s.SourcesToMap(sources)
+	sourcesMap = s.MapEndpointsToSources(sourcesMap, endpoints)
+	sources = s.MapToSources(sourcesMap)
+
+	return sources, nil
 }
