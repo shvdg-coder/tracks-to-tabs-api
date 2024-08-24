@@ -25,6 +25,13 @@ func NewInstrumentSvc(data data.InstrumentData, mapper mappers.InstrumentMapper)
 }
 
 // GetInstruments retrieves instruments for the provided IDs.
-func (s *InstrumentSvc) GetInstruments(instrumentID ...uint) ([]*models.Instrument, error) {
-	return nil, nil
+func (i *InstrumentSvc) GetInstruments(instrumentID ...uint) ([]*models.Instrument, error) {
+	instrumentEntries, err := i.GetInstrumentEntries(instrumentID...)
+	if err != nil {
+		return nil, err
+	}
+
+	instruments := i.InstrumentEntriesToInstruments(instrumentEntries)
+
+	return instruments, nil
 }

@@ -26,5 +26,12 @@ func NewDifficultySvc(data data.DifficultyData, mapper mappers.DifficultyMapper)
 
 // GetDifficulties retrieves the difficulties for the provided IDs.
 func (d *DifficultySvc) GetDifficulties(difficultyID ...uint) ([]*models.Difficulty, error) {
-	return nil, nil
+	difficultyEntries, err := d.GetDifficultyEntries(difficultyID...)
+	if err != nil {
+		return nil, err
+	}
+
+	difficulties := d.DifficultyEntriesToDifficulties(difficultyEntries)
+
+	return difficulties, nil
 }
