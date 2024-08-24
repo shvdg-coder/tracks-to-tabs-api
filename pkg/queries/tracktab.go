@@ -1,7 +1,7 @@
 package queries
 
 /*
-CreateTrackTabTableQuery is a query to create the 'track to tab' table.
+CreateTrackTabTable is a query to create the 'track to tab' table.
 +--------------------------------------+--------------------------------------+
 |               track_id               |                tab_id                |
 +--------------------------------------+--------------------------------------+
@@ -12,7 +12,7 @@ CreateTrackTabTableQuery is a query to create the 'track to tab' table.
 - 'track_id': The UUID that uniquely identifies a track from the 'tracks' table.
 - 'tab_id': The UUID that uniquely identifies a tab from the 'tabs' table.
 */
-const CreateTrackTabTableQuery = `
+const CreateTrackTabTable = `
 	CREATE TABLE IF NOT EXISTS track_tab  (
 	   track_id UUID REFERENCES tracks (id),
 	   tab_id UUID REFERENCES tabs (id),
@@ -20,8 +20,8 @@ const CreateTrackTabTableQuery = `
 	);
 `
 
-// DropTrackTabTableQuery is a SQL query that drops the 'track_tab' table from the database.
-const DropTrackTabTableQuery = `
+// DropTrackTabTable is a SQL query that drops the 'track_tab' table from the database.
+const DropTrackTabTable = `
 	DROP TABLE IF EXISTS track_tab;
 `
 

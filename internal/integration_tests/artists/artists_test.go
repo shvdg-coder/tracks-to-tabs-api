@@ -22,7 +22,7 @@ func TestGetArtists(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	api := pkg.NewAPI(dbEnv)
+	api := pkg.NewDataAPI(dbEnv)
 
 	// Execute
 	artists, err := api.GetArtists(artistIDs...)

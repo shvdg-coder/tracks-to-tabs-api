@@ -2,7 +2,7 @@ package environments
 
 import (
 	tstdb "github.com/shvdg-dev/base-logic/pkg/testable/database"
-	inl "github.com/shvdg-dev/tunes-to-tabs-api/internal"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg"
 )
 
 // EnvManagement represents the operations related to managing environments.
@@ -36,9 +36,8 @@ func (s *Service) CreateDbEnv(config *tstdb.ContainerConfig) (DbEnvOperations, e
 		return nil, err
 	}
 
-	tablesService := inl.NewTableService(dbContainer)
-	creatorService := inl.NewCreateService(tablesService)
-	dropService := inl.NewDropService(tablesService)
+	creatorService := pkg.NewCreateAPI(dbContainer)
+	dropService := pkg.NewDropAPI(dbContainer)
 	dbEnv := NewDbEnv(dbContainer, creatorService, dropService)
 
 	return dbEnv, nil

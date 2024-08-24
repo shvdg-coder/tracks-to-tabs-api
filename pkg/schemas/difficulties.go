@@ -25,7 +25,7 @@ func NewDifficultySvc(database logic.DbOperations) DifficultySchema {
 
 // CreateDifficultiesTable creates a difficulties table if it doesn't already exist.
 func (s *DifficultySvc) CreateDifficultiesTable() {
-	_, err := s.Exec(queries.CreateDifficultiesTableQuery)
+	_, err := s.Exec(queries.CreateDifficultiesTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *DifficultySvc) CreateDifficultiesTable() {
 
 // DropDifficultiesTable drops the difficulties table if it exists.
 func (s *DifficultySvc) DropDifficultiesTable() {
-	_, err := s.Exec(queries.DropDifficultiesTableQuery)
+	_, err := s.Exec(queries.DropDifficultiesTable)
 	if err != nil {
 		log.Fatal(err)
 	}

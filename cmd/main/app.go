@@ -10,17 +10,17 @@ import (
 )
 
 var (
-	config *inter.Config
-	tables inter.TableOperations
-	api    pkg.DataOps
+	config    *inter.Config
+	createAPI pkg.CreateOps
+	dropAPI   pkg.DropOps
 )
 
 // init instantiates all app requirements.
 func init() {
 	config = initConfig()
 	database := initDatabase()
-	tables = inter.NewTableService(database)
-	api = pkg.NewAPI(database)
+	createAPI = pkg.NewCreateAPI(database)
+	dropAPI = pkg.NewDropAPI(database)
 }
 
 // initConfig initializes the application configuration.
@@ -55,9 +55,9 @@ func handleArgs(args []string) {
 func handleArg(arg string) {
 	switch arg {
 	case inter.CommandCreate:
-		inter.NewCreateService(tables).CreateAll()
+		createAPI.CreateAll()
 	case inter.CommandPurge:
-		inter.NewDropService(tables).DropAll()
+		dropAPI.DropAll()
 	case inter.CommandSeed:
 	default:
 		printErrorAndExit()

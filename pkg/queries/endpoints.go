@@ -1,7 +1,7 @@
 package queries
 
 /*
-CreateEndpointsTableQuery is a query to create the endpoints table.
+CreateEndpointsTable is a query to create the endpoints table.
 It is used to store endpoints, taken from external sources.
 +---------------------------------------------------------------+
 |   source_id  | category   | type      | url                   |
@@ -17,7 +17,7 @@ It contains the following columns:
   - 'type': This denotes the type.
   - 'url': This is the endpoint, which has to be formatted with the corresponding IDs/references, as stored in the 'references' table.
 */
-const CreateEndpointsTableQuery = `
+const CreateEndpointsTable = `
 	CREATE TABLE IF NOT EXISTS "endpoints" (
 	   source_id INT NOT NULL,
 	   category VARCHAR(250) NOT NULL,
@@ -28,8 +28,8 @@ const CreateEndpointsTableQuery = `
 	);
 `
 
-// DropEndpointsTableQuery is a SQL query to drop the 'endpoints' table from the database.
-const DropEndpointsTableQuery = `
+// DropEndpointsTable is a SQL query to drop the 'endpoints' table from the database.
+const DropEndpointsTable = `
 	DROP TABLE IF EXISTS "endpoints";
 `
 

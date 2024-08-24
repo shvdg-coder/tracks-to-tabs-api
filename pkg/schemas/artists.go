@@ -25,7 +25,7 @@ func NewArtistSvc(database logic.DbOperations) ArtistSchema {
 
 // CreateArtistsTable creates an artists table if it doesn't already exist.
 func (s *ArtistSvc) CreateArtistsTable() {
-	_, err := s.Exec(queries.CreateArtistsTableQuery)
+	_, err := s.Exec(queries.CreateArtistsTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *ArtistSvc) CreateArtistsTable() {
 
 // DropArtistsTable drops the artists table if it exists.
 func (s *ArtistSvc) DropArtistsTable() {
-	_, err := s.Exec(queries.DropArtistsTableQuery)
+	_, err := s.Exec(queries.DropArtistsTable)
 	if err != nil {
 		log.Fatal(err)
 	}

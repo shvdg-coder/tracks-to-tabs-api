@@ -25,7 +25,7 @@ func NewEndpointSvc(database logic.DbOperations) EndpointSchema {
 
 // CreateEndpointsTable creates the endpoints table if it doesn't already exist.
 func (s *EndpointSvc) CreateEndpointsTable() {
-	_, err := s.Exec(queries.CreateEndpointsTableQuery)
+	_, err := s.Exec(queries.CreateEndpointsTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *EndpointSvc) CreateEndpointsTable() {
 
 // DropEndpointsTable drops the endpoints table if it exists.
 func (s *EndpointSvc) DropEndpointsTable() {
-	_, err := s.Exec(queries.DropEndpointsTableQuery)
+	_, err := s.Exec(queries.DropEndpointsTable)
 	if err != nil {
 		log.Fatal(err)
 	}

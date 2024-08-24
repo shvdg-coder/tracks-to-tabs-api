@@ -1,7 +1,7 @@
 package queries
 
 /*
-CreateInstrumentsTableQuery is a query to create an instruments lookup table.
+CreateInstrumentsTable is a query to create an instruments lookup table.
 +----+---------------------+
 | id |         name        |
 +----+---------------------+
@@ -13,15 +13,15 @@ It contains the following columns:
   - 'id': This is an auto-incrementing integer that uniquely identifies a record.
   - 'name': This column records the name of the instrument.
 */
-const CreateInstrumentsTableQuery = `
+const CreateInstrumentsTable = `
 	CREATE TABLE IF NOT EXISTS instruments (
 	   id SERIAL PRIMARY KEY,
 	   name VARCHAR(255) NOT NULL
 	);
 `
 
-// DropInstrumentsTableQuery is a SQL query to drop the 'instruments' table if it exists
-const DropInstrumentsTableQuery = `
+// DropInstrumentsTable is a SQL query to drop the 'instruments' table if it exists
+const DropInstrumentsTable = `
 	DROP TABLE IF EXISTS instruments;
 `
 

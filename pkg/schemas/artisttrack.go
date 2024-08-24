@@ -25,7 +25,7 @@ func NewArtistTrackSvc(database logic.DbOperations) ArtistTrackSchema {
 
 // CreateArtistTrackTable creates an artist_track table if it doesn't already exist.
 func (s *ArtistTrackSvc) CreateArtistTrackTable() {
-	_, err := s.Exec(queries.CreateArtistTrackTableQuery)
+	_, err := s.Exec(queries.CreateArtistTrackTable)
 	if err != nil {
 		log.Fatal(err)
 	}

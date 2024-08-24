@@ -2,14 +2,14 @@ package environments
 
 import (
 	"github.com/shvdg-dev/base-logic/pkg/testable/database"
-	inl "github.com/shvdg-dev/tunes-to-tabs-api/internal"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg"
 )
 
 // DbEnvOperations represents operations for a test environment, used during integration tests.
 type DbEnvOperations interface {
 	database.ContainerOperations
-	inl.CreateOperations
-	inl.DropOperations
+	pkg.CreateOps
+	pkg.DropOps
 	Setup()
 	Breakdown()
 }
@@ -17,16 +17,16 @@ type DbEnvOperations interface {
 // DbEnv is used to spin up a Database container for integration testing.
 type DbEnv struct {
 	database.ContainerOperations
-	inl.CreateOperations
-	inl.DropOperations
+	pkg.CreateOps
+	pkg.DropOps
 }
 
 // NewDbEnv creates a new instance of DbEnv.
-func NewDbEnv(dbContainer database.ContainerOperations, create inl.CreateOperations, drop inl.DropOperations) DbEnvOperations {
+func NewDbEnv(dbContainer database.ContainerOperations, create pkg.CreateOps, drop pkg.DropOps) DbEnvOperations {
 	return &DbEnv{
 		ContainerOperations: dbContainer,
-		CreateOperations:    create,
-		DropOperations:      drop,
+		CreateOps:           create,
+		DropOps:             drop,
 	}
 }
 

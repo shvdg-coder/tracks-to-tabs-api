@@ -25,7 +25,7 @@ func NewSourceSvc(database logic.DbOperations) SourceSchema {
 
 // CreateSourcesTable creates a sources table if it doesn't already exist.
 func (s *SourceSvc) CreateSourcesTable() {
-	_, err := s.Exec(queries.CreateSourcesTableQuery)
+	_, err := s.Exec(queries.CreateSourcesTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *SourceSvc) CreateSourcesTable() {
 
 // DropSourcesTable drops the sources table if it exists.
 func (s *SourceSvc) DropSourcesTable() {
-	_, err := s.Exec(queries.DropSourcesTableQuery)
+	_, err := s.Exec(queries.DropSourcesTable)
 	if err != nil {
 		log.Fatal(err)
 	}

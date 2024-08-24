@@ -1,7 +1,7 @@
 package queries
 
 /*
-CreateDifficultiesTableQuery is a query to create a difficulties lookup table.
+CreateDifficultiesTable is a query to create a difficulties lookup table.
 +----+---------------------+
 | id |         name        |
 +----+---------------------+
@@ -14,15 +14,15 @@ It contains the following columns:
   - 'id': This is an auto-incrementing integer that uniquely identifies a record.
   - 'name': This column records the name of the difficulty level.
 */
-const CreateDifficultiesTableQuery = `
+const CreateDifficultiesTable = `
 	CREATE TABLE IF NOT EXISTS difficulties (
 	   id SERIAL PRIMARY KEY,
 	   name VARCHAR(255) NOT NULL
 	);
 `
 
-// DropDifficultiesTableQuery is a SQL query to drop the 'difficulties' table if it exists
-const DropDifficultiesTableQuery = `
+// DropDifficultiesTable is a SQL query to drop the 'difficulties' table if it exists
+const DropDifficultiesTable = `
 	DROP TABLE IF EXISTS difficulties;
 `
 

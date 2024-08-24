@@ -1,7 +1,7 @@
 package queries
 
 /*
-CreateUsersTableQuery is a query to create a users table.
+CreateUsersTable is a query to create a users table.
 +--------------------------------------+---------------+-------------+
 |                   id                 |     email     | password 	 |
 +--------------------------------------+---------------+-------------+
@@ -14,7 +14,7 @@ It consists of the following columns:
   - 'email': This is the user's email address.
   - 'password': This stores the hashed password of the user.
 */
-const CreateUsersTableQuery = `
+const CreateUsersTable = `
 	CREATE TABLE IF NOT EXISTS users  (
 	   id UUID PRIMARY KEY,
 	   email VARCHAR(255) UNIQUE NOT NULL,
@@ -22,8 +22,8 @@ const CreateUsersTableQuery = `
 	);
 `
 
-// DropUsersTableQuery is an SQL query to drop the 'users' table from the database.
-const DropUsersTableQuery = `
+// DropUsersTable is an SQL query to drop the 'users' table from the database.
+const DropUsersTable = `
 	DROP TABLE IF EXISTS users;
 `
 

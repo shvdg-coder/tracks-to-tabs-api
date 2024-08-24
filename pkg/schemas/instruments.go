@@ -25,7 +25,7 @@ func NewInstrumentSvc(database logic.DbOperations) InstrumentSchema {
 
 // CreateInstrumentsTable creates an instruments table if it doesn't already exist.
 func (s *InstrumentSvc) CreateInstrumentsTable() {
-	_, err := s.Exec(queries.CreateInstrumentsTableQuery)
+	_, err := s.Exec(queries.CreateInstrumentsTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *InstrumentSvc) CreateInstrumentsTable() {
 
 // DropInstrumentsTable drops the instruments table if it exists.
 func (s *InstrumentSvc) DropInstrumentsTable() {
-	_, err := s.Exec(queries.DropInstrumentsTableQuery)
+	_, err := s.Exec(queries.DropInstrumentsTable)
 	if err != nil {
 		log.Fatal(err)
 	}

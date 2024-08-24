@@ -1,7 +1,7 @@
 package queries
 
 /*
-CreateArtistTrackTableQuery is a query to create an 'artist to track' linking table.
+CreateArtistTrackTable is a query to create an 'artist to track' linking table.
 +--------------------------------------+--------------------------------------+
 |              artist_id               |              track_id                |
 +--------------------------------------+--------------------------------------+
@@ -13,7 +13,7 @@ It contains the following columns:
 - 'artist_id': The UUID that uniquely identifies an artist in the 'artists' table.
 - 'track_id': The UUID that uniquely identifies a track in the 'tracks' table.
 */
-const CreateArtistTrackTableQuery = `
+const CreateArtistTrackTable = `
 	CREATE TABLE IF NOT EXISTS artist_track  (
 	   artist_id UUID REFERENCES artists (id),
 	   track_id UUID REFERENCES tracks (id),

@@ -1,7 +1,7 @@
 package queries
 
 /*
-CreateArtistsTableQuery is a query to create an artists table.
+CreateArtistsTable is a query to create an artists table.
 +--------------------------------------+------------+
 |                   id                 |   name    |
 +--------------------------------------+------------+
@@ -13,15 +13,15 @@ It contains the following columns:
   - 'id': This is the UUID that uniquely identifies a record in our system.
   - 'name': This column has the name of an Artist.
 */
-const CreateArtistsTableQuery = `
+const CreateArtistsTable = `
 	CREATE TABLE IF NOT EXISTS artists  (
 	   id UUID PRIMARY KEY,
 	   name VARCHAR(500) NOT NULL
 	);
 `
 
-// DropArtistsTableQuery is a SQL query to drop the 'artists' table from the database.
-const DropArtistsTableQuery = `
+// DropArtistsTable is a SQL query to drop the 'artists' table from the database.
+const DropArtistsTable = `
 	DROP TABLE IF EXISTS artists;
 `
 

@@ -25,7 +25,7 @@ func NewUserSvc(database logic.DbOperations) UserSchema {
 
 // CreateUsersTable creates a users table if it doesn't already exist.
 func (s *UserSvc) CreateUsersTable() {
-	_, err := s.Exec(queries.CreateUsersTableQuery)
+	_, err := s.Exec(queries.CreateUsersTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *UserSvc) CreateUsersTable() {
 
 // DropUsersTable drops the users table if it exists.
 func (s *UserSvc) DropUsersTable() {
-	_, err := s.Exec(queries.DropUsersTableQuery)
+	_, err := s.Exec(queries.DropUsersTable)
 	if err != nil {
 		log.Fatal(err)
 	}

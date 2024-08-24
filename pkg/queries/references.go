@@ -1,7 +1,7 @@
 package queries
 
 /*
-CreateReferencesTableQuery is a query to create a references table.
+CreateReferencesTable is a query to create a references table.
 It is used to store references of various external sources to link them to internal records.
 +-------------------------------------------------------------------------------------+
 |           internal_id            |   source_id  | category   | type  | reference    |
@@ -20,7 +20,7 @@ It contains the following columns:
   - 'type': This denotes the type of the reference.
   - 'reference': This stores the actual reference data.
 */
-const CreateReferencesTableQuery = `
+const CreateReferencesTable = `
 	CREATE TABLE IF NOT EXISTS "references" (
 	   internal_id UUID NOT NULL,
 	   source_id INT NOT NULL,
@@ -32,8 +32,8 @@ const CreateReferencesTableQuery = `
 	);
 `
 
-// DropReferencesTableQuery is a SQL query to drop the 'references' table from the database.
-const DropReferencesTableQuery = `
+// DropReferencesTable is a SQL query to drop the 'references' table from the database.
+const DropReferencesTable = `
 	DROP TABLE IF EXISTS "references";
 `
 

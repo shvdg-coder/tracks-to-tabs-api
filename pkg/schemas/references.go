@@ -25,7 +25,7 @@ func NewReferenceSvc(database logic.DbOperations) ReferenceSchema {
 
 // CreateReferencesTable creates the references table if it doesn't already exist.
 func (s *ReferenceSvc) CreateReferencesTable() {
-	_, err := s.Exec(queries.CreateReferencesTableQuery)
+	_, err := s.Exec(queries.CreateReferencesTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *ReferenceSvc) CreateReferencesTable() {
 
 // DropReferencesTable drops the references table if it exists.
 func (s *ReferenceSvc) DropReferencesTable() {
-	_, err := s.Exec(queries.DropReferencesTableQuery)
+	_, err := s.Exec(queries.DropReferencesTable)
 	if err != nil {
 		log.Fatal(err)
 	}

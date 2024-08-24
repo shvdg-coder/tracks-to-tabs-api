@@ -1,7 +1,7 @@
 package queries
 
 /*
-CreateTracksTableQuery is a query to create the tracks table.
+CreateTracksTable is a query to create the tracks table.
 +--------------------------------------+--------------------+------------+
 |                 id                   |       title        |  duration  |
 +--------------------------------------+--------------------+------------+
@@ -14,7 +14,7 @@ It contains the following columns:
   - 'title': The title of the track.
   - 'duration': The duration of the track in milliseconds.
 */
-const CreateTracksTableQuery = `
+const CreateTracksTable = `
 	CREATE TABLE IF NOT EXISTS tracks (
 	   id UUID PRIMARY KEY,
 	   title VARCHAR(500) NOT NULL,
@@ -22,8 +22,8 @@ const CreateTracksTableQuery = `
 	);
 `
 
-// DropTracksTableQuery is a SQL query to drop the 'tracks' table from the database.
-const DropTracksTableQuery = `
+// DropTracksTable is a SQL query to drop the 'tracks' table from the database.
+const DropTracksTable = `
 	DROP TABLE IF EXISTS tracks;
 `
 

@@ -25,7 +25,7 @@ func NewTabSvc(database logic.DbOperations) TabSchema {
 
 // CreateTabsTable creates a tabs table if it doesn't already exist.
 func (s *TabSvc) CreateTabsTable() {
-	_, err := s.Exec(queries.CreateTabsTableQuery)
+	_, err := s.Exec(queries.CreateTabsTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *TabSvc) CreateTabsTable() {
 
 // DropTabsTable drops the tabs table if it exists.
 func (s *TabSvc) DropTabsTable() {
-	_, err := s.Exec(queries.DropTabsTableQuery)
+	_, err := s.Exec(queries.DropTabsTable)
 	if err != nil {
 		log.Fatal(err)
 	}

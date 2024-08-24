@@ -25,7 +25,7 @@ func NewTrackTabSvc(database logic.DbOperations) TrackTabSchema {
 
 // CreateTrackTabTable creates the track_tab table if it doesn't already exist.
 func (s *TrackTabSvc) CreateTrackTabTable() {
-	_, err := s.Exec(queries.CreateTrackTabTableQuery)
+	_, err := s.Exec(queries.CreateTrackTabTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *TrackTabSvc) CreateTrackTabTable() {
 
 // DropTrackTabTable drops the track_tab table if it exists.
 func (s *TrackTabSvc) DropTrackTabTable() {
-	_, err := s.Exec(queries.DropTrackTabTableQuery)
+	_, err := s.Exec(queries.DropTrackTabTable)
 	if err != nil {
 		log.Fatal(err)
 	}

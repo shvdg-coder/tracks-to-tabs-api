@@ -1,7 +1,7 @@
 package queries
 
 /*
-CreateSourcesTableQuery is a query to create sources table.
+CreateSourcesTable is a query to create sources table.
 It is used to store external sources.
 +-------+-------------------+-------------+
 | id    |       name        |  category   |
@@ -17,7 +17,7 @@ It contains the following columns:
   - 'name': The name of the source.
   - 'category': The category of the source.
 */
-const CreateSourcesTableQuery = `
+const CreateSourcesTable = `
 	CREATE TABLE IF NOT EXISTS sources(
 	   id int PRIMARY KEY,
 	   name VARCHAR(250) NOT NULL,
@@ -26,8 +26,8 @@ const CreateSourcesTableQuery = `
 	);
 `
 
-// DropSourcesTableQuery is a SQL query to drop the 'sources' table
-const DropSourcesTableQuery = `
+// DropSourcesTable is a SQL query to drop the 'sources' table
+const DropSourcesTable = `
 	DROP TABLE IF EXISTS sources;
 `
 

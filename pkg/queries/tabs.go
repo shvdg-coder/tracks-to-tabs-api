@@ -1,7 +1,7 @@
 package queries
 
 /*
-CreateTabsTableQuery is a query to create a tracks table.
+CreateTabsTable is a query to create a tracks table.
 +--------------------------------------+---------------+---------------+------------------+
 |                  id                  | instrument_id | difficulty_id |   description    |
 +--------------------------------------+---------------+---------------+------------------+
@@ -15,7 +15,7 @@ It contains the following columns:
   - 'difficulty_id': This column represents the ID of the difficulty level from a lookup table.
   - 'description': This column records the description of the tab.
 */
-const CreateTabsTableQuery = `
+const CreateTabsTable = `
 	CREATE TABLE IF NOT EXISTS tabs (
 	   id UUID PRIMARY KEY,
 	   instrument_id INT NOT NULL,
@@ -26,8 +26,8 @@ const CreateTabsTableQuery = `
 	);
 `
 
-// DropTabsTableQuery is a SQL query to drop the 'tabs' table if it exists
-const DropTabsTableQuery = `
+// DropTabsTable is a SQL query to drop the 'tabs' table if it exists
+const DropTabsTable = `
 	DROP TABLE IF EXISTS tabs;
 `
 

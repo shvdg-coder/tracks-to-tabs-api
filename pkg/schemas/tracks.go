@@ -25,7 +25,7 @@ func NewTrackSvc(database logic.DbOperations) TrackSchema {
 
 // CreateTracksTable creates the tracks table if it doesn't already exist.
 func (s *TrackSvc) CreateTracksTable() {
-	_, err := s.Exec(queries.CreateTracksTableQuery)
+	_, err := s.Exec(queries.CreateTracksTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *TrackSvc) CreateTracksTable() {
 
 // DropTracksTable drops the tracks table if it exists.
 func (s *TrackSvc) DropTracksTable() {
-	_, err := s.Exec(queries.DropTracksTableQuery)
+	_, err := s.Exec(queries.DropTracksTable)
 	if err != nil {
 		log.Fatal(err)
 	}

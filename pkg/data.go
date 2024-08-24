@@ -6,7 +6,7 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
-// DataOps represents all API data operations.
+// DataOps represents all DataAPI data operations.
 type DataOps interface {
 	GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error)
 	GetTracks(trackID ...uuid.UUID) ([]*models.Track, error)
@@ -15,12 +15,12 @@ type DataOps interface {
 	GetSources(sourceID ...uint) ([]*models.Source, error)
 }
 
-// API represents the main entry point to interact with functionalities for the defined entities.
-type API struct {
+// DataAPI represents the main entry point to interact with functionalities for the defined entities.
+type DataAPI struct {
 	SvcOps
 }
 
-// NewAPI creates a new instance of the API.
-func NewAPI(database logic.DbOperations) DataOps {
-	return &API{SvcOps: NewSvcManager(database)}
+// NewDataAPI creates a new instance of the DataAPI.
+func NewDataAPI(database logic.DbOperations) DataOps {
+	return &DataAPI{SvcOps: NewSvcManager(database)}
 }
