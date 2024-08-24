@@ -19,7 +19,7 @@ func NewInstrumentSvc() InstrumentMapper {
 }
 
 // InstrumentEntriesToInstruments transforms a slice of models.InstrumentEntry's into a slice of models.Instrument's.
-func InstrumentEntriesToInstruments(instrumentEntries []*models.InstrumentEntry) []*models.Instrument {
+func (i *InstrumentSvc) InstrumentEntriesToInstruments(instrumentEntries []*models.InstrumentEntry) []*models.Instrument {
 	instruments := make([]*models.Instrument, len(instrumentEntries))
 	for i, instrumentEntry := range instrumentEntries {
 		instruments[i] = &models.Instrument{InstrumentEntry: instrumentEntry}
