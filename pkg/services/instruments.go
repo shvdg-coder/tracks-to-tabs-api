@@ -4,10 +4,12 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/schemas"
 )
 
-// InstrumentOps represents the operations related to instruments.
+// InstrumentOps represents operations related to instruments.
 type InstrumentOps interface {
+	schemas.InstrumentSchema
 	data.InstrumentData
 	mappers.InstrumentMapper
 	GetInstruments(instrumentID ...uint) ([]*models.Instrument, error)
@@ -15,13 +17,18 @@ type InstrumentOps interface {
 
 // InstrumentSvc is responsible for managing instruments.
 type InstrumentSvc struct {
+	schemas.InstrumentSchema
 	data.InstrumentData
 	mappers.InstrumentMapper
 }
 
 // NewInstrumentSvc creates a new instance of InstrumentSvc.
-func NewInstrumentSvc(data data.InstrumentData, mapper mappers.InstrumentMapper) InstrumentOps {
-	return &InstrumentSvc{InstrumentData: data, InstrumentMapper: mapper}
+func NewInstrumentSvc(schema schemas.InstrumentSchema, data data.InstrumentData, mapper mappers.InstrumentMapper) InstrumentOps {
+	return &InstrumentSvc{
+		InstrumentSchema: schema,
+		InstrumentData:   data,
+		InstrumentMapper: mapper,
+	}
 }
 
 // GetInstruments retrieves instruments for the provided IDs.

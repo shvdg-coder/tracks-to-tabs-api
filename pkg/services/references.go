@@ -5,10 +5,12 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/schemas"
 )
 
 // ReferenceOps represents operations related to references.
 type ReferenceOps interface {
+	schemas.ReferenceSchema
 	data.ReferenceData
 	mappers.ReferenceMapper
 	GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error)
@@ -16,14 +18,20 @@ type ReferenceOps interface {
 
 // ReferenceSvc is responsible for managing references.
 type ReferenceSvc struct {
+	schemas.ReferenceSchema
 	data.ReferenceData
 	mappers.ReferenceMapper
 	SourceOps
 }
 
 // NewReferenceSvc instantiates a new ReferenceSvc.
-func NewReferenceSvc(data data.ReferenceData, mapper mappers.ReferenceMapper, sources SourceOps) ReferenceOps {
-	return &ReferenceSvc{ReferenceData: data, ReferenceMapper: mapper, SourceOps: sources}
+func NewReferenceSvc(schema schemas.ReferenceSchema, data data.ReferenceData, mapper mappers.ReferenceMapper, sources SourceOps) ReferenceOps {
+	return &ReferenceSvc{
+		ReferenceSchema: schema,
+		ReferenceData:   data,
+		ReferenceMapper: mapper,
+		SourceOps:       sources,
+	}
 }
 
 // GetReferences retrieves the models.Reference's with entity references, for the provided internal IDs.

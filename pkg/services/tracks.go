@@ -7,8 +7,13 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
+import (
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/schemas"
+)
+
 // TrackOps represent all operations related to tracks.
 type TrackOps interface {
+	schemas.TrackSchema
 	data.TrackData
 	mappers.TrackMapper
 	GetTracks(trackID ...uuid.UUID) ([]*models.Track, error)
@@ -16,6 +21,7 @@ type TrackOps interface {
 
 // TrackSvc is responsible for managing and retrieving tracks.
 type TrackSvc struct {
+	schemas.TrackSchema
 	data.TrackData
 	mappers.TrackMapper
 	TrackTabOps
@@ -24,8 +30,9 @@ type TrackSvc struct {
 }
 
 // NewTrackSvc instantiates a TrackSvc.
-func NewTrackSvc(data data.TrackData, mapper mappers.TrackMapper, trackTabs TrackTabOps, tabs TabOps, references ReferenceOps) TrackOps {
+func NewTrackSvc(schema schemas.TrackSchema, data data.TrackData, mapper mappers.TrackMapper, trackTabs TrackTabOps, tabs TabOps, references ReferenceOps) TrackOps {
 	return &TrackSvc{
+		TrackSchema:  schema,
 		TrackData:    data,
 		TrackMapper:  mapper,
 		TrackTabOps:  trackTabs,

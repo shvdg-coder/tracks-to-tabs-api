@@ -4,10 +4,12 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/schemas"
 )
 
 // SourceOps represents operations related to sources.
 type SourceOps interface {
+	schemas.SourceSchema
 	data.SourceData
 	mappers.SourceMapper
 	GetSources(sourceID ...uint) ([]*models.Source, error)
@@ -15,14 +17,20 @@ type SourceOps interface {
 
 // SourceSvc is responsible for managing sources.
 type SourceSvc struct {
+	schemas.SourceSchema
 	data.SourceData
 	mappers.SourceMapper
 	EndpointOps
 }
 
 // NewSourceSvc instantiates a new SourceSvc.
-func NewSourceSvc(data data.SourceData, mapper mappers.SourceMapper, endpoints EndpointOps) SourceOps {
-	return &SourceSvc{SourceData: data, SourceMapper: mapper, EndpointOps: endpoints}
+func NewSourceSvc(schema schemas.SourceSchema, data data.SourceData, mapper mappers.SourceMapper, endpoints EndpointOps) SourceOps {
+	return &SourceSvc{
+		SourceSchema: schema,
+		SourceData:   data,
+		SourceMapper: mapper,
+		EndpointOps:  endpoints,
+	}
 }
 
 // GetSources retrieves sources with their entity references.

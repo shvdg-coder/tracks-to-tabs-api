@@ -5,10 +5,12 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/schemas"
 )
 
 // ArtistOps represents all operations related to artists.
 type ArtistOps interface {
+	schemas.ArtistSchema
 	data.ArtistData
 	mappers.ArtistMapper
 	GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error)
@@ -16,6 +18,7 @@ type ArtistOps interface {
 
 // ArtistSvc is responsible for managing and retrieving artists.
 type ArtistSvc struct {
+	schemas.ArtistSchema
 	data.ArtistData
 	mappers.ArtistMapper
 	ArtistTrackOps
@@ -24,8 +27,9 @@ type ArtistSvc struct {
 }
 
 // NewArtistSvc instantiates a ArtistSvc.
-func NewArtistSvc(data data.ArtistData, mapper mappers.ArtistMapper, artistTracks ArtistTrackOps, tracks TrackOps, references ReferenceOps) ArtistOps {
+func NewArtistSvc(schema schemas.ArtistSchema, data data.ArtistData, mapper mappers.ArtistMapper, artistTracks ArtistTrackOps, tracks TrackOps, references ReferenceOps) ArtistOps {
 	return &ArtistSvc{
+		ArtistSchema:   schema,
 		ArtistData:     data,
 		ArtistMapper:   mapper,
 		ArtistTrackOps: artistTracks,

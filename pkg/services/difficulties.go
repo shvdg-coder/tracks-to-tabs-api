@@ -6,8 +6,13 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
 )
 
-// DifficultyOps represents operations related to difficulties.
+import (
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/schemas"
+)
+
+// DifficultyOps combines interfaces representing all operations related to difficulties.
 type DifficultyOps interface {
+	schemas.DifficultySchema
 	data.DifficultyData
 	mappers.DifficultyMapper
 	GetDifficulties(difficultyID ...uint) ([]*models.Difficulty, error)
@@ -15,13 +20,18 @@ type DifficultyOps interface {
 
 // DifficultySvc is responsible for managing difficulties.
 type DifficultySvc struct {
+	schemas.DifficultySchema
 	data.DifficultyData
 	mappers.DifficultyMapper
 }
 
 // NewDifficultySvc instantiates a new instance of DifficultySvc.
-func NewDifficultySvc(data data.DifficultyData, mapper mappers.DifficultyMapper) DifficultyOps {
-	return &DifficultySvc{DifficultyData: data, DifficultyMapper: mapper}
+func NewDifficultySvc(schema schemas.DifficultySchema, data data.DifficultyData, mapper mappers.DifficultyMapper) DifficultyOps {
+	return &DifficultySvc{
+		DifficultySchema: schema,
+		DifficultyData:   data,
+		DifficultyMapper: mapper,
+	}
 }
 
 // GetDifficulties retrieves the difficulties for the provided IDs.

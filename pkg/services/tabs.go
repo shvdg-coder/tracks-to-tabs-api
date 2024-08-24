@@ -5,10 +5,12 @@ import (
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/schemas"
 )
 
 // TabOps represent all operations related to tabs.
 type TabOps interface {
+	schemas.TabSchema
 	data.TabData
 	mappers.TabMapper
 	GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error)
@@ -16,6 +18,7 @@ type TabOps interface {
 
 // TabSvc is responsible for managing and retrieving tabs.
 type TabSvc struct {
+	schemas.TabSchema
 	data.TabData
 	mappers.TabMapper
 	InstrumentOps
@@ -24,8 +27,9 @@ type TabSvc struct {
 }
 
 // NewTabSvc instantiates a TabSvc.
-func NewTabSvc(data data.TabData, mapper mappers.TabMapper, instruments InstrumentOps, difficulties DifficultyOps, references ReferenceOps) TabOps {
+func NewTabSvc(schema schemas.TabSchema, data data.TabData, mapper mappers.TabMapper, instruments InstrumentOps, difficulties DifficultyOps, references ReferenceOps) TabOps {
 	return &TabSvc{
+		TabSchema:     schema,
 		TabData:       data,
 		TabMapper:     mapper,
 		InstrumentOps: instruments,
