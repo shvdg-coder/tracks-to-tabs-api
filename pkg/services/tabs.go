@@ -15,6 +15,7 @@ type TabOps interface {
 	mappers.TabMapper
 	GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error)
 	GetTabsCascading(tabID ...uuid.UUID) ([]*models.Tab, error)
+	ExtractIDsFromTabs(tabs []*models.Tab) (tabIDs []uuid.UUID, instrumentIDs []uint, difficultyIDs []uint)
 }
 
 // TabSvc is responsible for managing and retrieving tabs.
@@ -78,7 +79,7 @@ func (t *TabSvc) GetTabsCascading(tabID ...uuid.UUID) ([]*models.Tab, error) {
 
 // LoadInstruments loads the models.Instrument's for the given models.Tab's.
 func (t *TabSvc) LoadInstruments(tabs ...*models.Tab) error {
-	instrumentIDs := t.ExtractInstrumentIDs(tabs)
+	_, instrumentIDs, _ := t.ExtractIDsFromTabs(tabs)
 	instruments, err := t.GetInstruments(instrumentIDs...)
 	if err != nil {
 		return err
@@ -93,7 +94,7 @@ func (t *TabSvc) LoadInstruments(tabs ...*models.Tab) error {
 
 // LoadDifficulties loads the models.Difficulty's for the given models.Tab's.
 func (t *TabSvc) LoadDifficulties(tabs ...*models.Tab) error {
-	difficultyIDs := t.ExtractDifficultyIDs(tabs)
+	_, _, difficultyIDs := t.ExtractIDsFromTabs(tabs)
 	difficulties, err := t.GetDifficulties(difficultyIDs...)
 	if err != nil {
 		return err
@@ -108,7 +109,8 @@ func (t *TabSvc) LoadDifficulties(tabs ...*models.Tab) error {
 
 // LoadReferences loads the models.Reference's for the given models.Tab's.
 func (t *TabSvc) LoadReferences(tabs ...*models.Tab) error {
-	references, err := t.GetReferences(t.ExtractTabIDs(tabs)...)
+	tabIDs, _, _ := t.ExtractIDsFromTabs(tabs)
+	references, err := t.GetReferences(tabIDs...)
 	if err != nil {
 		return err
 	}
@@ -119,29 +121,17 @@ func (t *TabSvc) LoadReferences(tabs ...*models.Tab) error {
 	return nil
 }
 
-// ExtractTabIDs retrieves the ID's from the models.Tab's.
-func (t *TabSvc) ExtractTabIDs(tabs []*models.Tab) []uuid.UUID {
-	tabIDs := make([]uuid.UUID, len(tabs))
+// ExtractIDsFromTabs retrieves the tab, instrument and difficulty ID's from the models.Tab's.
+func (t *TabSvc) ExtractIDsFromTabs(tabs []*models.Tab) (tabIDs []uuid.UUID, instrumentIDs []uint, difficultyIDs []uint) {
+	tabIDs = make([]uuid.UUID, len(tabs))
+	instrumentIDs = make([]uint, len(tabs))
+	difficultyIDs = make([]uint, len(tabs))
+
 	for i, tab := range tabs {
 		tabIDs[i] = tab.ID
-	}
-	return tabIDs
-}
-
-// ExtractInstrumentIDs retrieves the Instrument IDs from the models.Tab's.
-func (t *TabSvc) ExtractInstrumentIDs(tabs []*models.Tab) []uint {
-	instrumentIDs := make([]uint, len(tabs))
-	for i, tab := range tabs {
 		instrumentIDs[i] = tab.InstrumentID
-	}
-	return instrumentIDs
-}
-
-// ExtractDifficultyIDs retrieves the Difficulty IDs from the models.Tab's.
-func (t *TabSvc) ExtractDifficultyIDs(tabs []*models.Tab) []uint {
-	difficultyIDs := make([]uint, len(tabs))
-	for i, tab := range tabs {
 		difficultyIDs[i] = tab.DifficultyID
 	}
-	return difficultyIDs
+
+	return tabIDs, instrumentIDs, difficultyIDs
 }

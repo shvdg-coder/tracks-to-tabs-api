@@ -14,6 +14,7 @@ type ReferenceOps interface {
 	data.ReferenceData
 	mappers.ReferenceMapper
 	GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error)
+	ExtractSourceIDs(references []*models.Reference) []uint
 }
 
 // ReferenceSvc is responsible for managing references.
