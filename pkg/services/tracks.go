@@ -18,6 +18,7 @@ type TrackOps interface {
 	mappers.TrackMapper
 	GetTracks(trackID ...uuid.UUID) ([]*models.Track, error)
 	GetTracksCascading(trackID ...uuid.UUID) ([]*models.Track, error)
+	ExtractIDsFromTracks(tracks []*models.Track) []uuid.UUID
 }
 
 // TrackSvc is responsible for managing and retrieving tracks.
@@ -74,7 +75,7 @@ func (t *TrackSvc) GetTracksCascading(trackID ...uuid.UUID) ([]*models.Track, er
 
 // LoadTabs loads the models.Tab's for the given models.Track's.
 func (t *TrackSvc) LoadTabs(tracks ...*models.Track) error {
-	trackTabEntries, err := t.GetTrackToTabLinks(t.ExtractTrackIDs(tracks)...)
+	trackTabEntries, err := t.GetTrackToTabLinks(t.ExtractIDsFromTracks(tracks)...)
 	if err != nil {
 		return err
 	}
@@ -94,7 +95,7 @@ func (t *TrackSvc) LoadTabs(tracks ...*models.Track) error {
 
 // LoadReferences loads the references for the given tracks.
 func (t *TrackSvc) LoadReferences(tracks ...*models.Track) error {
-	references, err := t.GetReferences(t.ExtractTrackIDs(tracks)...)
+	references, err := t.GetReferences(t.ExtractIDsFromTracks(tracks)...)
 	if err != nil {
 		return err
 	}
@@ -105,8 +106,8 @@ func (t *TrackSvc) LoadReferences(tracks ...*models.Track) error {
 	return nil
 }
 
-// ExtractTrackIDs retrieves the ID's from the models.Track's.
-func (t *TrackSvc) ExtractTrackIDs(tracks []*models.Track) []uuid.UUID {
+// ExtractIDsFromTracks retrieves the ID's from the models.Track's.
+func (t *TrackSvc) ExtractIDsFromTracks(tracks []*models.Track) []uuid.UUID {
 	trackIDs := make([]uuid.UUID, len(tracks))
 	for i, track := range tracks {
 		trackIDs[i] = track.ID

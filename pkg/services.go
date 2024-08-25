@@ -39,7 +39,7 @@ type SvcManager struct {
 }
 
 // NewSvcManager creates a new instance of the SvcManager.
-func NewSvcManager(database logic.DbOperations) SvcOps {
+func NewSvcManager(database logic.DbOperations) *SvcManager {
 	artistTrackSvc := createArtistTrackService(database)
 	trackTabSvc := createTrackTabSvc(database)
 	endpointsSvc := createEndpointsSvc(database)

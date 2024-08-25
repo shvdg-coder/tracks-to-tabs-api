@@ -17,15 +17,33 @@ type DataOps interface {
 
 // DataAPI represents the main entry point to interact with functionalities for the defined entities.
 type DataAPI struct {
-	SvcOps
+	*SvcManager
 }
 
 // NewDataAPI creates a new instance of the DataAPI.
 func NewDataAPI(database logic.DbOperations) DataOps {
-	return &DataAPI{SvcOps: NewSvcManager(database)}
+	return &DataAPI{SvcManager: NewSvcManager(database)}
 }
 
 // GetArtists retrieves artists, with entity references, for the provided IDs.
 func (d *DataAPI) GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error) {
 	return d.GetArtistsCascading(artistID...)
+}
+
+// GetTracks retrieves tracks, with entity references, for the provided IDs.
+func (d *DataAPI) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
+	artistTrackEntries, err := d.GetArtistToTrackEntries(trackID...)
+	if err != nil {
+		return nil, err
+	}
+
+	artistIDs, _ := d.ExtractIDsFromArtistTrackEntries(artistTrackEntries)
+	artists, err := d.GetArtistsCascading(artistIDs...)
+	if err != nil {
+		return nil, err
+	}
+
+	tracks := d.CollectTracks(artists)
+
+	return tracks, nil
 }

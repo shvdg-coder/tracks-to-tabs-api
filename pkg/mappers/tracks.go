@@ -10,6 +10,7 @@ type TrackMapper interface {
 	TrackEntriesToTracks(trackEntries []*models.TrackEntry) []*models.Track
 	TracksToMap(tracks []*models.Track) map[uuid.UUID]*models.Track
 	MapToTracks(tracksMap map[uuid.UUID]*models.Track) []*models.Track
+	MapArtistsToTracks(tracksMap map[uuid.UUID]*models.Track, artistsMap map[uuid.UUID]*models.Artist, artistTracks []*models.ArtistTrackEntry) map[uuid.UUID]*models.Track
 	MapTabsToTracks(tracksMap map[uuid.UUID]*models.Track, tabsMap map[uuid.UUID]*models.Tab, trackTabs []*models.TrackTabEntry) map[uuid.UUID]*models.Track
 	MapReferencesToTracks(tracksMap map[uuid.UUID]*models.Track, references []*models.Reference) map[uuid.UUID]*models.Track
 }
@@ -49,6 +50,16 @@ func (t *TrackSvc) MapToTracks(tracksMap map[uuid.UUID]*models.Track) []*models.
 		tracks = append(tracks, track)
 	}
 	return tracks
+}
+
+// MapArtistsToTracks maps the models.Artist to the models.Track, by updating the provided models.Track's map and returning it.
+func (t *TrackSvc) MapArtistsToTracks(tracksMap map[uuid.UUID]*models.Track, artistsMap map[uuid.UUID]*models.Artist, artistTracks []*models.ArtistTrackEntry) map[uuid.UUID]*models.Track {
+	for _, artistTrack := range artistTracks {
+		artist := artistsMap[artistTrack.ArtistID]
+		track := tracksMap[artistTrack.TrackID]
+		track.Artist = artist
+	}
+	return tracksMap
 }
 
 // MapTabsToTracks adds the models.Tab's to the models.Track, by updating the provided models.Track's map and returning it.

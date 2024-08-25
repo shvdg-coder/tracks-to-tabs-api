@@ -15,6 +15,8 @@ type ArtistOps interface {
 	mappers.ArtistMapper
 	GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error)
 	GetArtistsCascading(artistID ...uuid.UUID) ([]*models.Artist, error)
+	ExtractIDsFromArtists(artists []*models.Artist) []uuid.UUID
+	CollectTracks(artists []*models.Artist) []*models.Track
 }
 
 // ArtistSvc is responsible for managing and retrieving artists.
@@ -71,12 +73,12 @@ func (a *ArtistSvc) GetArtistsCascading(artistID ...uuid.UUID) ([]*models.Artist
 
 // LoadTracks loads the models.Track's for the given models.Artist's.
 func (a *ArtistSvc) LoadTracks(artists ...*models.Artist) error {
-	artistTracksEntries, err := a.GetArtistToTrackEntries(a.ExtractArtistIDs(artists)...)
+	artistTracksEntries, err := a.GetArtistToTrackEntries(a.ExtractIDsFromArtists(artists)...)
 	if err != nil {
 		return err
 	}
 
-	trackIDs := a.ExtractTrackIDs(artistTracksEntries)
+	_, trackIDs := a.ExtractIDsFromArtistTrackEntries(artistTracksEntries)
 	tracks, err := a.GetTracksCascading(trackIDs...)
 	if err != nil {
 		return err
@@ -84,6 +86,8 @@ func (a *ArtistSvc) LoadTracks(artists ...*models.Artist) error {
 
 	artistsMap := a.ArtistsToMap(artists)
 	tracksMap := a.TracksToMap(tracks)
+
+	a.MapArtistsToTracks(tracksMap, artistsMap, artistTracksEntries)
 	a.MapTracksToArtists(artistsMap, tracksMap, artistTracksEntries)
 
 	return nil
@@ -91,7 +95,7 @@ func (a *ArtistSvc) LoadTracks(artists ...*models.Artist) error {
 
 // LoadReferences loads references for the given artists.
 func (a *ArtistSvc) LoadReferences(artists ...*models.Artist) error {
-	references, err := a.GetReferences(a.ExtractArtistIDs(artists)...)
+	references, err := a.GetReferences(a.ExtractIDsFromArtists(artists)...)
 	if err != nil {
 		return err
 	}
@@ -102,11 +106,20 @@ func (a *ArtistSvc) LoadReferences(artists ...*models.Artist) error {
 	return nil
 }
 
-// ExtractArtistIDs retrieves the ID's from the models.Artist's.
-func (a *ArtistSvc) ExtractArtistIDs(artists []*models.Artist) []uuid.UUID {
+// ExtractIDsFromArtists retrieves the ID's from the models.Artist's.
+func (a *ArtistSvc) ExtractIDsFromArtists(artists []*models.Artist) []uuid.UUID {
 	artistIDs := make([]uuid.UUID, len(artists))
 	for i, artist := range artists {
 		artistIDs[i] = artist.ID
 	}
 	return artistIDs
+}
+
+// CollectTracks plucks the models.Track's from each of the models.Artist, and returns them.
+func (a *ArtistSvc) CollectTracks(artists []*models.Artist) []*models.Track {
+	tracks := make([]*models.Track, 0)
+	for _, artist := range artists {
+		tracks = append(tracks, artist.Tracks...)
+	}
+	return tracks
 }

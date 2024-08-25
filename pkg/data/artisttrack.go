@@ -13,8 +13,8 @@ import (
 // ArtistTrackData represents operations related to 'artists to tracks' links.
 type ArtistTrackData interface {
 	LinkArtistToTrack(artistId, trackId uuid.UUID)
-	GetArtistToTrackEntry(artistID uuid.UUID) (*models.ArtistTrackEntry, error)
-	GetArtistToTrackEntries(artistID ...uuid.UUID) ([]*models.ArtistTrackEntry, error)
+	GetArtistToTrackEntry(ID uuid.UUID) (*models.ArtistTrackEntry, error)
+	GetArtistToTrackEntries(IDs ...uuid.UUID) ([]*models.ArtistTrackEntry, error)
 }
 
 // ArtistTrackSvc is for managing 'artists to tracks' links.
@@ -37,7 +37,7 @@ func (d *ArtistTrackSvc) LinkArtistToTrack(artistID, trackID uuid.UUID) {
 	}
 }
 
-// GetArtistToTrackEntry retrieves the 'artist to track' link for the provided artist ID.
+// GetArtistToTrackEntry retrieves the 'artist to track' link for the provided artist or track IDs.
 func (d *ArtistTrackSvc) GetArtistToTrackEntry(artistID uuid.UUID) (*models.ArtistTrackEntry, error) {
 	artistTracks, err := d.GetArtistToTrackEntries(artistID)
 	if err != nil {
@@ -46,7 +46,7 @@ func (d *ArtistTrackSvc) GetArtistToTrackEntry(artistID uuid.UUID) (*models.Arti
 	return artistTracks[0], err
 }
 
-// GetArtistToTrackEntries retrieves the 'artist to track' link for the provided artist IDs.
+// GetArtistToTrackEntries retrieves the 'artist to track' link for the provided artist or track IDs.
 func (d *ArtistTrackSvc) GetArtistToTrackEntries(artistID ...uuid.UUID) ([]*models.ArtistTrackEntry, error) {
 	rows, err := d.Query(queries.GetArtistTrackLinks, pq.Array(artistID))
 	if err != nil {
