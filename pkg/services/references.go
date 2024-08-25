@@ -35,7 +35,7 @@ func NewReferenceSvc(schema schemas.ReferenceSchema, data data.ReferenceData, ma
 	}
 }
 
-// GetReferences retrieves the models.Reference's with entity references, for the provided internal IDs.
+// GetReferences just retrieves the models.Reference' for the provided internal IDs.
 func (r *ReferenceSvc) GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error) {
 	referenceEntries, err := r.GetReferenceEntries(internalID...)
 	if err != nil {
@@ -44,16 +44,36 @@ func (r *ReferenceSvc) GetReferences(internalID ...uuid.UUID) ([]*models.Referen
 
 	references := r.ReferenceEntriesToReferences(referenceEntries)
 
-	sourceIDs := r.ExtractSourceIDs(references)
-	sources, err := r.GetSources(sourceIDs...)
+	return references, nil
+}
+
+// GetReferencesCascading retrieves the models.Reference's with entity references, for the provided internal IDs.
+func (r *ReferenceSvc) GetReferencesCascading(internalID ...uuid.UUID) ([]*models.Reference, error) {
+	references, err := r.GetReferences(internalID...)
 	if err != nil {
 		return nil, err
 	}
 
-	sourcesMap := r.SourcesToMap(sources)
-	references = r.MapSourcesToReferences(references, sourcesMap)
+	err = r.LoadSources(references...)
+	if err != nil {
+		return nil, err
+	}
 
 	return references, nil
+}
+
+// LoadSources loads the sources for the given models.Reference's.
+func (r *ReferenceSvc) LoadSources(references ...*models.Reference) error {
+	sourceIDs := r.ExtractSourceIDs(references)
+	sources, err := r.GetSources(sourceIDs...)
+	if err != nil {
+		return err
+	}
+
+	sourcesMap := r.SourcesToMap(sources)
+	r.MapSourcesToReferences(references, sourcesMap)
+
+	return nil
 }
 
 // ExtractSourceIDs extracts the source ID from the models.Reference.
