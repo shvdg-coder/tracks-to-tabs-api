@@ -24,3 +24,8 @@ type DataAPI struct {
 func NewDataAPI(database logic.DbOperations) DataOps {
 	return &DataAPI{SvcOps: NewSvcManager(database)}
 }
+
+// GetArtists retrieves artists, with entity references, for the provided IDs.
+func (d *DataAPI) GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error) {
+	return d.GetArtistsCascading(artistID...)
+}
