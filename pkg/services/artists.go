@@ -77,7 +77,7 @@ func (a *ArtistSvc) LoadTracks(artists ...*models.Artist) error {
 	}
 
 	trackIDs := a.ExtractTrackIDs(artistTracksEntries)
-	tracks, err := a.GetTracks(trackIDs...)
+	tracks, err := a.GetTracksCascading(trackIDs...)
 	if err != nil {
 		return err
 	}

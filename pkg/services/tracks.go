@@ -17,6 +17,7 @@ type TrackOps interface {
 	data.TrackData
 	mappers.TrackMapper
 	GetTracks(trackID ...uuid.UUID) ([]*models.Track, error)
+	GetTracksCascading(trackID ...uuid.UUID) ([]*models.Track, error)
 }
 
 // TrackSvc is responsible for managing and retrieving tracks.
@@ -41,36 +42,74 @@ func NewTrackSvc(schema schemas.TrackSchema, data data.TrackData, mapper mappers
 	}
 }
 
-// GetTracks retrieves tabs, with entity references, for the provided IDs.
-func (t TrackSvc) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
+// GetTracks retrieves tracks, without entity references, for the provided IDs.
+func (t *TrackSvc) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
 	trackEntries, err := t.GetTrackEntries(trackID...)
 	if err != nil {
 		return nil, err
 	}
+	tracks := t.TrackEntriesToTracks(trackEntries)
+	return tracks, nil
+}
 
-	trackTabEntries, err := t.GetTrackToTabLinks(trackID...)
+// GetTracksCascading retrieves tracks, with entity references, for the provided IDs.
+func (t *TrackSvc) GetTracksCascading(trackID ...uuid.UUID) ([]*models.Track, error) {
+	tracks, err := t.GetTracks(trackID...)
 	if err != nil {
 		return nil, err
+	}
+
+	err = t.LoadTabs(tracks...)
+	if err != nil {
+		return nil, err
+	}
+
+	err = t.LoadReferences(tracks...)
+	if err != nil {
+		return nil, err
+	}
+
+	return tracks, nil
+}
+
+// LoadTabs loads the models.Tab's for the given models.Track's.
+func (t *TrackSvc) LoadTabs(tracks ...*models.Track) error {
+	trackTabEntries, err := t.GetTrackToTabLinks(t.ExtractTrackIDs(tracks)...)
+	if err != nil {
+		return err
 	}
 
 	tabIDs := t.ExtractTabIDs(trackTabEntries)
-	tabs, err := t.GetTabs(tabIDs...)
+	tabs, err := t.GetTabsCascading(tabIDs...)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	references, err := t.GetReferences(trackID...)
-	if err != nil {
-		return nil, err
-	}
-
-	tracks := t.TrackEntriesToTracks(trackEntries)
 	tracksMap := t.TracksToMap(tracks)
 	tabsMap := t.TabsToMap(tabs)
+	t.MapTabsToTracks(tracksMap, tabsMap, trackTabEntries)
 
-	tracksMap = t.MapTabsToTracks(tracksMap, tabsMap, trackTabEntries)
-	tracksMap = t.MapReferencesToTracks(tracksMap, references)
-	tracks = t.MapToTracks(tracksMap)
+	return nil
+}
 
-	return tracks, nil
+// LoadReferences loads the references for the given tracks.
+func (t *TrackSvc) LoadReferences(tracks ...*models.Track) error {
+	references, err := t.GetReferences(t.ExtractTrackIDs(tracks)...)
+	if err != nil {
+		return err
+	}
+
+	tracksMap := t.TracksToMap(tracks)
+	t.MapReferencesToTracks(tracksMap, references)
+
+	return nil
+}
+
+// ExtractTrackIDs retrieves the ID's from the models.Track's.
+func (t *TrackSvc) ExtractTrackIDs(tracks []*models.Track) []uuid.UUID {
+	trackIDs := make([]uuid.UUID, len(tracks))
+	for i, track := range tracks {
+		trackIDs[i] = track.ID
+	}
+	return trackIDs
 }
