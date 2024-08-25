@@ -10,6 +10,7 @@ type TabMapper interface {
 	TabEntriesToTabs(tabEntries []*models.TabEntry) []*models.Tab
 	TabsToMap(tabs []*models.Tab) map[uuid.UUID]*models.Tab
 	MapToTabs(tabsMap map[uuid.UUID]*models.Tab) []*models.Tab
+	MapTracksToTabs(tabsMap map[uuid.UUID]*models.Tab, tracksMap map[uuid.UUID]*models.Track, trackTabs []*models.TrackTabEntry) map[uuid.UUID]*models.Tab
 	MapInstrumentsToTabs(tabsMap map[uuid.UUID]*models.Tab, instruments map[uint]*models.Instrument) map[uuid.UUID]*models.Tab
 	MapDifficultiesToTabs(tabsMap map[uuid.UUID]*models.Tab, difficulties map[uint]*models.Difficulty) map[uuid.UUID]*models.Tab
 	MapReferencesToTabs(tabsMap map[uuid.UUID]*models.Tab, references []*models.Reference) map[uuid.UUID]*models.Tab
@@ -54,6 +55,16 @@ func (t *TabSvc) MapToTabs(tabsMap map[uuid.UUID]*models.Tab) []*models.Tab {
 		tabs = append(tabs, tab)
 	}
 	return tabs
+}
+
+// MapTracksToTabs maps the models.Track to the models.Tab's, by updating the provided models.Tab's map and returning it.
+func (t *TabSvc) MapTracksToTabs(tabsMap map[uuid.UUID]*models.Tab, tracksMap map[uuid.UUID]*models.Track, trackTabs []*models.TrackTabEntry) map[uuid.UUID]*models.Tab {
+	for _, trackTab := range trackTabs {
+		track := tracksMap[trackTab.TrackID]
+		tab := tabsMap[trackTab.TabID]
+		tab.Track = track
+	}
+	return tabsMap
 }
 
 // MapInstrumentsToTabs maps models.Instrument's to models.Tab's, by updating the provided models.Tab's map and returning it.

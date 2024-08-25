@@ -47,7 +47,9 @@ func (a *ArtistSvc) GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error) 
 	if err != nil {
 		return nil, err
 	}
+
 	artists := a.ArtistEntriesToArtists(artistEntries)
+
 	return artists, nil
 }
 
@@ -115,7 +117,7 @@ func (a *ArtistSvc) ExtractIDsFromArtists(artists []*models.Artist) []uuid.UUID 
 	return artistIDs
 }
 
-// CollectTracks plucks the models.Track's from each of the models.Artist, and returns them.
+// CollectTracks plucks the models.Track's from each of the models.Artist's, and returns them.
 func (a *ArtistSvc) CollectTracks(artists []*models.Artist) []*models.Track {
 	tracks := make([]*models.Track, 0)
 	for _, artist := range artists {

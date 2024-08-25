@@ -19,6 +19,7 @@ type TrackOps interface {
 	GetTracks(trackID ...uuid.UUID) ([]*models.Track, error)
 	GetTracksCascading(trackID ...uuid.UUID) ([]*models.Track, error)
 	ExtractIDsFromTracks(tracks []*models.Track) []uuid.UUID
+	CollectTabs(tracks []*models.Track) []*models.Tab
 }
 
 // TrackSvc is responsible for managing and retrieving tracks.
@@ -49,7 +50,9 @@ func (t *TrackSvc) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	tracks := t.TrackEntriesToTracks(trackEntries)
+
 	return tracks, nil
 }
 
@@ -80,7 +83,7 @@ func (t *TrackSvc) LoadTabs(tracks ...*models.Track) error {
 		return err
 	}
 
-	tabIDs := t.ExtractTabIDs(trackTabEntries)
+	_, tabIDs := t.ExtractIDsFromTrackTabEntries(trackTabEntries)
 	tabs, err := t.GetTabsCascading(tabIDs...)
 	if err != nil {
 		return err
@@ -88,6 +91,8 @@ func (t *TrackSvc) LoadTabs(tracks ...*models.Track) error {
 
 	tracksMap := t.TracksToMap(tracks)
 	tabsMap := t.TabsToMap(tabs)
+
+	t.MapTracksToTabs(tabsMap, tracksMap, trackTabEntries)
 	t.MapTabsToTracks(tracksMap, tabsMap, trackTabEntries)
 
 	return nil
@@ -113,4 +118,13 @@ func (t *TrackSvc) ExtractIDsFromTracks(tracks []*models.Track) []uuid.UUID {
 		trackIDs[i] = track.ID
 	}
 	return trackIDs
+}
+
+// CollectTabs pluck the models.Tab's from each of the models.Track's, and returns them.
+func (t *TrackSvc) CollectTabs(tracks []*models.Track) []*models.Tab {
+	tabs := make([]*models.Tab, 0)
+	for _, track := range tracks {
+		tabs = append(tabs, track.Tabs...)
+	}
+	return tabs
 }

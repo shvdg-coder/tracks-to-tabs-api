@@ -45,7 +45,9 @@ func (t *TabSvc) GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	tabs := t.TabEntriesToTabs(tabEntries)
+
 	return tabs, nil
 }
 

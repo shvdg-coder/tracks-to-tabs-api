@@ -11,8 +11,6 @@ type DataOps interface {
 	GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error)
 	GetTracks(trackID ...uuid.UUID) ([]*models.Track, error)
 	GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error)
-	GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error)
-	GetSources(sourceID ...uint) ([]*models.Source, error)
 }
 
 // DataAPI represents the main entry point to interact with functionalities for the defined entities.
@@ -46,4 +44,22 @@ func (d *DataAPI) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
 	tracks := d.CollectTracks(artists)
 
 	return tracks, nil
+}
+
+// GetTabs retrieves tabs, with entity references, for the provided IDs.
+func (d *DataAPI) GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error) {
+	tabTrackEntries, err := d.GetTrackToTabLinks(tabID...)
+	if err != nil {
+		return nil, err
+	}
+
+	trackIDs, _ := d.ExtractIDsFromTrackTabEntries(tabTrackEntries)
+	tracks, err := d.GetTracksCascading(trackIDs...)
+	if err != nil {
+		return nil, err
+	}
+
+	tabs := d.CollectTabs(tracks)
+
+	return tabs, nil
 }

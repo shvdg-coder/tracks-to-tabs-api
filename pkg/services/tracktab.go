@@ -11,7 +11,7 @@ import (
 type TrackTabOps interface {
 	schemas.TrackTabSchema
 	data.TrackTabData
-	ExtractTabIDs(trackTabs []*models.TrackTabEntry) []uuid.UUID
+	ExtractIDsFromTrackTabEntries(trackTabs []*models.TrackTabEntry) ([]uuid.UUID, []uuid.UUID)
 }
 
 // TrackTabSvc is responsible for managing and retrieving 'track to tab' links.
@@ -27,11 +27,13 @@ func NewTrackTabSvc(schema schemas.TrackTabSchema, data data.TrackTabData) Track
 		TrackTabData:   data}
 }
 
-// ExtractTabIDs retrieves the tab IDs from the models.TrackTabEntry's.
-func (t *TrackTabSvc) ExtractTabIDs(trackTabs []*models.TrackTabEntry) []uuid.UUID {
+// ExtractIDsFromTrackTabEntries retrieves the track and tab IDs from the models.TrackTabEntry's.
+func (t *TrackTabSvc) ExtractIDsFromTrackTabEntries(trackTabs []*models.TrackTabEntry) ([]uuid.UUID, []uuid.UUID) {
+	var trackIDs []uuid.UUID
 	var tabIDs []uuid.UUID
-	for _, link := range trackTabs {
-		tabIDs = append(tabIDs, link.TabID)
+	for _, trackTab := range trackTabs {
+		trackIDs = append(trackIDs, trackTab.TrackID)
+		tabIDs = append(tabIDs, trackTab.TabID)
 	}
-	return tabIDs
+	return trackIDs, tabIDs
 }
