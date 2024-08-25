@@ -13,7 +13,7 @@ import (
 type ArtistTrackOps interface {
 	schemas.ArtistTrackSchema
 	data.ArtistTrackData
-	ExtractIDsFromArtistTrackEntries(artistTracks []*models.ArtistTrackEntry) ([]uuid.UUID, []uuid.UUID)
+	ExtractIDsFromArtistTrackEntries(artistTracks []*models.ArtistTrackEntry) (artistIDs []uuid.UUID, trackIDs []uuid.UUID)
 }
 
 // ArtistTrackSvc is responsible for managing 'artist to track' links.
@@ -31,12 +31,14 @@ func NewArtistTrackSvc(schema schemas.ArtistTrackSchema, data data.ArtistTrackDa
 }
 
 // ExtractIDsFromArtistTrackEntries retrieves the artist and track IDs from the models.ArtistTrackEntry's.
-func (at *ArtistTrackSvc) ExtractIDsFromArtistTrackEntries(artistTracks []*models.ArtistTrackEntry) ([]uuid.UUID, []uuid.UUID) {
-	var artistIDs []uuid.UUID
-	var trackIDs []uuid.UUID
+func (at *ArtistTrackSvc) ExtractIDsFromArtistTrackEntries(artistTracks []*models.ArtistTrackEntry) (artistIDs []uuid.UUID, trackIDs []uuid.UUID) {
+	artistIDs = make([]uuid.UUID, len(artistTracks))
+	trackIDs = make([]uuid.UUID, len(artistTracks))
+
 	for _, artistTrack := range artistTracks {
 		artistIDs = append(artistIDs, artistTrack.ArtistID)
 		trackIDs = append(trackIDs, artistTrack.TrackID)
 	}
+
 	return artistIDs, trackIDs
 }

@@ -62,9 +62,11 @@ func (r *ReferenceSvc) ExtractSourceIDs(references []*models.Reference) []uint {
 	for _, reference := range references {
 		sourceIDMap[reference.Source.ID] = true
 	}
+
 	sourceIDs := make([]uint, 0)
 	for key, _ := range sourceIDMap {
 		sourceIDs = append(sourceIDs, key)
 	}
+
 	return sourceIDs
 }
