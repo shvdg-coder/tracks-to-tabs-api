@@ -13,6 +13,7 @@ type SourceOps interface {
 	data.SourceData
 	mappers.SourceMapper
 	GetSources(sourceID ...uint) ([]*models.Source, error)
+	GetSourcesCascading(sourceID ...uint) ([]*models.Source, error)
 }
 
 // SourceSvc is responsible for managing sources.
@@ -62,7 +63,8 @@ func (s *SourceSvc) GetSourcesCascading(sourceID ...uint) ([]*models.Source, err
 
 // LoadEndpoints loads the models.Endpoint's for given models.Source's.
 func (s *SourceSvc) LoadEndpoints(sources ...*models.Source) error {
-	endpoints, err := s.GetEndpoints(s.ExtractIDsFromSources(sources)...)
+	sourceIDs := s.ExtractIDsFromSources(sources)
+	endpoints, err := s.GetEndpoints(sourceIDs...)
 	if err != nil {
 		return err
 	}

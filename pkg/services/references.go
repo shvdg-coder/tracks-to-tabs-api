@@ -14,6 +14,7 @@ type ReferenceOps interface {
 	data.ReferenceData
 	mappers.ReferenceMapper
 	GetReferences(internalID ...uuid.UUID) ([]*models.Reference, error)
+	GetReferencesCascading(internalID ...uuid.UUID) ([]*models.Reference, error)
 	ExtractSourceIDs(references []*models.Reference) []uint
 }
 
@@ -65,7 +66,7 @@ func (r *ReferenceSvc) GetReferencesCascading(internalID ...uuid.UUID) ([]*model
 // LoadSources loads the sources for the given models.Reference's.
 func (r *ReferenceSvc) LoadSources(references ...*models.Reference) error {
 	sourceIDs := r.ExtractSourceIDs(references)
-	sources, err := r.GetSources(sourceIDs...)
+	sources, err := r.GetSourcesCascading(sourceIDs...)
 	if err != nil {
 		return err
 	}
