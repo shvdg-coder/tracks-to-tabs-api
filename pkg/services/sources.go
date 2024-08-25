@@ -33,22 +33,51 @@ func NewSourceSvc(schema schemas.SourceSchema, data data.SourceData, mapper mapp
 	}
 }
 
-// GetSources retrieves sources with their entity references.
+// GetSources retrieves sources without their entity references.
 func (s *SourceSvc) GetSources(sourceID ...uint) ([]*models.Source, error) {
 	sourceEntries, err := s.GetSourceEntries(sourceID...)
 	if err != nil {
 		return nil, err
 	}
 
-	endpoints, err := s.GetEndpoints(sourceID...)
+	sources := s.SourceEntriesToSources(sourceEntries)
+
+	return sources, nil
+}
+
+// GetSourcesCascading retrieves sources with their entity references.
+func (s *SourceSvc) GetSourcesCascading(sourceID ...uint) ([]*models.Source, error) {
+	sources, err := s.GetSources(sourceID...)
 	if err != nil {
 		return nil, err
 	}
 
-	sources := s.SourceEntriesToSources(sourceEntries)
-	sourcesMap := s.SourcesToMap(sources)
-	sourcesMap = s.MapEndpointsToSources(sourcesMap, endpoints)
-	sources = s.MapToSources(sourcesMap)
+	err = s.LoadEndpoints(sources...)
+	if err != nil {
+		return nil, err
+	}
 
 	return sources, nil
+}
+
+// LoadEndpoints loads the models.Endpoint's for given models.Source's.
+func (s *SourceSvc) LoadEndpoints(sources ...*models.Source) error {
+	endpoints, err := s.GetEndpoints(s.ExtractIDsFromSources(sources)...)
+	if err != nil {
+		return err
+	}
+
+	sourcesMap := s.SourcesToMap(sources)
+	s.MapEndpointsToSources(sourcesMap, endpoints)
+
+	return nil
+}
+
+// ExtractIDsFromSources retrieves the ID's from the models.Source's.
+func (s *SourceSvc) ExtractIDsFromSources(sources []*models.Source) []uint {
+	sourceIDs := make([]uint, len(sources))
+	for i, source := range sources {
+		sourceIDs[i] = source.ID
+	}
+	return sourceIDs
 }
