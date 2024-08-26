@@ -2,11 +2,11 @@ package integration_tests
 
 import (
 	"encoding/json"
-	"fmt"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	tstenv "github.com/shvdg-dev/tunes-to-tabs-api/internal/integration_tests/environments"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg"
-	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"os"
+	"reflect"
 	"testing"
 )
 
@@ -16,14 +16,21 @@ func TestGetArtists(t *testing.T) {
 	defer dbEnv.Breakdown()
 
 	// Prepare
+	expectedArtistsJson, err := os.ReadFile(artists1JSON)
+	if err != nil {
+		t.Fatalf("failed to read '%s': %s", artists1JSON, err)
+	}
+
 	artistIDStrings, err := logic.GetCSVColumnValues(artistsCSV, artistsColumnID)
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	artistIDs, err := logic.StringsToUUIDs(artistIDStrings...)
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	api := pkg.NewDataAPI(dbEnv)
 
 	// Execute
@@ -33,61 +40,21 @@ func TestGetArtists(t *testing.T) {
 	}
 
 	// Convert artists to JSON format
-	jsonData, err := json.Marshal(artists)
+	artistsJson, err := json.Marshal(artists)
 	if err != nil {
 		t.Fatalf("error occurred during marshalling to JSON: %s", err.Error())
 		return
 	}
 
-	fmt.Println(string(jsonData))
-
-	// Extract
-	tracks := extractTracks(artists)
-	tabs := extractTabs(tracks)
-
 	// Tests
-	testArtists(t, artists)
-	testTracks(t, tracks)
-	testTabs(t, tabs)
-}
-
-// testArtists todo:
-func testArtists(t *testing.T, artists []*trk.Artist) {
-	if len(artists) != 2 {
-		t.Fatalf("expected number of artists found in the database (%d) to be equal to those in the CSV (%d)", len(artists), 2)
+	isEqual, err := isEqualJSON(string(artistsJson), string(expectedArtistsJson))
+	if err != nil {
+		t.Fatalf("failed to compare JSONs: %s", err)
 	}
-}
 
-// testTracks todo:
-func testTracks(t *testing.T, tracks []*trk.Track) {
-	if len(tracks) != 4 {
-		t.Fatalf("expected number of tracks found in the database (%d) to be equal to those in the CSV (%d)", len(tracks), 4)
+	if !isEqual {
+		t.Fatalf("JSONs are not equal")
 	}
-}
-
-// testTabs todo:
-func testTabs(t *testing.T, tabs []*trk.Tab) {
-	if len(tabs) != 4 {
-		t.Fatalf("expected number of tabs found in the database (%d) to be equal to those in the CSV (%d)", len(tabs), 4)
-	}
-}
-
-// extractTracks extracts the tracks.Track's from the artists.ArtistEntry.
-func extractTracks(artists []*trk.Artist) []*trk.Track {
-	var tracks []*trk.Track
-	for _, artist := range artists {
-		tracks = append(tracks, artist.Tracks...)
-	}
-	return tracks
-}
-
-// extractTabs extracts the tabs.Tab's from the tracks.Track.
-func extractTabs(tracks []*trk.Track) []*trk.Tab {
-	var tabs []*trk.Tab
-	for _, track := range tracks {
-		tabs = append(tabs, track.Tabs...)
-	}
-	return tabs
 }
 
 // setup prepares the tests by performing the minimally required steps.
@@ -143,4 +110,23 @@ func insertions(t *testing.T, dbEnv tstenv.DbEnvOperations) {
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+// isEqualJSON checks whether the two provided JSON strings are equal.
+func isEqualJSON(s1, s2 string) (bool, error) {
+	var o1 interface{}
+	var o2 interface{}
+	var err error
+
+	err = json.Unmarshal([]byte(s1), &o1)
+	if err != nil {
+		return false, err
+	}
+
+	err = json.Unmarshal([]byte(s2), &o2)
+	if err != nil {
+		return false, err
+	}
+
+	return reflect.DeepEqual(o1, o2), nil
 }

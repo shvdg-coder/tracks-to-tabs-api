@@ -12,6 +12,9 @@ const sourcesCSV = "./resources/sources.csv"
 const instrumentsCSV = "./resources/instruments.csv"
 const difficultiesCSV = "./resources/difficulties.csv"
 
+// Expected outputs
+const artists1JSON = "./expectations/artists_1.json"
+
 // Tables
 const artistsTable = "artists"
 const tracksTable = "tracks"
