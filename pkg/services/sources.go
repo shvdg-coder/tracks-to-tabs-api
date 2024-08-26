@@ -64,12 +64,13 @@ func (s *SourceSvc) GetSourcesCascading(sourceID ...uint) ([]*models.Source, err
 // LoadEndpoints loads the models.Endpoint's for given models.Source's.
 func (s *SourceSvc) LoadEndpoints(sources ...*models.Source) error {
 	sourceIDs := s.ExtractIDsFromSources(sources)
-	endpoints, err := s.GetEndpoints(sourceIDs...)
+	endpoints, err := s.GetEndpointsCascading(sourceIDs...)
 	if err != nil {
 		return err
 	}
 
 	sourcesMap := s.SourcesToMap(sources)
+	s.MapSourcesToEndpoints(endpoints, sourcesMap)
 	s.MapEndpointsToSources(sourcesMap, endpoints)
 
 	return nil

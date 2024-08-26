@@ -75,7 +75,8 @@ func (a *ArtistSvc) GetArtistsCascading(artistID ...uuid.UUID) ([]*models.Artist
 
 // LoadTracks loads the models.Track's for the given models.Artist's.
 func (a *ArtistSvc) LoadTracks(artists ...*models.Artist) error {
-	artistTracksEntries, err := a.GetArtistToTrackEntries(a.ExtractIDsFromArtists(artists)...)
+	artistIDs := a.ExtractIDsFromArtists(artists)
+	artistTracksEntries, err := a.GetArtistToTrackEntries(artistIDs...)
 	if err != nil {
 		return err
 	}
@@ -97,7 +98,8 @@ func (a *ArtistSvc) LoadTracks(artists ...*models.Artist) error {
 
 // LoadReferences loads references for the given artists.
 func (a *ArtistSvc) LoadReferences(artists ...*models.Artist) error {
-	references, err := a.GetReferences(a.ExtractIDsFromArtists(artists)...)
+	artistIDs := a.ExtractIDsFromArtists(artists)
+	references, err := a.GetReferencesCascading(artistIDs...)
 	if err != nil {
 		return err
 	}

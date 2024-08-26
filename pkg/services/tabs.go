@@ -110,7 +110,7 @@ func (t *TabSvc) LoadDifficulties(tabs ...*models.Tab) error {
 // LoadReferences loads the models.Reference's for the given models.Tab's.
 func (t *TabSvc) LoadReferences(tabs ...*models.Tab) error {
 	tabIDs, _, _ := t.ExtractIDsFromTabs(tabs)
-	references, err := t.GetReferences(tabIDs...)
+	references, err := t.GetReferencesCascading(tabIDs...)
 	if err != nil {
 		return err
 	}

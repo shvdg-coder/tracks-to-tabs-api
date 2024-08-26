@@ -13,6 +13,8 @@ type EndpointOps interface {
 	data.EndpointsData
 	mappers.EndpointMapper
 	GetEndpoints(sourceID ...uint) ([]*models.Endpoint, error)
+	GetEndpointsCascading(sourceID ...uint) ([]*models.Endpoint, error)
+	ExtractIDsFromEndpoints(endpoints []*models.Endpoint) []uint
 }
 
 // EndpointSvc is responsible for managing endpoints.
@@ -32,13 +34,31 @@ func NewEndpointSvc(schema schemas.EndpointSchema, data data.EndpointsData, mapp
 }
 
 // GetEndpoints retrieves the endpoints, with entity references, for the provided IDs.
-func (s *EndpointSvc) GetEndpoints(sourceID ...uint) ([]*models.Endpoint, error) {
-	endpointEntries, err := s.GetEndpointEntries(sourceID...)
+func (e *EndpointSvc) GetEndpoints(sourceID ...uint) ([]*models.Endpoint, error) {
+	endpointEntries, err := e.GetEndpointEntries(sourceID...)
 	if err != nil {
 		return nil, err
 	}
 
-	endpoints := s.EndpointEntriesToEndpoints(endpointEntries)
+	endpoints := e.EndpointEntriesToEndpoints(endpointEntries)
 
 	return endpoints, nil
+}
+
+// GetEndpointsCascading retrieves the endpoints, with entity references, for the provided IDs.
+func (e *EndpointSvc) GetEndpointsCascading(sourceID ...uint) ([]*models.Endpoint, error) {
+	endpoints, err := e.GetEndpoints(sourceID...)
+	if err != nil {
+		return nil, err
+	}
+	return endpoints, nil
+}
+
+// ExtractIDsFromEndpoints retrieves the source IDs from the models.Endpoint's.
+func (e *EndpointSvc) ExtractIDsFromEndpoints(endpoints []*models.Endpoint) []uint {
+	sourceIDs := make([]uint, len(endpoints))
+	for i, endpoint := range endpoints {
+		sourceIDs[i] = endpoint.Source.ID
+	}
+	return sourceIDs
 }
