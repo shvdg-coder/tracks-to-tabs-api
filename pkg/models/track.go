@@ -1,6 +1,9 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"encoding/json"
+	"github.com/google/uuid"
+)
 
 // TrackEntry represents a track in the database.
 type TrackEntry struct {
@@ -15,4 +18,13 @@ type Track struct {
 	Artist     *Artist
 	Tabs       []*Tab
 	References []*Reference
+}
+
+// MarshalJSON marshals the models.Track while preventing circling.
+func (t *Track) MarshalJSON() ([]byte, error) {
+	track := *t
+	track.Artist = &Artist{
+		ArtistEntry: t.Artist.ArtistEntry,
+	}
+	return json.Marshal(track)
 }

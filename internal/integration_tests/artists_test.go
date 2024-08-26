@@ -1,6 +1,8 @@
 package integration_tests
 
 import (
+	"encoding/json"
+	"fmt"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	tstenv "github.com/shvdg-dev/tunes-to-tabs-api/internal/integration_tests/environments"
 	"github.com/shvdg-dev/tunes-to-tabs-api/pkg"
@@ -29,6 +31,15 @@ func TestGetArtists(t *testing.T) {
 	if err != nil {
 		t.Fatalf("error occurred during retrieval of artist cascading: %s", err.Error())
 	}
+
+	// Convert artists to JSON format
+	jsonData, err := json.Marshal(artists)
+	if err != nil {
+		t.Fatalf("error occurred during marshalling to JSON: %s", err.Error())
+		return
+	}
+
+	fmt.Println(string(jsonData))
 
 	// Extract
 	tracks := extractTracks(artists)

@@ -1,6 +1,9 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"encoding/json"
+	"github.com/google/uuid"
+)
 
 // ReferenceEntry represents a reference in the database.
 type ReferenceEntry struct {
@@ -15,4 +18,13 @@ type ReferenceEntry struct {
 type Reference struct {
 	*ReferenceEntry
 	Source *Source
+}
+
+// MarshalJSON marshals the models.Reference while preventing circling.
+func (r *Reference) MarshalJSON() ([]byte, error) {
+	reference := *r
+	reference.Source = &Source{
+		SourceEntry: r.Source.SourceEntry,
+	}
+	return json.Marshal(reference)
 }

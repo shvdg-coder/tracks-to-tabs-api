@@ -1,6 +1,9 @@
 package models
 
-import "strings"
+import (
+	"encoding/json"
+	"strings"
+)
 
 // EndpointEntry represents a record in the 'endpoints' table.
 type EndpointEntry struct {
@@ -23,4 +26,13 @@ func (e *EndpointEntry) CreateLink(replacements map[string]string) string {
 		url = strings.Replace(url, old, replacement, 1)
 	}
 	return url
+}
+
+// MarshalJSON marshals the models.Endpoint while preventing cyclic references.
+func (e *Endpoint) MarshalJSON() ([]byte, error) {
+	endpoint := *e
+	endpoint.Source = &Source{
+		SourceEntry: e.Source.SourceEntry,
+	}
+	return json.Marshal(endpoint)
 }

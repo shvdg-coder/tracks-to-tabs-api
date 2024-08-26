@@ -1,6 +1,9 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"encoding/json"
+	"github.com/google/uuid"
+)
 
 // TabEntry represents a tab.
 type TabEntry struct {
@@ -17,4 +20,14 @@ type Tab struct {
 	Instrument *Instrument
 	Difficulty *Difficulty
 	References []*Reference
+}
+
+// MarshalJSON marshals the models.Tab while preventing circling.
+func (t *Tab) MarshalJSON() ([]byte, error) {
+	tab := *t
+	tab.Track = &Track{
+		TrackEntry: t.Track.TrackEntry,
+		Artist:     t.Track.Artist,
+	}
+	return json.Marshal(tab)
 }
