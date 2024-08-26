@@ -25,6 +25,7 @@ func (r *Reference) MarshalJSON() ([]byte, error) {
 	reference := *r
 	reference.Source = &Source{
 		SourceEntry: r.Source.SourceEntry,
+		Endpoints:   r.Source.Endpoints,
 	}
 	return json.Marshal(reference)
 }
