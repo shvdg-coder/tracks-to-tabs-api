@@ -18,6 +18,7 @@ type Track struct {
 	Artist     *Artist
 	Tabs       []*Tab
 	References []*Reference
+	Resources  []*Resource
 }
 
 // MarshalJSON marshals the models.Track while preventing circling.
@@ -25,6 +26,8 @@ func (t *Track) MarshalJSON() ([]byte, error) {
 	track := *t
 	track.Artist = &Artist{
 		ArtistEntry: t.Artist.ArtistEntry,
+		References:  t.Artist.References,
+		Resources:   t.Artist.Resources,
 	}
 	return json.Marshal(track)
 }

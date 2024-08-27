@@ -40,20 +40,20 @@ func TestGetArtists(t *testing.T) {
 	}
 
 	// Convert artists to JSON format
-	artistsJson, err := json.Marshal(artists)
+	artistsJSON, err := json.Marshal(artists)
 	if err != nil {
 		t.Fatalf("error occurred during marshalling to JSON: %s", err.Error())
 		return
 	}
 
 	// Tests
-	isEqual, err := isEqualJSON(string(artistsJson), string(expectedArtistsJson))
+	isEqual, err := isEqualJSON(string(artistsJSON), string(expectedArtistsJson))
 	if err != nil {
 		t.Fatalf("failed to compare JSONs: %s", err)
 	}
 
 	if !isEqual {
-		t.Fatalf("JSONs are not equal")
+		t.Fatalf("JSONs are not equal: got \n%s", string(artistsJSON))
 	}
 }
 

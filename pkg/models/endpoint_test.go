@@ -67,8 +67,8 @@ func createTestCases(endpoints []*EndpointEntry) []TestCase {
 
 // Runs the test for creating a new Link.
 func runTest(t *testing.T, testCase TestCase) {
-	link := testCase.endpoint.CreateLink(testCase.replacements)
+	link := testCase.endpoint.CreateFormattedURL(testCase.replacements)
 	if link != testCase.want {
-		t.Errorf("CreateLink() for endpoint %v got = %v, want = %v", testCase.endpoint, link, testCase.want)
+		t.Errorf("FormatURL() for endpoint %v got = %v, want = %v", testCase.endpoint, link, testCase.want)
 	}
 }

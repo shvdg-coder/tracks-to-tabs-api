@@ -31,7 +31,7 @@ func (s *SourceSvc) SourceEntriesToSources(sourceEntries []*models.SourceEntry) 
 	return sources
 }
 
-// SourcesToMap transforms a slice of sources into a map where the key is the ID and the value the Source.
+// SourcesToMap transforms a slice of models.Source's into a map where the key is the ID and the value the models.Source.
 func (s *SourceSvc) SourcesToMap(sources []*models.Source) map[uint]*models.Source {
 	sourcesMap := make(map[uint]*models.Source, len(sources))
 	for _, source := range sources {
@@ -40,7 +40,7 @@ func (s *SourceSvc) SourcesToMap(sources []*models.Source) map[uint]*models.Sour
 	return sourcesMap
 }
 
-// MapToSources transforms a map of models.Source's into a slice of models.Source's.
+// MapToSources transforms a map of models.Source's into a slice.
 func (s *SourceSvc) MapToSources(sourcesMap map[uint]*models.Source) []*models.Source {
 	sources := make([]*models.Source, 0)
 	for _, source := range sourcesMap {

@@ -36,6 +36,7 @@ type SvcManager struct {
 	services.ArtistTrackOps
 	services.TrackTabOps
 	services.UserOps
+	services.ResourceOps
 }
 
 // NewSvcManager creates a new instance of the SvcManager.
@@ -62,6 +63,7 @@ func NewSvcManager(database logic.DbOperations) *SvcManager {
 		EndpointOps:    endpointsSvc,
 		SourceOps:      sourcesSvc,
 		ReferenceOps:   referencesSvc,
+		ResourceOps:    createResourcesSvc(),
 	}
 }
 
@@ -148,4 +150,9 @@ func createReferencesSvc(db logic.DbOperations, sources services.SourceOps) serv
 	referencesDataSvc := data.NewReferenceSvc(db)
 	referencesMappingSvc := mappers.NewReferenceSvc()
 	return services.NewReferenceSvc(referenceSchemaSvc, referencesDataSvc, referencesMappingSvc, sources)
+}
+
+// createResourcesSvc creates a services.ResourceSvc.
+func createResourcesSvc() services.ResourceOps {
+	return services.NewResourceSvc()
 }

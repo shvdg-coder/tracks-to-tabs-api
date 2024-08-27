@@ -20,6 +20,7 @@ type Tab struct {
 	Instrument *Instrument
 	Difficulty *Difficulty
 	References []*Reference
+	Resources  []*Resource
 }
 
 // MarshalJSON marshals the models.Tab while preventing circling.
@@ -28,6 +29,8 @@ func (t *Tab) MarshalJSON() ([]byte, error) {
 	tab.Track = &Track{
 		TrackEntry: t.Track.TrackEntry,
 		Artist:     t.Track.Artist,
+		References: t.Track.References,
+		Resources:  t.Track.Resources,
 	}
 	return json.Marshal(tab)
 }

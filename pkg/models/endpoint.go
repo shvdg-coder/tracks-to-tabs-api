@@ -19,8 +19,8 @@ type Endpoint struct {
 	Source *Source
 }
 
-// CreateLink formats the endpoint UnformattedURL with the corresponding values.
-func (e *EndpointEntry) CreateLink(replacements map[string]string) string {
+// CreateFormattedURL formats the endpoint UnformattedURL with the corresponding values.
+func (e *EndpointEntry) CreateFormattedURL(replacements map[string]string) string {
 	url := e.UnformattedURL
 	for old, replacement := range replacements {
 		url = strings.Replace(url, old, replacement, 1)

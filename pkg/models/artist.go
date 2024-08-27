@@ -13,4 +13,5 @@ type Artist struct {
 	*ArtistEntry
 	Tracks     []*Track
 	References []*Reference
+	Resources  []*Resource
 }

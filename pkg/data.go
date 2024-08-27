@@ -25,7 +25,14 @@ func NewDataAPI(database logic.DbOperations) DataOps {
 
 // GetArtists retrieves artists, with entity references, for the provided IDs.
 func (d *DataAPI) GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error) {
-	return d.GetArtistsCascading(artistID...)
+	artists, err := d.GetArtistsCascading(artistID...)
+	if err != nil {
+		return nil, err
+	}
+
+	d.LoadArtistsResourcesCascading(artists...)
+
+	return artists, nil
 }
 
 // GetTracks retrieves tracks, with entity references, for the provided IDs.
@@ -41,6 +48,7 @@ func (d *DataAPI) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
 		return nil, err
 	}
 
+	d.LoadArtistsResourcesCascading(artists...)
 	tracks := d.CollectTracks(artists)
 
 	return tracks, nil
@@ -59,6 +67,7 @@ func (d *DataAPI) GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error) {
 		return nil, err
 	}
 
+	d.LoadTracksResourcesCascading(tracks...)
 	tabs := d.CollectTabs(tracks)
 
 	return tabs, nil
