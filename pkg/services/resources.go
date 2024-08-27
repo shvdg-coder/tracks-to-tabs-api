@@ -57,32 +57,12 @@ func (r *ResourceSvc) createResourcesFromReferences(category string, references 
 
 	referencesMap := r.GroupReferencesBySource(references)
 	for source, _ := range referencesMap {
-		endpoints := r.GetEndpointsForCategory(category, source.Endpoints)
+		endpoints := r.FilterEndpointsByCategory(category, source.Endpoints)
 		entityResources := r.createResourcesFromEndpoints(replacements, endpoints)
 		resources = append(resources, entityResources...)
 	}
 
 	return resources
-}
-
-// GetEndpointsForCategory plucks the endpoints of which the category corresponds with the provided category.
-func (r *ResourceSvc) GetEndpointsForCategory(category string, endpoints []*models.Endpoint) []*models.Endpoint {
-	filteredEndpoints := make([]*models.Endpoint, 0)
-	for _, endpoint := range endpoints {
-		if endpoint.Category == category {
-			filteredEndpoints = append(filteredEndpoints, endpoint)
-		}
-	}
-	return filteredEndpoints
-}
-
-// GroupReferencesBySource transforms createResourcesFromEndpoints slice of models.Reference's into createResourcesFromEndpoints map where the key is the models.Source and the value createResourcesFromEndpoints slice of models.Reference's.
-func (r *ResourceSvc) GroupReferencesBySource(references []*models.Reference) map[*models.Source][]*models.Reference {
-	referencesMap := make(map[*models.Source][]*models.Reference, len(references))
-	for _, reference := range references {
-		referencesMap[reference.Source] = append(referencesMap[reference.Source], reference)
-	}
-	return referencesMap
 }
 
 // CreateReplacements creates createResourcesFromEndpoints map where the key is createResourcesFromEndpoints placeholder and the value createResourcesFromEndpoints reference, to be used for formatting strings.
@@ -93,6 +73,26 @@ func (r *ResourceSvc) CreateReplacements(references ...*models.Reference) map[st
 		replacements[placeholder] = reference.Reference
 	}
 	return replacements
+}
+
+// GroupReferencesBySource transforms createResourcesFromEndpoints slice of models.Reference's into createResourcesFromEndpoints map where the key is the models.Source and the value createResourcesFromEndpoints slice of models.Reference's.
+func (r *ResourceSvc) GroupReferencesBySource(references []*models.Reference) map[*models.Source][]*models.Reference {
+	referencesMap := make(map[*models.Source][]*models.Reference)
+	for _, reference := range references {
+		referencesMap[reference.Source] = append(referencesMap[reference.Source], reference)
+	}
+	return referencesMap
+}
+
+// FilterEndpointsByCategory plucks the endpoints of which the category corresponds with the provided category.
+func (r *ResourceSvc) FilterEndpointsByCategory(category string, endpoints []*models.Endpoint) []*models.Endpoint {
+	filteredEndpoints := make([]*models.Endpoint, 0)
+	for _, endpoint := range endpoints {
+		if endpoint.Category == category {
+			filteredEndpoints = append(filteredEndpoints, endpoint)
+		}
+	}
+	return filteredEndpoints
 }
 
 // createResourcesFromEndpoints creates models.Resource's by formatting the URL's from the models.Endpoint using the provided replacements map.
