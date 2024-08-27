@@ -2,5 +2,5 @@ source_id,category,type,url
 1000,artist,web,https://www.songify/artist/{artist:id}
 1000,track,web,https://www.songify/track/{track:id}
 2000,artist,web,https://www.tabsters/web/{artist:name}-tabs-{artist:id}
-2000,tab,web,https://www.tabsters/web/{artist:name}-{track:name}-tab-{tabID}
-2000,artist,api,https://www.tabsters/api/artist/{artist:id}/tracks?from={from}&size={size}
+2000,tab,web,https://www.tabsters/web/{artist:name}-{tab:name}-tab-{tab:id}
+2000,track,api,https://www.tabsters/api/artist/{artist:id}/tracks?from={from}&size={size}

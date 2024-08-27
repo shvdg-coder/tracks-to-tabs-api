@@ -30,7 +30,7 @@ func (d *DataAPI) GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error) {
 		return nil, err
 	}
 
-	d.LoadArtistsResourcesCascading(artists...)
+	d.LoadArtistsResources(artists...)
 
 	return artists, nil
 }
@@ -48,7 +48,7 @@ func (d *DataAPI) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
 		return nil, err
 	}
 
-	d.LoadArtistsResourcesCascading(artists...)
+	d.LoadArtistsResources(artists...)
 	tracks := d.CollectTracks(artists)
 
 	return tracks, nil
@@ -67,7 +67,7 @@ func (d *DataAPI) GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error) {
 		return nil, err
 	}
 
-	d.LoadTracksResourcesCascading(tracks...)
+	d.LoadTracksResources(tracks...)
 	tabs := d.CollectTabs(tracks)
 
 	return tabs, nil
