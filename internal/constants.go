@@ -1,13 +1,11 @@
 package internal
 
 const (
-	KeyDatabaseURL          = "DATABASE_URL"
-	KeyAdminInitialEmail    = "ADMIN_INITIAL_EMAIL"
-	KeyAdminInitialPassword = "ADMIN_INITIAL_PASSWORD"
+	KeyDatabaseURL = "DATABASE_URL"
 )
 
 const (
-	PathConfig = "config.yaml"
+	PathSeedConfig = "seed-config.yaml"
 )
 
 const (

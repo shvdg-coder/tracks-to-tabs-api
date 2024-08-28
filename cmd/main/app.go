@@ -5,29 +5,30 @@ import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	inter "github.com/shvdg-dev/tracks-to-tabs-api/internal"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"log"
 	"os"
 )
 
 var (
-	config    *inter.Config
 	createAPI pkg.CreateOps
 	dropAPI   pkg.DropOps
+	seedAPI   pkg.Seeder
 )
 
 // init instantiates all app requirements.
 func init() {
-	config = initConfig()
 	database := initDatabase()
 	createAPI = pkg.NewCreateAPI(database)
 	dropAPI = pkg.NewDropAPI(database)
+	seedAPI = pkg.NewSeedingAPI(database, initSeedConfig())
 }
 
-// initConfig initializes the application configuration.
-func initConfig() *inter.Config {
-	conf, err := inter.NewConfig(inter.PathConfig)
+// initSeedConfig initializes the application seeding configuration.
+func initSeedConfig() *models.SeedConfig {
+	conf, err := models.NewSeedConfig(inter.PathSeedConfig)
 	if err != nil {
-		log.Fatalf("Could not load config")
+		log.Fatalf("Could not load seed config")
 	}
 	return conf
 }
@@ -59,6 +60,7 @@ func handleArg(arg string) {
 	case inter.CommandPurge:
 		dropAPI.DropAll()
 	case inter.CommandSeed:
+		seedAPI.Seed()
 	default:
 		printErrorAndExit()
 	}

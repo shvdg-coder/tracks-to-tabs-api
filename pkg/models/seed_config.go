@@ -1,24 +1,18 @@
-package internal
+package models
 
 import (
 	faker "github.com/brianvoe/gofakeit/v7"
-	diff "github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"gopkg.in/yaml.v2"
 	"os"
 )
 
-// Config represents the configuration object for the application.
-type Config struct {
-	Seeding *SeedingConfig `yaml:"seeding"`
-}
-
-// SeedingConfig represents the configuration with predefined seeds.
-type SeedingConfig struct {
-	Dummies      *DummiesConfig          `yaml:"dummies"`
-	Instruments  []*diff.InstrumentEntry `yaml:"instruments"`
-	Difficulties []*diff.DifficultyEntry `yaml:"difficulties"`
-	Sources      []*diff.Source          `yaml:"sources"`
-	Endpoints    []*diff.EndpointEntry   `yaml:"endpoints"`
+// SeedConfig represents the configuration with seeding info.
+type SeedConfig struct {
+	Dummies      *DummiesConfig     `yaml:"dummies"`
+	Instruments  []*InstrumentEntry `yaml:"instruments"`
+	Difficulties []*DifficultyEntry `yaml:"difficulties"`
+	Sources      []*SourceEntry     `yaml:"sources"`
+	Endpoints    []*EndpointEntry   `yaml:"endpoints"`
 }
 
 // DummiesConfig represents the configuration for generating dummies.
@@ -33,6 +27,7 @@ type ArtistsConfig struct {
 	Tracks *TracksConfig `yaml:"tracks"`
 }
 
+// RandomAmount returns a random number between the defined min and max value.
 func (a *ArtistsConfig) RandomAmount() uint {
 	return uint(faker.Number(a.Min, a.Max))
 }
@@ -44,6 +39,7 @@ type TracksConfig struct {
 	Tabs *TabsConfig `yaml:"tabs"`
 }
 
+// RandomAmount returns a random number between the defined min and max value.
 func (t *TracksConfig) RandomAmount() uint {
 	return uint(faker.Number(t.Min, t.Max))
 }
@@ -54,13 +50,14 @@ type TabsConfig struct {
 	Max int `yaml:"max"`
 }
 
+// RandomAmount returns a random number between the defined min and max value.
 func (t *TabsConfig) RandomAmount() uint {
 	return uint(faker.Number(t.Min, t.Max))
 }
 
-// NewConfig reads a file from the given path and unmarshalls its contents into a Config struct.
-func NewConfig(path string) (*Config, error) {
-	var config Config
+// NewSeedConfig reads the seed config from the given path and unmarshalls its contents into a models.SeedConfig.
+func NewSeedConfig(path string) (*SeedConfig, error) {
+	var config SeedConfig
 
 	file, err := os.ReadFile(path)
 	if err != nil {
