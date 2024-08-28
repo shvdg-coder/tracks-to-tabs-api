@@ -29,29 +29,29 @@ seeding:
       name: 'expert'
   sources:
     - id: 1000
-      name: 'Music Provider 1'
+      name: 'Songify'
       category: 'music'
     - id: 2000
-      name: 'Tab Provider 1'
+      name: 'Tabsters'
       category: 'tabs'
   endpoints:
     - sourceId: 1000
       category: 'artist'
       type: 'web'
-      url: 'https://musicprovider1/artist/{artistID}'
+      url: 'https://www.songify/artist/{artist:id}'
     - sourceId: 1000
       category: 'track'
       type: 'web'
-      url: 'https://musicprovider1/track/{trackID}'
+      url: 'https://www.songify/track/{track:id}'
     - sourceId: 2000
       category: 'artist'
       type: 'web'
-      url: 'https://tabprovider1/artist/{artistID}'
+      url: 'https://www.tabsters/web/{artist:name}-tabs-{artist:id}'
     - sourceId: 2000
       category: 'tab'
       type: 'web'
-      url: 'https://tabprovider1/track/{trackID}'
+      url: 'https://www.tabsters/web/{artist:name}-{tab:name}-tab-{tab:id}'
     - sourceId: 2000
       category: 'artist'
       type: 'api'
-      url: 'https://tabprovider1/artist/api/{artistID}'
+      url: 'https://www.tabsters/api/artist/{artist:id}/tracks?from={from}&size={size}'
