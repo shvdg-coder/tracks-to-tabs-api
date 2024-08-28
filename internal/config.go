@@ -2,7 +2,7 @@ package internal
 
 import (
 	faker "github.com/brianvoe/gofakeit/v7"
-	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	diff "github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"gopkg.in/yaml.v2"
 	"os"
 )

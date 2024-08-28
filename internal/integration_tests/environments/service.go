@@ -2,7 +2,7 @@ package environments
 
 import (
 	tstdb "github.com/shvdg-dev/base-logic/pkg/testable/database"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
 )
 
 // EnvManagement represents the operations related to managing environments.

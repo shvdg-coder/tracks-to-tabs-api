@@ -2,7 +2,7 @@ package mappers
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 )
 
 // TabMapper represents operations related to tab data mapping.

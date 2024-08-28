@@ -1,4 +1,4 @@
-module github.com/shvdg-dev/tunes-to-tabs-api
+module github.com/shvdg-dev/tracks-to-tabs-api
 
 go 1.22.2
 

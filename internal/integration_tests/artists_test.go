@@ -3,8 +3,8 @@ package integration_tests
 import (
 	"encoding/json"
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	tstenv "github.com/shvdg-dev/tunes-to-tabs-api/internal/integration_tests/environments"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg"
+	tstenv "github.com/shvdg-dev/tracks-to-tabs-api/internal/integration_tests/environments"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
 	"os"
 	"reflect"
 	"testing"

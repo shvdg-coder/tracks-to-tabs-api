@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	inter "github.com/shvdg-dev/tunes-to-tabs-api/internal"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg"
+	inter "github.com/shvdg-dev/tracks-to-tabs-api/internal"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
 	"log"
 	"os"
 )

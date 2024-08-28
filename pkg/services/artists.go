@@ -2,10 +2,10 @@ package services
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/data"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/mappers"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/schemas"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/data"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/mappers"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/schemas"
 )
 
 // ArtistOps represents all operations related to artists.

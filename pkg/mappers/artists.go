@@ -2,7 +2,7 @@ package mappers
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 )
 
 // ArtistMapper represents operations related to artist data mapping.

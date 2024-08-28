@@ -3,7 +3,7 @@ package pkg
 import (
 	"github.com/google/uuid"
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 )
 
 // DataOps represents all DataAPI data operations.

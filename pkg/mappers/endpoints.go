@@ -1,6 +1,6 @@
 package mappers
 
-import "github.com/shvdg-dev/tunes-to-tabs-api/pkg/models"
+import "github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 
 // EndpointMapper represents operations related to endpoint data mapping.
 type EndpointMapper interface {

@@ -3,7 +3,7 @@ package data
 import (
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-dev/base-logic/pkg"
-	"github.com/shvdg-dev/tunes-to-tabs-api/pkg/queries"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/queries"
 	"log"
 )
 

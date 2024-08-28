@@ -1,7 +1,7 @@
 package integration_tests
 
 import (
-	tstenv "github.com/shvdg-dev/tunes-to-tabs-api/internal/integration_tests/environments"
+	tstenv "github.com/shvdg-dev/tracks-to-tabs-api/internal/integration_tests/environments"
 	"testing"
 )
 
