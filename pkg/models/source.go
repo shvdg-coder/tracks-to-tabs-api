@@ -16,7 +16,7 @@ type Source struct {
 }
 
 // HasCategory checks if the Source has the provided category.
-func (s *Source) HasCategory(category string) bool {
+func (s *SourceEntry) HasCategory(category string) bool {
 	return s.Category == category
 }
 
