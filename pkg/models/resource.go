@@ -22,5 +22,7 @@ func (r *Resource) FormatURL(replacements map[string]string) {
 
 // MarshalJSON marshals the models.Resource.
 func (r *Resource) MarshalJSON() ([]byte, error) {
+	resource := *r
+	resource.Source = nil
 	return json.Marshal(*r)
 }

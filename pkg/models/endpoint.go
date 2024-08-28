@@ -21,8 +21,6 @@ type Endpoint struct {
 // MarshalJSON marshals the models.Endpoint while preventing cyclic references.
 func (e *Endpoint) MarshalJSON() ([]byte, error) {
 	endpoint := *e
-	endpoint.Source = &Source{
-		SourceEntry: e.Source.SourceEntry,
-	}
+	endpoint.Source = nil
 	return json.Marshal(endpoint)
 }
