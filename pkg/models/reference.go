@@ -23,6 +23,9 @@ type Reference struct {
 // MarshalJSON marshals the models.Reference while preventing circling.
 func (r *Reference) MarshalJSON() ([]byte, error) {
 	reference := *r
-	reference.Source = nil
+	reference.Source = &Source{
+		SourceEntry: r.Source.SourceEntry,
+		Endpoints:   r.Source.Endpoints,
+	}
 	return json.Marshal(reference)
 }
