@@ -25,7 +25,6 @@ func NewResourceSvc() ResourceOps {
 func (r *ResourceSvc) LoadArtistsResources(artists ...*models.Artist) {
 	for _, artist := range artists {
 		artist.Resources = r.CreateResourcesFromReferences("artist", artist.References...)
-		r.LoadTracksResources(artist.Tracks...)
 	}
 }
 
@@ -35,7 +34,6 @@ func (r *ResourceSvc) LoadTracksResources(tracks ...*models.Track) {
 		references := track.References
 		references = append(references, track.Artist.References...)
 		track.Resources = r.CreateResourcesFromReferences("track", references...)
-		r.LoadTabsResources(track.Tabs...)
 	}
 }
 
@@ -45,7 +43,6 @@ func (r *ResourceSvc) LoadTabsResources(tabs ...*models.Tab) {
 		references := tab.References
 		references = append(references, tab.Track.References...)
 		references = append(references, tab.Track.Artist.References...)
-		tab.Resources = r.CreateResourcesFromReferences("tab", references...)
 	}
 }
 
@@ -65,7 +62,7 @@ func (r *ResourceSvc) CreateResourcesFromReferences(category string, references 
 	return resources
 }
 
-// SetDefaultReplacements sets the default replacements in a map where the key is the placeholder and the value a reference, to be used for formatting strings.
+// SetDefaultReplacements sets the default replacements in the provided map, where the key is the placeholder and the value a reference, to be used for formatting strings.
 func (r *ResourceSvc) SetDefaultReplacements(replacements map[string]string) map[string]string {
 	replacements["{from}"] = "0"
 	replacements["{size}"] = "50"

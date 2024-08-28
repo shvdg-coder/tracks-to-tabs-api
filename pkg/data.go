@@ -43,13 +43,13 @@ func (d *DataAPI) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
 	}
 
 	artistIDs, _ := d.ExtractIDsFromArtistTrackEntries(artistTrackEntries)
-	artists, err := d.GetArtistsCascading(artistIDs...)
+	artists, err := d.GetArtists(artistIDs...)
 	if err != nil {
 		return nil, err
 	}
 
-	d.LoadArtistsResources(artists...)
 	tracks := d.CollectTracks(artists)
+	d.LoadTracksResources(tracks...)
 
 	return tracks, nil
 }
@@ -62,13 +62,13 @@ func (d *DataAPI) GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error) {
 	}
 
 	trackIDs, _ := d.ExtractIDsFromTrackTabEntries(tabTrackEntries)
-	tracks, err := d.GetTracksCascading(trackIDs...)
+	tracks, err := d.GetTracks(trackIDs...)
 	if err != nil {
 		return nil, err
 	}
 
-	d.LoadTracksResources(tracks...)
 	tabs := d.CollectTabs(tracks)
+	d.LoadTabsResources(tabs...)
 
 	return tabs, nil
 }
