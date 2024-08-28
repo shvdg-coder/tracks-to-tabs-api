@@ -53,7 +53,7 @@ func (r *ResourceSvc) LoadTabsResources(tabs ...*models.Tab) {
 func (r *ResourceSvc) createResourcesFromReferences(category string, references ...*models.Reference) []*models.Resource {
 	resources := make([]*models.Resource, 0)
 
-	replacements := r.CreateReplacements(references...)
+	replacements := r.SetDefaultReplacements(r.CreateReplacements(references...))
 
 	referencesMap := r.GroupReferencesBySource(references)
 	for source, _ := range referencesMap {
@@ -65,7 +65,14 @@ func (r *ResourceSvc) createResourcesFromReferences(category string, references 
 	return resources
 }
 
-// CreateReplacements creates createResourcesFromEndpoints map where the key is createResourcesFromEndpoints placeholder and the value createResourcesFromEndpoints reference, to be used for formatting strings.
+// SetDefaultReplacements sets the default replacements in a map where the key is the placeholder and the value a reference, to be used for formatting strings.
+func (r *ResourceSvc) SetDefaultReplacements(replacements map[string]string) map[string]string {
+	replacements["{from}"] = "0"
+	replacements["{size}"] = "50"
+	return replacements
+}
+
+// CreateReplacements creates createResourcesFromEndpoints map where the key is createResourcesFromEndpoints placeholder and the value a reference, to be used for formatting strings.
 func (r *ResourceSvc) CreateReplacements(references ...*models.Reference) map[string]string {
 	replacements := make(map[string]string)
 	for _, reference := range references {
