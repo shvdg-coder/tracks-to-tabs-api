@@ -29,6 +29,8 @@ func (s *SeedingAPI) Seed() {
 	s.SeedSources()
 	s.SeedEndpoints()
 	s.SeedArtists()
+	s.SeedTracks()
+	s.SeedTabs()
 }
 
 // SeedInstruments seeds the instruments table with the default instruments.
