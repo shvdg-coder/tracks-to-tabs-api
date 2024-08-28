@@ -1,5 +1,7 @@
 package models
 
+import "encoding/json"
+
 // SourceEntry represents a source in the database.
 type SourceEntry struct {
 	ID       uint   `yaml:"id"`
@@ -16,4 +18,9 @@ type Source struct {
 // HasCategory checks if the Source has the provided category.
 func (s *Source) HasCategory(category string) bool {
 	return s.Category == category
+}
+
+// MarshalJSON marshals the models.Source.
+func (s *Source) MarshalJSON() ([]byte, error) {
+	return json.Marshal(*s)
 }

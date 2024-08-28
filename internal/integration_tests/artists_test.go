@@ -53,7 +53,7 @@ func TestGetArtists(t *testing.T) {
 	}
 
 	if !isEqual {
-		t.Fatalf("JSONs are not equal: got \n%s", string(artistsJSON))
+		t.Fatalf("JSONs are not equal: got \n%s", artistsJSON)
 	}
 }
 

@@ -1,6 +1,9 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"encoding/json"
+	"github.com/google/uuid"
+)
 
 // ArtistEntry represents an artist in the database.
 type ArtistEntry struct {
@@ -14,4 +17,9 @@ type Artist struct {
 	Tracks     []*Track
 	References []*Reference
 	Resources  []*Resource
+}
+
+// MarshalJSON marshals the models.Artist.
+func (a *Artist) MarshalJSON() ([]byte, error) {
+	return json.Marshal(*a)
 }
