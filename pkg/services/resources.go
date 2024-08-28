@@ -24,7 +24,7 @@ func NewResourceSvc() ResourceOps {
 // LoadArtistsResources sets the models.Resource's for models.Artist's and it's entities.
 func (r *ResourceSvc) LoadArtistsResources(artists ...*models.Artist) {
 	for _, artist := range artists {
-		artist.Resources = r.createResourcesFromReferences("artist", artist.References...)
+		artist.Resources = r.CreateResourcesFromReferences("artist", artist.References...)
 		r.LoadTracksResources(artist.Tracks...)
 	}
 }
@@ -34,7 +34,7 @@ func (r *ResourceSvc) LoadTracksResources(tracks ...*models.Track) {
 	for _, track := range tracks {
 		references := track.References
 		references = append(references, track.Artist.References...)
-		track.Resources = r.createResourcesFromReferences("track", references...)
+		track.Resources = r.CreateResourcesFromReferences("track", references...)
 		r.LoadTabsResources(track.Tabs...)
 	}
 }
@@ -45,12 +45,12 @@ func (r *ResourceSvc) LoadTabsResources(tabs ...*models.Tab) {
 		references := tab.References
 		references = append(references, tab.Track.References...)
 		references = append(references, tab.Track.Artist.References...)
-		tab.Resources = r.createResourcesFromReferences("tab", references...)
+		tab.Resources = r.CreateResourcesFromReferences("tab", references...)
 	}
 }
 
-// createResourcesFromReferences creates models.Resource's for all the models.Endpoint`s that have the provided category, using the entities models.Reference's.
-func (r *ResourceSvc) createResourcesFromReferences(category string, references ...*models.Reference) []*models.Resource {
+// CreateResourcesFromReferences creates models.Resource's for all the models.Endpoint`s that have the provided category, using the entities models.Reference's.
+func (r *ResourceSvc) CreateResourcesFromReferences(category string, references ...*models.Reference) []*models.Resource {
 	resources := make([]*models.Resource, 0)
 
 	replacements := r.SetDefaultReplacements(r.CreateReplacements(references...))
@@ -58,7 +58,7 @@ func (r *ResourceSvc) createResourcesFromReferences(category string, references 
 	referencesMap := r.GroupReferencesBySource(references)
 	for source, _ := range referencesMap {
 		endpoints := r.FilterEndpointsByCategory(category, source.Endpoints)
-		entityResources := r.createResourcesFromEndpoints(replacements, endpoints)
+		entityResources := r.CreateResourcesFromEndpoints(replacements, endpoints)
 		resources = append(resources, entityResources...)
 	}
 
@@ -72,7 +72,7 @@ func (r *ResourceSvc) SetDefaultReplacements(replacements map[string]string) map
 	return replacements
 }
 
-// CreateReplacements creates createResourcesFromEndpoints map where the key is createResourcesFromEndpoints placeholder and the value a reference, to be used for formatting strings.
+// CreateReplacements creates CreateResourcesFromEndpoints map where the key is CreateResourcesFromEndpoints placeholder and the value a reference, to be used for formatting strings.
 func (r *ResourceSvc) CreateReplacements(references ...*models.Reference) map[string]string {
 	replacements := make(map[string]string)
 	for _, reference := range references {
@@ -82,7 +82,7 @@ func (r *ResourceSvc) CreateReplacements(references ...*models.Reference) map[st
 	return replacements
 }
 
-// GroupReferencesBySource transforms createResourcesFromEndpoints slice of models.Reference's into createResourcesFromEndpoints map where the key is the models.Source and the value createResourcesFromEndpoints slice of models.Reference's.
+// GroupReferencesBySource transforms CreateResourcesFromEndpoints slice of models.Reference's into CreateResourcesFromEndpoints map where the key is the models.Source and the value CreateResourcesFromEndpoints slice of models.Reference's.
 func (r *ResourceSvc) GroupReferencesBySource(references []*models.Reference) map[*models.Source][]*models.Reference {
 	referencesMap := make(map[*models.Source][]*models.Reference)
 	for _, reference := range references {
@@ -102,8 +102,8 @@ func (r *ResourceSvc) FilterEndpointsByCategory(category string, endpoints []*mo
 	return filteredEndpoints
 }
 
-// createResourcesFromEndpoints creates models.Resource's by formatting the URL's from the models.Endpoint using the provided replacements map.
-func (r *ResourceSvc) createResourcesFromEndpoints(replacements map[string]string, endpoints []*models.Endpoint) []*models.Resource {
+// CreateResourcesFromEndpoints creates models.Resource's by formatting the URL's from the models.Endpoint using the provided replacements map.
+func (r *ResourceSvc) CreateResourcesFromEndpoints(replacements map[string]string, endpoints []*models.Endpoint) []*models.Resource {
 	resources := make([]*models.Resource, 0)
 	for _, endpoint := range endpoints {
 		resource := &models.Resource{Endpoint: endpoint}
