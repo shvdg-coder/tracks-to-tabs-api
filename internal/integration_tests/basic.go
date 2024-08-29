@@ -5,19 +5,18 @@ import (
 	"testing"
 )
 
-// setup prepares the tests by performing the minimally required steps.
-func setup(t *testing.T) tstenv.DbEnvOperations {
+// createDefaultDbEnv prepares the tests by performing the minimally required steps.
+func createDefaultDbEnv(t *testing.T) tstenv.DbEnvOperations {
 	dbEnv, err := tstenv.NewService().CreatePostgresEnv()
 	if err != nil {
 		t.Fatal(err)
 	}
 	dbEnv.Setup()
-	insertions(t, dbEnv)
 	return dbEnv
 }
 
-// insertions prepares the test, by insertions the dummy data into the database.
-func insertions(t *testing.T, dbEnv tstenv.DbEnvOperations) {
+// defaultInsertions prepares the test, by defaultInsertions the dummy data into the database.
+func defaultInsertions(t *testing.T, dbEnv tstenv.DbEnvOperations) {
 	err := dbEnv.InsertCSVFile(artistsCSV, artistsTable, artistsColumns)
 	if err != nil {
 		t.Fatal(err)

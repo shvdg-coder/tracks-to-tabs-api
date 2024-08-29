@@ -18,10 +18,12 @@ var (
 
 // init instantiates all app requirements.
 func init() {
+	seedConfig := initSeedConfig()
 	database := initDatabase()
 	createAPI = pkg.NewCreateAPI(database)
 	dropAPI = pkg.NewDropAPI(database)
-	seedAPI = pkg.NewSeedingAPI(database, initSeedConfig())
+	dummyAPI := pkg.NewDummyAPI(database, seedConfig.Sources, seedConfig.Instruments, seedConfig.Difficulties)
+	seedAPI = pkg.NewSeedingAPI(database, seedConfig, dummyAPI)
 }
 
 // initSeedConfig initializes the application seeding configuration.

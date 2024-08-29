@@ -12,6 +12,9 @@ const sourcesCSV = "./resources/sources.csv"
 const instrumentsCSV = "./resources/instruments.csv"
 const difficultiesCSV = "./resources/difficulties.csv"
 
+// Paths
+const seedConfigPath = "./resources/seed-config.yaml"
+
 // Tables
 const artistsTable = "artists"
 const tracksTable = "tracks"

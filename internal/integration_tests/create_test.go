@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// TestEnvSetup tests whether the tables can be created as part of the database environment setup.
+// TestEnvSetup tests whether the tables can be created as part of the database environment createDefaultDbEnv.
 func TestEnvSetup(t *testing.T) {
 	dbEnv, err := tstenv.NewService().CreatePostgresEnv()
 	if err != nil {

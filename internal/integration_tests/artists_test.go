@@ -8,7 +8,8 @@ import (
 
 // TestGetArtists tests whether artists can be inserted and retrieved cascading.
 func TestGetArtists(t *testing.T) {
-	dbEnv := setup(t)
+	dbEnv := createDefaultDbEnv(t)
+	defaultInsertions(t, dbEnv)
 	defer dbEnv.Breakdown()
 
 	// Prepare
