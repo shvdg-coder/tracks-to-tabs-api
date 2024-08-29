@@ -39,9 +39,7 @@ func (d *ArtistSvc) InsertArtistEntries(artists ...*models.ArtistEntry) {
 func (d *ArtistSvc) InsertArtistEntry(artist *models.ArtistEntry) {
 	_, err := d.Exec(queries.InsertArtist, artist.ID, artist.Name)
 	if err != nil {
-		log.Printf("Failed inserting user with name '%s': %s", artist.Name, err.Error())
-	} else {
-		log.Printf("Successfully inserted artist '%s' into the 'artists' table", artist.Name)
+		log.Printf("Failed inserting user: %s", err.Error())
 	}
 }
 

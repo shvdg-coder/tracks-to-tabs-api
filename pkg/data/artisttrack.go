@@ -31,9 +31,7 @@ func NewArtistTrackSvc(database logic.DbOperations) ArtistTrackData {
 func (d *ArtistTrackSvc) LinkArtistToTrack(artistID, trackID uuid.UUID) {
 	_, err := d.Exec(queries.InsertArtistTrack, artistID, trackID)
 	if err != nil {
-		log.Printf("Failed linking artist with ID '%s' and track with ID '%s': %s", artistID, trackID, err.Error())
-	} else {
-		log.Printf("Successfully linked artist with ID '%s' and track with ID '%s'", artistID, trackID)
+		log.Printf("Failed linking artist: %s", err.Error())
 	}
 }
 

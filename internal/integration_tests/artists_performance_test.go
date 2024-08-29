@@ -1,0 +1,60 @@
+package integration_tests
+
+import (
+	"github.com/google/uuid"
+	env "github.com/shvdg-dev/tracks-to-tabs-api/internal/integration_tests/environments"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"testing"
+)
+
+// TestGetArtistsPerformance tests the performance of retrieving artists.
+func TestGetArtistsPerformance(t *testing.T) {
+	dbEnv := createDefaultDbEnv(t)
+	defer dbEnv.Breakdown()
+
+	// Prepare
+	seedConfig, err := models.NewSeedConfig(performanceConfigPath)
+	if err != nil {
+		t.Fatalf("error occurred while parsing the seed config: %s", err.Error())
+	}
+
+	dummyAPI := pkg.NewDummyAPI(dbEnv, seedConfig.Sources, seedConfig.Instruments, seedConfig.Difficulties)
+	seedingAPI := pkg.NewSeedingAPI(dbEnv, seedConfig, dummyAPI)
+	dataAPI := pkg.NewDataAPI(dbEnv)
+
+	artistIDs := selectArtistIDs(t, dbEnv)
+
+	// Execute
+	seedingAPI.Seed()
+
+	artists, err := dataAPI.GetArtists(artistIDs...)
+	if err != nil {
+		t.Fatalf("error occurred during retrieval of artist: %s", err.Error())
+	}
+
+	// Test
+	if len(artists) != len(artistIDs) {
+		t.Errorf("expected %d number of artists, got %d", len(artistIDs), len(artists))
+	}
+}
+
+// selectArtistIDs retrieves al the artist IDs from the artists table.
+func selectArtistIDs(t *testing.T, dbEnv env.DbEnvOperations) []uuid.UUID {
+	rows, err := dbEnv.Query("SELECT id FROM artists")
+	if err != nil {
+		t.Fatalf("error occured while querying artists table: %s", err.Error())
+	}
+
+	artistIDs := make([]uuid.UUID, 0)
+	for rows.Next() {
+		artistEntry := &models.ArtistEntry{}
+		err := rows.Scan(&artistEntry.ID, &artistEntry.Name)
+		if err != nil {
+			t.Fatalf("error occured while scanning artists rows: %s", err.Error())
+		}
+		artistIDs = append(artistIDs, artistEntry.ID)
+	}
+
+	return artistIDs
+}

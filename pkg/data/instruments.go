@@ -39,8 +39,6 @@ func (d *InstrumentSvc) InsertInstrumentEntry(instrument *models.InstrumentEntry
 	_, err := d.Exec(queries.InsertInstrument, instrument.Name)
 	if err != nil {
 		log.Printf("Failed inserting instrument: %s", err.Error())
-	} else {
-		log.Printf("Successfully inserted instrument")
 	}
 }
 

@@ -39,8 +39,6 @@ func (d *SourceSvc) InsertSourceEntry(source *models.SourceEntry) {
 	_, err := d.Exec(queries.InsertSource, source.ID, source.Name, source.Category)
 	if err != nil {
 		log.Printf("Failed inserting source: %s", err.Error())
-	} else {
-		log.Printf("Successfully inserted source")
 	}
 }
 

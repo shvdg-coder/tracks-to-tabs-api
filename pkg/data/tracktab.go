@@ -30,9 +30,7 @@ func NewTrackTabSvc(database logic.DbOperations) *TrackTabSvc {
 func (d *TrackTabSvc) LinkTrackToTab(trackId, tabId uuid.UUID) {
 	_, err := d.Exec(queries.InsertTrackTab, trackId, tabId)
 	if err != nil {
-		log.Printf("Failed linking track with ID '%s' and tab with ID '%s': %s", trackId, tabId, err.Error())
-	} else {
-		log.Printf("Successfully linked track with ID '%s' and tab with ID '%s'", trackId, tabId)
+		log.Printf("Failed linking track: %s", err.Error())
 	}
 }
 

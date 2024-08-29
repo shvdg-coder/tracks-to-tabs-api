@@ -39,8 +39,6 @@ func (d *ReferenceSvc) InsertReferenceEntry(reference *models.ReferenceEntry) {
 	_, err := d.Exec(queries.InsertReference, reference.InternalID, reference.SourceID, reference.Category, reference.Type, reference.Reference)
 	if err != nil {
 		log.Printf("Failed to insert reference: %s", err.Error())
-	} else {
-		log.Print("Successfully inserted reference")
 	}
 }
 

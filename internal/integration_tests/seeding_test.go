@@ -17,9 +17,9 @@ func TestSeeding(t *testing.T) {
 		t.Fatalf("error occurred while parsing the seed config: %s", err.Error())
 	}
 
-	dummySvc := pkg.NewDummyAPI(dbEnv, seedConfig.Sources, seedConfig.Instruments, seedConfig.Difficulties)
-	api := pkg.NewSeedingAPI(dbEnv, seedConfig, dummySvc)
+	dummyAPI := pkg.NewDummyAPI(dbEnv, seedConfig.Sources, seedConfig.Instruments, seedConfig.Difficulties)
+	seedingAPI := pkg.NewSeedingAPI(dbEnv, seedConfig, dummyAPI)
 
 	// Execute
-	api.Seed()
+	seedingAPI.Seed()
 }

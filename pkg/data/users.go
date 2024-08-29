@@ -28,9 +28,7 @@ func (d *UserSvc) InsertUser(email, plainPassword string) {
 	hashedPassword, _ := logic.HashPassword(plainPassword)
 	_, err := d.Exec(queries.InsertUser, email, hashedPassword)
 	if err != nil {
-		log.Printf("Failed inserting user with email '%s': %s", email, err.Error())
-	} else {
-		log.Printf("Successfully inserted the user '%s' in the 'users' table", email)
+		log.Printf("Failed inserting: %s", err.Error())
 	}
 }
 

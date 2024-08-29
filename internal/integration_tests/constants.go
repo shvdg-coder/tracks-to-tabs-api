@@ -14,6 +14,7 @@ const difficultiesCSV = "./resources/difficulties.csv"
 
 // Paths
 const seedConfigPath = "./resources/seed-config.yaml"
+const performanceConfigPath = "./resources/seed-config.performance.yaml"
 
 // Tables
 const artistsTable = "artists"

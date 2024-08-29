@@ -38,9 +38,7 @@ func (d *TrackSvc) InsertTrackEntries(tracks ...*models.TrackEntry) {
 func (d *TrackSvc) InsertTrackEntry(track *models.TrackEntry) {
 	_, err := d.Exec(queries.InsertTrack, track.ID, track.Title, track.Duration)
 	if err != nil {
-		log.Printf("Failed to insert track with title '%s': %s", track.Title, err.Error())
-	} else {
-		log.Printf("Successfully inserted track into the 'tracks' table with title '%s'", track.Title)
+		log.Printf("Failed to insert track: %s", err.Error())
 	}
 }
 

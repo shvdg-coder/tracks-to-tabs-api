@@ -38,9 +38,7 @@ func (d *DifficultySvc) InsertDifficultyEntries(difficulties ...*models.Difficul
 func (d *DifficultySvc) InsertDifficultyEntry(difficulty *models.DifficultyEntry) {
 	_, err := d.Exec(queries.InsertDifficulty, difficulty.Name)
 	if err != nil {
-		log.Printf("Failed inserting difficulty level with name: '%s': %s", difficulty.Name, err.Error())
-	} else {
-		log.Printf("Successfully inserted difficulty level with name: '%s'", difficulty.Name)
+		log.Printf("Failed inserting difficulty level: %s", err.Error())
 	}
 }
 

@@ -40,8 +40,6 @@ func (d *TabSvc) InsertTabEntry(tab *models.TabEntry) {
 	_, err := d.Exec(queries.InsertTab, tab.ID, tab.InstrumentID, tab.DifficultyID, tab.Description)
 	if err != nil {
 		log.Printf("Failed to insert tab: %s", err.Error())
-	} else {
-		log.Printf("Successfully inserted tab")
 	}
 }
 

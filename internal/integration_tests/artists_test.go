@@ -28,7 +28,7 @@ func TestGetArtists(t *testing.T) {
 	// Execute
 	artists, err := api.GetArtists(artistIDs...)
 	if err != nil {
-		t.Fatalf("error occurred during retrieval of artist cascading: %s", err.Error())
+		t.Fatalf("error occurred during retrieval of artist: %s", err.Error())
 	}
 
 	// Test

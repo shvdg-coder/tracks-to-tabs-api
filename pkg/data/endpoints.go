@@ -38,13 +38,7 @@ func (d *EndpointSvc) InsertEndpointEntry(endpoint *models.EndpointEntry) {
 	_, err := d.Exec(queries.InsertEndpoint, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.UnformattedURL)
 	if err != nil {
 		log.Printf(
-			"Failed to insert endpoint with Source '%d', Category '%s', Type '%s', and UnformattedURL '%s': %s",
-			endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.UnformattedURL, err.Error(),
-		)
-	} else {
-		log.Printf(
-			"Successfully inserted endpoint into the 'endpoints' table with Source '%d', Category '%s', Type '%s', and UnformattedURL '%s'",
-			endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.UnformattedURL,
+			"Failed to insert endpoint: %s", err.Error(),
 		)
 	}
 }
