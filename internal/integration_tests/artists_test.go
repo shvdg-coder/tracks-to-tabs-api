@@ -5,6 +5,7 @@ import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	tstenv "github.com/shvdg-dev/tracks-to-tabs-api/internal/integration_tests/environments"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"os"
 	"reflect"
 	"testing"
@@ -16,10 +17,7 @@ func TestGetArtists(t *testing.T) {
 	defer dbEnv.Breakdown()
 
 	// Prepare
-	expectedArtistsJson, err := os.ReadFile(artists1JSON)
-	if err != nil {
-		t.Fatalf("failed to read '%s': %s", artists1JSON, err)
-	}
+	expectedArtists := getExpectedArtists(t)
 
 	artistIDStrings, err := logic.GetCSVColumnValues(artistsCSV, artistsColumnID)
 	if err != nil {
@@ -39,22 +37,34 @@ func TestGetArtists(t *testing.T) {
 		t.Fatalf("error occurred during retrieval of artist cascading: %s", err.Error())
 	}
 
-	// Convert artists to JSON format
-	artistsJSON, err := json.Marshal(artists)
-	if err != nil {
-		t.Fatalf("error occurred during marshalling to JSON: %s", err.Error())
-		return
-	}
-
 	// Tests
-	isEqual, err := isEqualJSON(string(artistsJSON), string(expectedArtistsJson))
-	if err != nil {
-		t.Fatalf("failed to compare JSONs: %s", err)
+	if len(artists) != len(expectedArtists) {
+		t.Fatalf("expected to be the same number of artists")
 	}
 
-	if !isEqual {
-		t.Fatalf("JSONs are not equal: got \n%s", artistsJSON)
+	for i := range artists {
+		if !reflect.DeepEqual(artists[i], expectedArtists[i]) {
+			actualJSON, _ := json.Marshal(artists[i])
+			expectedJSON, _ := json.Marshal(expectedArtists[i])
+			t.Errorf("expected artist \n%s, \nbut got \n%s", string(expectedJSON), string(actualJSON))
+		}
 	}
+}
+
+// getExpectedArtists unmarshalls the expected artists from the JSON.
+func getExpectedArtists(t *testing.T) []models.Artist {
+	expectedArtistsJson, err := os.ReadFile(artistsScenario1JSON)
+	if err != nil {
+		t.Fatalf("failed to read '%s': %s", artistsScenario1JSON, err)
+	}
+
+	// Unmarshal expected artists from JSON
+	var expectedArtists []models.Artist
+	if err := json.Unmarshal(expectedArtistsJson, &expectedArtists); err != nil {
+		t.Fatalf("failed to unmarshal expected artists: %s", err)
+	}
+
+	return expectedArtists
 }
 
 // setup prepares the tests by performing the minimally required steps.
@@ -110,23 +120,4 @@ func insertions(t *testing.T, dbEnv tstenv.DbEnvOperations) {
 	if err != nil {
 		t.Fatal(err)
 	}
-}
-
-// isEqualJSON checks whether the two provided JSON strings are equal.
-func isEqualJSON(s1, s2 string) (bool, error) {
-	var o1 interface{}
-	var o2 interface{}
-	var err error
-
-	err = json.Unmarshal([]byte(s1), &o1)
-	if err != nil {
-		return false, err
-	}
-
-	err = json.Unmarshal([]byte(s2), &o2)
-	if err != nil {
-		return false, err
-	}
-
-	return reflect.DeepEqual(o1, o2), nil
 }
