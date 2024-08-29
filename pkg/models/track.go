@@ -28,6 +28,7 @@ func (t *Track) MarshalJSON() ([]byte, error) {
 		ArtistEntry: t.Artist.ArtistEntry,
 		References:  t.Artist.References,
 		Resources:   t.Artist.Resources,
+		Tracks:      nil,
 	}
 	return json.Marshal(track)
 }

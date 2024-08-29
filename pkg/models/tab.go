@@ -31,6 +31,7 @@ func (t *Tab) MarshalJSON() ([]byte, error) {
 		Artist:     t.Track.Artist,
 		References: t.Track.References,
 		Resources:  t.Track.Resources,
+		Tabs:       nil,
 	}
 	return json.Marshal(tab)
 }

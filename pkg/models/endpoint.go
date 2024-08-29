@@ -23,6 +23,7 @@ func (e *Endpoint) MarshalJSON() ([]byte, error) {
 	endpoint := *e
 	endpoint.Source = &Source{
 		SourceEntry: e.Source.SourceEntry,
+		Endpoints:   nil,
 	}
 	return json.Marshal(endpoint)
 }
