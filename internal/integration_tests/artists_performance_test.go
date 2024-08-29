@@ -6,6 +6,7 @@ import (
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"testing"
+	"time"
 )
 
 // TestGetArtistsPerformance tests the performance of retrieving artists.
@@ -23,15 +24,18 @@ func TestGetArtistsPerformance(t *testing.T) {
 	seedingAPI := pkg.NewSeedingAPI(dbEnv, seedConfig, dummyAPI)
 	dataAPI := pkg.NewDataAPI(dbEnv)
 
-	artistIDs := selectArtistIDs(t, dbEnv)
-
 	// Execute
 	seedingAPI.Seed()
+	artistIDs := selectArtistIDs(t, dbEnv)
 
+	start := time.Now()
 	artists, err := dataAPI.GetArtists(artistIDs...)
 	if err != nil {
 		t.Fatalf("error occurred during retrieval of artist: %s", err.Error())
 	}
+
+	elapsed := time.Since(start)
+	t.Logf("GetArtists took %s", elapsed.Round(time.Millisecond))
 
 	// Test
 	if len(artists) != len(artistIDs) {
@@ -48,12 +52,12 @@ func selectArtistIDs(t *testing.T, dbEnv env.DbEnvOperations) []uuid.UUID {
 
 	artistIDs := make([]uuid.UUID, 0)
 	for rows.Next() {
-		artistEntry := &models.ArtistEntry{}
-		err := rows.Scan(&artistEntry.ID, &artistEntry.Name)
+		artistID := uuid.UUID{}
+		err := rows.Scan(&artistID)
 		if err != nil {
 			t.Fatalf("error occured while scanning artists rows: %s", err.Error())
 		}
-		artistIDs = append(artistIDs, artistEntry.ID)
+		artistIDs = append(artistIDs, artistID)
 	}
 
 	return artistIDs
