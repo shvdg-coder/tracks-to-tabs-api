@@ -1,8 +1,6 @@
 package pkg
 
 import (
-	"errors"
-	"fmt"
 	faker "github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
 	logic "github.com/shvdg-dev/base-logic/pkg"
@@ -11,7 +9,10 @@ import (
 
 // DummyOps represents all operations related to dummy data.
 type DummyOps interface {
-	CreateReference(internalID uuid.UUID, sourceCategory, referenceCategory string) *models.ReferenceEntry
+	GetRandomSource(category string) *models.SourceEntry
+	CreateRandomUUID() string
+
+	CreateReference(internalID uuid.UUID, sourceID uint, referenceType, referenceCategory, value string) *models.ReferenceEntry
 	CreateArtists(config *models.ArtistsConfig) []*models.ArtistEntry
 	CreateArtist() *models.ArtistEntry
 	CreateTracks(config *models.TracksConfig) []*models.TrackEntry
@@ -38,7 +39,7 @@ func NewDummyAPI(database logic.DbOperations, sources []*models.SourceEntry, ins
 }
 
 // GetRandomSource returns a random source that has the provided category, from the DummyService's list of sources.
-func (d *DummyAPI) GetRandomSource(category string) (*models.SourceEntry, error) {
+func (d *DummyAPI) GetRandomSource(category string) *models.SourceEntry {
 	var matchingSources []*models.SourceEntry
 	for _, source := range d.Sources {
 		if source.HasCategory(category) {
@@ -46,9 +47,9 @@ func (d *DummyAPI) GetRandomSource(category string) (*models.SourceEntry, error)
 		}
 	}
 	if len(matchingSources) == 0 {
-		return nil, errors.New(fmt.Sprintf("A source with the category '%s' does not exist", category))
+		return nil
 	}
-	return matchingSources[faker.Number(0, len(matchingSources)-1)], nil
+	return matchingSources[faker.Number(0, len(matchingSources)-1)]
 }
 
 // GetRandomInstrument returns a random instrument from the DummyAPI list of instruments.
@@ -61,15 +62,19 @@ func (d *DummyAPI) GetRandomDifficulty() *models.DifficultyEntry {
 	return d.Difficulties[faker.Number(0, len(d.Difficulties)-1)]
 }
 
-// CreateReference creates a new reference ID, based on the provided inl ID and categories.
-func (d *DummyAPI) CreateReference(internalID uuid.UUID, sourceCategory, referenceCategory string) *models.ReferenceEntry {
-	source, _ := d.GetRandomSource(sourceCategory)
+// CreateRandomUUID creates a random uuid as a string.
+func (d *DummyAPI) CreateRandomUUID() string {
+	return faker.UUID()
+}
+
+// CreateReference creates a new models.Reference using the provided values.
+func (d *DummyAPI) CreateReference(internalID uuid.UUID, sourceID uint, referenceType, referenceCategory, value string) *models.ReferenceEntry {
 	return &models.ReferenceEntry{
 		InternalID: internalID,
-		SourceID:   source.ID,
+		SourceID:   sourceID,
 		Category:   referenceCategory,
-		Type:       "ID",
-		Reference:  faker.UUID(),
+		Type:       referenceType,
+		Reference:  value,
 	}
 }
 

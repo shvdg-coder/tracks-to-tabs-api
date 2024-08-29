@@ -3,6 +3,7 @@ package pkg
 import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"strings"
 )
 
 // Seeder represents all operations related to seeding.
@@ -58,6 +59,14 @@ func (s *SeedingAPI) SeedArtists() {
 	dummyArtists := s.CreateArtists(s.Dummies.Artists)
 	for _, artist := range dummyArtists {
 		s.InsertArtistEntry(artist)
+
+		sourceMusic := s.GetRandomSource(CategoryMusic)
+		artistIDRef := s.CreateReference(artist.ID, sourceMusic.ID, TypeID, CategoryArtist, s.CreateRandomUUID())
+		s.InsertReferenceEntry(artistIDRef)
+
+		sourceTabs := s.GetRandomSource(CategoryTabs)
+		artistNameRef := s.CreateReference(artist.ID, sourceTabs.ID, TypeName, CategoryArtist, s.formatName(artist.Name))
+		s.InsertReferenceEntry(artistNameRef)
 	}
 }
 
@@ -66,13 +75,34 @@ func (s *SeedingAPI) SeedTracks() {
 	dummyTracks := s.CreateTracks(s.Dummies.Artists.Tracks)
 	for _, track := range dummyTracks {
 		s.InsertTrackEntry(track)
+
+		sourceMusic := s.GetRandomSource(CategoryMusic)
+		trackIDRef := s.CreateReference(track.ID, sourceMusic.ID, TypeID, CategoryTrack, s.CreateRandomUUID())
+		s.InsertReferenceEntry(trackIDRef)
+
+		sourceTabs := s.GetRandomSource(CategoryTabs)
+		trackNameRef := s.CreateReference(track.ID, sourceTabs.ID, TypeName, CategoryTrack, s.formatName(track.Title))
+		s.InsertReferenceEntry(trackNameRef)
 	}
 }
 
 // SeedTabs seeds the tabs according to the dummy settings in the config file.
 func (s *SeedingAPI) SeedTabs() {
 	dummyTabs := s.CreateTabs(s.Dummies.Artists.Tracks.Tabs)
-	for _, track := range dummyTabs {
-		s.InsertTabEntry(track)
+	for _, tab := range dummyTabs {
+		s.InsertTabEntry(tab)
+
+		sourceTabs := s.GetRandomSource(CategoryTabs)
+
+		tabIDRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeID, CategoryTab, s.CreateRandomUUID())
+		s.InsertReferenceEntry(tabIDRef)
+
+		tabNameRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeName, CategoryTab, s.formatName(tab.Description))
+		s.InsertReferenceEntry(tabNameRef)
 	}
+}
+
+// formatName formats the provided name.
+func (s *SeedingAPI) formatName(name string) string {
+	return strings.ToLower(strings.Replace(name, " ", "-", -1))
 }
