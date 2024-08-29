@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"github.com/google/uuid"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"strings"
@@ -30,8 +31,6 @@ func (s *SeedingAPI) Seed() {
 	s.SeedSources()
 	s.SeedEndpoints()
 	s.SeedArtists()
-	s.SeedTracks()
-	s.SeedTabs()
 }
 
 // SeedInstruments seeds the instruments table with the default instruments.
@@ -67,14 +66,17 @@ func (s *SeedingAPI) SeedArtists() {
 		sourceTabs := s.GetRandomSource(CategoryTabs)
 		artistNameRef := s.CreateReference(artist.ID, sourceTabs.ID, TypeName, CategoryArtist, s.formatName(artist.Name))
 		s.InsertReferenceEntry(artistNameRef)
+
+		s.SeedTracks(artist.ID)
 	}
 }
 
 // SeedTracks seeds the tracks according to the dummy settings in the config file.
-func (s *SeedingAPI) SeedTracks() {
+func (s *SeedingAPI) SeedTracks(artistID uuid.UUID) {
 	dummyTracks := s.CreateTracks(s.Dummies.Artists.Tracks)
 	for _, track := range dummyTracks {
 		s.InsertTrackEntry(track)
+		s.LinkArtistToTrack(artistID, track.ID)
 
 		sourceMusic := s.GetRandomSource(CategoryMusic)
 		trackIDRef := s.CreateReference(track.ID, sourceMusic.ID, TypeID, CategoryTrack, s.CreateRandomUUID())
@@ -83,14 +85,17 @@ func (s *SeedingAPI) SeedTracks() {
 		sourceTabs := s.GetRandomSource(CategoryTabs)
 		trackNameRef := s.CreateReference(track.ID, sourceTabs.ID, TypeName, CategoryTrack, s.formatName(track.Title))
 		s.InsertReferenceEntry(trackNameRef)
+
+		s.SeedTabs(track.ID)
 	}
 }
 
 // SeedTabs seeds the tabs according to the dummy settings in the config file.
-func (s *SeedingAPI) SeedTabs() {
+func (s *SeedingAPI) SeedTabs(trackID uuid.UUID) {
 	dummyTabs := s.CreateTabs(s.Dummies.Artists.Tracks.Tabs)
 	for _, tab := range dummyTabs {
 		s.InsertTabEntry(tab)
+		s.LinkTrackToTab(trackID, tab.ID)
 
 		sourceTabs := s.GetRandomSource(CategoryTabs)
 

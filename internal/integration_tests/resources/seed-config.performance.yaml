@@ -1,13 +1,13 @@
 dummies:
   artists:
-    min: 100
-    max: 100
+    min: 10
+    max: 10
     tracks:
-      min: 25
-      max: 25
+      min: 5
+      max: 5
       tabs:
-        min: 25
-        max: 25
+        min: 5
+        max: 5
 instruments:
   - id: 1
     name: 'electric guitar'
