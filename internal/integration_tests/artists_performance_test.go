@@ -4,7 +4,6 @@ import (
 	"github.com/google/uuid"
 	env "github.com/shvdg-dev/tracks-to-tabs-api/internal/integration_tests/environments"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"testing"
 	"time"
 )
@@ -15,21 +14,15 @@ func TestGetArtistsPerformance(t *testing.T) {
 	defer dbEnv.Breakdown()
 
 	// Prepare
-	seedConfig, err := models.NewSeedConfig(performanceConfigPath)
-	if err != nil {
-		t.Fatalf("error occurred while parsing the seed config: %s", err.Error())
-	}
+	seed(t, dbEnv, maxConfigPath)
 
-	dummyAPI := pkg.NewDummyAPI(dbEnv, seedConfig.Sources, seedConfig.Instruments, seedConfig.Difficulties)
-	seedingAPI := pkg.NewSeedingAPI(dbEnv, seedConfig, dummyAPI)
-	dataAPI := pkg.NewDataAPI(dbEnv)
+	api := pkg.NewDataAPI(dbEnv)
 
 	// Execute
-	seedingAPI.Seed()
 	artistIDs := selectArtistIDs(t, dbEnv)
 
 	start := time.Now()
-	artists, err := dataAPI.GetArtists(artistIDs...)
+	artists, err := api.GetArtists(artistIDs...)
 	if err != nil {
 		t.Fatalf("error occurred during retrieval of artist: %s", err.Error())
 	}

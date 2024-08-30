@@ -19,10 +19,12 @@ type ExpectedArtist struct {
 // TestGetArtists tests whether artists can be inserted and retrieved cascading.
 func TestGetArtists(t *testing.T) {
 	dbEnv := createDefaultDbEnv(t)
-	defaultInsertions(t, dbEnv)
 	defer dbEnv.Breakdown()
 
 	// Prepare
+	seed(t, dbEnv, minConfigPath)
+	defaultData(t, dbEnv)
+
 	artistIDStrings, err := logic.GetCSVColumnValues(artistsCSV, artistsColumnID)
 	if err != nil {
 		t.Fatal(err)

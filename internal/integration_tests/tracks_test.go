@@ -19,10 +19,12 @@ type ExpectedTrack struct {
 // TestGetTracks tests whether tracks can be inserted and retrieved cascading.
 func TestGetTracks(t *testing.T) {
 	dbEnv := createDefaultDbEnv(t)
-	defaultInsertions(t, dbEnv)
 	defer dbEnv.Breakdown()
 
 	// Prepare
+	seed(t, dbEnv, minConfigPath)
+	defaultData(t, dbEnv)
+
 	trackIDStrings, err := logic.GetCSVColumnValues(tracksCSV, tracksColumnID)
 	if err != nil {
 		t.Fatal(err)

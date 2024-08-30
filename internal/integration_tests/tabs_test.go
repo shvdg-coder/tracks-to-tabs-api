@@ -19,10 +19,12 @@ type ExpectedTab struct {
 // TestGetTabs tests whether tabs can be inserted and retrieved cascading.
 func TestGetTabs(t *testing.T) {
 	dbEnv := createDefaultDbEnv(t)
-	defaultInsertions(t, dbEnv)
 	defer dbEnv.Breakdown()
 
 	// Prepare
+	seed(t, dbEnv, minConfigPath)
+	defaultData(t, dbEnv)
+
 	tabIDStrings, err := logic.GetCSVColumnValues(tabsCSV, tabsColumnID)
 	if err != nil {
 		t.Fatal(err)

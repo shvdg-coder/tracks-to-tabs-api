@@ -2,6 +2,8 @@ package integration_tests
 
 import (
 	tstenv "github.com/shvdg-dev/tracks-to-tabs-api/internal/integration_tests/environments"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"testing"
 )
 
@@ -15,8 +17,20 @@ func createDefaultDbEnv(t *testing.T) tstenv.DbEnvOperations {
 	return dbEnv
 }
 
-// defaultInsertions prepares the test, by defaultInsertions the dummy data into the database.
-func defaultInsertions(t *testing.T, dbEnv tstenv.DbEnvOperations) {
+// seed seeds the database using the provided configuration.
+func seed(t *testing.T, dbEnv tstenv.DbEnvOperations, seedConfigPath string) {
+	seedConfig, err := models.NewSeedConfig(seedConfigPath)
+	if err != nil {
+		t.Fatalf("error occurred while parsing the seed config: %s", err.Error())
+	}
+
+	dummyAPI := pkg.NewDummyAPI(dbEnv, seedConfig.Sources, seedConfig.Instruments, seedConfig.Difficulties)
+	seedingAPI := pkg.NewSeedingAPI(dbEnv, seedConfig, dummyAPI)
+	seedingAPI.Seed()
+}
+
+// defaultData prepares the test, by defaultData the dummy data into the database.
+func defaultData(t *testing.T, dbEnv tstenv.DbEnvOperations) {
 	err := dbEnv.InsertCSVFile(artistsCSV, artistsTable, artistsColumns)
 	if err != nil {
 		t.Fatal(err)
@@ -26,22 +40,6 @@ func defaultInsertions(t *testing.T, dbEnv tstenv.DbEnvOperations) {
 		t.Fatal(err)
 	}
 	err = dbEnv.InsertCSVFile(artisttrackCSV, artistTrackTable, artisttrackColumns)
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = dbEnv.InsertCSVFile(sourcesCSV, sourcesTable, sourcesColumns)
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = dbEnv.InsertCSVFile(endpointsCSV, endpointsTable, endpointsColumns)
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = dbEnv.InsertCSVFile(instrumentsCSV, instrumentsTable, instrumentsColumns)
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = dbEnv.InsertCSVFile(difficultiesCSV, difficultiesTable, difficultiesColumns)
 	if err != nil {
 		t.Fatal(err)
 	}

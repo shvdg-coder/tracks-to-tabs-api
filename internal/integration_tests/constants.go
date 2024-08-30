@@ -6,15 +6,12 @@ const tracksCSV = "./resources/csv/tracks.csv"
 const artisttrackCSV = "./resources/csv/artisttrack.csv"
 const tabsCSV = "./resources/csv/tabs.csv"
 const tracktabCSV = "./resources/csv/tracktab.csv"
-const endpointsCSV = "./resources/csv/endpoints.csv"
 const referencesCSV = "./resources/csv/references.csv"
-const sourcesCSV = "./resources/csv/sources.csv"
-const instrumentsCSV = "./resources/csv/instruments.csv"
-const difficultiesCSV = "./resources/csv/difficulties.csv"
 
 // Configs
-const seedConfigPath = "./resources/configs/seed-config.yaml"
-const performanceConfigPath = "./resources/configs/seed-config.performance.yaml"
+const minConfigPath = "./resources/configs/seed-config.minimum.yaml"
+const maxConfigPath = "./resources/configs/seed-config.maximum.yaml"
+const medConfigPath = "./resources/configs/seed-config.medium.yaml"
 
 // Tables
 const artistsTable = "artists"
