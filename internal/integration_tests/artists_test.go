@@ -117,26 +117,3 @@ func createExpectedArtists(t *testing.T) map[uuid.UUID]*ExpectedArtist {
 
 	return expectedArtists
 }
-
-// createArtistsFromCSV creates a map of artists where the key is the IDStr and the value a models.ArtistEntry.
-func createArtistsFromCSV(t *testing.T, filePath string) map[uuid.UUID]*models.ArtistEntry {
-	artistsMap := make(map[uuid.UUID]*models.ArtistEntry)
-
-	records, err := logic.GetCSVRecords(filePath, false)
-	if err != nil {
-		t.Fatalf("error occurred during the creation of artists from a CSV: %s", err.Error())
-	}
-
-	for _, record := range records {
-		artistID, _ := logic.StringToUUID(record[0])
-
-		artist := &models.ArtistEntry{
-			ID:   artistID,
-			Name: record[1],
-		}
-
-		artistsMap[artistID] = artist
-	}
-
-	return artistsMap
-}

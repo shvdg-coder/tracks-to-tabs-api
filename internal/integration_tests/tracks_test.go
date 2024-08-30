@@ -117,26 +117,3 @@ func createExpectedTracks(t *testing.T) map[uuid.UUID]*ExpectedTrack {
 
 	return expectedTracks
 }
-
-// createTracksFromCSV creates a map of tracks where the key is the IDStr and the value a models.TrackEntry.
-func createTracksFromCSV(t *testing.T, filePath string) map[uuid.UUID]*models.TrackEntry {
-	tracksMap := make(map[uuid.UUID]*models.TrackEntry)
-
-	records, err := logic.GetCSVRecords(filePath, false)
-	if err != nil {
-		t.Fatalf("error occurred during the creation of tracks from a CSV: %s", err.Error())
-	}
-
-	for _, record := range records {
-		trackID, _ := logic.StringToUUID(record[0])
-
-		track := &models.TrackEntry{
-			ID:    trackID,
-			Title: record[1],
-		}
-
-		tracksMap[trackID] = track
-	}
-
-	return tracksMap
-}

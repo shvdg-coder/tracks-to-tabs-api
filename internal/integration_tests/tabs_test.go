@@ -6,7 +6,6 @@ import (
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
-	"strconv"
 	"testing"
 )
 
@@ -115,32 +114,4 @@ func createExpectedTabs(t *testing.T) map[uuid.UUID]*ExpectedTab {
 	}
 
 	return expectedTabs
-}
-
-// createTabsFromCSV creates a map of tabs where the key is the ID and the value a models.TabEntry.
-func createTabsFromCSV(t *testing.T, filePath string) map[uuid.UUID]*models.TabEntry {
-	tabsMap := make(map[uuid.UUID]*models.TabEntry)
-
-	records, err := logic.GetCSVRecords(filePath, false)
-	if err != nil {
-		t.Fatalf("error occurred during the creation of tabs from a CSV: %s", err.Error())
-	}
-
-	for _, record := range records {
-		tabID, _ := logic.StringToUUID(record[0])
-
-		instrumentID, _ := strconv.ParseUint(record[1], 10, 64)
-		difficultyID, _ := strconv.ParseUint(record[2], 10, 64)
-
-		tab := &models.TabEntry{
-			ID:           tabID,
-			InstrumentID: uint(instrumentID),
-			DifficultyID: uint(difficultyID),
-			Description:  record[3],
-		}
-
-		tabsMap[tabID] = tab
-	}
-
-	return tabsMap
 }
