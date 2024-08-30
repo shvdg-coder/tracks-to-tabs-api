@@ -25,6 +25,8 @@ func TestGetTabs(t *testing.T) {
 	seed(t, dbEnv, minConfigPath)
 	defaultData(t, dbEnv)
 
+	expectedTabs := createExpectedTabs(t)
+
 	tabIDStrings, err := logic.GetCSVColumnValues(tabsCSV, tabsColumnID)
 	if err != nil {
 		t.Fatal(err)
@@ -45,10 +47,10 @@ func TestGetTabs(t *testing.T) {
 
 	// Test
 	if len(actualTabs) != len(tabIDs) {
-		t.Errorf("expected %d tabs, got %d", len(tabIDs), len(actualTabs))
+		t.Errorf("expected %d expectedTabs, got %d", len(tabIDs), len(actualTabs))
 	}
 
-	testFieldsOfTabs(t, actualTabs, createExpectedTabs(t))
+	testFieldsOfTabs(t, actualTabs, expectedTabs)
 }
 
 // testFieldsOfTabs tests the fields of multiple tab objects by comparing the actual tabs to the expected ones.

@@ -25,6 +25,8 @@ func TestGetArtists(t *testing.T) {
 	seed(t, dbEnv, minConfigPath)
 	defaultData(t, dbEnv)
 
+	expectedArtists := createExpectedArtists(t)
+
 	artistIDStrings, err := logic.GetCSVColumnValues(artistsCSV, artistsColumnID)
 	if err != nil {
 		t.Fatal(err)
@@ -45,10 +47,10 @@ func TestGetArtists(t *testing.T) {
 
 	// Test
 	if len(actualArtists) != len(artistIDs) {
-		t.Errorf("expected %d artists, got %d", len(artistIDs), len(actualArtists))
+		t.Errorf("expectedArtists %d artists, got %d", len(artistIDs), len(actualArtists))
 	}
 
-	testFieldsOfArtists(t, actualArtists, createExpectedArtists(t))
+	testFieldsOfArtists(t, actualArtists, expectedArtists)
 }
 
 // testFieldsOfArtists tests the fields of multiple artist objects by comparing the actual artists to the expected ones.

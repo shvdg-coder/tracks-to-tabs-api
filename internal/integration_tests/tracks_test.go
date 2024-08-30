@@ -25,6 +25,8 @@ func TestGetTracks(t *testing.T) {
 	seed(t, dbEnv, minConfigPath)
 	defaultData(t, dbEnv)
 
+	expectedTracks := createExpectedTracks(t)
+
 	trackIDStrings, err := logic.GetCSVColumnValues(tracksCSV, tracksColumnID)
 	if err != nil {
 		t.Fatal(err)
@@ -48,7 +50,7 @@ func TestGetTracks(t *testing.T) {
 		t.Errorf("expected %d tracks, got %d", len(trackIDs), len(actualTracks))
 	}
 
-	testFieldsOfTracks(t, actualTracks, createExpectedTracks(t))
+	testFieldsOfTracks(t, actualTracks, expectedTracks)
 }
 
 // testFieldsOfTracks tests the fields of multiple track objects by comparing the actual tracks to the expected ones.
