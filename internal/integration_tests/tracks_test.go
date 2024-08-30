@@ -9,14 +9,6 @@ import (
 	"testing"
 )
 
-// ExpectedTrack contains the data of what a models.Track is expected to have.
-type ExpectedTrack struct {
-	*models.TrackEntry
-	TabCount       int
-	ReferenceCount int
-	ResourceCount  int
-}
-
 // TestGetTracks tests whether tracks can be inserted and retrieved cascading.
 func TestGetTracks(t *testing.T) {
 	dbEnv := createDefaultDbEnv(t)

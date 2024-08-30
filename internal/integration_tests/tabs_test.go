@@ -9,13 +9,6 @@ import (
 	"testing"
 )
 
-// ExpectedTab contains the data of what a models.Tab is expected to have.
-type ExpectedTab struct {
-	*models.TabEntry
-	ReferencesCount int
-	ResourceCount   int
-}
-
 // TestGetTabs tests whether tabs can be inserted and retrieved cascading.
 func TestGetTabs(t *testing.T) {
 	dbEnv := createDefaultDbEnv(t)

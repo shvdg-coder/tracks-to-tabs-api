@@ -9,14 +9,6 @@ import (
 	"testing"
 )
 
-// ExpectedArtist contains the data of what a models.Artist is expected to have.
-type ExpectedArtist struct {
-	*models.ArtistEntry
-	TrackCount     int
-	ReferenceCount int
-	ResourceCount  int
-}
-
 // TestGetArtists tests whether artists can be inserted and retrieved cascading.
 func TestGetArtists(t *testing.T) {
 	dbEnv := createDefaultDbEnv(t)
