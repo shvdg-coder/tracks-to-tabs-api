@@ -4,14 +4,14 @@ import (
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"strconv"
 	"testing"
 )
 
 // ExpectedTab contains the data of what a models.Tab is expected to have.
 type ExpectedTab struct {
-	ID              string
-	InstrumentID    uint
-	DifficultyID    uint
+	ID string
+	*models.TabEntry
 	ReferencesCount int
 	ResourceCount   int
 }
@@ -48,17 +48,7 @@ func TestGetTabs(t *testing.T) {
 		t.Errorf("expected %d tabs, got %d", len(tabIDs), len(actualTabs))
 	}
 
-	testFieldsOfTabs(t, actualTabs, createExpectedTabs())
-}
-
-// createExpectedTabs constructs and returns a slice of ExpectedTab objects for use in test cases.
-func createExpectedTabs() []*ExpectedTab {
-	return []*ExpectedTab{
-		{ID: "3fa85f64-5717-4562-b3fc-2c963f66afa6", InstrumentID: 1, DifficultyID: 3, ReferencesCount: 2, ResourceCount: 1},
-		{ID: "f79e3f20-a634-4c3e-90a9-70c5fe8b0195", InstrumentID: 1, DifficultyID: 2, ReferencesCount: 2, ResourceCount: 1},
-		{ID: "6fa91502-efd5-4f52-9087-0b8bf7343f2b", InstrumentID: 1, DifficultyID: 2, ReferencesCount: 2, ResourceCount: 1},
-		{ID: "337ab4e4-2c48-41f8-9131-9acf511d72a6", InstrumentID: 1, DifficultyID: 3, ReferencesCount: 2, ResourceCount: 1},
-	}
+	testFieldsOfTabs(t, actualTabs, createExpectedTabs(t))
 }
 
 // testFieldsOfTabs tests the fields of multiple tab objects by comparing the actual tabs to the expected ones.
@@ -95,4 +85,50 @@ func testFieldsOfTab(t *testing.T, actualTab *models.Tab, expectedTab *ExpectedT
 	if len(actualTab.Resources) != expectedTab.ResourceCount {
 		t.Errorf("expected %d Resources, got %d", expectedTab.ResourceCount, len(actualTab.Resources))
 	}
+}
+
+// createExpectedTabs constructs and returns a slice of ExpectedTab objects for use in test cases.
+func createExpectedTabs(t *testing.T) []*ExpectedTab {
+	expectedTabs := make([]*ExpectedTab, 0)
+
+	tabsMap := createTabsFromCSV(t, tabsCSV)
+	for id, tab := range tabsMap {
+		expectedTab := &ExpectedTab{
+			ID:              id,
+			TabEntry:        tab,
+			ReferencesCount: 2,
+			ResourceCount:   1,
+		}
+		expectedTabs = append(expectedTabs, expectedTab)
+	}
+
+	return expectedTabs
+}
+
+// createTabsFromCSV creates a map of tabs where the key is the ID and the value a models.TabEntry.
+func createTabsFromCSV(t *testing.T, filePath string) map[string]*models.TabEntry {
+	tabsMap := make(map[string]*models.TabEntry)
+
+	records, err := logic.GetCSVRecords(filePath, false)
+	if err != nil {
+		t.Fatalf("error occurred during the creation of tabs from a CSV: %s", err.Error())
+	}
+
+	for _, record := range records {
+		tabID, _ := logic.StringToUUID(record[0])
+
+		instrumentID, _ := strconv.ParseUint(record[1], 10, 64)
+		difficultyID, _ := strconv.ParseUint(record[2], 10, 64)
+
+		tab := &models.TabEntry{
+			ID:           tabID,
+			InstrumentID: uint(instrumentID),
+			DifficultyID: uint(difficultyID),
+			Description:  record[3],
+		}
+
+		tabsMap[tabID.String()] = tab
+	}
+
+	return tabsMap
 }
