@@ -91,21 +91,3 @@ func testFieldsOfArtist(t *testing.T, actualArtist *models.Artist, expectedArtis
 		t.Errorf("expected %d Resources, got %d", expectedArtist.ResourceCount, len(actualArtist.Resources))
 	}
 }
-
-// createExpectedArtists constructs and returns a map of ExpectedArtist's for use in test cases.
-func createExpectedArtists(t *testing.T) map[uuid.UUID]*ExpectedArtist {
-	expectedArtists := make(map[uuid.UUID]*ExpectedArtist)
-
-	artistsMap := createArtistsFromCSV(t, artistsCSV)
-	for id, artist := range artistsMap {
-		expectedArtist := &ExpectedArtist{
-			ArtistEntry:    artist,
-			TrackCount:     2,
-			ReferenceCount: 3,
-			ResourceCount:  2,
-		}
-		expectedArtists[id] = expectedArtist
-	}
-
-	return expectedArtists
-}

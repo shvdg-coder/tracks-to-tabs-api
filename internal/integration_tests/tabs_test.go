@@ -91,20 +91,3 @@ func testFieldsOfTab(t *testing.T, actualTab *models.Tab, expectedTab *ExpectedT
 		t.Errorf("expected %d Resources, got %d", expectedTab.ResourceCount, len(actualTab.Resources))
 	}
 }
-
-// createExpectedTabs constructs and returns a map of ExpectedTab's for use in test cases.
-func createExpectedTabs(t *testing.T) map[uuid.UUID]*ExpectedTab {
-	expectedTabs := make(map[uuid.UUID]*ExpectedTab)
-
-	tabsMap := createTabsFromCSV(t, tabsCSV)
-	for _, tab := range tabsMap {
-		expectedTab := &ExpectedTab{
-			TabEntry:        tab,
-			ReferencesCount: 2,
-			ResourceCount:   1,
-		}
-		expectedTabs[tab.ID] = expectedTab
-	}
-
-	return expectedTabs
-}

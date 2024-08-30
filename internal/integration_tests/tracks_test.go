@@ -91,21 +91,3 @@ func testFieldsOfTrack(t *testing.T, actualTrack *models.Track, expectedTrack *E
 		t.Errorf("expected %d Resources, got %d", expectedTrack.ResourceCount, len(actualTrack.Resources))
 	}
 }
-
-// createExpectedTracks constructs and returns a map of ExpectedTrack's for use in test cases.
-func createExpectedTracks(t *testing.T) map[uuid.UUID]*ExpectedTrack {
-	expectedTracks := make(map[uuid.UUID]*ExpectedTrack)
-
-	tracksMap := createTracksFromCSV(t, tracksCSV)
-	for id, track := range tracksMap {
-		expectedTrack := &ExpectedTrack{
-			TrackEntry:     track,
-			TabCount:       1,
-			ReferenceCount: 1,
-			ResourceCount:  2,
-		}
-		expectedTracks[id] = expectedTrack
-	}
-
-	return expectedTracks
-}
