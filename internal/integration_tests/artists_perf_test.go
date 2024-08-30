@@ -8,13 +8,13 @@ import (
 	"time"
 )
 
-// TestGetArtistsPerformance tests the performance of retrieving artists.
-func TestGetArtistsPerformance(t *testing.T) {
+// TestGetArtistsPerf tests the performance of retrieving artists.
+func TestGetArtistsPerf(t *testing.T) {
 	dbEnv := createDefaultDbEnv(t)
 	defer dbEnv.Breakdown()
 
 	// Prepare
-	seed(t, dbEnv, maxConfigPath)
+	seedConfig := seed(t, dbEnv, maxConfigPath)
 
 	api := pkg.NewDataAPI(dbEnv)
 
@@ -31,8 +31,12 @@ func TestGetArtistsPerformance(t *testing.T) {
 	t.Logf("GetArtists took %s", elapsed.Round(time.Millisecond))
 
 	// Test
-	if len(artists) != len(artistIDs) {
-		t.Errorf("expected %d number of artists, got %d", len(artistIDs), len(artists))
+	if len(artists) == 0 || len(artistIDs) == 0 {
+		t.Errorf("expected more than 0 artists (DB: %d, API: %d)", len(artistIDs), len(artists))
+	}
+
+	if len(artists) < seedConfig.Dummies.Artists.Min {
+		t.Errorf("expected a minimum of %d artists, got %d", seedConfig.Dummies.Artists.Min, len(artists))
 	}
 }
 

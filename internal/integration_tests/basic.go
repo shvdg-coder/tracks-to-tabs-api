@@ -18,7 +18,7 @@ func createDefaultDbEnv(t *testing.T) tstenv.DbEnvOperations {
 }
 
 // seed seeds the database using the provided configuration.
-func seed(t *testing.T, dbEnv tstenv.DbEnvOperations, seedConfigPath string) {
+func seed(t *testing.T, dbEnv tstenv.DbEnvOperations, seedConfigPath string) *models.SeedConfig {
 	seedConfig, err := models.NewSeedConfig(seedConfigPath)
 	if err != nil {
 		t.Fatalf("error occurred while parsing the seed config: %s", err.Error())
@@ -27,6 +27,8 @@ func seed(t *testing.T, dbEnv tstenv.DbEnvOperations, seedConfigPath string) {
 	dummyAPI := pkg.NewDummyAPI(dbEnv, seedConfig.Sources, seedConfig.Instruments, seedConfig.Difficulties)
 	seedingAPI := pkg.NewSeedingAPI(dbEnv, seedConfig, dummyAPI)
 	seedingAPI.Seed()
+
+	return seedConfig
 }
 
 // defaultData prepares the test, by defaultData the dummy data into the database.
