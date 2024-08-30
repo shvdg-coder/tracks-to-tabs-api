@@ -1,15 +1,16 @@
 package integration_tests
 
 import (
+	"github.com/google/uuid"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"testing"
 )
 
 // ExpectedArtist contains the data of what a models.Artist is expected to have.
 type ExpectedArtist struct {
-	ID string
 	*models.ArtistEntry
 	TrackCount     int
 	ReferenceCount int
@@ -25,7 +26,7 @@ func TestGetArtists(t *testing.T) {
 	seed(t, dbEnv, minConfigPath)
 	defaultData(t, dbEnv)
 
-	expectedArtists := createExpectedArtists(t)
+	expectedArtistsMap := createExpectedArtists(t)
 
 	artistIDStrings, err := logic.GetCSVColumnValues(artistsCSV, artistsColumnID)
 	if err != nil {
@@ -37,6 +38,7 @@ func TestGetArtists(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	mapper := mappers.NewArtistSvc()
 	api := pkg.NewDataAPI(dbEnv)
 
 	// Execute
@@ -50,25 +52,26 @@ func TestGetArtists(t *testing.T) {
 		t.Errorf("expectedArtists %d artists, got %d", len(artistIDs), len(actualArtists))
 	}
 
-	testFieldsOfArtists(t, actualArtists, expectedArtists)
+	testFieldsOfArtists(t, mapper.ArtistsToMap(actualArtists), expectedArtistsMap)
 }
 
 // testFieldsOfArtists tests the fields of multiple artist objects by comparing the actual artists to the expected ones.
-func testFieldsOfArtists(t *testing.T, actualArtists []*models.Artist, expectedArtist []*ExpectedArtist) {
-	for i := 0; i < len(actualArtists); i++ {
-		testFieldsOfArtist(t, actualArtists[i], expectedArtist[i])
+func testFieldsOfArtists(t *testing.T, actualArtistsMap map[uuid.UUID]*models.Artist, expectedArtistsMap map[uuid.UUID]*ExpectedArtist) {
+	for id := range actualArtistsMap {
+		actualArtist := actualArtistsMap[id]
+		expectedArtist, ok := expectedArtistsMap[id]
+		if !ok {
+			t.Fatalf("ID %s does not exist in 'expected artists' map", id)
+		} else {
+			testFieldsOfArtist(t, actualArtist, expectedArtist)
+		}
 	}
 }
 
 // testFieldsOfArtist tests the fields of a single artist object by comparing the actual artist to the expected one.
 func testFieldsOfArtist(t *testing.T, actualArtist *models.Artist, expectedArtist *ExpectedArtist) {
 	// Check ID
-	artistID, err := logic.UUIDToString(actualArtist.ID)
-	if err != nil {
-		t.Fatalf("error occurred during conversion of UUID to string: %s", err.Error())
-	}
-
-	if artistID != expectedArtist.ID {
+	if actualArtist.ID != expectedArtist.ID {
 		t.Errorf("expected ID to be %s, got %s", expectedArtist.ID, actualArtist.ID)
 	}
 
@@ -93,28 +96,27 @@ func testFieldsOfArtist(t *testing.T, actualArtist *models.Artist, expectedArtis
 	}
 }
 
-// createExpectedArtists constructs and returns a slice of ExpectedArtist objects for use in test cases.
-func createExpectedArtists(t *testing.T) []*ExpectedArtist {
-	expectedArtists := make([]*ExpectedArtist, 0)
+// createExpectedArtists constructs and returns a map of ExpectedArtist's for use in test cases.
+func createExpectedArtists(t *testing.T) map[uuid.UUID]*ExpectedArtist {
+	expectedArtists := make(map[uuid.UUID]*ExpectedArtist)
 
 	artistsMap := createArtistsFromCSV(t, artistsCSV)
 	for id, artist := range artistsMap {
 		expectedArtist := &ExpectedArtist{
-			ID:             id,
 			ArtistEntry:    artist,
 			TrackCount:     2,
 			ReferenceCount: 3,
 			ResourceCount:  2,
 		}
-		expectedArtists = append(expectedArtists, expectedArtist)
+		expectedArtists[id] = expectedArtist
 	}
 
 	return expectedArtists
 }
 
-// createArtistsFromCSV creates a map of artists where the key is the ID and the value a models.ArtistEntry.
-func createArtistsFromCSV(t *testing.T, filePath string) map[string]*models.ArtistEntry {
-	artistsMap := make(map[string]*models.ArtistEntry)
+// createArtistsFromCSV creates a map of artists where the key is the IDStr and the value a models.ArtistEntry.
+func createArtistsFromCSV(t *testing.T, filePath string) map[uuid.UUID]*models.ArtistEntry {
+	artistsMap := make(map[uuid.UUID]*models.ArtistEntry)
 
 	records, err := logic.GetCSVRecords(filePath, false)
 	if err != nil {
@@ -129,7 +131,7 @@ func createArtistsFromCSV(t *testing.T, filePath string) map[string]*models.Arti
 			Name: record[1],
 		}
 
-		artistsMap[artistID.String()] = artist
+		artistsMap[artistID] = artist
 	}
 
 	return artistsMap
