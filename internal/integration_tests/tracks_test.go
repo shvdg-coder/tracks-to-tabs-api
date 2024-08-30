@@ -9,8 +9,8 @@ import (
 
 // ExpectedTrack contains the data of what a models.Track is expected to have.
 type ExpectedTrack struct {
-	ID             string
-	Title          string
+	ID string
+	*models.TrackEntry
 	TabCount       int
 	ReferenceCount int
 	ResourceCount  int
@@ -48,17 +48,7 @@ func TestGetTracks(t *testing.T) {
 		t.Errorf("expected %d tracks, got %d", len(trackIDs), len(actualTracks))
 	}
 
-	testFieldsOfTracks(t, actualTracks, createExpectedTracks())
-}
-
-// createExpectedTracks constructs and returns a slice of ExpectedTrack objects for use in test cases.
-func createExpectedTracks() []*ExpectedTrack {
-	return []*ExpectedTrack{
-		{ID: "c51a9150-6b7d-45aa-88f7-75372b221c1d", Title: "Suffocate", TabCount: 1, ReferenceCount: 1, ResourceCount: 2},
-		{ID: "c52a9150-6b7d-45aa-88f7-75372b222c1e", Title: "Blinding Faith", TabCount: 1, ReferenceCount: 1, ResourceCount: 2},
-		{ID: "c72a9150-6b7d-45aa-88f7-75372b222f1f", Title: "Stabbing In The Dark", TabCount: 1, ReferenceCount: 1, ResourceCount: 2},
-		{ID: "c73a9150-6b7d-45aa-88f7-75372b223f1d", Title: "Ex-Mørtis", TabCount: 1, ReferenceCount: 1, ResourceCount: 2},
-	}
+	testFieldsOfTracks(t, actualTracks, createExpectedTracks(t))
 }
 
 // testFieldsOfTracks tests the fields of multiple track objects by comparing the actual tracks to the expected ones.
@@ -95,4 +85,46 @@ func testFieldsOfTrack(t *testing.T, actualTrack *models.Track, expectedTrack *E
 	if len(actualTrack.Resources) != expectedTrack.ResourceCount {
 		t.Errorf("expected %d Resources, got %d", expectedTrack.ResourceCount, len(actualTrack.Resources))
 	}
+}
+
+// createExpectedTracks constructs and returns a slice of ExpectedTrack objects for use in test cases.
+func createExpectedTracks(t *testing.T) []*ExpectedTrack {
+	expectedTracks := make([]*ExpectedTrack, 0)
+
+	tracksMap := createTracksFromCSV(t, tracksCSV)
+	for id, track := range tracksMap {
+		expectedTrack := &ExpectedTrack{
+			ID:             id,
+			TrackEntry:     track,
+			TabCount:       1,
+			ReferenceCount: 1,
+			ResourceCount:  2,
+		}
+		expectedTracks = append(expectedTracks, expectedTrack)
+	}
+
+	return expectedTracks
+}
+
+// createTracksFromCSV creates a map of tracks where the key is the ID and the value a models.TrackEntry.
+func createTracksFromCSV(t *testing.T, filePath string) map[string]*models.TrackEntry {
+	tracksMap := make(map[string]*models.TrackEntry)
+
+	records, err := logic.GetCSVRecords(filePath, false)
+	if err != nil {
+		t.Fatalf("error occurred during the creation of tracks from a CSV: %s", err.Error())
+	}
+
+	for _, record := range records {
+		trackID, _ := logic.StringToUUID(record[0])
+
+		track := &models.TrackEntry{
+			ID:    trackID,
+			Title: record[1],
+		}
+
+		tracksMap[trackID.String()] = track
+	}
+
+	return tracksMap
 }
