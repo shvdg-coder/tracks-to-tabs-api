@@ -1,15 +1,16 @@
 package integration_tests
 
 import (
+	"github.com/google/uuid"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"testing"
 )
 
 // ExpectedTrack contains the data of what a models.Track is expected to have.
 type ExpectedTrack struct {
-	ID string
 	*models.TrackEntry
 	TabCount       int
 	ReferenceCount int
@@ -37,6 +38,7 @@ func TestGetTracks(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	mapper := mappers.NewTrackSvc()
 	api := pkg.NewDataAPI(dbEnv)
 
 	// Execute
@@ -50,26 +52,27 @@ func TestGetTracks(t *testing.T) {
 		t.Errorf("expected %d tracks, got %d", len(trackIDs), len(actualTracks))
 	}
 
-	testFieldsOfTracks(t, actualTracks, expectedTracks)
+	testFieldsOfTracks(t, mapper.TracksToMap(actualTracks), expectedTracks)
 }
 
 // testFieldsOfTracks tests the fields of multiple track objects by comparing the actual tracks to the expected ones.
-func testFieldsOfTracks(t *testing.T, actualTracks []*models.Track, expectedTrack []*ExpectedTrack) {
-	for i := 0; i < len(actualTracks); i++ {
-		testFieldsOfTrack(t, actualTracks[i], expectedTrack[i])
+func testFieldsOfTracks(t *testing.T, actualTracksMap map[uuid.UUID]*models.Track, expectedTracksMap map[uuid.UUID]*ExpectedTrack) {
+	for id := range actualTracksMap {
+		actualTrack := actualTracksMap[id]
+		expectedTrack, ok := expectedTracksMap[id]
+		if !ok {
+			t.Fatalf("ID %s does not exist in 'expected track' map", id)
+		} else {
+			testFieldsOfTrack(t, actualTrack, expectedTrack)
+		}
 	}
 }
 
 // testFieldsOfTrack tests the fields of a single track object by comparing the actual track to the expected one.
 func testFieldsOfTrack(t *testing.T, actualTrack *models.Track, expectedTrack *ExpectedTrack) {
-	// Check ID
-	trackID, err := logic.UUIDToString(actualTrack.ID)
-	if err != nil {
-		t.Fatalf("error occurred during conversion of UUID to string: %s", err.Error())
-	}
-
-	if trackID != expectedTrack.ID {
-		t.Errorf("expected ID to be %s, got %s", expectedTrack.ID, actualTrack.ID)
+	// Check IDStr
+	if actualTrack.ID != expectedTrack.ID {
+		t.Errorf("expected IDStr to be %s, got %s", expectedTrack.ID, actualTrack.ID)
 	}
 
 	// Check Track Title
@@ -93,28 +96,27 @@ func testFieldsOfTrack(t *testing.T, actualTrack *models.Track, expectedTrack *E
 	}
 }
 
-// createExpectedTracks constructs and returns a slice of ExpectedTrack objects for use in test cases.
-func createExpectedTracks(t *testing.T) []*ExpectedTrack {
-	expectedTracks := make([]*ExpectedTrack, 0)
+// createExpectedTracks constructs and returns a map of ExpectedTrack's for use in test cases.
+func createExpectedTracks(t *testing.T) map[uuid.UUID]*ExpectedTrack {
+	expectedTracks := make(map[uuid.UUID]*ExpectedTrack)
 
 	tracksMap := createTracksFromCSV(t, tracksCSV)
 	for id, track := range tracksMap {
 		expectedTrack := &ExpectedTrack{
-			ID:             id,
 			TrackEntry:     track,
 			TabCount:       1,
 			ReferenceCount: 1,
 			ResourceCount:  2,
 		}
-		expectedTracks = append(expectedTracks, expectedTrack)
+		expectedTracks[id] = expectedTrack
 	}
 
 	return expectedTracks
 }
 
-// createTracksFromCSV creates a map of tracks where the key is the ID and the value a models.TrackEntry.
-func createTracksFromCSV(t *testing.T, filePath string) map[string]*models.TrackEntry {
-	tracksMap := make(map[string]*models.TrackEntry)
+// createTracksFromCSV creates a map of tracks where the key is the IDStr and the value a models.TrackEntry.
+func createTracksFromCSV(t *testing.T, filePath string) map[uuid.UUID]*models.TrackEntry {
+	tracksMap := make(map[uuid.UUID]*models.TrackEntry)
 
 	records, err := logic.GetCSVRecords(filePath, false)
 	if err != nil {
@@ -129,7 +131,7 @@ func createTracksFromCSV(t *testing.T, filePath string) map[string]*models.Track
 			Title: record[1],
 		}
 
-		tracksMap[trackID.String()] = track
+		tracksMap[trackID] = track
 	}
 
 	return tracksMap
