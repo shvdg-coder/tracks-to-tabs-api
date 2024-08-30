@@ -53,8 +53,8 @@ func (r *ResourceSvc) CreateResourcesFromReferences(category string, references 
 
 	replacements := r.SetDefaultReplacements(r.CreateReplacements(references...))
 
-	referencesMap := r.GroupReferencesBySource(references)
-	for source, _ := range referencesMap {
+	sourceMap := r.GroupSources(references)
+	for _, source := range sourceMap {
 		endpoints := r.FilterEndpointsByCategory(category, source.Endpoints)
 		entityResources := r.CreateResourcesFromEndpoints(replacements, endpoints)
 		resources = append(resources, entityResources...)
@@ -80,13 +80,13 @@ func (r *ResourceSvc) CreateReplacements(references ...*models.Reference) map[st
 	return replacements
 }
 
-// GroupReferencesBySource transforms CreateResourcesFromEndpoints slice of models.Reference's into CreateResourcesFromEndpoints map where the key is the models.Source and the value CreateResourcesFromEndpoints slice of models.Reference's.
-func (r *ResourceSvc) GroupReferencesBySource(references []*models.Reference) map[*models.Source][]*models.Reference {
-	referencesMap := make(map[*models.Source][]*models.Reference)
+// GroupSources collect models.Source's from a slice of models.Reference's, and put them in a map where the key is the ID and the value is a models.Source.
+func (r *ResourceSvc) GroupSources(references []*models.Reference) map[uint]*models.Source {
+	sourceMap := make(map[uint]*models.Source)
 	for _, reference := range references {
-		referencesMap[reference.Source] = append(referencesMap[reference.Source], reference)
+		sourceMap[reference.SourceID] = reference.Source
 	}
-	return referencesMap
+	return sourceMap
 }
 
 // FilterEndpointsByCategory plucks the endpoints of which the category corresponds with the provided category.
