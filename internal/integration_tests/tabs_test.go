@@ -48,8 +48,12 @@ func TestGetTabs(t *testing.T) {
 	}
 
 	// Test
+	if len(actualTabs) == 0 || len(tabIDs) == 0 {
+		t.Errorf("expected more than 0 tabs (CSV: %d, API: %d)", len(tabIDs), len(actualTabs))
+	}
+
 	if len(actualTabs) != len(tabIDs) {
-		t.Errorf("expected %d expectedTabsMap, got %d", len(tabIDs), len(actualTabs))
+		t.Errorf("expected %d tabs, got %d", len(tabIDs), len(actualTabs))
 	}
 
 	testFieldsOfTabs(t, mapper.TabsToMap(actualTabs), expectedTabsMap)

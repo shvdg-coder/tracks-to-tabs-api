@@ -48,6 +48,10 @@ func TestGetTracks(t *testing.T) {
 	}
 
 	// Test
+	if len(actualTracks) == 0 || len(trackIDs) == 0 {
+		t.Errorf("expected more than 0 tracks (CSV: %d, API: %d)", len(trackIDs), len(actualTracks))
+	}
+
 	if len(actualTracks) != len(trackIDs) {
 		t.Errorf("expected %d tracks, got %d", len(trackIDs), len(actualTracks))
 	}

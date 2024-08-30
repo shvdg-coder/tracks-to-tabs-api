@@ -48,8 +48,12 @@ func TestGetArtists(t *testing.T) {
 	}
 
 	// Test
+	if len(actualArtists) == 0 || len(artistIDs) == 0 {
+		t.Errorf("expected more than 0 artists (CSV: %d, API: %d)", len(artistIDs), len(actualArtists))
+	}
+
 	if len(actualArtists) != len(artistIDs) {
-		t.Errorf("expectedArtists %d artists, got %d", len(artistIDs), len(actualArtists))
+		t.Errorf("expected %d artists, got %d", len(artistIDs), len(actualArtists))
 	}
 
 	testFieldsOfArtists(t, mapper.ArtistsToMap(actualArtists), expectedArtistsMap)
