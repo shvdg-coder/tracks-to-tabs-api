@@ -61,7 +61,11 @@ func testFieldsOfTracks(t *testing.T, actualTracks []*models.Track, expectedTrac
 // testFieldsOfTrack tests the fields of a single track object by comparing the actual track to the expected one.
 func testFieldsOfTrack(t *testing.T, actualTrack *models.Track, expectedTrack *ExpectedTrack) {
 	// Check ID
-	trackID, _ := logic.UUIDToString(actualTrack.ID)
+	trackID, err := logic.UUIDToString(actualTrack.ID)
+	if err != nil {
+		t.Fatalf("error occurred during conversion of UUID to string: %s", err.Error())
+	}
+
 	if trackID != expectedTrack.ID {
 		t.Errorf("expected ID to be %s, got %s", expectedTrack.ID, actualTrack.ID)
 	}

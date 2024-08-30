@@ -61,7 +61,11 @@ func testFieldsOfArtists(t *testing.T, actualArtists []*models.Artist, expectedA
 // testFieldsOfArtist tests the fields of a single artist object by comparing the actual artist to the expected one.
 func testFieldsOfArtist(t *testing.T, actualArtist *models.Artist, expectedArtist *ExpectedArtist) {
 	// Check ID
-	artistID, _ := logic.UUIDToString(actualArtist.ID)
+	artistID, err := logic.UUIDToString(actualArtist.ID)
+	if err != nil {
+		t.Fatalf("error occurred during conversion of UUID to string: %s", err.Error())
+	}
+
 	if artistID != expectedArtist.ID {
 		t.Errorf("expected ID to be %s, got %s", expectedArtist.ID, actualArtist.ID)
 	}

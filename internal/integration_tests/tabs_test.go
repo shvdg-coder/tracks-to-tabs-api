@@ -61,7 +61,11 @@ func testFieldsOfTabs(t *testing.T, actualTabs []*models.Tab, expectedTab []*Exp
 // testFieldsOfTab tests the fields of a single tab object by comparing the actual tab to the expected one.
 func testFieldsOfTab(t *testing.T, actualTab *models.Tab, expectedTab *ExpectedTab) {
 	// Check ID
-	tabID, _ := logic.UUIDToString(actualTab.ID)
+	tabID, err := logic.UUIDToString(actualTab.ID)
+	if err != nil {
+		t.Fatalf("error occurred during conversion of UUID to string: %s", err.Error())
+	}
+
 	if tabID != expectedTab.ID {
 		t.Errorf("expected ID to be %s, got %s", expectedTab.ID, actualTab.ID)
 	}
