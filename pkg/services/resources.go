@@ -43,6 +43,7 @@ func (r *ResourceSvc) LoadTabsResources(tabs ...*models.Tab) {
 		references := tab.References
 		references = append(references, tab.Track.References...)
 		references = append(references, tab.Track.Artist.References...)
+		tab.Resources = r.CreateResourcesFromReferences("tab", references...)
 	}
 }
 
