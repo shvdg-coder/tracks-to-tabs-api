@@ -43,7 +43,7 @@ func TestGetArtists(t *testing.T) {
 
 	// Test
 	if len(actualArtists) != len(artistIDs) {
-		t.Errorf("expected %d number of actualArtists, got %d", len(artistIDs), len(actualArtists))
+		t.Errorf("expected %d artists, got %d", len(artistIDs), len(actualArtists))
 	}
 
 	testFieldsOfArtists(t, actualArtists, createExpectedArtists())
@@ -52,10 +52,8 @@ func TestGetArtists(t *testing.T) {
 // createExpectedArtists constructs and returns a slice of ExpectedArtist objects for use in test cases.
 func createExpectedArtists() []*ExpectedArtist {
 	return []*ExpectedArtist{
-		{ID: "9b5ed980-340a-4b69-8d47-92e358992657", Name: "Knocked Loose",
-			TrackCount: 2, ReferenceCount: 3, ResourceCount: 2},
-		{ID: "1d7edc80-526b-4f74-a5de-657a7c9e0521", Name: "Ice Nine Kills",
-			TrackCount: 2, ReferenceCount: 3, ResourceCount: 2},
+		{ID: "9b5ed980-340a-4b69-8d47-92e358992657", Name: "Knocked Loose", TrackCount: 2, ReferenceCount: 3, ResourceCount: 2},
+		{ID: "1d7edc80-526b-4f74-a5de-657a7c9e0521", Name: "Ice Nine Kills", TrackCount: 2, ReferenceCount: 3, ResourceCount: 2},
 	}
 }
 
@@ -74,9 +72,9 @@ func testFieldsOfArtist(t *testing.T, actualArtist *models.Artist, expectedArtis
 		t.Errorf("expected ID to be %s, got %s", expectedArtist.ID, actualArtist.ID)
 	}
 
-	// Check Artist Name
+	// Check Artist Title
 	if actualArtist.Name != expectedArtist.Name {
-		t.Errorf("expected Name to be %s, got %s", expectedArtist.Name, actualArtist.Name)
+		t.Errorf("expected Title to be %s, got %s", expectedArtist.Name, actualArtist.Name)
 	}
 
 	// Check Tracks
