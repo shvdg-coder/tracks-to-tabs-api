@@ -12,8 +12,8 @@ import (
 // TrackTabData represents operations related to 'track to tab' links.
 type TrackTabData interface {
 	LinkTrackToTab(trackID, tabID uuid.UUID)
-	GetTrackToTabLink(trackID uuid.UUID) (*models.TrackTabEntry, error)
-	GetTrackToTabLinks(trackID ...uuid.UUID) ([]*models.TrackTabEntry, error)
+	GetTrackToTabEntry(trackID uuid.UUID) (*models.TrackTabEntry, error)
+	GetTrackToTabEntries(trackID ...uuid.UUID) ([]*models.TrackTabEntry, error)
 }
 
 // TrackTabSvc is for managing tracks of songs.
@@ -34,17 +34,17 @@ func (d *TrackTabSvc) LinkTrackToTab(trackId, tabId uuid.UUID) {
 	}
 }
 
-// GetTrackToTabLink retrieves the 'track to tab' link for the provided ID.
-func (d *TrackTabSvc) GetTrackToTabLink(trackID uuid.UUID) (*models.TrackTabEntry, error) {
-	trackTabLinks, err := d.GetTrackToTabLinks(trackID)
+// GetTrackToTabEntry retrieves the 'track to tab' link for the provided ID.
+func (d *TrackTabSvc) GetTrackToTabEntry(trackID uuid.UUID) (*models.TrackTabEntry, error) {
+	trackTabLinks, err := d.GetTrackToTabEntries(trackID)
 	if err != nil {
 		return nil, err
 	}
 	return trackTabLinks[0], nil
 }
 
-// GetTrackToTabLinks retrieves the 'track to tab' links for the provided track IDs.
-func (d *TrackTabSvc) GetTrackToTabLinks(trackID ...uuid.UUID) ([]*models.TrackTabEntry, error) {
+// GetTrackToTabEntries retrieves the 'track to tab' links for the provided track IDs.
+func (d *TrackTabSvc) GetTrackToTabEntries(trackID ...uuid.UUID) ([]*models.TrackTabEntry, error) {
 	rows, err := d.Query(queries.GetTrackTabLinks, pq.Array(trackID))
 	if err != nil {
 		return nil, err

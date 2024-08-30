@@ -32,4 +32,4 @@ const InsertTrackTab = `
 `
 
 // GetTrackTabLinks retrieves the 'track to tab' links for the provided Track IDs.
-const GetTrackTabLinks = `SELECT track_id, tab_id FROM track_tab WHERE track_id = ANY($1::uuid[])`
+const GetTrackTabLinks = `SELECT track_id, tab_id FROM track_tab WHERE track_id = ANY($1::uuid[]) OR tab_id = ANY($1::uuid[])`

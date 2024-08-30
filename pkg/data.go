@@ -56,7 +56,7 @@ func (d *DataAPI) GetTracks(trackID ...uuid.UUID) ([]*models.Track, error) {
 
 // GetTabs retrieves tabs, with entity references, for the provided IDs.
 func (d *DataAPI) GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error) {
-	tabTrackEntries, err := d.GetTrackToTabLinks(tabID...)
+	tabTrackEntries, err := d.GetTrackToTabEntries(tabID...)
 	if err != nil {
 		return nil, err
 	}

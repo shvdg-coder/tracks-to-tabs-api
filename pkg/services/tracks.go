@@ -79,7 +79,7 @@ func (t *TrackSvc) GetTracksCascading(trackID ...uuid.UUID) ([]*models.Track, er
 // LoadTabs loads the models.Tab's for the given models.Track's.
 func (t *TrackSvc) LoadTabs(tracks ...*models.Track) error {
 	trackIDs := t.ExtractIDsFromTracks(tracks)
-	trackTabEntries, err := t.GetTrackToTabLinks(trackIDs...)
+	trackTabEntries, err := t.GetTrackToTabEntries(trackIDs...)
 	if err != nil {
 		return err
 	}

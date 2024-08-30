@@ -12,7 +12,7 @@ const sourcesCSV = "./resources/csv/sources.csv"
 const instrumentsCSV = "./resources/csv/instruments.csv"
 const difficultiesCSV = "./resources/csv/difficulties.csv"
 
-// Paths
+// Configs
 const seedConfigPath = "./resources/configs/seed-config.yaml"
 const performanceConfigPath = "./resources/configs/seed-config.performance.yaml"
 
