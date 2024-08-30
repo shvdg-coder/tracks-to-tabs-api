@@ -1,8 +1,10 @@
 package integration_tests
 
 import (
+	"github.com/google/uuid"
 	logic "github.com/shvdg-dev/base-logic/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"strconv"
 	"testing"
@@ -10,7 +12,6 @@ import (
 
 // ExpectedTab contains the data of what a models.Tab is expected to have.
 type ExpectedTab struct {
-	ID string
 	*models.TabEntry
 	ReferencesCount int
 	ResourceCount   int
@@ -25,7 +26,7 @@ func TestGetTabs(t *testing.T) {
 	seed(t, dbEnv, minConfigPath)
 	defaultData(t, dbEnv)
 
-	expectedTabs := createExpectedTabs(t)
+	expectedTabsMap := createExpectedTabs(t)
 
 	tabIDStrings, err := logic.GetCSVColumnValues(tabsCSV, tabsColumnID)
 	if err != nil {
@@ -37,6 +38,7 @@ func TestGetTabs(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	mapper := mappers.NewTabSvc()
 	api := pkg.NewDataAPI(dbEnv)
 
 	// Execute
@@ -47,28 +49,29 @@ func TestGetTabs(t *testing.T) {
 
 	// Test
 	if len(actualTabs) != len(tabIDs) {
-		t.Errorf("expected %d expectedTabs, got %d", len(tabIDs), len(actualTabs))
+		t.Errorf("expected %d expectedTabsMap, got %d", len(tabIDs), len(actualTabs))
 	}
 
-	testFieldsOfTabs(t, actualTabs, expectedTabs)
+	testFieldsOfTabs(t, mapper.TabsToMap(actualTabs), expectedTabsMap)
 }
 
 // testFieldsOfTabs tests the fields of multiple tab objects by comparing the actual tabs to the expected ones.
-func testFieldsOfTabs(t *testing.T, actualTabs []*models.Tab, expectedTab []*ExpectedTab) {
-	for i := 0; i < len(actualTabs); i++ {
-		testFieldsOfTab(t, actualTabs[i], expectedTab[i])
+func testFieldsOfTabs(t *testing.T, actualTabsMap map[uuid.UUID]*models.Tab, expectedTabsMap map[uuid.UUID]*ExpectedTab) {
+	for id := range actualTabsMap {
+		actualTab := actualTabsMap[id]
+		expectedTab, ok := expectedTabsMap[id]
+		if !ok {
+			t.Fatalf("ID %s does not exist in 'expected tabs' map", id)
+		} else {
+			testFieldsOfTab(t, actualTab, expectedTab)
+		}
 	}
 }
 
 // testFieldsOfTab tests the fields of a single tab object by comparing the actual tab to the expected one.
 func testFieldsOfTab(t *testing.T, actualTab *models.Tab, expectedTab *ExpectedTab) {
 	// Check ID
-	tabID, err := logic.UUIDToString(actualTab.ID)
-	if err != nil {
-		t.Fatalf("error occurred during conversion of UUID to string: %s", err.Error())
-	}
-
-	if tabID != expectedTab.ID {
+	if actualTab.ID != expectedTab.ID {
 		t.Errorf("expected ID to be %s, got %s", expectedTab.ID, actualTab.ID)
 	}
 
@@ -93,27 +96,26 @@ func testFieldsOfTab(t *testing.T, actualTab *models.Tab, expectedTab *ExpectedT
 	}
 }
 
-// createExpectedTabs constructs and returns a slice of ExpectedTab objects for use in test cases.
-func createExpectedTabs(t *testing.T) []*ExpectedTab {
-	expectedTabs := make([]*ExpectedTab, 0)
+// createExpectedTabs constructs and returns a map of ExpectedTab's for use in test cases.
+func createExpectedTabs(t *testing.T) map[uuid.UUID]*ExpectedTab {
+	expectedTabs := make(map[uuid.UUID]*ExpectedTab)
 
 	tabsMap := createTabsFromCSV(t, tabsCSV)
-	for id, tab := range tabsMap {
+	for _, tab := range tabsMap {
 		expectedTab := &ExpectedTab{
-			ID:              id,
 			TabEntry:        tab,
 			ReferencesCount: 2,
 			ResourceCount:   1,
 		}
-		expectedTabs = append(expectedTabs, expectedTab)
+		expectedTabs[tab.ID] = expectedTab
 	}
 
 	return expectedTabs
 }
 
 // createTabsFromCSV creates a map of tabs where the key is the ID and the value a models.TabEntry.
-func createTabsFromCSV(t *testing.T, filePath string) map[string]*models.TabEntry {
-	tabsMap := make(map[string]*models.TabEntry)
+func createTabsFromCSV(t *testing.T, filePath string) map[uuid.UUID]*models.TabEntry {
+	tabsMap := make(map[uuid.UUID]*models.TabEntry)
 
 	records, err := logic.GetCSVRecords(filePath, false)
 	if err != nil {
@@ -133,7 +135,7 @@ func createTabsFromCSV(t *testing.T, filePath string) map[string]*models.TabEntr
 			Description:  record[3],
 		}
 
-		tabsMap[tabID.String()] = tab
+		tabsMap[tabID] = tab
 	}
 
 	return tabsMap
