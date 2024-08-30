@@ -1,20 +1,20 @@
 package integration_tests
 
 // CSV
-const artistsCSV = "./resources/artists.csv"
-const tracksCSV = "./resources/tracks.csv"
-const artisttrackCSV = "./resources/artisttrack.csv"
-const tabsCSV = "./resources/tabs.csv"
-const tracktabCSV = "./resources/tracktab.csv"
-const endpointsCSV = "./resources/endpoints.csv"
-const referencesCSV = "./resources/references.csv"
-const sourcesCSV = "./resources/sources.csv"
-const instrumentsCSV = "./resources/instruments.csv"
-const difficultiesCSV = "./resources/difficulties.csv"
+const artistsCSV = "./resources/csv/artists.csv"
+const tracksCSV = "./resources/csv/tracks.csv"
+const artisttrackCSV = "./resources/csv/artisttrack.csv"
+const tabsCSV = "./resources/csv/tabs.csv"
+const tracktabCSV = "./resources/csv/tracktab.csv"
+const endpointsCSV = "./resources/csv/endpoints.csv"
+const referencesCSV = "./resources/csv/references.csv"
+const sourcesCSV = "./resources/csv/sources.csv"
+const instrumentsCSV = "./resources/csv/instruments.csv"
+const difficultiesCSV = "./resources/csv/difficulties.csv"
 
 // Paths
-const seedConfigPath = "./resources/seed-config.yaml"
-const performanceConfigPath = "./resources/seed-config.performance.yaml"
+const seedConfigPath = "./resources/configs/seed-config.yaml"
+const performanceConfigPath = "./resources/configs/seed-config.performance.yaml"
 
 // Tables
 const artistsTable = "artists"
