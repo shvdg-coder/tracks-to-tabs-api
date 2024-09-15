@@ -2,7 +2,7 @@ package integration_tests
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/base-logic/pkg"
+	"github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"strconv"
 	"testing"

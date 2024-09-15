@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	logic "github.com/shvdg-dev/base-logic/pkg"
+	logic "github.com/shvdg-coder/base-logic/pkg"
 	inter "github.com/shvdg-dev/tracks-to-tabs-api/internal"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
@@ -37,9 +37,22 @@ func initSeedConfig() *models.SeedConfig {
 
 // initDatabase initializes the database manager.
 func initDatabase() logic.DbOperations {
-	URL := logic.GetEnvValueAsString(inter.KeyDatabaseURL)
-	database := logic.NewDbService(inter.ValueDatabaseDriver, URL, logic.WithConnection())
+	dbURL := logic.GetEnvValueAsString(inter.KeyDatabaseURL)
+	sshConfig := createSSHConfig()
+
+	database := logic.NewDbService(inter.ValueDatabaseDriver, dbURL, logic.WithSSH(sshConfig), logic.WithConnection())
 	return database
+}
+
+// CreateSSHConfig creates a new SSH client config with values from environment variables.
+func createSSHConfig() *logic.SSHConfig {
+	return &logic.SSHConfig{
+		User:        logic.GetEnvValueAsString(inter.KeySshUser),
+		Password:    logic.GetEnvValueAsString(inter.KeySshPassword),
+		Server:      logic.GetEnvValueAsString(inter.KeySshServer),
+		Destination: logic.GetEnvValueAsString(inter.KeySshDestination),
+		LocalPort:   logic.GetEnvValueAsString(inter.KeySshLocalPort),
+	}
 }
 
 // main is the entry point of the application.

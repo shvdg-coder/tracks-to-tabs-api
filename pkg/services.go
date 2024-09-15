@@ -1,7 +1,7 @@
 package pkg
 
 import (
-	logic "github.com/shvdg-dev/base-logic/pkg"
+	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/data"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/schemas"

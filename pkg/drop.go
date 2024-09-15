@@ -1,6 +1,6 @@
 package pkg
 
-import logic "github.com/shvdg-dev/base-logic/pkg"
+import logic "github.com/shvdg-coder/base-logic/pkg"
 
 // DropOps represents operations for dropping tables.
 type DropOps interface {

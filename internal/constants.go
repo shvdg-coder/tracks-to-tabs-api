@@ -1,7 +1,12 @@
 package internal
 
 const (
-	KeyDatabaseURL = "DATABASE_URL"
+	KeyDatabaseURL    = "DATABASE_URL"
+	KeySshUser        = "SSH_USER"
+	KeySshPassword    = "SSH_PASSWORD"
+	KeySshServer      = "SSH_SERVER"
+	KeySshDestination = "SSH_DESTINATION"
+	KeySshLocalPort   = "SSH_LOCAL_PORT"
 )
 
 const (

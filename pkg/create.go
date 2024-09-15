@@ -1,6 +1,6 @@
 package pkg
 
-import logic "github.com/shvdg-dev/base-logic/pkg"
+import logic "github.com/shvdg-coder/base-logic/pkg"
 
 // CreateOps represents operations for creating tables.
 type CreateOps interface {
