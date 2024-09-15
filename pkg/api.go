@@ -2,7 +2,6 @@ package pkg
 
 import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
-	inter "github.com/shvdg-dev/tracks-to-tabs-api/internal"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"log"
 )
@@ -42,7 +41,7 @@ func NewAPI() *API {
 
 // initSeedConfig instantiates the config for seeding.
 func initSeedConfig() *models.SeedConfig {
-	conf, err := models.NewSeedConfig(inter.PathSeedConfig)
+	conf, err := models.NewSeedConfig(PathSeedConfig)
 	if err != nil {
 		log.Fatalf("Could not load seed config")
 	}
@@ -51,20 +50,20 @@ func initSeedConfig() *models.SeedConfig {
 
 // initDatabase instantiates the database.
 func initDatabase() logic.DbOperations {
-	dbURL := logic.GetEnvValueAsString(inter.KeyDatabaseURL)
+	dbURL := logic.GetEnvValueAsString(KeyDatabaseURL)
 	sshConfig := createSSHConfig()
 
-	database := logic.NewDbService(inter.ValueDatabaseDriver, dbURL, logic.WithSSHTunnel(sshConfig), logic.WithConnection())
+	database := logic.NewDbService(ValueDatabaseDriver, dbURL, logic.WithSSHTunnel(sshConfig), logic.WithConnection())
 	return database
 }
 
 // createSSHConfig
 func createSSHConfig() *logic.SSHConfig {
 	return &logic.SSHConfig{
-		User:        logic.GetEnvValueAsString(inter.KeySshUser),
-		Password:    logic.GetEnvValueAsString(inter.KeySshPassword),
-		Server:      logic.GetEnvValueAsString(inter.KeySshServer),
-		Destination: logic.GetEnvValueAsString(inter.KeySshDestination),
-		LocalPort:   logic.GetEnvValueAsString(inter.KeySshLocalPort),
+		User:        logic.GetEnvValueAsString(KeySshUser),
+		Password:    logic.GetEnvValueAsString(KeySshPassword),
+		Server:      logic.GetEnvValueAsString(KeySshServer),
+		Destination: logic.GetEnvValueAsString(KeySshDestination),
+		LocalPort:   logic.GetEnvValueAsString(KeySshLocalPort),
 	}
 }

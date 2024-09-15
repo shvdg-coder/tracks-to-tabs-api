@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	inter "github.com/shvdg-dev/tracks-to-tabs-api/internal"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
 	"os"
 )
@@ -31,11 +30,11 @@ func handleArgs(args []string) {
 // handleArgs handles the command line argument and performs the corresponding action.
 func handleArg(arg string) {
 	switch arg {
-	case inter.CommandCreate:
+	case CommandCreate:
 		api.CreateAll()
-	case inter.CommandDrop:
+	case CommandDrop:
 		api.DropAll()
-	case inter.CommandSeed:
+	case CommandSeed:
 		api.Seed()
 	default:
 		printErrorAndExit()
