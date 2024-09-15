@@ -40,7 +40,7 @@ func initDatabase() logic.DbOperations {
 	dbURL := logic.GetEnvValueAsString(inter.KeyDatabaseURL)
 	sshConfig := createSSHConfig()
 
-	database := logic.NewDbService(inter.ValueDatabaseDriver, dbURL, logic.WithSSH(sshConfig), logic.WithConnection())
+	database := logic.NewDbService(inter.ValueDatabaseDriver, dbURL, logic.WithSSHTunnel(sshConfig), logic.WithConnection())
 	return database
 }
 
