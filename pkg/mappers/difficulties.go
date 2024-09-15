@@ -1,6 +1,6 @@
 package mappers
 
-import "github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+import "github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 
 // DifficultyMapper represents operations related to difficulty data mapping.
 type DifficultyMapper interface {

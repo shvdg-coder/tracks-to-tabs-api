@@ -32,7 +32,7 @@ func NewAPI(configPath string) (*API, error) {
 	database := createDatabase(config.Database)
 	svcManager := NewSvcManager(database)
 	seeding := config.Seeding
-	dummyAPI := NewDummyAPI(database, seeding.Sources, seeding.Instruments, seeding.Difficulties)
+	dummyAPI := NewDummyAPI(svcManager, seeding.Sources, seeding.Instruments, seeding.Difficulties)
 
 	return &API{
 		CreateOps: NewCreateAPI(svcManager),

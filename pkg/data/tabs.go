@@ -5,8 +5,8 @@ import (
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-coder/base-logic/pkg"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/queries"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
 	"log"
 )
 

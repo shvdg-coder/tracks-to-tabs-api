@@ -2,7 +2,7 @@ package services
 
 import (
 	"fmt"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 )
 
 // ResourceOps represents operations related to resources.

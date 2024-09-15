@@ -1,9 +1,8 @@
 package integration_tests
 
 import (
-	tstenv "github.com/shvdg-dev/tracks-to-tabs-api/internal/integration_tests/environments"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	tstenv "github.com/shvdg-coder/tracks-to-tabs-api/internal/integration_tests/environments"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg"
 	"testing"
 )
 
@@ -18,17 +17,20 @@ func createDefaultDbEnv(t *testing.T) tstenv.DbEnvOperations {
 }
 
 // seed seeds the database using the provided configuration.
-func seed(t *testing.T, dbEnv tstenv.DbEnvOperations, seedConfigPath string) *models.SeedConfig {
-	seedConfig, err := models.NewSeedConfig(seedConfigPath)
+func seed(t *testing.T, dbEnv tstenv.DbEnvOperations, apiConfigPath string) *pkg.SeedingConfig {
+	apiConfig, err := pkg.NewAPIConfig(apiConfigPath)
 	if err != nil {
 		t.Fatalf("error occurred while parsing the seed config: %s", err.Error())
 	}
 
-	dummyAPI := pkg.NewDummyAPI(dbEnv, seedConfig.Sources, seedConfig.Instruments, seedConfig.Difficulties)
-	seedingAPI := pkg.NewSeedingAPI(dbEnv, seedConfig, dummyAPI)
+	seedingConfig := apiConfig.Seeding
+	svcManager := pkg.NewSvcManager(dbEnv)
+
+	dummyAPI := pkg.NewDummyAPI(svcManager, seedingConfig.Sources, seedingConfig.Instruments, seedingConfig.Difficulties)
+	seedingAPI := pkg.NewSeedingAPI(svcManager, seedingConfig, dummyAPI)
 	seedingAPI.Seed()
 
-	return seedConfig
+	return seedingConfig
 }
 
 // defaultData prepares the test, by defaultData the dummy data into the database.

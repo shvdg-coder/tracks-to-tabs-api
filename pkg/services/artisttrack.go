@@ -2,11 +2,11 @@ package services
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/data"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/data"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 )
 import (
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/schemas"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/schemas"
 )
 
 // ArtistTrackOps combines the interface representing operations related to 'artist to track' links.

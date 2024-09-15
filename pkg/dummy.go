@@ -3,8 +3,7 @@ package pkg
 import (
 	faker "github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
-	logic "github.com/shvdg-coder/base-logic/pkg"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 )
 
 // DummyOps represents all operations related to dummy data.
@@ -30,9 +29,9 @@ type DummyAPI struct {
 }
 
 // NewDummyAPI instantiates a DummyAPI.
-func NewDummyAPI(database logic.DbOperations, sources []*models.SourceEntry, instruments []*models.InstrumentEntry, difficulties []*models.DifficultyEntry) DummyOps {
+func NewDummyAPI(svcManager *SvcManager, sources []*models.SourceEntry, instruments []*models.InstrumentEntry, difficulties []*models.DifficultyEntry) DummyOps {
 	return &DummyAPI{
-		NewSvcManager(database),
+		svcManager,
 		sources,
 		instruments,
 		difficulties}

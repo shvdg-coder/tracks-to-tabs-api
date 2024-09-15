@@ -2,7 +2,7 @@ package pkg
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 )
 
 // DataOps represents all DataAPI data operations.

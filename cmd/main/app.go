@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg"
 	"log"
 	"os"
 )

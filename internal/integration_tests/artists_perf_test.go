@@ -2,8 +2,8 @@ package integration_tests
 
 import (
 	"github.com/google/uuid"
-	env "github.com/shvdg-dev/tracks-to-tabs-api/internal/integration_tests/environments"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
+	env "github.com/shvdg-coder/tracks-to-tabs-api/internal/integration_tests/environments"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg"
 	"testing"
 	"time"
 )
@@ -11,12 +11,13 @@ import (
 // TestGetArtistsPerf tests the performance of retrieving artists.
 func TestGetArtistsPerf(t *testing.T) {
 	dbEnv := createDefaultDbEnv(t)
+	svcManager := pkg.NewSvcManager(dbEnv)
 	defer dbEnv.Breakdown()
 
 	// Prepare
 	seedConfig := seed(t, dbEnv, maxConfigPath)
 
-	api := pkg.NewDataAPI(dbEnv)
+	api := pkg.NewDataAPI(svcManager)
 
 	// Execute
 	artistIDs := selectArtistIDs(t, dbEnv)

@@ -2,7 +2,7 @@ package mappers
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 )
 
 // TrackMapper represents operations related to track data mapping.

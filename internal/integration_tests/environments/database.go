@@ -1,8 +1,8 @@
 package environments
 
 import (
-	"github.com/shvdg-dev/base-logic/pkg/testable/database"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-coder/base-logic/pkg/testable/database"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg"
 )
 
 // DbEnvOperations represents operations for a test environment, used during integration tests.

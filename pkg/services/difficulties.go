@@ -1,13 +1,13 @@
 package services
 
 import (
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/data"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/mappers"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/data"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/mappers"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 )
 
 import (
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/schemas"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/schemas"
 )
 
 // DifficultyOps combines interfaces representing all operations related to difficulties.

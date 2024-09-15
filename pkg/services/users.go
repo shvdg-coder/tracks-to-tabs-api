@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/data"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/schemas"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/data"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/schemas"
 )
 
 // UserOps represents the operations related to users.

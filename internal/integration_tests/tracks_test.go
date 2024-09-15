@@ -3,15 +3,16 @@ package integration_tests
 import (
 	"github.com/google/uuid"
 	logic "github.com/shvdg-coder/base-logic/pkg"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/mappers"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/mappers"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"testing"
 )
 
 // TestGetTracks tests whether tracks can be inserted and retrieved cascading.
 func TestGetTracks(t *testing.T) {
 	dbEnv := createDefaultDbEnv(t)
+	svcManager := pkg.NewSvcManager(dbEnv)
 	defer dbEnv.Breakdown()
 
 	// Prepare
@@ -31,7 +32,7 @@ func TestGetTracks(t *testing.T) {
 	}
 
 	mapper := mappers.NewTrackSvc()
-	api := pkg.NewDataAPI(dbEnv)
+	api := pkg.NewDataAPI(svcManager)
 
 	// Execute
 	actualTracks, err := api.GetTracks(trackIDs...)

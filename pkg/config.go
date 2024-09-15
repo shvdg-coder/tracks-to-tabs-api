@@ -3,7 +3,7 @@ package pkg
 import (
 	faker "github.com/brianvoe/gofakeit/v7"
 	logic "github.com/shvdg-coder/base-logic/pkg"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"gopkg.in/yaml.v3"
 	"os"
 )

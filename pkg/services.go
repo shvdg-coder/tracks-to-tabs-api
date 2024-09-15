@@ -2,10 +2,10 @@ package pkg
 
 import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/data"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/mappers"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/schemas"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/services"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/data"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/mappers"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/schemas"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/services"
 )
 
 // SvcOps represents operations regarding all the services.

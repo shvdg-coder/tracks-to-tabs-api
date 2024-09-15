@@ -1,6 +1,6 @@
 package integration_tests
 
-import "github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
+import "github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 
 // ExpectedArtist contains the data of what a models.Artist is expected to have.
 type ExpectedArtist struct {

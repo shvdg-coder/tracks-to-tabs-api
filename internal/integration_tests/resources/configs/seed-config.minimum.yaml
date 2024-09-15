@@ -1,56 +1,57 @@
-dummies:
-  artists:
-    min: 0
-    max: 0
-    tracks:
+seeding:
+  dummies:
+    artists:
       min: 0
       max: 0
-      tabs:
+      tracks:
         min: 0
         max: 0
-instruments:
-  - id: 1
-    name: 'electric guitar'
-  - id: 2
-    name: 'acoustic guitar'
-  - id: 3
-    name: 'bass guitar'
-  - id: 4
-    name: 'drums'
-difficulties:
-  - id: 1
-    name: 'easy'
-  - id: 2
-    name: 'intermediate'
-  - id: 3
-    name: 'hard'
-  - id: 4
-    name: 'expert'
-sources:
-  - id: 1000
-    name: 'Songify'
-    category: 'music'
-  - id: 2000
-    name: 'Tabsters'
-    category: 'tabs'
-endpoints:
-  - sourceId: 1000
-    category: 'artist'
-    type: 'web'
-    url: 'https://www.songify/artist/{artist:id}'
-  - sourceId: 1000
-    category: 'track'
-    type: 'web'
-    url: 'https://www.songify/track/{track:id}'
-  - sourceId: 2000
-    category: 'artist'
-    type: 'web'
-    url: 'https://www.tabsters/web/{artist:name}-tabs-{artist:id}'
-  - sourceId: 2000
-    category: 'tab'
-    type: 'web'
-    url: 'https://www.tabsters/web/{artist:name}-{tab:name}-tab-{tab:id}'
-  - sourceId: 2000
-    category: 'track'
-    type: 'api'
-    url: 'https://www.tabsters/api/artist/{artist:id}/tracks?from={from}&size={size}'
+        tabs:
+          min: 0
+          max: 0
+  instruments:
+    - id: 1
+      name: 'electric guitar'
+    - id: 2
+      name: 'acoustic guitar'
+    - id: 3
+      name: 'bass guitar'
+    - id: 4
+      name: 'drums'
+  difficulties:
+    - id: 1
+      name: 'easy'
+    - id: 2
+      name: 'intermediate'
+    - id: 3
+      name: 'hard'
+    - id: 4
+      name: 'expert'
+  sources:
+    - id: 1000
+      name: 'Songify'
+      category: 'music'
+    - id: 2000
+      name: 'Tabsters'
+      category: 'tabs'
+  endpoints:
+    - sourceId: 1000
+      category: 'artist'
+      type: 'web'
+      url: 'https://www.songify/artist/{artist:id}'
+    - sourceId: 1000
+      category: 'track'
+      type: 'web'
+      url: 'https://www.songify/track/{track:id}'
+    - sourceId: 2000
+      category: 'artist'
+      type: 'web'
+      url: 'https://www.tabsters/web/{artist:name}-tabs-{artist:id}'
+    - sourceId: 2000
+      category: 'tab'
+      type: 'web'
+      url: 'https://www.tabsters/web/{artist:name}-{tab:name}-tab-{tab:id}'
+    - sourceId: 2000
+      category: 'track'
+      type: 'api'
+      url: 'https://www.tabsters/api/artist/{artist:id}/tracks?from={from}&size={size}'
