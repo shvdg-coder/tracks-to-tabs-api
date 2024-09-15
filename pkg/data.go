@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"github.com/google/uuid"
-	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 )
 
@@ -15,12 +14,12 @@ type DataOps interface {
 
 // DataAPI represents the main entry point to interact with functionalities for the defined entities.
 type DataAPI struct {
-	*SvcManager
+	SvcOps
 }
 
 // NewDataAPI creates a new instance of the DataAPI.
-func NewDataAPI(database logic.DbOperations) DataOps {
-	return &DataAPI{SvcManager: NewSvcManager(database)}
+func NewDataAPI(svcManager SvcOps) DataOps {
+	return &DataAPI{svcManager}
 }
 
 // GetArtists retrieves artists, with entity references, for the provided IDs.

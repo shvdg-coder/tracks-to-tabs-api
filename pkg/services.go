@@ -21,6 +21,7 @@ type SvcOps interface {
 	services.ArtistTrackOps
 	services.TrackTabOps
 	services.UserOps
+	services.ResourceOps
 }
 
 // SvcManager instantiates and handles the different services.

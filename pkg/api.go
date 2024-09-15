@@ -28,14 +28,15 @@ type API struct {
 func NewAPI() *API {
 	seedConfig := initSeedConfig()
 	database := initDatabase()
+	svcManager := NewSvcManager(database)
 	dummyAPI := NewDummyAPI(database, seedConfig.Sources, seedConfig.Instruments, seedConfig.Difficulties)
 
 	return &API{
-		CreateOps: NewCreateAPI(database),
-		DropOps:   NewDropAPI(database),
-		DataOps:   NewDataAPI(database),
+		CreateOps: NewCreateAPI(svcManager),
+		DropOps:   NewDropAPI(svcManager),
+		DataOps:   NewDataAPI(svcManager),
 		DummyOps:  dummyAPI,
-		SeedOps:   NewSeedingAPI(database, seedConfig, dummyAPI),
+		SeedOps:   NewSeedingAPI(svcManager, seedConfig, dummyAPI),
 	}
 }
 

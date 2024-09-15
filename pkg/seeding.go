@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"github.com/google/uuid"
-	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"strings"
 )
@@ -14,14 +13,14 @@ type SeedOps interface {
 
 // SeedingAPI is responsible for seeding data.
 type SeedingAPI struct {
-	*SvcManager
+	SvcOps
 	*models.SeedConfig
 	DummyOps
 }
 
 // NewSeedingAPI instantiates a SeedingAPI.
-func NewSeedingAPI(database logic.DbOperations, config *models.SeedConfig, dummies DummyOps) SeedOps {
-	return &SeedingAPI{NewSvcManager(database), config, dummies}
+func NewSeedingAPI(svcManager SvcOps, config *models.SeedConfig, dummies DummyOps) SeedOps {
+	return &SeedingAPI{svcManager, config, dummies}
 }
 
 // Seed seeds the database with the entries found in the provided models.SeedConfig.

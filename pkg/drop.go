@@ -1,7 +1,5 @@
 package pkg
 
-import logic "github.com/shvdg-coder/base-logic/pkg"
-
 // DropOps represents operations for dropping tables.
 type DropOps interface {
 	DropAll()
@@ -16,8 +14,8 @@ type DropAPI struct {
 }
 
 // NewDropAPI creates a new instance of DropAPI.
-func NewDropAPI(database logic.DbOperations) DropOps {
-	return &DropAPI{SvcOps: NewSvcManager(database)}
+func NewDropAPI(svcManager SvcOps) DropOps {
+	return &DropAPI{svcManager}
 }
 
 // DropAll when permitted, drops the tables in the database.

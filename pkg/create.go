@@ -1,7 +1,5 @@
 package pkg
 
-import logic "github.com/shvdg-coder/base-logic/pkg"
-
 // CreateOps represents operations for creating tables.
 type CreateOps interface {
 	CreateAll()
@@ -16,8 +14,8 @@ type CreateAPI struct {
 }
 
 // NewCreateAPI creates a new instance of CreateAPI
-func NewCreateAPI(database logic.DbOperations) CreateOps {
-	return &CreateAPI{SvcOps: NewSvcManager(database)}
+func NewCreateAPI(svcManager SvcOps) CreateOps {
+	return &CreateAPI{SvcOps: svcManager}
 }
 
 // CreateAll when permitted, creates tables in the database
