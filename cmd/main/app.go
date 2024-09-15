@@ -13,7 +13,7 @@ import (
 var (
 	createAPI pkg.CreateOps
 	dropAPI   pkg.DropOps
-	seedAPI   pkg.Seeder
+	seedAPI   pkg.SeedOps
 )
 
 // init instantiates all app requirements.

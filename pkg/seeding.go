@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-// Seeder represents all operations related to seeding.
-type Seeder interface {
+// SeedOps represents all operations related to seeding.
+type SeedOps interface {
 	Seed()
 }
 
@@ -20,7 +20,7 @@ type SeedingAPI struct {
 }
 
 // NewSeedingAPI instantiates a SeedingAPI.
-func NewSeedingAPI(database logic.DbOperations, config *models.SeedConfig, dummies DummyOps) Seeder {
+func NewSeedingAPI(database logic.DbOperations, config *models.SeedConfig, dummies DummyOps) SeedOps {
 	return &SeedingAPI{NewSvcManager(database), config, dummies}
 }
 
@@ -30,7 +30,9 @@ func (s *SeedingAPI) Seed() {
 	s.SeedDifficulties()
 	s.SeedSources()
 	s.SeedEndpoints()
-	s.SeedArtists()
+	artistIDs := s.SeedArtists()
+	trackIDs := s.SeedTracks(artistIDs)
+	s.SeedTabs(trackIDs)
 }
 
 // SeedInstruments seeds the instruments table with the default instruments.
@@ -53,9 +55,11 @@ func (s *SeedingAPI) SeedEndpoints() {
 	s.InsertEndpointEntries(s.SeedConfig.Endpoints...)
 }
 
-// SeedArtists seeds the artists according to the dummy settings in the config file.
-func (s *SeedingAPI) SeedArtists() {
+// SeedArtists seeds the artists according to the dummy settings in the config file and returns their IDs.
+func (s *SeedingAPI) SeedArtists() []uuid.UUID {
+	var artistIDs []uuid.UUID
 	dummyArtists := s.CreateArtists(s.Dummies.Artists)
+
 	for _, artist := range dummyArtists {
 		s.InsertArtistEntry(artist)
 
@@ -67,43 +71,53 @@ func (s *SeedingAPI) SeedArtists() {
 		artistNameRef := s.CreateReference(artist.ID, sourceTabs.ID, TypeName, CategoryArtist, s.formatName(artist.Name))
 		s.InsertReferenceEntry(artistNameRef)
 
-		s.SeedTracks(artist.ID)
+		artistIDs = append(artistIDs, artist.ID)
 	}
+
+	return artistIDs
 }
 
-// SeedTracks seeds the tracks according to the dummy settings in the config file.
-func (s *SeedingAPI) SeedTracks(artistID uuid.UUID) {
-	dummyTracks := s.CreateTracks(s.Dummies.Artists.Tracks)
-	for _, track := range dummyTracks {
-		s.InsertTrackEntry(track)
-		s.LinkArtistToTrack(artistID, track.ID)
+// SeedTracks seeds the tracks according to the dummy settings in the config file and returns their IDs.
+func (s *SeedingAPI) SeedTracks(artistIDs []uuid.UUID) []uuid.UUID {
+	var trackIDs []uuid.UUID
 
-		sourceMusic := s.GetRandomSource(CategoryMusic)
-		trackIDRef := s.CreateReference(track.ID, sourceMusic.ID, TypeID, CategoryTrack, s.CreateRandomUUID())
-		s.InsertReferenceEntry(trackIDRef)
+	for _, artistID := range artistIDs {
+		dummyTracks := s.CreateTracks(s.Dummies.Artists.Tracks)
+		for _, track := range dummyTracks {
+			s.InsertTrackEntry(track)
+			s.LinkArtistToTrack(artistID, track.ID)
 
-		sourceTabs := s.GetRandomSource(CategoryTabs)
-		trackNameRef := s.CreateReference(track.ID, sourceTabs.ID, TypeName, CategoryTrack, s.formatName(track.Title))
-		s.InsertReferenceEntry(trackNameRef)
+			sourceMusic := s.GetRandomSource(CategoryMusic)
+			trackIDRef := s.CreateReference(track.ID, sourceMusic.ID, TypeID, CategoryTrack, s.CreateRandomUUID())
+			s.InsertReferenceEntry(trackIDRef)
 
-		s.SeedTabs(track.ID)
+			sourceTabs := s.GetRandomSource(CategoryTabs)
+			trackNameRef := s.CreateReference(track.ID, sourceTabs.ID, TypeName, CategoryTrack, s.formatName(track.Title))
+			s.InsertReferenceEntry(trackNameRef)
+
+			trackIDs = append(trackIDs, track.ID)
+		}
 	}
+
+	return trackIDs
 }
 
 // SeedTabs seeds the tabs according to the dummy settings in the config file.
-func (s *SeedingAPI) SeedTabs(trackID uuid.UUID) {
-	dummyTabs := s.CreateTabs(s.Dummies.Artists.Tracks.Tabs)
-	for _, tab := range dummyTabs {
-		s.InsertTabEntry(tab)
-		s.LinkTrackToTab(trackID, tab.ID)
+func (s *SeedingAPI) SeedTabs(trackIDs []uuid.UUID) {
+	for _, trackID := range trackIDs {
+		dummyTabs := s.CreateTabs(s.Dummies.Artists.Tracks.Tabs)
+		for _, tab := range dummyTabs {
+			s.InsertTabEntry(tab)
+			s.LinkTrackToTab(trackID, tab.ID)
 
-		sourceTabs := s.GetRandomSource(CategoryTabs)
+			sourceTabs := s.GetRandomSource(CategoryTabs)
 
-		tabIDRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeID, CategoryTab, s.CreateRandomUUID())
-		s.InsertReferenceEntry(tabIDRef)
+			tabIDRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeID, CategoryTab, s.CreateRandomUUID())
+			s.InsertReferenceEntry(tabIDRef)
 
-		tabNameRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeName, CategoryTab, s.formatName(tab.Description))
-		s.InsertReferenceEntry(tabNameRef)
+			tabNameRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeName, CategoryTab, s.formatName(tab.Description))
+			s.InsertReferenceEntry(tabNameRef)
+		}
 	}
 }
 
