@@ -38,7 +38,7 @@ func initSeedConfig() *models.SeedConfig {
 // initDatabase initializes the database manager.
 func initDatabase() logic.DbOperations {
 	URL := logic.GetEnvValueAsString(inter.KeyDatabaseURL)
-	database := logic.NewDbService(inter.ValueDatabaseDriver, URL)
+	database := logic.NewDbService(inter.ValueDatabaseDriver, URL, logic.WithConnection())
 	return database
 }
 
