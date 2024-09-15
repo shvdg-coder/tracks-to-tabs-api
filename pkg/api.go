@@ -24,14 +24,13 @@ type API struct {
 
 // NewAPI instantiates a API.
 func NewAPI(configPath string) (*API, error) {
-	config, err := NewAPIConfig(configPath)
+	apiConfig, err := NewAPIConfig(configPath)
 	if err != nil {
 		return nil, err
 	}
 
-	database := createDatabase(config.Database)
-	svcManager := NewSvcManager(database)
-	seeding := config.Seeding
+	svcManager := createServiceManager(apiConfig.Database)
+	seeding := apiConfig.Seeding
 	dummyAPI := NewDummyAPI(svcManager, seeding.Sources, seeding.Instruments, seeding.Difficulties)
 
 	return &API{
@@ -43,9 +42,8 @@ func NewAPI(configPath string) (*API, error) {
 	}, nil
 }
 
-// createDatabase instantiates the database.
-func createDatabase(dbConfig *DatabaseConfig) logic.DbOperations {
-	return logic.NewDbService(
-		ValueDatabaseDriver, dbConfig.URL,
-		logic.WithSSHTunnel(dbConfig.SSH), logic.WithConnection())
+// createServiceManager instantiates the service manager with the database.
+func createServiceManager(dbConfig *DatabaseConfig) *SvcManager {
+	database := logic.NewDbService(ValueDatabaseDriver, dbConfig.URL, logic.WithSSHTunnel(dbConfig.SSH), logic.WithConnection())
+	return NewSvcManager(database)
 }
