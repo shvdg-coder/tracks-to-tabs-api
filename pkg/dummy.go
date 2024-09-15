@@ -13,11 +13,11 @@ type DummyOps interface {
 	CreateRandomUUID() string
 
 	CreateReference(internalID uuid.UUID, sourceID uint, referenceType, referenceCategory, value string) *models.ReferenceEntry
-	CreateArtists(config *models.ArtistsConfig) []*models.ArtistEntry
+	CreateArtists(config *ArtistConfig) []*models.ArtistEntry
 	CreateArtist() *models.ArtistEntry
-	CreateTracks(config *models.TracksConfig) []*models.TrackEntry
+	CreateTracks(config *TrackConfig) []*models.TrackEntry
 	CreateTrack() *models.TrackEntry
-	CreateTabs(config *models.TabsConfig) []*models.TabEntry
+	CreateTabs(config *TabConfig) []*models.TabEntry
 	CreateTab() *models.TabEntry
 }
 
@@ -79,7 +79,7 @@ func (d *DummyAPI) CreateReference(internalID uuid.UUID, sourceID uint, referenc
 }
 
 // CreateArtists creates a specified amount of dummy artists.
-func (d *DummyAPI) CreateArtists(config *models.ArtistsConfig) []*models.ArtistEntry {
+func (d *DummyAPI) CreateArtists(config *ArtistConfig) []*models.ArtistEntry {
 	dummyArtists := make([]*models.ArtistEntry, config.RandomAmount())
 	for i := range dummyArtists {
 		dummyArtists[i] = d.CreateArtist()
@@ -96,7 +96,7 @@ func (d *DummyAPI) CreateArtist() *models.ArtistEntry {
 }
 
 // CreateTracks creates a specified amount of dummy tracks.
-func (d *DummyAPI) CreateTracks(config *models.TracksConfig) []*models.TrackEntry {
+func (d *DummyAPI) CreateTracks(config *TrackConfig) []*models.TrackEntry {
 	dummyTracks := make([]*models.TrackEntry, config.RandomAmount())
 	for i := range dummyTracks {
 		dummyTracks[i] = d.CreateTrack()
@@ -114,7 +114,7 @@ func (d *DummyAPI) CreateTrack() *models.TrackEntry {
 }
 
 // CreateTabs creates a specified amount of dummy tabs.
-func (d *DummyAPI) CreateTabs(config *models.TabsConfig) []*models.TabEntry {
+func (d *DummyAPI) CreateTabs(config *TabConfig) []*models.TabEntry {
 	dummyTabs := make([]*models.TabEntry, config.RandomAmount())
 	for i := range dummyTabs {
 		dummyTabs[i] = d.CreateTab()

@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"github.com/google/uuid"
-	"github.com/shvdg-dev/tracks-to-tabs-api/pkg/models"
 	"strings"
 )
 
@@ -14,16 +13,16 @@ type SeedOps interface {
 // SeedingAPI is responsible for seeding data.
 type SeedingAPI struct {
 	SvcOps
-	*models.SeedConfig
+	*SeedingConfig
 	DummyOps
 }
 
 // NewSeedingAPI instantiates a SeedingAPI.
-func NewSeedingAPI(svcManager SvcOps, config *models.SeedConfig, dummies DummyOps) SeedOps {
+func NewSeedingAPI(svcManager SvcOps, config *SeedingConfig, dummies DummyOps) SeedOps {
 	return &SeedingAPI{svcManager, config, dummies}
 }
 
-// Seed seeds the database with the entries found in the provided models.SeedConfig.
+// Seed seeds the database with the entries found in the provided SeedingConfig.
 func (s *SeedingAPI) Seed() {
 	s.SeedInstruments()
 	s.SeedDifficulties()
@@ -36,22 +35,22 @@ func (s *SeedingAPI) Seed() {
 
 // SeedInstruments seeds the instruments table with the default instruments.
 func (s *SeedingAPI) SeedInstruments() {
-	s.InsertInstrumentEntries(s.SeedConfig.Instruments...)
+	s.InsertInstrumentEntries(s.SeedingConfig.Instruments...)
 }
 
 // SeedDifficulties seeds the difficulties table with the default difficulties.
 func (s *SeedingAPI) SeedDifficulties() {
-	s.InsertDifficultyEntries(s.SeedConfig.Difficulties...)
+	s.InsertDifficultyEntries(s.SeedingConfig.Difficulties...)
 }
 
 // SeedSources seeds the sources from the config file.
 func (s *SeedingAPI) SeedSources() {
-	s.InsertSourceEntries(s.SeedConfig.Sources...)
+	s.InsertSourceEntries(s.SeedingConfig.Sources...)
 }
 
 // SeedEndpoints seeds the endpoints from the config file.
 func (s *SeedingAPI) SeedEndpoints() {
-	s.InsertEndpointEntries(s.SeedConfig.Endpoints...)
+	s.InsertEndpointEntries(s.SeedingConfig.Endpoints...)
 }
 
 // SeedArtists seeds the artists according to the dummy settings in the config file and returns their IDs.

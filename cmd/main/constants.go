@@ -5,3 +5,7 @@ const (
 	CommandDrop   = "drop"
 	CommandSeed   = "seed"
 )
+
+const (
+	APIConfigPath = "app-config.yaml"
+)

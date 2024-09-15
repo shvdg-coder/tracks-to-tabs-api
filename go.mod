@@ -8,7 +8,7 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/shvdg-coder/base-logic v0.0.2
 	github.com/shvdg-dev/base-logic v0.0.18
-	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (

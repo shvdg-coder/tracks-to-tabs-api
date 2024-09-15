@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/shvdg-dev/tracks-to-tabs-api/pkg"
+	"log"
 	"os"
 )
 
@@ -12,7 +13,11 @@ var (
 
 // init instantiates all app requirements.
 func init() {
-	api = pkg.NewAPI()
+	var err error
+	api, err = pkg.NewAPI(APIConfigPath)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 // main is the entry point of the application.
