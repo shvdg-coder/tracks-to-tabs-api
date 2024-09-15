@@ -16,6 +16,6 @@ const (
 const (
 	ValueDatabaseDriver = "postgres"
 	CommandCreate       = "create"
-	CommandPurge        = "purge"
+	CommandDrop         = "drop"
 	CommandSeed         = "seed"
 )
