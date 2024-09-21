@@ -15,17 +15,17 @@ type DifficultySchema interface {
 
 // DifficultySvc is for managing difficulties.
 type DifficultySvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewDifficultySvc creates a new instance of the DifficultySvc struct.
-func NewDifficultySvc(database logic.DbOperations) DifficultySchema {
+func NewDifficultySvc(database logic.DbOps) DifficultySchema {
 	return &DifficultySvc{database}
 }
 
 // CreateDifficultiesTable creates a difficulties table if it doesn't already exist.
 func (s *DifficultySvc) CreateDifficultiesTable() {
-	_, err := s.Exec(queries.CreateDifficultiesTable)
+	_, err := s.DB().Exec(queries.CreateDifficultiesTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *DifficultySvc) CreateDifficultiesTable() {
 
 // DropDifficultiesTable drops the difficulties table if it exists.
 func (s *DifficultySvc) DropDifficultiesTable() {
-	_, err := s.Exec(queries.DropDifficultiesTable)
+	_, err := s.DB().Exec(queries.DropDifficultiesTable)
 	if err != nil {
 		log.Fatal(err)
 	}

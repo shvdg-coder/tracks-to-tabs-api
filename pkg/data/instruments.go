@@ -19,11 +19,11 @@ type InstrumentData interface {
 
 // InstrumentSvc is for managing instruments.
 type InstrumentSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewInstrumentSvc creates a new instance of the InstrumentSvc struct.
-func NewInstrumentSvc(database logic.DbOperations) InstrumentData {
+func NewInstrumentSvc(database logic.DbOps) InstrumentData {
 	return &InstrumentSvc{DbOperations: database}
 }
 
@@ -53,7 +53,7 @@ func (d *InstrumentSvc) GetInstrumentEntry(instrumentID uint) (*models.Instrumen
 
 // GetInstrumentEntries retrieves instruments for the provided IDs.
 func (d *InstrumentSvc) GetInstrumentEntries(instrumentID ...uint) ([]*models.InstrumentEntry, error) {
-	rows, err := d.Query(queries.GetInstruments, pq.Array(instrumentID))
+	rows, err := d.DB().Query(queries.GetInstruments, pq.Array(instrumentID))
 	if err != nil {
 		return nil, err
 	}

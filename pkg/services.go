@@ -41,7 +41,7 @@ type SvcManager struct {
 }
 
 // NewSvcManager creates a new instance of the SvcManager.
-func NewSvcManager(database logic.DbOperations) *SvcManager {
+func NewSvcManager(database logic.DbOps) *SvcManager {
 	artistTrackSvc := createArtistTrackService(database)
 	trackTabSvc := createTrackTabSvc(database)
 	endpointsSvc := createEndpointsSvc(database)
@@ -69,7 +69,7 @@ func NewSvcManager(database logic.DbOperations) *SvcManager {
 }
 
 // createArtistsSvc creates a services.ArtistOps.
-func createArtistsSvc(db logic.DbOperations, artistTrack services.ArtistTrackOps, tracks services.TrackOps, references services.ReferenceOps) services.ArtistOps {
+func createArtistsSvc(db logic.DbOps, artistTrack services.ArtistTrackOps, tracks services.TrackOps, references services.ReferenceOps) services.ArtistOps {
 	artistDataSvc := data.NewArtistSvc(db)
 	artistSchemaSvc := schemas.NewArtistSvc(db)
 	artistMappingSvc := mappers.NewArtistSvc()
@@ -77,7 +77,7 @@ func createArtistsSvc(db logic.DbOperations, artistTrack services.ArtistTrackOps
 }
 
 // createTracksSvc creates a services.TrackOps.
-func createTracksSvc(db logic.DbOperations, trackTab services.TrackTabOps, tabs services.TabOps, references services.ReferenceOps) services.TrackOps {
+func createTracksSvc(db logic.DbOps, trackTab services.TrackTabOps, tabs services.TabOps, references services.ReferenceOps) services.TrackOps {
 	trackSchemaSvc := schemas.NewTrackSvc(db)
 	trackDataSvc := data.NewTrackSvc(db)
 	trackMappingSvc := mappers.NewTrackSvc()
@@ -85,7 +85,7 @@ func createTracksSvc(db logic.DbOperations, trackTab services.TrackTabOps, tabs 
 }
 
 // createTabsSvc creates a services.TabOps.
-func createTabsSvc(db logic.DbOperations, instruments services.InstrumentOps, difficulties services.DifficultyOps, references services.ReferenceOps) services.TabOps {
+func createTabsSvc(db logic.DbOps, instruments services.InstrumentOps, difficulties services.DifficultyOps, references services.ReferenceOps) services.TabOps {
 	tabDataSvc := data.NewTabSvc(db)
 	tabSchemaSvc := schemas.NewTabSvc(db)
 	tabMappingSvc := mappers.NewTabSvc()
@@ -93,28 +93,28 @@ func createTabsSvc(db logic.DbOperations, instruments services.InstrumentOps, di
 }
 
 // createArtistTrackService creates an services.ArtistTrackOps.
-func createArtistTrackService(db logic.DbOperations) services.ArtistTrackOps {
+func createArtistTrackService(db logic.DbOps) services.ArtistTrackOps {
 	artistTrackSchemaSvc := schemas.NewArtistTrackSvc(db)
 	artistTrackDataSvc := data.NewArtistTrackSvc(db)
 	return services.NewArtistTrackSvc(artistTrackSchemaSvc, artistTrackDataSvc)
 }
 
 // createTrackTabSvc creates a services.TrackTabOps.
-func createTrackTabSvc(db logic.DbOperations) services.TrackTabOps {
+func createTrackTabSvc(db logic.DbOps) services.TrackTabOps {
 	trackTabSchemaSvc := schemas.NewTrackTabSvc(db)
 	trackTabDataSvc := data.NewTrackTabSvc(db)
 	return services.NewTrackTabSvc(trackTabSchemaSvc, trackTabDataSvc)
 }
 
 // createUsersService creates a services.UserOps.
-func createUsersService(db logic.DbOperations) services.UserOps {
+func createUsersService(db logic.DbOps) services.UserOps {
 	userSchemaSvc := schemas.NewUserSvc(db)
 	usersDataSvc := data.NewUserSvc(db)
 	return services.NewUserSvc(userSchemaSvc, usersDataSvc)
 }
 
 // createInstrumentsSvc creates a services.InstrumentOps.
-func createInstrumentsSvc(db logic.DbOperations) services.InstrumentOps {
+func createInstrumentsSvc(db logic.DbOps) services.InstrumentOps {
 	instrumentSchemaSvc := schemas.NewInstrumentSvc(db)
 	instrumentsDataSvc := data.NewInstrumentSvc(db)
 	instrumentMappingSvc := mappers.NewInstrumentSvc()
@@ -122,7 +122,7 @@ func createInstrumentsSvc(db logic.DbOperations) services.InstrumentOps {
 }
 
 // createDifficultiesSvc creates a services.DifficultyOps.
-func createDifficultiesSvc(db logic.DbOperations) services.DifficultyOps {
+func createDifficultiesSvc(db logic.DbOps) services.DifficultyOps {
 	difficultySchemaSvc := schemas.NewDifficultySvc(db)
 	difficultiesDataSvc := data.NewDifficultySvc(db)
 	difficultiesMappingSvc := mappers.NewDifficultySvc()
@@ -130,7 +130,7 @@ func createDifficultiesSvc(db logic.DbOperations) services.DifficultyOps {
 }
 
 // createSourcesSvc creates a services.SourceOps.
-func createSourcesSvc(db logic.DbOperations, endpoints services.EndpointOps) services.SourceOps {
+func createSourcesSvc(db logic.DbOps, endpoints services.EndpointOps) services.SourceOps {
 	sourceSchemaSvc := schemas.NewSourceSvc(db)
 	sourceDataSvc := data.NewSourceSvc(db)
 	sourceMappingSvc := mappers.NewSourceSvc()
@@ -138,7 +138,7 @@ func createSourcesSvc(db logic.DbOperations, endpoints services.EndpointOps) ser
 }
 
 // createEndpointsSvc creates a services.EndpointOps.
-func createEndpointsSvc(db logic.DbOperations) services.EndpointOps {
+func createEndpointsSvc(db logic.DbOps) services.EndpointOps {
 	endpointSchemaSvc := schemas.NewEndpointSvc(db)
 	endpointsDataSvc := data.NewEndpointSvc(db)
 	endpointsMappingSvc := mappers.NewEndpointSvc()
@@ -146,7 +146,7 @@ func createEndpointsSvc(db logic.DbOperations) services.EndpointOps {
 }
 
 // createReferencesSvc creates a services.ReferenceOps.
-func createReferencesSvc(db logic.DbOperations, sources services.SourceOps) services.ReferenceOps {
+func createReferencesSvc(db logic.DbOps, sources services.SourceOps) services.ReferenceOps {
 	referenceSchemaSvc := schemas.NewReferenceSvc(db)
 	referencesDataSvc := data.NewReferenceSvc(db)
 	referencesMappingSvc := mappers.NewReferenceSvc()

@@ -15,17 +15,17 @@ type ArtistTrackSchema interface {
 
 // ArtistTrackSvc is for managing 'artists to tracks' links.
 type ArtistTrackSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewArtistTrackSvc creates a new instance of the ArtistTrackSvc struct.
-func NewArtistTrackSvc(database logic.DbOperations) ArtistTrackSchema {
+func NewArtistTrackSvc(database logic.DbOps) ArtistTrackSchema {
 	return &ArtistTrackSvc{database}
 }
 
 // CreateArtistTrackTable creates an artist_track table if it doesn't already exist.
 func (s *ArtistTrackSvc) CreateArtistTrackTable() {
-	_, err := s.Exec(queries.CreateArtistTrackTable)
+	_, err := s.DB().Exec(queries.CreateArtistTrackTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *ArtistTrackSvc) CreateArtistTrackTable() {
 
 // DropArtistTrackTable drops the artist_track table if it exists.
 func (s *ArtistTrackSvc) DropArtistTrackTable() {
-	_, err := s.Exec(queries.DropArtistTrackTableQuery)
+	_, err := s.DB().Exec(queries.DropArtistTrackTableQuery)
 	if err != nil {
 		log.Fatal(err)
 	}

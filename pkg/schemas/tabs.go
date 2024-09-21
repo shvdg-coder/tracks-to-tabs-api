@@ -15,17 +15,17 @@ type TabSchema interface {
 
 // TabSvc is for managing 'tabs' tables in the database.
 type TabSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewTabSvc creates a new instance of the TabSvc struct.
-func NewTabSvc(database logic.DbOperations) TabSchema {
+func NewTabSvc(database logic.DbOps) TabSchema {
 	return &TabSvc{database}
 }
 
 // CreateTabsTable creates a tabs table if it doesn't already exist.
 func (s *TabSvc) CreateTabsTable() {
-	_, err := s.Exec(queries.CreateTabsTable)
+	_, err := s.DB().Exec(queries.CreateTabsTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *TabSvc) CreateTabsTable() {
 
 // DropTabsTable drops the tabs table if it exists.
 func (s *TabSvc) DropTabsTable() {
-	_, err := s.Exec(queries.DropTabsTable)
+	_, err := s.DB().Exec(queries.DropTabsTable)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -18,11 +18,11 @@ type EndpointsData interface {
 
 // EndpointSvc is for managing endpoints.
 type EndpointSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewEndpointSvc creates a new instance of EndpointSvc.
-func NewEndpointSvc(database logic.DbOperations) EndpointsData {
+func NewEndpointSvc(database logic.DbOps) EndpointsData {
 	return &EndpointSvc{DbOperations: database}
 }
 
@@ -54,7 +54,7 @@ func (d *EndpointSvc) GetEndpointEntry(sourceID uint) (*models.EndpointEntry, er
 
 // GetEndpointEntries retrieves the endpoints for the provided IDs from the database.
 func (d *EndpointSvc) GetEndpointEntries(sourceID ...uint) ([]*models.EndpointEntry, error) {
-	rows, err := d.Query(queries.GetEndpointsFromIDs, pq.Array(sourceID))
+	rows, err := d.DB().Query(queries.GetEndpointsFromIDs, pq.Array(sourceID))
 	if err != nil {
 		return nil, err
 	}

@@ -15,20 +15,23 @@ func TestGetArtistsPerf(t *testing.T) {
 	defer dbEnv.Breakdown()
 
 	// Prepare
+	start := time.Now()
 	seedConfig := seed(t, dbEnv, maxConfigPath)
+	elapsed := time.Since(start)
+	t.Logf("Seeding artists took %s", elapsed.Round(time.Millisecond))
 
 	api := pkg.NewDataAPI(svcManager)
 
 	// Execute
 	artistIDs := selectArtistIDs(t, dbEnv)
 
-	start := time.Now()
+	start = time.Now()
 	artists, err := api.GetArtists(artistIDs...)
 	if err != nil {
 		t.Fatalf("error occurred during retrieval of artist: %s", err.Error())
 	}
 
-	elapsed := time.Since(start)
+	elapsed = time.Since(start)
 	t.Logf("GetArtists took %s", elapsed.Round(time.Millisecond))
 
 	// Test
@@ -43,7 +46,7 @@ func TestGetArtistsPerf(t *testing.T) {
 
 // selectArtistIDs retrieves al the artist IDs from the artists table.
 func selectArtistIDs(t *testing.T, dbEnv env.DbEnvOperations) []uuid.UUID {
-	rows, err := dbEnv.Query("SELECT id FROM artists")
+	rows, err := dbEnv.DB().Query("SELECT id FROM artists")
 	if err != nil {
 		t.Fatalf("error occured while querying artists table: %s", err.Error())
 	}

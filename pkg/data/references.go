@@ -19,11 +19,11 @@ type ReferenceData interface {
 
 // ReferenceSvc is for managing references.
 type ReferenceSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewReferenceSvc creates a new instance of the ReferenceSvc struct.
-func NewReferenceSvc(database logic.DbOperations) ReferenceData {
+func NewReferenceSvc(database logic.DbOps) ReferenceData {
 	return &ReferenceSvc{DbOperations: database}
 }
 
@@ -53,7 +53,7 @@ func (d *ReferenceSvc) GetReferenceEntry(internalID uuid.UUID) (*models.Referenc
 
 // GetReferenceEntries retrieves reference entries, without entity references, for the provided internal IDs.
 func (d *ReferenceSvc) GetReferenceEntries(internalID ...uuid.UUID) ([]*models.ReferenceEntry, error) {
-	rows, err := d.Query(queries.GetReferences, pq.Array(internalID))
+	rows, err := d.DB().Query(queries.GetReferences, pq.Array(internalID))
 	if err != nil {
 		return nil, err
 	}

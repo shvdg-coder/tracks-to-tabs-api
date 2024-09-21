@@ -19,11 +19,11 @@ type TrackData interface {
 
 // TrackSvc is for managing tracks of songs.
 type TrackSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewTrackSvc creates a new instance of the TrackSvc struct.
-func NewTrackSvc(database logic.DbOperations) TrackData {
+func NewTrackSvc(database logic.DbOps) TrackData {
 	return &TrackSvc{DbOperations: database}
 }
 
@@ -53,7 +53,7 @@ func (d *TrackSvc) GetTrackEntry(trackID uuid.UUID) (*models.TrackEntry, error) 
 
 // GetTrackEntries retrieves tracks entries, without entity references, for the provided IDs.
 func (d *TrackSvc) GetTrackEntries(trackID ...uuid.UUID) ([]*models.TrackEntry, error) {
-	rows, err := d.Query(queries.GetTracksFromIDs, pq.Array(trackID))
+	rows, err := d.DB().Query(queries.GetTracksFromIDs, pq.Array(trackID))
 	if err != nil {
 		return nil, err
 	}

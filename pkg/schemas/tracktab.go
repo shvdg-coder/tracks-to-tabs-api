@@ -15,17 +15,17 @@ type TrackTabSchema interface {
 
 // TrackTabSvc is for managing 'track_tab' links in the database.
 type TrackTabSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewTrackTabSvc creates a new instance of the TrackTabSvc struct.
-func NewTrackTabSvc(database logic.DbOperations) TrackTabSchema {
+func NewTrackTabSvc(database logic.DbOps) TrackTabSchema {
 	return &TrackTabSvc{database}
 }
 
 // CreateTrackTabTable creates the track_tab table if it doesn't already exist.
 func (s *TrackTabSvc) CreateTrackTabTable() {
-	_, err := s.Exec(queries.CreateTrackTabTable)
+	_, err := s.DB().Exec(queries.CreateTrackTabTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *TrackTabSvc) CreateTrackTabTable() {
 
 // DropTrackTabTable drops the track_tab table if it exists.
 func (s *TrackTabSvc) DropTrackTabTable() {
-	_, err := s.Exec(queries.DropTrackTabTable)
+	_, err := s.DB().Exec(queries.DropTrackTabTable)
 	if err != nil {
 		log.Fatal(err)
 	}

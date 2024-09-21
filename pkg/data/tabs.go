@@ -20,11 +20,11 @@ type TabData interface {
 
 // TabSvc is for managing queries.
 type TabSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewTabSvc creates a new instance of the TabSvc struct.
-func NewTabSvc(database logic.DbOperations) TabData {
+func NewTabSvc(database logic.DbOps) TabData {
 	return &TabSvc{DbOperations: database}
 }
 
@@ -54,7 +54,7 @@ func (d *TabSvc) GetTabEntry(tabID uuid.UUID) (*models.TabEntry, error) {
 
 // GetTabEntries retrieves tab entries, without entity references, for the provided IDs.
 func (d *TabSvc) GetTabEntries(tabID ...uuid.UUID) ([]*models.TabEntry, error) {
-	rows, err := d.Query(queries.GetTabs, pq.Array(tabID))
+	rows, err := d.DB().Query(queries.GetTabs, pq.Array(tabID))
 	if err != nil {
 		return nil, err
 	}

@@ -15,17 +15,17 @@ type ReferenceSchema interface {
 
 // ReferenceSvc is for managing 'references' tables in the database.
 type ReferenceSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewReferenceSvc creates a new instance of the ReferenceSvc struct.
-func NewReferenceSvc(database logic.DbOperations) ReferenceSchema {
+func NewReferenceSvc(database logic.DbOps) ReferenceSchema {
 	return &ReferenceSvc{database}
 }
 
 // CreateReferencesTable creates the references table if it doesn't already exist.
 func (s *ReferenceSvc) CreateReferencesTable() {
-	_, err := s.Exec(queries.CreateReferencesTable)
+	_, err := s.DB().Exec(queries.CreateReferencesTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *ReferenceSvc) CreateReferencesTable() {
 
 // DropReferencesTable drops the references table if it exists.
 func (s *ReferenceSvc) DropReferencesTable() {
-	_, err := s.Exec(queries.DropReferencesTable)
+	_, err := s.DB().Exec(queries.DropReferencesTable)
 	if err != nil {
 		log.Fatal(err)
 	}

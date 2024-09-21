@@ -15,17 +15,17 @@ type InstrumentSchema interface {
 
 // InstrumentSvc is for managing 'instruments' tables in the database.
 type InstrumentSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewInstrumentSvc creates a new instance of the InstrumentSvc struct.
-func NewInstrumentSvc(database logic.DbOperations) InstrumentSchema {
+func NewInstrumentSvc(database logic.DbOps) InstrumentSchema {
 	return &InstrumentSvc{database}
 }
 
 // CreateInstrumentsTable creates an instruments table if it doesn't already exist.
 func (s *InstrumentSvc) CreateInstrumentsTable() {
-	_, err := s.Exec(queries.CreateInstrumentsTable)
+	_, err := s.DB().Exec(queries.CreateInstrumentsTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *InstrumentSvc) CreateInstrumentsTable() {
 
 // DropInstrumentsTable drops the instruments table if it exists.
 func (s *InstrumentSvc) DropInstrumentsTable() {
-	_, err := s.Exec(queries.DropInstrumentsTable)
+	_, err := s.DB().Exec(queries.DropInstrumentsTable)
 	if err != nil {
 		log.Fatal(err)
 	}

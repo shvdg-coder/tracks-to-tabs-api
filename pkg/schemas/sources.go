@@ -15,17 +15,17 @@ type SourceSchema interface {
 
 // SourceSvc is for managing 'sources' tables in the database.
 type SourceSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewSourceSvc creates a new instance of the SourceSvc struct.
-func NewSourceSvc(database logic.DbOperations) SourceSchema {
+func NewSourceSvc(database logic.DbOps) SourceSchema {
 	return &SourceSvc{database}
 }
 
 // CreateSourcesTable creates a sources table if it doesn't already exist.
 func (s *SourceSvc) CreateSourcesTable() {
-	_, err := s.Exec(queries.CreateSourcesTable)
+	_, err := s.DB().Exec(queries.CreateSourcesTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *SourceSvc) CreateSourcesTable() {
 
 // DropSourcesTable drops the sources table if it exists.
 func (s *SourceSvc) DropSourcesTable() {
-	_, err := s.Exec(queries.DropSourcesTable)
+	_, err := s.DB().Exec(queries.DropSourcesTable)
 	if err != nil {
 		log.Fatal(err)
 	}

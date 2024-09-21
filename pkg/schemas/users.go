@@ -15,17 +15,17 @@ type UserSchema interface {
 
 // UserSvc is for managing 'users' tables in the database.
 type UserSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewUserSvc creates a new instance of the UserSvc struct.
-func NewUserSvc(database logic.DbOperations) UserSchema {
+func NewUserSvc(database logic.DbOps) UserSchema {
 	return &UserSvc{database}
 }
 
 // CreateUsersTable creates a users table if it doesn't already exist.
 func (s *UserSvc) CreateUsersTable() {
-	_, err := s.Exec(queries.CreateUsersTable)
+	_, err := s.DB().Exec(queries.CreateUsersTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *UserSvc) CreateUsersTable() {
 
 // DropUsersTable drops the users table if it exists.
 func (s *UserSvc) DropUsersTable() {
-	_, err := s.Exec(queries.DropUsersTable)
+	_, err := s.DB().Exec(queries.DropUsersTable)
 	if err != nil {
 		log.Fatal(err)
 	}

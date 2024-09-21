@@ -19,11 +19,11 @@ type ArtistTrackData interface {
 
 // ArtistTrackSvc is for managing 'artists to tracks' links.
 type ArtistTrackSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewArtistTrackSvc creates a new instance of the ArtistTrackSvc struct.
-func NewArtistTrackSvc(database logic.DbOperations) ArtistTrackData {
+func NewArtistTrackSvc(database logic.DbOps) ArtistTrackData {
 	return &ArtistTrackSvc{DbOperations: database}
 }
 
@@ -46,7 +46,7 @@ func (d *ArtistTrackSvc) GetArtistToTrackEntry(artistID uuid.UUID) (*models.Arti
 
 // GetArtistToTrackEntries retrieves the 'artist to track' link for the provided artist or track IDs.
 func (d *ArtistTrackSvc) GetArtistToTrackEntries(artistID ...uuid.UUID) ([]*models.ArtistTrackEntry, error) {
-	rows, err := d.Query(queries.GetArtistTrackLinks, pq.Array(artistID))
+	rows, err := d.DB().Query(queries.GetArtistTrackLinks, pq.Array(artistID))
 	if err != nil {
 		return nil, err
 	}

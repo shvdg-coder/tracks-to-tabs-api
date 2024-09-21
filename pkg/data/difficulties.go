@@ -19,11 +19,11 @@ type DifficultyData interface {
 
 // DifficultySvc is for managing difficulties.
 type DifficultySvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewDifficultySvc creates a new instance of the DifficultySvc struct.
-func NewDifficultySvc(database logic.DbOperations) DifficultyData {
+func NewDifficultySvc(database logic.DbOps) DifficultyData {
 	return &DifficultySvc{DbOperations: database}
 }
 
@@ -53,7 +53,7 @@ func (d *DifficultySvc) GetDifficultyEntry(difficultyID uint) (*models.Difficult
 
 // GetDifficultyEntries retrieves difficulty entries, without entity references, for the provided IDs.
 func (d *DifficultySvc) GetDifficultyEntries(difficultyID ...uint) ([]*models.DifficultyEntry, error) {
-	rows, err := d.Query(queries.GetDifficulties, pq.Array(difficultyID))
+	rows, err := d.DB().Query(queries.GetDifficulties, pq.Array(difficultyID))
 	if err != nil {
 		return nil, err
 	}

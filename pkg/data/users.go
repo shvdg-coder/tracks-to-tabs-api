@@ -15,11 +15,11 @@ type UserData interface {
 
 // UserSvc is for managing users.
 type UserSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewUserSvc creates a new instance of the UserSvc struct.
-func NewUserSvc(database logic.DbOperations) UserData {
+func NewUserSvc(database logic.DbOps) UserData {
 	return &UserSvc{database}
 }
 
@@ -38,7 +38,7 @@ func (d *UserSvc) IsPasswordCorrect(email, plainPassword string) bool {
 		return false
 	}
 	var foundHashedPassword string
-	err := d.QueryRow(queries.SelectUserPassword, email).Scan(&foundHashedPassword)
+	err := d.DB().QueryRow(queries.SelectUserPassword, email).Scan(&foundHashedPassword)
 	if err != nil {
 		log.Fatal(err)
 	}

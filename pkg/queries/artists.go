@@ -25,8 +25,8 @@ const DropArtistsTable = `
 	DROP TABLE IF EXISTS artists;
 `
 
-// InsertArtist is a SQL query string used to insert an artist into the 'artists' table.
-const InsertArtist = `
+// InsertArtists is a SQL query string used to insert artist(s) into the 'artists' table.
+const InsertArtists = `
 	INSERT INTO artists (id, name)
     VALUES ($1, $2) 
 `

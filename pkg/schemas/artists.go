@@ -15,17 +15,17 @@ type ArtistSchema interface {
 
 // ArtistSvc is for managing artists.
 type ArtistSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewArtistSvc creates a new instance of the ArtistSvc struct.
-func NewArtistSvc(database logic.DbOperations) ArtistSchema {
+func NewArtistSvc(database logic.DbOps) ArtistSchema {
 	return &ArtistSvc{database}
 }
 
 // CreateArtistsTable creates an artists table if it doesn't already exist.
 func (s *ArtistSvc) CreateArtistsTable() {
-	_, err := s.Exec(queries.CreateArtistsTable)
+	_, err := s.DB().Exec(queries.CreateArtistsTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *ArtistSvc) CreateArtistsTable() {
 
 // DropArtistsTable drops the artists table if it exists.
 func (s *ArtistSvc) DropArtistsTable() {
-	_, err := s.Exec(queries.DropArtistsTable)
+	_, err := s.DB().Exec(queries.DropArtistsTable)
 	if err != nil {
 		log.Fatal(err)
 	}

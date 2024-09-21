@@ -19,11 +19,11 @@ type SourceData interface {
 
 // SourceSvc is for managing sources.
 type SourceSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewSourceSvc creates a new instance of the SourceSvc struct.
-func NewSourceSvc(database logic.DbOperations) SourceData {
+func NewSourceSvc(database logic.DbOps) SourceData {
 	return &SourceSvc{DbOperations: database}
 }
 
@@ -53,7 +53,7 @@ func (d *SourceSvc) GetSourceEntry(id uint) (*models.SourceEntry, error) {
 
 // GetSourceEntries retrieves multiple sources from the database.
 func (d *SourceSvc) GetSourceEntries(sourceID ...uint) ([]*models.SourceEntry, error) {
-	rows, err := d.Query(queries.GetSourcesFromIDs, pq.Array(sourceID))
+	rows, err := d.DB().Query(queries.GetSourcesFromIDs, pq.Array(sourceID))
 	if err != nil {
 		return nil, err
 	}

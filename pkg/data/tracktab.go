@@ -18,11 +18,11 @@ type TrackTabData interface {
 
 // TrackTabSvc is for managing tracks of songs.
 type TrackTabSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewTrackTabSvc creates a new instance of the TrackTabSvc struct.
-func NewTrackTabSvc(database logic.DbOperations) *TrackTabSvc {
+func NewTrackTabSvc(database logic.DbOps) *TrackTabSvc {
 	return &TrackTabSvc{DbOperations: database}
 }
 
@@ -45,7 +45,7 @@ func (d *TrackTabSvc) GetTrackToTabEntry(trackID uuid.UUID) (*models.TrackTabEnt
 
 // GetTrackToTabEntries retrieves the 'track to tab' links for the provided track IDs.
 func (d *TrackTabSvc) GetTrackToTabEntries(trackID ...uuid.UUID) ([]*models.TrackTabEntry, error) {
-	rows, err := d.Query(queries.GetTrackTabLinks, pq.Array(trackID))
+	rows, err := d.DB().Query(queries.GetTrackTabLinks, pq.Array(trackID))
 	if err != nil {
 		return nil, err
 	}

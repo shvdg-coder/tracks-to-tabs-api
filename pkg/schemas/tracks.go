@@ -15,17 +15,17 @@ type TrackSchema interface {
 
 // TrackSvc is for managing 'tracks' tables in the database.
 type TrackSvc struct {
-	logic.DbOperations
+	logic.DbOps
 }
 
 // NewTrackSvc creates a new instance of the TrackSvc struct.
-func NewTrackSvc(database logic.DbOperations) TrackSchema {
+func NewTrackSvc(database logic.DbOps) TrackSchema {
 	return &TrackSvc{database}
 }
 
 // CreateTracksTable creates the tracks table if it doesn't already exist.
 func (s *TrackSvc) CreateTracksTable() {
-	_, err := s.Exec(queries.CreateTracksTable)
+	_, err := s.DB().Exec(queries.CreateTracksTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (s *TrackSvc) CreateTracksTable() {
 
 // DropTracksTable drops the tracks table if it exists.
 func (s *TrackSvc) DropTracksTable() {
-	_, err := s.Exec(queries.DropTracksTable)
+	_, err := s.DB().Exec(queries.DropTracksTable)
 	if err != nil {
 		log.Fatal(err)
 	}
