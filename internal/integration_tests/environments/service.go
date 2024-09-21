@@ -20,7 +20,7 @@ type Service struct {
 // NewService instantiates a new Service.
 func NewService() EnvManagement {
 	return &Service{
-		Database: tstdb.NewContainerService(),
+		Database: tstdb.NewContainerSvc(),
 	}
 }
 

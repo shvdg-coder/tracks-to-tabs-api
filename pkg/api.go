@@ -44,6 +44,6 @@ func NewAPI(configPath string) (*API, error) {
 
 // createServiceManager instantiates the service manager with the database.
 func createServiceManager(dbConfig *DatabaseConfig) *SvcManager {
-	database := logic.NewDbService(ValueDatabaseDriver, dbConfig.URL, logic.WithSSHTunnel(dbConfig.SSH), logic.WithConnection())
+	database := logic.NewDbSvc(ValueDatabaseDriver, dbConfig.URL, logic.WithSSHTunnel(dbConfig.SSH), logic.WithConnection())
 	return NewSvcManager(database)
 }

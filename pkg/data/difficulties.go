@@ -6,13 +6,11 @@ import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
-	"log"
 )
 
 // DifficultyData represents operations related to difficulties in the database.
 type DifficultyData interface {
-	InsertDifficultyEntries(difficulties ...*models.DifficultyEntry)
-	InsertDifficultyEntry(difficulty *models.DifficultyEntry)
+	InsertDifficultyEntries(difficulties ...*models.DifficultyEntry) error
 	GetDifficultyEntries(difficultyID ...uint) ([]*models.DifficultyEntry, error)
 	GetDifficultyEntry(difficultyID uint) (*models.DifficultyEntry, error)
 }
@@ -28,18 +26,8 @@ func NewDifficultySvc(database logic.DbOps) DifficultyData {
 }
 
 // InsertDifficultyEntries inserts multiple difficulty levels.
-func (d *DifficultySvc) InsertDifficultyEntries(difficulties ...*models.DifficultyEntry) {
-	for _, difficulty := range difficulties {
-		d.InsertDifficultyEntry(difficulty)
-	}
-}
-
-// InsertDifficultyEntry inserts a new difficulty level.
-func (d *DifficultySvc) InsertDifficultyEntry(difficulty *models.DifficultyEntry) {
-	_, err := d.DB().Exec(queries.InsertDifficulty, difficulty.Name)
-	if err != nil {
-		log.Printf("Failed inserting difficulty level: %s", err.Error())
-	}
+func (d *DifficultySvc) InsertDifficultyEntries(difficulties ...*models.DifficultyEntry) error {
+	return nil
 }
 
 // GetDifficultyEntry retrieves a difficulty entry, without the entity references, for the provided ID.
