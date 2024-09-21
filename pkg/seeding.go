@@ -80,6 +80,20 @@ func (s *SeedingAPI) CreateAndInsertArtists() []*models.ArtistEntry {
 	return dummyArtists
 }
 
+// CreateAndInsertArtistReferences creates and inserts artist references for given artists.
+func (s *SeedingAPI) CreateAndInsertArtistReferences(artists []*models.ArtistEntry) {
+	artistRefs := make([]*models.ReferenceEntry, 0)
+
+	for _, artist := range artists {
+		artistRefs = append(artistRefs, s.CreateArtistReferences(artist)...)
+	}
+
+	err := s.InsertReferenceEntries(artistRefs...)
+	if err != nil {
+		log.Fatalf("Failed to insert artist references: %s", err.Error())
+	}
+}
+
 // CreateArtistReferences creates artist references and returns it.
 func (s *SeedingAPI) CreateArtistReferences(artist *models.ArtistEntry) []*models.ReferenceEntry {
 	artistRefs := make([]*models.ReferenceEntry, 0)
@@ -93,20 +107,6 @@ func (s *SeedingAPI) CreateArtistReferences(artist *models.ArtistEntry) []*model
 	artistRefs = append(artistRefs, artistNameRef)
 
 	return artistRefs
-}
-
-// CreateAndInsertArtistReferences creates and inserts artist references for given artists.
-func (s *SeedingAPI) CreateAndInsertArtistReferences(artists []*models.ArtistEntry) {
-	artistRefs := make([]*models.ReferenceEntry, 0)
-
-	for _, artist := range artists {
-		artistRefs = append(artistRefs, s.CreateArtistReferences(artist)...)
-	}
-
-	err := s.InsertReferenceEntries(artistRefs...)
-	if err != nil {
-		log.Fatalf("Failed to insert artist references: %s", err.Error())
-	}
 }
 
 // CreateAndInsertTracks creates and inserts tracks for given artists and returns the tracks.
@@ -135,6 +135,20 @@ func (s *SeedingAPI) CreateAndInsertTracks(artists []*models.ArtistEntry) []*mod
 	return dummyTracks
 }
 
+// CreateAndInsertTrackReferences creates and inserts track references for given tracks.
+func (s *SeedingAPI) CreateAndInsertTrackReferences(tracks []*models.TrackEntry) {
+	trackRefs := make([]*models.ReferenceEntry, 0)
+
+	for _, track := range tracks {
+		trackRefs = append(trackRefs, s.CreateTrackReferences(track)...)
+	}
+
+	err := s.InsertReferenceEntries(trackRefs...)
+	if err != nil {
+		log.Fatalf("Failed to insert track references: %s", err.Error())
+	}
+}
+
 // CreateTrackReferences creates track references for a given track and returns it.
 func (s *SeedingAPI) CreateTrackReferences(track *models.TrackEntry) []*models.ReferenceEntry {
 	trackRefs := make([]*models.ReferenceEntry, 0)
@@ -148,20 +162,6 @@ func (s *SeedingAPI) CreateTrackReferences(track *models.TrackEntry) []*models.R
 	trackRefs = append(trackRefs, trackNameRef)
 
 	return trackRefs
-}
-
-// CreateAndInsertTrackReferences creates and inserts track references for given tracks.
-func (s *SeedingAPI) CreateAndInsertTrackReferences(tracks []*models.TrackEntry) {
-	trackRefs := make([]*models.ReferenceEntry, 0)
-
-	for _, track := range tracks {
-		trackRefs = append(trackRefs, s.CreateTrackReferences(track)...)
-	}
-
-	err := s.InsertReferenceEntries(trackRefs...)
-	if err != nil {
-		log.Fatalf("Failed to insert track references: %s", err.Error())
-	}
 }
 
 // CreateAndInsertTabs creates and inserts tabs for given tacks and returns the tabs.
@@ -190,6 +190,20 @@ func (s *SeedingAPI) CreateAndInsertTabs(tracks []*models.TrackEntry) []*models.
 	return dummyTabs
 }
 
+// CreateAndInsertTabReferences creates and inserts tab references for given tabs.
+func (s *SeedingAPI) CreateAndInsertTabReferences(tabs []*models.TabEntry) {
+	tabRefs := make([]*models.ReferenceEntry, 0)
+
+	for _, tab := range tabs {
+		tabRefs = append(tabRefs, s.CreateTabReferences(tab)...)
+	}
+
+	err := s.InsertReferenceEntries(tabRefs...)
+	if err != nil {
+		log.Fatalf("Failed to insert tab references: %s", err.Error())
+	}
+}
+
 // CreateTabReferences creates tab references for a given tab and returns it.
 func (s *SeedingAPI) CreateTabReferences(tab *models.TabEntry) []*models.ReferenceEntry {
 	tabRefs := make([]*models.ReferenceEntry, 0)
@@ -203,20 +217,6 @@ func (s *SeedingAPI) CreateTabReferences(tab *models.TabEntry) []*models.Referen
 	tabRefs = append(tabRefs, tabNameRef)
 
 	return tabRefs
-}
-
-// CreateAndInsertTabReferences creates and inserts tab references for given tabs.
-func (s *SeedingAPI) CreateAndInsertTabReferences(tabs []*models.TabEntry) {
-	tabRefs := make([]*models.ReferenceEntry, 0)
-
-	for _, tab := range tabs {
-		tabRefs = append(tabRefs, s.CreateTabReferences(tab)...)
-	}
-
-	err := s.InsertReferenceEntries(tabRefs...)
-	if err != nil {
-		log.Fatalf("Failed to insert tab references: %s", err.Error())
-	}
 }
 
 // formatName formats the provided name.
