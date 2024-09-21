@@ -69,10 +69,28 @@ func (s *SeedingAPI) SeedEndpoints() {
 // SeedArtists seeds the artists according to the dummy settings in the config file and returns their IDs.
 func (s *SeedingAPI) SeedArtists() []*models.ArtistEntry {
 	dummyArtists := s.CreateArtists(s.Dummies.Artists)
+	artistRefs := make([]*models.ReferenceEntry, 0)
+
+	for _, artist := range dummyArtists {
+		sourceMusic := s.GetRandomSource(CategoryMusic)
+		artistIDRef := s.CreateReference(artist.ID, sourceMusic.ID, TypeID, CategoryArtist, s.CreateRandomUUID())
+		artistRefs = append(artistRefs, artistIDRef)
+
+		sourceTabs := s.GetRandomSource(CategoryTabs)
+		artistNameRef := s.CreateReference(artist.ID, sourceTabs.ID, TypeName, CategoryArtist, s.formatName(artist.Name))
+		artistRefs = append(artistRefs, artistNameRef)
+	}
+
 	err := s.InsertArtistEntries(dummyArtists...)
 	if err != nil {
-		log.Fatalf("Failed to insert artists: %s", err.Error())
+		log.Fatalf("Failed to insert artist references: %s", err.Error())
 	}
+
+	err = s.InsertReferenceEntries(artistRefs...)
+	if err != nil {
+		log.Fatalf("Failed to insert artist references: %s", err.Error())
+	}
+
 	return dummyArtists
 }
 
@@ -80,6 +98,7 @@ func (s *SeedingAPI) SeedArtists() []*models.ArtistEntry {
 func (s *SeedingAPI) SeedTracks(artists []*models.ArtistEntry) []*models.TrackEntry {
 	dummyTracks := make([]*models.TrackEntry, 0)
 	dummyArtistTracks := make([]*models.ArtistTrackEntry, 0)
+	trackRefs := make([]*models.ReferenceEntry, 0)
 
 	for _, artist := range artists {
 		tracks := s.CreateTracks(s.Dummies.Artists.Tracks)
@@ -87,6 +106,16 @@ func (s *SeedingAPI) SeedTracks(artists []*models.ArtistEntry) []*models.TrackEn
 
 		artistTracks := s.CreateArtistTrackEntries(artist, tracks)
 		dummyArtistTracks = append(dummyArtistTracks, artistTracks...)
+	}
+
+	for _, track := range dummyTracks {
+		sourceMusic := s.GetRandomSource(CategoryMusic)
+		trackIDRef := s.CreateReference(track.ID, sourceMusic.ID, TypeID, CategoryTrack, s.CreateRandomUUID())
+		trackRefs = append(trackRefs, trackIDRef)
+
+		sourceTabs := s.GetRandomSource(CategoryTabs)
+		trackNameRef := s.CreateReference(track.ID, sourceTabs.ID, TypeName, CategoryTrack, s.formatName(track.Title))
+		trackRefs = append(trackRefs, trackNameRef)
 	}
 
 	err := s.InsertTrackEntries(dummyTracks...)
@@ -99,6 +128,11 @@ func (s *SeedingAPI) SeedTracks(artists []*models.ArtistEntry) []*models.TrackEn
 		log.Fatalf("Failed to insert artist tracks: %s", err.Error())
 	}
 
+	err = s.InsertReferenceEntries(trackRefs...)
+	if err != nil {
+		log.Fatalf("Failed to insert track references: %s", err.Error())
+	}
+
 	return dummyTracks
 }
 
@@ -106,6 +140,7 @@ func (s *SeedingAPI) SeedTracks(artists []*models.ArtistEntry) []*models.TrackEn
 func (s *SeedingAPI) SeedTabs(tracks []*models.TrackEntry) []*models.TabEntry {
 	dummyTabs := make([]*models.TabEntry, 0)
 	dummyTrackTabs := make([]*models.TrackTabEntry, 0)
+	tabRefs := make([]*models.ReferenceEntry, 0)
 
 	for _, track := range tracks {
 		tabs := s.CreateTabs(s.Dummies.Artists.Tracks.Tabs)
@@ -113,6 +148,16 @@ func (s *SeedingAPI) SeedTabs(tracks []*models.TrackEntry) []*models.TabEntry {
 
 		trackTabs := s.CreateTrackTabEntries(track, tabs)
 		dummyTrackTabs = append(dummyTrackTabs, trackTabs...)
+	}
+
+	for _, tab := range dummyTabs {
+		sourceTabs := s.GetRandomSource(CategoryTabs)
+
+		tabIDRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeID, CategoryTab, s.CreateRandomUUID())
+		tabRefs = append(tabRefs, tabIDRef)
+
+		tabNameRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeName, CategoryTab, s.formatName(tab.Description))
+		tabRefs = append(tabRefs, tabNameRef)
 	}
 
 	err := s.InsertTabEntries(dummyTabs...)
@@ -123,6 +168,11 @@ func (s *SeedingAPI) SeedTabs(tracks []*models.TrackEntry) []*models.TabEntry {
 	err = s.InsertTrackTabEntries(dummyTrackTabs...)
 	if err != nil {
 		log.Fatalf("Failed to insert track tabs: %s", err.Error())
+	}
+
+	err = s.InsertReferenceEntries(tabRefs...)
+	if err != nil {
+		log.Fatalf("Failed to insert tab references: %s", err.Error())
 	}
 
 	return dummyTabs
