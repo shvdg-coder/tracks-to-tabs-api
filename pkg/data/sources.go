@@ -24,7 +24,7 @@ type SourceSvc struct {
 
 // NewSourceSvc creates a new instance of the SourceSvc struct.
 func NewSourceSvc(database logic.DbOps) SourceData {
-	return &SourceSvc{DbOperations: database}
+	return &SourceSvc{DbOps: database}
 }
 
 // InsertSourceEntries inserts multiple sources in the sources table.
@@ -36,7 +36,7 @@ func (d *SourceSvc) InsertSourceEntries(sources ...*models.SourceEntry) {
 
 // InsertSourceEntry inserts a new source in the sources table.
 func (d *SourceSvc) InsertSourceEntry(source *models.SourceEntry) {
-	_, err := d.Exec(queries.InsertSource, source.ID, source.Name, source.Category)
+	_, err := d.DB().Exec(queries.InsertSource, source.ID, source.Name, source.Category)
 	if err != nil {
 		log.Printf("Failed inserting source: %s", err.Error())
 	}

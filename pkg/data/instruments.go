@@ -24,7 +24,7 @@ type InstrumentSvc struct {
 
 // NewInstrumentSvc creates a new instance of the InstrumentSvc struct.
 func NewInstrumentSvc(database logic.DbOps) InstrumentData {
-	return &InstrumentSvc{DbOperations: database}
+	return &InstrumentSvc{DbOps: database}
 }
 
 // InsertInstrumentEntries inserts multiple instruments in the instruments table.
@@ -36,7 +36,7 @@ func (d *InstrumentSvc) InsertInstrumentEntries(instruments ...*models.Instrumen
 
 // InsertInstrumentEntry inserts a new instrument in the instruments table.
 func (d *InstrumentSvc) InsertInstrumentEntry(instrument *models.InstrumentEntry) {
-	_, err := d.Exec(queries.InsertInstrument, instrument.Name)
+	_, err := d.DB().Exec(queries.InsertInstrument, instrument.Name)
 	if err != nil {
 		log.Printf("Failed inserting instrument: %s", err.Error())
 	}

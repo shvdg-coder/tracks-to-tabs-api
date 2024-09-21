@@ -23,7 +23,7 @@ type EndpointSvc struct {
 
 // NewEndpointSvc creates a new instance of EndpointSvc.
 func NewEndpointSvc(database logic.DbOps) EndpointsData {
-	return &EndpointSvc{DbOperations: database}
+	return &EndpointSvc{DbOps: database}
 }
 
 // InsertEndpointEntries inserts multiple records into the endpoints table.
@@ -35,7 +35,7 @@ func (d *EndpointSvc) InsertEndpointEntries(endpoints ...*models.EndpointEntry) 
 
 // InsertEndpointEntry inserts a record into the endpoints table.
 func (d *EndpointSvc) InsertEndpointEntry(endpoint *models.EndpointEntry) {
-	_, err := d.Exec(queries.InsertEndpoint, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.UnformattedURL)
+	_, err := d.DB().Exec(queries.InsertEndpoint, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.UnformattedURL)
 	if err != nil {
 		log.Printf(
 			"Failed to insert endpoint: %s", err.Error(),

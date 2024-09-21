@@ -24,7 +24,7 @@ type TrackSvc struct {
 
 // NewTrackSvc creates a new instance of the TrackSvc struct.
 func NewTrackSvc(database logic.DbOps) TrackData {
-	return &TrackSvc{DbOperations: database}
+	return &TrackSvc{DbOps: database}
 }
 
 // InsertTrackEntries inserts multiple tracks into the tracks table.
@@ -36,7 +36,7 @@ func (d *TrackSvc) InsertTrackEntries(tracks ...*models.TrackEntry) {
 
 // InsertTrackEntry inserts a track into the tracks table.
 func (d *TrackSvc) InsertTrackEntry(track *models.TrackEntry) {
-	_, err := d.Exec(queries.InsertTrack, track.ID, track.Title, track.Duration)
+	_, err := d.DB().Exec(queries.InsertTrack, track.ID, track.Title, track.Duration)
 	if err != nil {
 		log.Printf("Failed to insert track: %s", err.Error())
 	}

@@ -24,7 +24,7 @@ type DifficultySvc struct {
 
 // NewDifficultySvc creates a new instance of the DifficultySvc struct.
 func NewDifficultySvc(database logic.DbOps) DifficultyData {
-	return &DifficultySvc{DbOperations: database}
+	return &DifficultySvc{DbOps: database}
 }
 
 // InsertDifficultyEntries inserts multiple difficulty levels.
@@ -36,7 +36,7 @@ func (d *DifficultySvc) InsertDifficultyEntries(difficulties ...*models.Difficul
 
 // InsertDifficultyEntry inserts a new difficulty level.
 func (d *DifficultySvc) InsertDifficultyEntry(difficulty *models.DifficultyEntry) {
-	_, err := d.Exec(queries.InsertDifficulty, difficulty.Name)
+	_, err := d.DB().Exec(queries.InsertDifficulty, difficulty.Name)
 	if err != nil {
 		log.Printf("Failed inserting difficulty level: %s", err.Error())
 	}

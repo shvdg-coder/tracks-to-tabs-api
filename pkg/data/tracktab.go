@@ -23,12 +23,12 @@ type TrackTabSvc struct {
 
 // NewTrackTabSvc creates a new instance of the TrackTabSvc struct.
 func NewTrackTabSvc(database logic.DbOps) *TrackTabSvc {
-	return &TrackTabSvc{DbOperations: database}
+	return &TrackTabSvc{DbOps: database}
 }
 
 // LinkTrackToTab inserts a link between a track and a tab into the track_tab table.
 func (d *TrackTabSvc) LinkTrackToTab(trackId, tabId uuid.UUID) {
-	_, err := d.Exec(queries.InsertTrackTab, trackId, tabId)
+	_, err := d.DB().Exec(queries.InsertTrackTab, trackId, tabId)
 	if err != nil {
 		log.Printf("Failed linking track: %s", err.Error())
 	}

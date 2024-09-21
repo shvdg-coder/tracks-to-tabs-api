@@ -25,7 +25,7 @@ type TabSvc struct {
 
 // NewTabSvc creates a new instance of the TabSvc struct.
 func NewTabSvc(database logic.DbOps) TabData {
-	return &TabSvc{DbOperations: database}
+	return &TabSvc{DbOps: database}
 }
 
 // InsertTabEntries inserts multiple tabs in the tabs table.
@@ -37,7 +37,7 @@ func (d *TabSvc) InsertTabEntries(tabs ...*models.TabEntry) {
 
 // InsertTabEntry inserts a new tab in the tabs table.
 func (d *TabSvc) InsertTabEntry(tab *models.TabEntry) {
-	_, err := d.Exec(queries.InsertTab, tab.ID, tab.InstrumentID, tab.DifficultyID, tab.Description)
+	_, err := d.DB().Exec(queries.InsertTab, tab.ID, tab.InstrumentID, tab.DifficultyID, tab.Description)
 	if err != nil {
 		log.Printf("Failed to insert tab: %s", err.Error())
 	}

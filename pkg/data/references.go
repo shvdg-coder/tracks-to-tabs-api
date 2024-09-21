@@ -24,7 +24,7 @@ type ReferenceSvc struct {
 
 // NewReferenceSvc creates a new instance of the ReferenceSvc struct.
 func NewReferenceSvc(database logic.DbOps) ReferenceData {
-	return &ReferenceSvc{DbOperations: database}
+	return &ReferenceSvc{DbOps: database}
 }
 
 // InsertReferenceEntries inserts multiple references in the references table.
@@ -36,7 +36,7 @@ func (d *ReferenceSvc) InsertReferenceEntries(references ...*models.ReferenceEnt
 
 // InsertReferenceEntry inserts a record into the references table.
 func (d *ReferenceSvc) InsertReferenceEntry(reference *models.ReferenceEntry) {
-	_, err := d.Exec(queries.InsertReference, reference.InternalID, reference.SourceID, reference.Category, reference.Type, reference.Reference)
+	_, err := d.DB().Exec(queries.InsertReference, reference.InternalID, reference.SourceID, reference.Category, reference.Type, reference.Reference)
 	if err != nil {
 		log.Printf("Failed to insert reference: %s", err.Error())
 	}

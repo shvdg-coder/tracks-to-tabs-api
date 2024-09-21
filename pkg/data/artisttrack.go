@@ -24,12 +24,12 @@ type ArtistTrackSvc struct {
 
 // NewArtistTrackSvc creates a new instance of the ArtistTrackSvc struct.
 func NewArtistTrackSvc(database logic.DbOps) ArtistTrackData {
-	return &ArtistTrackSvc{DbOperations: database}
+	return &ArtistTrackSvc{DbOps: database}
 }
 
 // LinkArtistToTrack inserts a link between an artist and a track into the artist_track table.
 func (d *ArtistTrackSvc) LinkArtistToTrack(artistID, trackID uuid.UUID) {
-	_, err := d.Exec(queries.InsertArtistTrack, artistID, trackID)
+	_, err := d.DB().Exec(queries.InsertArtistTrack, artistID, trackID)
 	if err != nil {
 		log.Printf("Failed linking artist: %s", err.Error())
 	}

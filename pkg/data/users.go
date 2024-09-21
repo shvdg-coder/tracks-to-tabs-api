@@ -26,7 +26,7 @@ func NewUserSvc(database logic.DbOps) UserData {
 // InsertUser inserts a new user into the users table.
 func (d *UserSvc) InsertUser(email, plainPassword string) {
 	hashedPassword, _ := logic.HashPassword(plainPassword)
-	_, err := d.Exec(queries.InsertUser, email, hashedPassword)
+	_, err := d.DB().Exec(queries.InsertUser, email, hashedPassword)
 	if err != nil {
 		log.Printf("Failed inserting: %s", err.Error())
 	}
