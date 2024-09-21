@@ -6,13 +6,11 @@ import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
-	"log"
 )
 
 // InstrumentData represents operations related to instruments in the database.
 type InstrumentData interface {
-	InsertInstrumentEntries(instruments ...*models.InstrumentEntry)
-	InsertInstrumentEntry(instrument *models.InstrumentEntry)
+	InsertInstrumentEntries(instruments ...*models.InstrumentEntry) error
 	GetInstrumentEntries(instrumentID ...uint) ([]*models.InstrumentEntry, error)
 	GetInstrumentEntry(instrumentID uint) (*models.InstrumentEntry, error)
 }
@@ -28,18 +26,15 @@ func NewInstrumentSvc(database logic.DbOps) InstrumentData {
 }
 
 // InsertInstrumentEntries inserts multiple instruments in the instruments table.
-func (d *InstrumentSvc) InsertInstrumentEntries(instruments ...*models.InstrumentEntry) {
-	for _, instrument := range instruments {
-		d.InsertInstrumentEntry(instrument)
-	}
-}
+func (d *InstrumentSvc) InsertInstrumentEntries(instruments ...*models.InstrumentEntry) error {
+	data := make([][]interface{}, len(instruments))
 
-// InsertInstrumentEntry inserts a new instrument in the instruments table.
-func (d *InstrumentSvc) InsertInstrumentEntry(instrument *models.InstrumentEntry) {
-	_, err := d.DB().Exec(queries.InsertInstrument, instrument.Name)
-	if err != nil {
-		log.Printf("Failed inserting instrument: %s", err.Error())
+	for i, instrument := range instruments {
+		data[i] = instrument.Fields()
 	}
+
+	fieldNames := []string{"id", "name"}
+	return d.BulkInsert("instruments", fieldNames, data)
 }
 
 // GetInstrumentEntry retrieves an instrument for the provided ID.

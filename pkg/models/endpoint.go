@@ -12,6 +12,11 @@ type EndpointEntry struct {
 	UnformattedURL string `yaml:"url"`
 }
 
+// Fields returns a slice of interfaces containing values of the EndpointEntry.
+func (e *EndpointEntry) Fields() []interface{} {
+	return []interface{}{e.SourceID, e.Category, e.Type, e.UnformattedURL}
+}
+
 // Endpoint represents an endpoint with entity references
 type Endpoint struct {
 	*EndpointEntry

@@ -8,6 +8,11 @@ type InstrumentEntry struct {
 	Name string `yaml:"name"`
 }
 
+// Fields returns a slice of interfaces containing values of the InstrumentEntry.
+func (i *InstrumentEntry) Fields() []interface{} {
+	return []interface{}{i.ID, i.Name}
+}
+
 // Instrument represents an instrument with entity references.
 type Instrument struct {
 	*InstrumentEntry

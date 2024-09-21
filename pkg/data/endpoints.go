@@ -5,13 +5,11 @@ import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
-	"log"
 )
 
 // EndpointsData represents operations related to endpoints in the database.
 type EndpointsData interface {
-	InsertEndpointEntries(endpoints ...*models.EndpointEntry)
-	InsertEndpointEntry(endpoint *models.EndpointEntry)
+	InsertEndpointEntries(endpoints ...*models.EndpointEntry) error
 	GetEndpointEntries(sourceID ...uint) ([]*models.EndpointEntry, error)
 	GetEndpointEntry(sourceID uint) (*models.EndpointEntry, error)
 }
@@ -27,20 +25,15 @@ func NewEndpointSvc(database logic.DbOps) EndpointsData {
 }
 
 // InsertEndpointEntries inserts multiple records into the endpoints table.
-func (d *EndpointSvc) InsertEndpointEntries(endpoints ...*models.EndpointEntry) {
-	for _, endpoint := range endpoints {
-		d.InsertEndpointEntry(endpoint)
-	}
-}
+func (d *EndpointSvc) InsertEndpointEntries(endpoints ...*models.EndpointEntry) error {
+	data := make([][]interface{}, len(endpoints))
 
-// InsertEndpointEntry inserts a record into the endpoints table.
-func (d *EndpointSvc) InsertEndpointEntry(endpoint *models.EndpointEntry) {
-	_, err := d.DB().Exec(queries.InsertEndpoint, endpoint.SourceID, endpoint.Category, endpoint.Type, endpoint.UnformattedURL)
-	if err != nil {
-		log.Printf(
-			"Failed to insert endpoint: %s", err.Error(),
-		)
+	for i, endpoint := range endpoints {
+		data[i] = endpoint.Fields()
 	}
+
+	fieldNames := []string{"source_id", "category", "type", "url"}
+	return d.BulkInsert("endpoints", fieldNames, data)
 }
 
 // GetEndpointEntry retrieves the endpoint for the provided ID from the database.

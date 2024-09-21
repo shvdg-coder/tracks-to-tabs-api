@@ -13,6 +13,11 @@ type TabEntry struct {
 	Description  string
 }
 
+// Fields returns a slice of interfaces containing values of the TabEntry.
+func (t *TabEntry) Fields() []interface{} {
+	return []interface{}{t.ID, t.InstrumentID, t.DifficultyID, t.Description}
+}
+
 // Tab represents a tab.
 type Tab struct {
 	*TabEntry

@@ -7,12 +7,11 @@ import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
-	"log"
 )
 
 // ArtistTrackData represents operations related to 'artists to tracks' links.
 type ArtistTrackData interface {
-	LinkArtistToTrack(artistId, trackId uuid.UUID)
+	InsertArtistTracks(artistTracks ...*models.ArtistTrackEntry) error
 	GetArtistToTrackEntry(ID uuid.UUID) (*models.ArtistTrackEntry, error)
 	GetArtistToTrackEntries(IDs ...uuid.UUID) ([]*models.ArtistTrackEntry, error)
 }
@@ -27,12 +26,16 @@ func NewArtistTrackSvc(database logic.DbOps) ArtistTrackData {
 	return &ArtistTrackSvc{DbOps: database}
 }
 
-// LinkArtistToTrack inserts a link between an artist and a track into the artist_track table.
-func (d *ArtistTrackSvc) LinkArtistToTrack(artistID, trackID uuid.UUID) {
-	_, err := d.DB().Exec(queries.InsertArtistTrack, artistID, trackID)
-	if err != nil {
-		log.Printf("Failed linking artist: %s", err.Error())
+// InsertArtistTracks inserts links between artists and tracks into the artist_track table.
+func (d *ArtistTrackSvc) InsertArtistTracks(artistTracks ...*models.ArtistTrackEntry) error {
+	data := make([][]interface{}, len(artistTracks))
+
+	for i, link := range artistTracks {
+		data[i] = link.Fields()
 	}
+
+	fieldNames := []string{"artist_id", "track_id"}
+	return d.BulkInsert("artist_track", fieldNames, data)
 }
 
 // GetArtistToTrackEntry retrieves the 'artist to track' link for the provided artist or track IDs.

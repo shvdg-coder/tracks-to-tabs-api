@@ -1,7 +1,7 @@
 package pkg
 
 import (
-	"github.com/google/uuid"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"log"
 	"strings"
 )
@@ -29,99 +29,71 @@ func (s *SeedingAPI) Seed() {
 	s.SeedDifficulties()
 	s.SeedSources()
 	s.SeedEndpoints()
-	artistIDs := s.SeedArtists()
-	trackIDs := s.SeedTracks(artistIDs)
-	s.SeedTabs(trackIDs)
+	artists := s.SeedArtists()
+	tracks := s.SeedTracks(artists)
+	s.SeedTabs(tracks)
 }
 
 // SeedInstruments seeds the instruments table with the default instruments.
 func (s *SeedingAPI) SeedInstruments() {
-	s.InsertInstrumentEntries(s.SeedingConfig.Instruments...)
+	err := s.InsertInstrumentEntries(s.SeedingConfig.Instruments...)
+	if err != nil {
+		log.Fatalf("Failed to insert instruments: %s", err.Error())
+	}
 }
 
 // SeedDifficulties seeds the difficulties table with the default difficulties.
 func (s *SeedingAPI) SeedDifficulties() {
-	s.InsertDifficultyEntries(s.SeedingConfig.Difficulties...)
+	err := s.InsertDifficultyEntries(s.SeedingConfig.Difficulties...)
+	if err != nil {
+		log.Fatalf("Failed to insert difficulties: %s", err.Error())
+	}
 }
 
 // SeedSources seeds the sources from the config file.
 func (s *SeedingAPI) SeedSources() {
-	s.InsertSourceEntries(s.SeedingConfig.Sources...)
+	err := s.InsertSourceEntries(s.SeedingConfig.Sources...)
+	if err != nil {
+		log.Fatalf("Failed to insert sources: %s", err.Error())
+	}
 }
 
 // SeedEndpoints seeds the endpoints from the config file.
 func (s *SeedingAPI) SeedEndpoints() {
-	s.InsertEndpointEntries(s.SeedingConfig.Endpoints...)
+	err := s.InsertEndpointEntries(s.SeedingConfig.Endpoints...)
+	if err != nil {
+		log.Fatalf("Failed to insert endpoints: %s", err.Error())
+	}
 }
 
 // SeedArtists seeds the artists according to the dummy settings in the config file and returns their IDs.
-func (s *SeedingAPI) SeedArtists() []uuid.UUID {
-	var artistIDs []uuid.UUID
+func (s *SeedingAPI) SeedArtists() []*models.ArtistEntry {
 	dummyArtists := s.CreateArtists(s.Dummies.Artists)
-
 	err := s.InsertArtistEntries(dummyArtists...)
 	if err != nil {
-		log.Printf("aaaah %s", err)
-		return nil
+		log.Fatalf("Failed to insert artists: %s", err.Error())
 	}
-
-	for _, artist := range dummyArtists {
-		sourceMusic := s.GetRandomSource(CategoryMusic)
-		artistIDRef := s.CreateReference(artist.ID, sourceMusic.ID, TypeID, CategoryArtist, s.CreateRandomUUID())
-		s.InsertReferenceEntry(artistIDRef)
-
-		sourceTabs := s.GetRandomSource(CategoryTabs)
-		artistNameRef := s.CreateReference(artist.ID, sourceTabs.ID, TypeName, CategoryArtist, s.formatName(artist.Name))
-		s.InsertReferenceEntry(artistNameRef)
-
-		artistIDs = append(artistIDs, artist.ID)
-	}
-
-	return artistIDs
+	return dummyArtists
 }
 
 // SeedTracks seeds the tracks according to the dummy settings in the config file and returns their IDs.
-func (s *SeedingAPI) SeedTracks(artistIDs []uuid.UUID) []uuid.UUID {
-	var trackIDs []uuid.UUID
-
-	for _, artistID := range artistIDs {
-		dummyTracks := s.CreateTracks(s.Dummies.Artists.Tracks)
-		for _, track := range dummyTracks {
-			s.InsertTrackEntry(track)
-			s.LinkArtistToTrack(artistID, track.ID)
-
-			sourceMusic := s.GetRandomSource(CategoryMusic)
-			trackIDRef := s.CreateReference(track.ID, sourceMusic.ID, TypeID, CategoryTrack, s.CreateRandomUUID())
-			s.InsertReferenceEntry(trackIDRef)
-
-			sourceTabs := s.GetRandomSource(CategoryTabs)
-			trackNameRef := s.CreateReference(track.ID, sourceTabs.ID, TypeName, CategoryTrack, s.formatName(track.Title))
-			s.InsertReferenceEntry(trackNameRef)
-
-			trackIDs = append(trackIDs, track.ID)
-		}
+func (s *SeedingAPI) SeedTracks(artists []*models.ArtistEntry) []*models.TrackEntry {
+	dummyTracks := s.CreateTracks(s.Dummies.Artists.Tracks)
+	err := s.InsertTrackEntries(dummyTracks...)
+	if err != nil {
+		log.Fatalf("Failed to insert tracks: %s", err.Error())
 	}
-
-	return trackIDs
+	return dummyTracks
 }
 
 // SeedTabs seeds the tabs according to the dummy settings in the config file.
-func (s *SeedingAPI) SeedTabs(trackIDs []uuid.UUID) {
-	for _, trackID := range trackIDs {
-		dummyTabs := s.CreateTabs(s.Dummies.Artists.Tracks.Tabs)
-		for _, tab := range dummyTabs {
-			s.InsertTabEntry(tab)
-			s.LinkTrackToTab(trackID, tab.ID)
-
-			sourceTabs := s.GetRandomSource(CategoryTabs)
-
-			tabIDRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeID, CategoryTab, s.CreateRandomUUID())
-			s.InsertReferenceEntry(tabIDRef)
-
-			tabNameRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeName, CategoryTab, s.formatName(tab.Description))
-			s.InsertReferenceEntry(tabNameRef)
-		}
+func (s *SeedingAPI) SeedTabs(tracks []*models.TrackEntry) []*models.TabEntry {
+	dummyTabs := s.CreateTabs(s.Dummies.Artists.Tracks.Tabs)
+	err := s.InsertTabEntries(dummyTabs...)
+	if err != nil {
+		log.Fatalf("Failed to insert tab entries: %v", err)
 	}
+	return dummyTabs
 }
 
 // formatName formats the provided name.

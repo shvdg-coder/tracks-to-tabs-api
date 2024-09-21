@@ -11,6 +11,11 @@ type ArtistEntry struct {
 	Name string
 }
 
+// Fields returns a slice of interfaces containing values of the ArtistEntry.
+func (a *ArtistEntry) Fields() []interface{} {
+	return []interface{}{a.ID, a.Name}
+}
+
 // Artist represents an artist with entity references.
 type Artist struct {
 	*ArtistEntry

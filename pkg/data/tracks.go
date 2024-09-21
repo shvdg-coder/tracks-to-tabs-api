@@ -6,13 +6,11 @@ import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
-	"log"
 )
 
 // TrackData represents operations related to tracks in the database.
 type TrackData interface {
-	InsertTrackEntry(track *models.TrackEntry)
-	InsertTrackEntries(tracks ...*models.TrackEntry)
+	InsertTrackEntries(tracks ...*models.TrackEntry) error
 	GetTrackEntry(trackID uuid.UUID) (*models.TrackEntry, error)
 	GetTrackEntries(trackID ...uuid.UUID) ([]*models.TrackEntry, error)
 }
@@ -28,18 +26,15 @@ func NewTrackSvc(database logic.DbOps) TrackData {
 }
 
 // InsertTrackEntries inserts multiple tracks into the tracks table.
-func (d *TrackSvc) InsertTrackEntries(tracks ...*models.TrackEntry) {
-	for _, track := range tracks {
-		d.InsertTrackEntry(track)
-	}
-}
+func (d *TrackSvc) InsertTrackEntries(tracks ...*models.TrackEntry) error {
+	data := make([][]interface{}, len(tracks))
 
-// InsertTrackEntry inserts a track into the tracks table.
-func (d *TrackSvc) InsertTrackEntry(track *models.TrackEntry) {
-	_, err := d.DB().Exec(queries.InsertTrack, track.ID, track.Title, track.Duration)
-	if err != nil {
-		log.Printf("Failed to insert track: %s", err.Error())
+	for i, track := range tracks {
+		data[i] = track.Fields()
 	}
+
+	fieldNames := []string{"id", "title", "duration"}
+	return d.BulkInsert("tracks", fieldNames, data)
 }
 
 // GetTrackEntry retrieves a track entry, without entity references, for the provided ID.

@@ -12,6 +12,11 @@ type TrackEntry struct {
 	Duration uint // In milliseconds.
 }
 
+// Fields returns a slice of interfaces containing values of the TrackEntry.
+func (t *TrackEntry) Fields() []interface{} {
+	return []interface{}{t.ID.String(), t.Title, t.Duration}
+}
+
 // Track represents a track.
 type Track struct {
 	*TrackEntry

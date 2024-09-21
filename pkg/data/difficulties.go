@@ -27,7 +27,14 @@ func NewDifficultySvc(database logic.DbOps) DifficultyData {
 
 // InsertDifficultyEntries inserts multiple difficulty levels.
 func (d *DifficultySvc) InsertDifficultyEntries(difficulties ...*models.DifficultyEntry) error {
-	return nil
+	data := make([][]interface{}, len(difficulties))
+
+	for i, difficulty := range difficulties {
+		data[i] = difficulty.Fields()
+	}
+
+	fieldNames := []string{"id", "name"}
+	return d.BulkInsert("difficulties", fieldNames, data)
 }
 
 // GetDifficultyEntry retrieves a difficulty entry, without the entity references, for the provided ID.

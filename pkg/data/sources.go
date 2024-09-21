@@ -6,13 +6,11 @@ import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
-	"log"
 )
 
 // SourceData represents operations related to sources in the database.
 type SourceData interface {
-	InsertSourceEntries(sources ...*models.SourceEntry)
-	InsertSourceEntry(source *models.SourceEntry)
+	InsertSourceEntries(sources ...*models.SourceEntry) error
 	GetSourceEntries(id ...uint) ([]*models.SourceEntry, error)
 	GetSourceEntry(id uint) (*models.SourceEntry, error)
 }
@@ -28,18 +26,15 @@ func NewSourceSvc(database logic.DbOps) SourceData {
 }
 
 // InsertSourceEntries inserts multiple sources in the sources table.
-func (d *SourceSvc) InsertSourceEntries(sources ...*models.SourceEntry) {
-	for _, source := range sources {
-		d.InsertSourceEntry(source)
-	}
-}
+func (d *SourceSvc) InsertSourceEntries(sources ...*models.SourceEntry) error {
+	data := make([][]interface{}, len(sources))
 
-// InsertSourceEntry inserts a new source in the sources table.
-func (d *SourceSvc) InsertSourceEntry(source *models.SourceEntry) {
-	_, err := d.DB().Exec(queries.InsertSource, source.ID, source.Name, source.Category)
-	if err != nil {
-		log.Printf("Failed inserting source: %s", err.Error())
+	for i, source := range sources {
+		data[i] = source.Fields()
 	}
+
+	fieldNames := []string{"id", "name", "category"}
+	return d.BulkInsert("sources", fieldNames, data)
 }
 
 // GetSourceEntry retrieves a source from the database.

@@ -8,6 +8,11 @@ type DifficultyEntry struct {
 	Name string `yaml:"name"`
 }
 
+// Fields returns a slice of interfaces containing values of the DifficultyEntry.
+func (d *DifficultyEntry) Fields() []interface{} {
+	return []interface{}{d.ID, d.Name}
+}
+
 // Difficulty represents a difficulty with entity references
 type Difficulty struct {
 	*DifficultyEntry

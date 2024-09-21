@@ -7,13 +7,11 @@ import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
-	"log"
 )
 
 // TabData represents operations related to tabs in the database.
 type TabData interface {
-	InsertTabEntries(tabs ...*models.TabEntry)
-	InsertTabEntry(tab *models.TabEntry)
+	InsertTabEntries(tabs ...*models.TabEntry) error
 	GetTabEntries(tabID ...uuid.UUID) ([]*models.TabEntry, error)
 	GetTabEntry(tabID uuid.UUID) (*models.TabEntry, error)
 }
@@ -29,18 +27,15 @@ func NewTabSvc(database logic.DbOps) TabData {
 }
 
 // InsertTabEntries inserts multiple tabs in the tabs table.
-func (d *TabSvc) InsertTabEntries(tabs ...*models.TabEntry) {
-	for _, tab := range tabs {
-		d.InsertTabEntry(tab)
-	}
-}
+func (d *TabSvc) InsertTabEntries(tabs ...*models.TabEntry) error {
+	data := make([][]interface{}, len(tabs))
 
-// InsertTabEntry inserts a new tab in the tabs table.
-func (d *TabSvc) InsertTabEntry(tab *models.TabEntry) {
-	_, err := d.DB().Exec(queries.InsertTab, tab.ID, tab.InstrumentID, tab.DifficultyID, tab.Description)
-	if err != nil {
-		log.Printf("Failed to insert tab: %s", err.Error())
+	for i, tab := range tabs {
+		data[i] = tab.Fields()
 	}
+
+	fieldNames := []string{"id", "instrument_id", "difficulty_id", "description"}
+	return d.BulkInsert("tabs", fieldNames, data)
 }
 
 // GetTabEntry retrieves a tab entry, without entity references, for the provided tab ID.

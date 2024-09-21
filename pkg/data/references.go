@@ -11,8 +11,7 @@ import (
 
 // ReferenceData represents operations related to references in the database.
 type ReferenceData interface {
-	InsertReferenceEntries(reference ...*models.ReferenceEntry)
-	InsertReferenceEntry(reference *models.ReferenceEntry)
+	InsertReferenceEntries(reference ...*models.ReferenceEntry) error
 	GetReferenceEntries(internalID ...uuid.UUID) ([]*models.ReferenceEntry, error)
 	GetReferenceEntry(internalID uuid.UUID) (*models.ReferenceEntry, error)
 }
@@ -28,10 +27,15 @@ func NewReferenceSvc(database logic.DbOps) ReferenceData {
 }
 
 // InsertReferenceEntries inserts multiple references in the references table.
-func (d *ReferenceSvc) InsertReferenceEntries(references ...*models.ReferenceEntry) {
-	for _, reference := range references {
-		d.InsertReferenceEntry(reference)
+func (d *ReferenceSvc) InsertReferenceEntries(references ...*models.ReferenceEntry) error {
+	data := make([][]interface{}, len(references))
+
+	for i, reference := range references {
+		data[i] = reference.Fields()
 	}
+
+	fieldNames := []string{"internal_id", "source_id", "category", "type", "reference"}
+	return d.BulkInsert("references", fieldNames, data)
 }
 
 // InsertReferenceEntry inserts a record into the references table.

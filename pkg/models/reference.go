@@ -14,6 +14,11 @@ type ReferenceEntry struct {
 	Reference  string
 }
 
+// Fields returns a slice of interfaces containing values of the ReferenceEntry.
+func (r *ReferenceEntry) Fields() []interface{} {
+	return []interface{}{r.InternalID, r.SourceID, r.Category, r.Type, r.Reference}
+}
+
 // Reference represents a record in the 'references' table.
 type Reference struct {
 	*ReferenceEntry
