@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
@@ -26,8 +27,40 @@ func NewArtistSvc(database logic.DbOps) ArtistData {
 	return &ArtistSvc{database}
 }
 
-// InsertArtistEntries inserts multiple ArtistEntry's into the artists table.
+// InsertArtistEntries inserts multiple ArtistEntry's into the artists table using bulk insert.
 func (d *ArtistSvc) InsertArtistEntries(artists ...*models.ArtistEntry) error {
+	txn, err := d.DbOps.DB().Begin()
+	if err != nil {
+		return fmt.Errorf("failed starting transaction: %w", err)
+	}
+
+	stmt, err := txn.Prepare(pq.CopyIn("artists", "id", "name"))
+	if err != nil {
+		return fmt.Errorf("failed preparing statement: %w", err)
+	}
+
+	for _, artist := range artists {
+		_, err := stmt.Exec(artist.ID, artist.Name)
+		if err != nil {
+			return fmt.Errorf("failed inserting artist: %w", err)
+		}
+	}
+
+	_, err = stmt.Exec()
+	if err != nil {
+		return fmt.Errorf("failed executing statement: %w", err)
+	}
+
+	err = stmt.Close()
+	if err != nil {
+		return fmt.Errorf("failed closing statement: %w", err)
+	}
+
+	err = txn.Commit()
+	if err != nil {
+		return fmt.Errorf("failed committing transaction: %w", err)
+	}
+
 	return nil
 }
 

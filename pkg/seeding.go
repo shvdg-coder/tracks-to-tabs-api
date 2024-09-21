@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"github.com/google/uuid"
+	"log"
 	"strings"
 )
 
@@ -56,6 +57,26 @@ func (s *SeedingAPI) SeedEndpoints() {
 // SeedArtists seeds the artists according to the dummy settings in the config file and returns their IDs.
 func (s *SeedingAPI) SeedArtists() []uuid.UUID {
 	var artistIDs []uuid.UUID
+	dummyArtists := s.CreateArtists(s.Dummies.Artists)
+
+	err := s.InsertArtistEntries(dummyArtists...)
+	if err != nil {
+		log.Printf("aaaah %s", err)
+		return nil
+	}
+
+	for _, artist := range dummyArtists {
+		sourceMusic := s.GetRandomSource(CategoryMusic)
+		artistIDRef := s.CreateReference(artist.ID, sourceMusic.ID, TypeID, CategoryArtist, s.CreateRandomUUID())
+		s.InsertReferenceEntry(artistIDRef)
+
+		sourceTabs := s.GetRandomSource(CategoryTabs)
+		artistNameRef := s.CreateReference(artist.ID, sourceTabs.ID, TypeName, CategoryArtist, s.formatName(artist.Name))
+		s.InsertReferenceEntry(artistNameRef)
+
+		artistIDs = append(artistIDs, artist.ID)
+	}
+
 	return artistIDs
 }
 
