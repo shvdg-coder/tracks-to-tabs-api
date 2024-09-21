@@ -78,21 +78,53 @@ func (s *SeedingAPI) SeedArtists() []*models.ArtistEntry {
 
 // SeedTracks seeds the tracks according to the dummy settings in the config file and returns their IDs.
 func (s *SeedingAPI) SeedTracks(artists []*models.ArtistEntry) []*models.TrackEntry {
-	dummyTracks := s.CreateTracks(s.Dummies.Artists.Tracks)
+	dummyTracks := make([]*models.TrackEntry, 0)
+	dummyArtistTracks := make([]*models.ArtistTrackEntry, 0)
+
+	for _, artist := range artists {
+		tracks := s.CreateTracks(s.Dummies.Artists.Tracks)
+		dummyTracks = append(dummyTracks, tracks...)
+
+		artistTracks := s.CreateArtistTrackEntries(artist, tracks)
+		dummyArtistTracks = append(dummyArtistTracks, artistTracks...)
+	}
+
 	err := s.InsertTrackEntries(dummyTracks...)
 	if err != nil {
 		log.Fatalf("Failed to insert tracks: %s", err.Error())
 	}
+
+	err = s.InsertArtistTrackEntries(dummyArtistTracks...)
+	if err != nil {
+		log.Fatalf("Failed to insert artist tracks: %s", err.Error())
+	}
+
 	return dummyTracks
 }
 
 // SeedTabs seeds the tabs according to the dummy settings in the config file.
 func (s *SeedingAPI) SeedTabs(tracks []*models.TrackEntry) []*models.TabEntry {
-	dummyTabs := s.CreateTabs(s.Dummies.Artists.Tracks.Tabs)
+	dummyTabs := make([]*models.TabEntry, 0)
+	dummyTrackTabs := make([]*models.TrackTabEntry, 0)
+
+	for _, track := range tracks {
+		tabs := s.CreateTabs(s.Dummies.Artists.Tracks.Tabs)
+		dummyTabs = append(dummyTabs, tabs...)
+
+		trackTabs := s.CreateTrackTabEntries(track, tabs)
+		dummyTrackTabs = append(dummyTrackTabs, trackTabs...)
+	}
+
 	err := s.InsertTabEntries(dummyTabs...)
 	if err != nil {
 		log.Fatalf("Failed to insert tab entries: %v", err)
 	}
+
+	err = s.InsertTrackTabEntries(dummyTrackTabs...)
+	if err != nil {
+		log.Fatalf("Failed to insert track tabs: %s", err.Error())
+	}
+
 	return dummyTabs
 }
 

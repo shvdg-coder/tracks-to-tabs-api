@@ -6,12 +6,11 @@ import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
-	"log"
 )
 
 // TrackTabData represents operations related to 'track to tab' links.
 type TrackTabData interface {
-	LinkTrackToTab(trackID, tabID uuid.UUID)
+	InsertTrackTabEntries(trackTabs ...*models.TrackTabEntry) error
 	GetTrackToTabEntry(trackID uuid.UUID) (*models.TrackTabEntry, error)
 	GetTrackToTabEntries(trackID ...uuid.UUID) ([]*models.TrackTabEntry, error)
 }
@@ -26,12 +25,16 @@ func NewTrackTabSvc(database logic.DbOps) *TrackTabSvc {
 	return &TrackTabSvc{DbOps: database}
 }
 
-// LinkTrackToTab inserts a link between a track and a tab into the track_tab table.
-func (d *TrackTabSvc) LinkTrackToTab(trackId, tabId uuid.UUID) {
-	_, err := d.DB().Exec(queries.InsertTrackTab, trackId, tabId)
-	if err != nil {
-		log.Printf("Failed linking track: %s", err.Error())
+// InsertTrackTabEntries inserts links between tracks and tabs into the track_tab table.
+func (d *TrackTabSvc) InsertTrackTabEntries(trackTabs ...*models.TrackTabEntry) error {
+	data := make([][]interface{}, len(trackTabs))
+
+	for i, link := range trackTabs {
+		data[i] = link.Fields()
 	}
+
+	fieldNames := []string{"track_id", "tab_id"}
+	return d.BulkInsert("track_tab", fieldNames, data)
 }
 
 // GetTrackToTabEntry retrieves the 'track to tab' link for the provided ID.

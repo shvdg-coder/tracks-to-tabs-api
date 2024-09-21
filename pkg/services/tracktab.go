@@ -11,6 +11,7 @@ import (
 type TrackTabOps interface {
 	schemas.TrackTabSchema
 	data.TrackTabData
+	CreateTrackTabEntries(track *models.TrackEntry, tabs []*models.TabEntry) []*models.TrackTabEntry
 	ExtractIDsFromTrackTabEntries(trackTabs []*models.TrackTabEntry) (trackIDs []uuid.UUID, tabIDs []uuid.UUID)
 }
 
@@ -27,8 +28,17 @@ func NewTrackTabSvc(schema schemas.TrackTabSchema, data data.TrackTabData) Track
 		TrackTabData:   data}
 }
 
+// CreateTrackTabEntries creates models.TrackTab's using the provided models.TrackEntry and models.TabEntry's.
+func (tt *TrackTabSvc) CreateTrackTabEntries(track *models.TrackEntry, tabs []*models.TabEntry) []*models.TrackTabEntry {
+	trackTabs := make([]*models.TrackTabEntry, len(tabs))
+	for i, tab := range tabs {
+		trackTabs[i] = &models.TrackTabEntry{TrackID: track.ID, TabID: tab.ID}
+	}
+	return trackTabs
+}
+
 // ExtractIDsFromTrackTabEntries retrieves the track and tab IDs from the models.TrackTabEntry's.
-func (t *TrackTabSvc) ExtractIDsFromTrackTabEntries(trackTabs []*models.TrackTabEntry) (trackIDs []uuid.UUID, tabIDs []uuid.UUID) {
+func (tt *TrackTabSvc) ExtractIDsFromTrackTabEntries(trackTabs []*models.TrackTabEntry) (trackIDs []uuid.UUID, tabIDs []uuid.UUID) {
 	trackIDs = make([]uuid.UUID, len(trackTabs))
 	tabIDs = make([]uuid.UUID, len(trackTabs))
 

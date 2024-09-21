@@ -11,7 +11,7 @@ import (
 
 // ArtistTrackData represents operations related to 'artists to tracks' links.
 type ArtistTrackData interface {
-	InsertArtistTracks(artistTracks ...*models.ArtistTrackEntry) error
+	InsertArtistTrackEntries(artistTracks ...*models.ArtistTrackEntry) error
 	GetArtistToTrackEntry(ID uuid.UUID) (*models.ArtistTrackEntry, error)
 	GetArtistToTrackEntries(IDs ...uuid.UUID) ([]*models.ArtistTrackEntry, error)
 }
@@ -26,8 +26,8 @@ func NewArtistTrackSvc(database logic.DbOps) ArtistTrackData {
 	return &ArtistTrackSvc{DbOps: database}
 }
 
-// InsertArtistTracks inserts links between artists and tracks into the artist_track table.
-func (d *ArtistTrackSvc) InsertArtistTracks(artistTracks ...*models.ArtistTrackEntry) error {
+// InsertArtistTrackEntries inserts links between artists and tracks into the artist_track table.
+func (d *ArtistTrackSvc) InsertArtistTrackEntries(artistTracks ...*models.ArtistTrackEntry) error {
 	data := make([][]interface{}, len(artistTracks))
 
 	for i, link := range artistTracks {
