@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/shvdg-coder/tracks-to-tabs-api/internal"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg"
 	"log"
 	"os"
@@ -14,7 +15,7 @@ var (
 // init instantiates all app requirements.
 func init() {
 	var err error
-	api, err = pkg.NewAPI(APIConfigPath)
+	api, err = pkg.NewAPI(internal.APIConfigPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,11 +36,11 @@ func handleArgs(args []string) {
 // handleArgs handles the command line argument and performs the corresponding action.
 func handleArg(arg string) {
 	switch arg {
-	case CommandCreate:
+	case internal.CommandCreate:
 		api.CreateAll()
-	case CommandDrop:
+	case internal.CommandDrop:
 		api.DropAll()
-	case CommandSeed:
+	case internal.CommandSeed:
 		api.Seed()
 	default:
 		printErrorAndExit()
