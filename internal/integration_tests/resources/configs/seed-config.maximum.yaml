@@ -4,8 +4,8 @@ seeding:
       min: 100
       max: 100
       tracks:
-        min: 5
-        max: 5
+        min: 10
+        max: 10
         tabs:
           min: 5
           max: 5

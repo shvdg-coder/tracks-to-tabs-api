@@ -32,7 +32,11 @@ func TestGetArtistsPerf(t *testing.T) {
 	}
 
 	elapsed = time.Since(start)
-	t.Logf("GetArtists took %s", elapsed.Round(time.Millisecond))
+	artistsCount, tracksCount, tabsCount := countRecords(t, dbEnv)
+	totalRecordCount := artistsCount + tracksCount + tabsCount
+	t.Logf("GetArtists took %s (total: %d, artists: %d, tracks: %d, tabs: %d)",
+		elapsed.Round(time.Millisecond),
+		totalRecordCount, artistsCount, tracksCount, tabsCount)
 
 	// Test
 	if len(artists) == 0 || len(artistIDs) == 0 {
@@ -62,4 +66,24 @@ func selectArtistIDs(t *testing.T, dbEnv env.DbEnvOperations) []uuid.UUID {
 	}
 
 	return artistIDs
+}
+
+// countRecords count the records of the artists, tracks and tabs.
+func countRecords(t *testing.T, dbEnv env.DbEnvOperations) (artistCount int, trackCount int, tabCount int) {
+	err := dbEnv.DB().QueryRow("SELECT COUNT(*) FROM artists").Scan(&artistCount)
+	if err != nil {
+		t.Fatalf("Failed to count artists: %s", err.Error())
+	}
+
+	err = dbEnv.DB().QueryRow("SELECT COUNT(*) FROM tracks").Scan(&trackCount)
+	if err != nil {
+		t.Fatalf("Failed to count tracks: %s", err.Error())
+	}
+
+	err = dbEnv.DB().QueryRow("SELECT COUNT(*) FROM tabs").Scan(&tabCount)
+	if err != nil {
+		t.Fatalf("Failed to count tabs: %s", err.Error())
+	}
+
+	return artistCount, trackCount, tabCount
 }
