@@ -1,8 +1,8 @@
 package data
 
 import (
+	"database/sql"
 	"github.com/google/uuid"
-	"github.com/lib/pq"
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
@@ -11,7 +11,6 @@ import (
 // TrackData represents operations related to tracks in the database.
 type TrackData interface {
 	InsertTrackEntries(tracks ...*models.TrackEntry) error
-	GetTrackEntry(trackID uuid.UUID) (*models.TrackEntry, error)
 	GetTrackEntries(trackID ...uuid.UUID) ([]*models.TrackEntry, error)
 }
 
@@ -37,37 +36,16 @@ func (d *TrackSvc) InsertTrackEntries(tracks ...*models.TrackEntry) error {
 	return d.BulkInsert("tracks", fieldNames, data)
 }
 
-// GetTrackEntry retrieves a track entry, without entity references, for the provided ID.
-func (d *TrackSvc) GetTrackEntry(trackID uuid.UUID) (*models.TrackEntry, error) {
-	tracks, err := d.GetTrackEntries(trackID)
-	if err != nil {
-		return nil, err
-	}
-	return tracks[0], nil
+// GetTrackEntries retrieves track entries, without entity references, for the provided IDs.
+func (d *TrackSvc) GetTrackEntries(trackIDs ...uuid.UUID) ([]*models.TrackEntry, error) {
+	return logic.BatchGet(d, 1000, queries.GetTracksFromIDs, trackIDs, scanTrackEntry)
 }
 
-// GetTrackEntries retrieves tracks entries, without entity references, for the provided IDs.
-func (d *TrackSvc) GetTrackEntries(trackID ...uuid.UUID) ([]*models.TrackEntry, error) {
-	rows, err := d.DB().Query(queries.GetTracksFromIDs, pq.Array(trackID))
-	if err != nil {
+// scanTrackEntry scans a row into a models.TrackEntry.
+func scanTrackEntry(rows *sql.Rows) (*models.TrackEntry, error) {
+	track := &models.TrackEntry{}
+	if err := rows.Scan(&track.ID, &track.Title, &track.Duration); err != nil {
 		return nil, err
 	}
-
-	defer rows.Close()
-
-	var tracks []*models.TrackEntry
-	for rows.Next() {
-		track := &models.TrackEntry{}
-		err := rows.Scan(&track.ID, &track.Title, &track.Duration)
-		if err != nil {
-			return nil, err
-		}
-		tracks = append(tracks, track)
-	}
-
-	if rows.Err() != nil {
-		return nil, rows.Err()
-	}
-
-	return tracks, nil
+	return track, nil
 }

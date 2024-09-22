@@ -1,8 +1,8 @@
 package data
 
 import (
+	"database/sql"
 	"github.com/google/uuid"
-	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
@@ -48,27 +48,15 @@ func (d *ArtistSvc) GetArtistEntry(artistID uuid.UUID) (*models.ArtistEntry, err
 }
 
 // GetArtistsEntries retrieves artist entries, without entity references, for the provided IDs.
-func (d *ArtistSvc) GetArtistsEntries(artistID ...uuid.UUID) ([]*models.ArtistEntry, error) {
-	rows, err := d.DB().Query(queries.GetArtistsFromIDs, pq.Array(artistID))
-	if err != nil {
+func (d *ArtistSvc) GetArtistsEntries(artistIDs ...uuid.UUID) ([]*models.ArtistEntry, error) {
+	return logic.BatchGet(d, 1000, queries.GetArtistsFromIDs, artistIDs, scanArtistEntry)
+}
+
+// scanArtistEntry scans a row into a models.ArtistEntry.
+func scanArtistEntry(rows *sql.Rows) (*models.ArtistEntry, error) {
+	artistEntry := &models.ArtistEntry{}
+	if err := rows.Scan(&artistEntry.ID, &artistEntry.Name); err != nil {
 		return nil, err
 	}
-
-	defer rows.Close()
-
-	var artists []*models.ArtistEntry
-	for rows.Next() {
-		artistEntry := &models.ArtistEntry{}
-		err := rows.Scan(&artistEntry.ID, &artistEntry.Name)
-		if err != nil {
-			return nil, err
-		}
-		artists = append(artists, artistEntry)
-	}
-
-	if rows.Err() != nil {
-		return nil, rows.Err()
-	}
-
-	return artists, nil
+	return artistEntry, nil
 }

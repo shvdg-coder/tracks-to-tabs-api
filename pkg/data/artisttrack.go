@@ -1,8 +1,8 @@
 package data
 
 import (
+	"database/sql"
 	"github.com/google/uuid"
-	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
@@ -48,27 +48,15 @@ func (d *ArtistTrackSvc) GetArtistToTrackEntry(artistID uuid.UUID) (*models.Arti
 }
 
 // GetArtistToTrackEntries retrieves the 'artist to track' link for the provided artist or track IDs.
-func (d *ArtistTrackSvc) GetArtistToTrackEntries(artistID ...uuid.UUID) ([]*models.ArtistTrackEntry, error) {
-	rows, err := d.DB().Query(queries.GetArtistTrackLinks, pq.Array(artistID))
-	if err != nil {
+func (d *ArtistTrackSvc) GetArtistToTrackEntries(artistIDs ...uuid.UUID) ([]*models.ArtistTrackEntry, error) {
+	return logic.BatchGet(d, 1000, queries.GetArtistTrackLinks, artistIDs, scanArtistTrackEntry)
+}
+
+// scanArtistTrackEntry scans a row into a models.ArtistTrackEntry.
+func scanArtistTrackEntry(rows *sql.Rows) (*models.ArtistTrackEntry, error) {
+	artistTrack := &models.ArtistTrackEntry{}
+	if err := rows.Scan(&artistTrack.ArtistID, &artistTrack.TrackID); err != nil {
 		return nil, err
 	}
-
-	defer rows.Close()
-
-	var artistTrackLink []*models.ArtistTrackEntry
-	for rows.Next() {
-		artistTrack := &models.ArtistTrackEntry{}
-		err := rows.Scan(&artistTrack.ArtistID, &artistTrack.TrackID)
-		if err != nil {
-			return nil, err
-		}
-		artistTrackLink = append(artistTrackLink, artistTrack)
-	}
-
-	if rows.Err() != nil {
-		return nil, rows.Err()
-	}
-
-	return artistTrackLink, nil
+	return artistTrack, nil
 }

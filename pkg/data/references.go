@@ -1,8 +1,8 @@
 package data
 
 import (
+	"database/sql"
 	"github.com/google/uuid"
-	"github.com/lib/pq"
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
@@ -12,7 +12,6 @@ import (
 type ReferenceData interface {
 	InsertReferenceEntries(reference ...*models.ReferenceEntry) error
 	GetReferenceEntries(internalID ...uuid.UUID) ([]*models.ReferenceEntry, error)
-	GetReferenceEntry(internalID uuid.UUID) (*models.ReferenceEntry, error)
 }
 
 // ReferenceSvc is for managing references.
@@ -37,37 +36,16 @@ func (d *ReferenceSvc) InsertReferenceEntries(references ...*models.ReferenceEnt
 	return d.BulkInsert("references", fieldNames, data)
 }
 
-// GetReferenceEntry retrieves a reference entry, without entity references, for the provided internal ID.
-func (d *ReferenceSvc) GetReferenceEntry(internalID uuid.UUID) (*models.ReferenceEntry, error) {
-	references, err := d.GetReferenceEntries(internalID)
-	if err != nil {
-		return nil, err
-	}
-	return references[0], nil
+// GetReferenceEntries retrieves reference entries, without entity references, for the provided internal IDs.
+func (d *ReferenceSvc) GetReferenceEntries(internalIDs ...uuid.UUID) ([]*models.ReferenceEntry, error) {
+	return logic.BatchGet(d, 1000, queries.GetReferences, internalIDs, scanReferenceEntry)
 }
 
-// GetReferenceEntries retrieves reference entries, without entity references, for the provided internal IDs.
-func (d *ReferenceSvc) GetReferenceEntries(internalID ...uuid.UUID) ([]*models.ReferenceEntry, error) {
-	rows, err := d.DB().Query(queries.GetReferences, pq.Array(internalID))
-	if err != nil {
+// scanReferenceEntry scans a row into a models.ReferenceEntry.
+func scanReferenceEntry(rows *sql.Rows) (*models.ReferenceEntry, error) {
+	reference := &models.ReferenceEntry{}
+	if err := rows.Scan(&reference.InternalID, &reference.SourceID, &reference.Category, &reference.Type, &reference.Reference); err != nil {
 		return nil, err
 	}
-
-	defer rows.Close()
-
-	var references []*models.ReferenceEntry
-	for rows.Next() {
-		reference := &models.ReferenceEntry{}
-		err := rows.Scan(&reference.InternalID, &reference.SourceID, &reference.Category, &reference.Type, &reference.Reference)
-		if err != nil {
-			return nil, err
-		}
-		references = append(references, reference)
-	}
-
-	if rows.Err() != nil {
-		return nil, rows.Err()
-	}
-
-	return references, nil
+	return reference, nil
 }
