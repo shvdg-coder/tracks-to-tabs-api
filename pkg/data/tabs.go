@@ -39,7 +39,7 @@ func (d *TabSvc) InsertTabEntries(tabs ...*models.TabEntry) error {
 
 // GetTabEntries retrieves tab entries, without entity references, for the provided IDs.
 func (d *TabSvc) GetTabEntries(tabIDs ...uuid.UUID) ([]*models.TabEntry, error) {
-	return logic.BatchGet(d, 1000, queries.GetTabs, tabIDs, scanTabEntry)
+	return logic.BatchGet(d, batchSize, queries.GetTabs, tabIDs, scanTabEntry)
 }
 
 // scanTabEntry scans a row into a models.TabEntry.

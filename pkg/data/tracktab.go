@@ -38,7 +38,7 @@ func (d *TrackTabSvc) InsertTrackTabEntries(trackTabs ...*models.TrackTabEntry) 
 
 // GetTrackToTabEntries retrieves the 'track to tab' links for the provided track IDs.
 func (d *TrackTabSvc) GetTrackToTabEntries(trackIDs ...uuid.UUID) ([]*models.TrackTabEntry, error) {
-	return logic.BatchGet(d, 1000, queries.GetTrackTabLinks, trackIDs, scanTrackTabEntry)
+	return logic.BatchGet(d, batchSize, queries.GetTrackTabLinks, trackIDs, scanTrackTabEntry)
 }
 
 // scanTrackTabEntry scans a row into a models.TrackTabEntry.

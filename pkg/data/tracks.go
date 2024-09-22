@@ -38,7 +38,7 @@ func (d *TrackSvc) InsertTrackEntries(tracks ...*models.TrackEntry) error {
 
 // GetTrackEntries retrieves track entries, without entity references, for the provided IDs.
 func (d *TrackSvc) GetTrackEntries(trackIDs ...uuid.UUID) ([]*models.TrackEntry, error) {
-	return logic.BatchGet(d, 1000, queries.GetTracksFromIDs, trackIDs, scanTrackEntry)
+	return logic.BatchGet(d, batchSize, queries.GetTracksFromIDs, trackIDs, scanTrackEntry)
 }
 
 // scanTrackEntry scans a row into a models.TrackEntry.

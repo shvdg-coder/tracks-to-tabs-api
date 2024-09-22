@@ -38,7 +38,7 @@ func (d *ReferenceSvc) InsertReferenceEntries(references ...*models.ReferenceEnt
 
 // GetReferenceEntries retrieves reference entries, without entity references, for the provided internal IDs.
 func (d *ReferenceSvc) GetReferenceEntries(internalIDs ...uuid.UUID) ([]*models.ReferenceEntry, error) {
-	return logic.BatchGet(d, 1000, queries.GetReferences, internalIDs, scanReferenceEntry)
+	return logic.BatchGet(d, batchSize, queries.GetReferences, internalIDs, scanReferenceEntry)
 }
 
 // scanReferenceEntry scans a row into a models.ReferenceEntry.

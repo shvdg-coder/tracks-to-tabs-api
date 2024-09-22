@@ -49,7 +49,7 @@ func (d *ArtistTrackSvc) GetArtistToTrackEntry(artistID uuid.UUID) (*models.Arti
 
 // GetArtistToTrackEntries retrieves the 'artist to track' link for the provided artist or track IDs.
 func (d *ArtistTrackSvc) GetArtistToTrackEntries(artistIDs ...uuid.UUID) ([]*models.ArtistTrackEntry, error) {
-	return logic.BatchGet(d, 1000, queries.GetArtistTrackLinks, artistIDs, scanArtistTrackEntry)
+	return logic.BatchGet(d, batchSize, queries.GetArtistTrackLinks, artistIDs, scanArtistTrackEntry)
 }
 
 // scanArtistTrackEntry scans a row into a models.ArtistTrackEntry.

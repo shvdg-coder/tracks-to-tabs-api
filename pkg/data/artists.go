@@ -49,7 +49,7 @@ func (d *ArtistSvc) GetArtistEntry(artistID uuid.UUID) (*models.ArtistEntry, err
 
 // GetArtistsEntries retrieves artist entries, without entity references, for the provided IDs.
 func (d *ArtistSvc) GetArtistsEntries(artistIDs ...uuid.UUID) ([]*models.ArtistEntry, error) {
-	return logic.BatchGet(d, 1000, queries.GetArtistsFromIDs, artistIDs, scanArtistEntry)
+	return logic.BatchGet(d, batchSize, queries.GetArtistsFromIDs, artistIDs, scanArtistEntry)
 }
 
 // scanArtistEntry scans a row into a models.ArtistEntry.
