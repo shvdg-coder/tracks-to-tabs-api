@@ -33,8 +33,8 @@ func seed(t *testing.T, dbEnv tstenv.DbEnvOperations, apiConfigPath string) *pkg
 	return seedingConfig
 }
 
-// defaultData prepares the test, by defaultData the dummy data into the database.
-func defaultData(t *testing.T, dbEnv tstenv.DbEnvOperations) {
+// insertCSVFiles prepares the test, by insertCSVFiles the dummy data into the database.
+func insertCSVFiles(t *testing.T, dbEnv tstenv.DbEnvOperations) {
 	err := dbEnv.InsertCSVFile(artistsCSV, artistsTable, artistsColumns)
 	if err != nil {
 		t.Fatal(err)

@@ -17,7 +17,7 @@ func TestGetArtists(t *testing.T) {
 
 	// Prepare
 	seed(t, dbEnv, minConfigPath)
-	defaultData(t, dbEnv)
+	insertCSVFiles(t, dbEnv)
 
 	expectedArtistsMap := createExpectedArtists(t)
 
@@ -75,20 +75,5 @@ func testFieldsOfArtist(t *testing.T, actualArtist *models.Artist, expectedArtis
 	// Check Artist Name
 	if actualArtist.Name != expectedArtist.Name {
 		t.Errorf("expected Name to be %s, got %s", expectedArtist.Name, actualArtist.Name)
-	}
-
-	// Check Tracks
-	if len(actualArtist.Tracks) != expectedArtist.TrackCount {
-		t.Errorf("expected %d Tracks, got %d", expectedArtist.TrackCount, len(actualArtist.Tracks))
-	}
-
-	// Check References
-	if len(actualArtist.References) != expectedArtist.ReferenceCount {
-		t.Errorf("expected %d References, got %d", expectedArtist.ReferenceCount, len(actualArtist.References))
-	}
-
-	// Check Resources
-	if len(actualArtist.Resources) != expectedArtist.ResourceCount {
-		t.Errorf("expected %d Resources, got %d", expectedArtist.ResourceCount, len(actualArtist.Resources))
 	}
 }

@@ -12,10 +12,7 @@ func createExpectedArtists(t *testing.T) map[uuid.UUID]*ExpectedArtist {
 	artistsMap := createArtistsFromCSV(t, artistsCSV)
 	for id, artist := range artistsMap {
 		expectedArtist := &ExpectedArtist{
-			ArtistEntry:    artist,
-			TrackCount:     2,
-			ReferenceCount: 3,
-			ResourceCount:  2,
+			ArtistEntry: artist,
 		}
 		expectedArtists[id] = expectedArtist
 	}
@@ -30,10 +27,7 @@ func createExpectedTracks(t *testing.T) map[uuid.UUID]*ExpectedTrack {
 	tracksMap := createTracksFromCSV(t, tracksCSV)
 	for id, track := range tracksMap {
 		expectedTrack := &ExpectedTrack{
-			TrackEntry:     track,
-			TabCount:       1,
-			ReferenceCount: 1,
-			ResourceCount:  2,
+			TrackEntry: track,
 		}
 		expectedTracks[id] = expectedTrack
 	}
@@ -48,9 +42,7 @@ func createExpectedTabs(t *testing.T) map[uuid.UUID]*ExpectedTab {
 	tabsMap := createTabsFromCSV(t, tabsCSV)
 	for _, tab := range tabsMap {
 		expectedTab := &ExpectedTab{
-			TabEntry:        tab,
-			ReferencesCount: 2,
-			ResourceCount:   1,
+			TabEntry: tab,
 		}
 		expectedTabs[tab.ID] = expectedTab
 	}

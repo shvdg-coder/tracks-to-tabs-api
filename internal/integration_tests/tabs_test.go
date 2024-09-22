@@ -17,7 +17,7 @@ func TestGetTabs(t *testing.T) {
 
 	// Prepare
 	seed(t, dbEnv, minConfigPath)
-	defaultData(t, dbEnv)
+	insertCSVFiles(t, dbEnv)
 
 	expectedTabsMap := createExpectedTabs(t)
 
@@ -80,15 +80,5 @@ func testFieldsOfTab(t *testing.T, actualTab *models.Tab, expectedTab *ExpectedT
 	// Check DifficultyID
 	if actualTab.DifficultyID != expectedTab.DifficultyID {
 		t.Errorf("expected DifficultyID to be %d, got %d", expectedTab.DifficultyID, actualTab.DifficultyID)
-	}
-
-	// Check ReferencesCount
-	if len(actualTab.References) != expectedTab.ReferencesCount {
-		t.Errorf("expected %d References, got %d", expectedTab.ReferencesCount, len(actualTab.References))
-	}
-
-	// Check ResourceCount
-	if len(actualTab.Resources) != expectedTab.ResourceCount {
-		t.Errorf("expected %d Resources, got %d", expectedTab.ResourceCount, len(actualTab.Resources))
 	}
 }

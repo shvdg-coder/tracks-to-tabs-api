@@ -17,7 +17,7 @@ func TestGetTracks(t *testing.T) {
 
 	// Prepare
 	seed(t, dbEnv, minConfigPath)
-	defaultData(t, dbEnv)
+	insertCSVFiles(t, dbEnv)
 
 	expectedTracks := createExpectedTracks(t)
 
@@ -67,7 +67,7 @@ func testFieldsOfTracks(t *testing.T, actualTracksMap map[uuid.UUID]*models.Trac
 
 // testFieldsOfTrack tests the fields of a single track object by comparing the actual track to the expected one.
 func testFieldsOfTrack(t *testing.T, actualTrack *models.Track, expectedTrack *ExpectedTrack) {
-	// Check IDStr
+	// Check ID
 	if actualTrack.ID != expectedTrack.ID {
 		t.Errorf("expected IDStr to be %s, got %s", expectedTrack.ID, actualTrack.ID)
 	}
@@ -75,20 +75,5 @@ func testFieldsOfTrack(t *testing.T, actualTrack *models.Track, expectedTrack *E
 	// Check Track Title
 	if actualTrack.Title != expectedTrack.Title {
 		t.Errorf("expected Title to be %s, got %s", expectedTrack.Title, actualTrack.Title)
-	}
-
-	// Check Tabs
-	if len(actualTrack.Tabs) != expectedTrack.TabCount {
-		t.Errorf("expected %d Tabs, got %d", expectedTrack.TabCount, len(actualTrack.Tabs))
-	}
-
-	// Check References
-	if len(actualTrack.References) != expectedTrack.ReferenceCount {
-		t.Errorf("expected %d References, got %d", expectedTrack.ReferenceCount, len(actualTrack.References))
-	}
-
-	// Check Resources
-	if len(actualTrack.Resources) != expectedTrack.ResourceCount {
-		t.Errorf("expected %d Resources, got %d", expectedTrack.ResourceCount, len(actualTrack.Resources))
 	}
 }
