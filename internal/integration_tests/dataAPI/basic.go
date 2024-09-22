@@ -7,8 +7,8 @@ import (
 )
 
 // createDefaultDbEnv prepares the tests by performing the minimally required steps.
-func createDefaultDbEnv(t *testing.T) tstenv.DbEnvOperations {
-	dbEnv, err := tstenv.NewService().CreatePostgresEnv()
+func createDefaultDbEnv(t *testing.T) tstenv.DbEnvOps {
+	dbEnv, err := tstenv.NewEnvSvc().CreatePostgresEnv()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -17,7 +17,7 @@ func createDefaultDbEnv(t *testing.T) tstenv.DbEnvOperations {
 }
 
 // seed seeds the database using the provided configuration.
-func seed(t *testing.T, dbEnv tstenv.DbEnvOperations, apiConfigPath string) *pkg.SeedingConfig {
+func seed(t *testing.T, dbEnv tstenv.DbEnvOps, apiConfigPath string) *pkg.SeedingConfig {
 	apiConfig, err := pkg.NewAPIConfig(apiConfigPath)
 	if err != nil {
 		t.Fatalf("error occurred while parsing the seed config: %s", err.Error())
@@ -34,7 +34,7 @@ func seed(t *testing.T, dbEnv tstenv.DbEnvOperations, apiConfigPath string) *pkg
 }
 
 // insertCSVFiles prepares the test, by insertCSVFiles the dummy data into the database.
-func insertCSVFiles(t *testing.T, dbEnv tstenv.DbEnvOperations) {
+func insertCSVFiles(t *testing.T, dbEnv tstenv.DbEnvOps) {
 	err := dbEnv.InsertCSVFile(artistsCSV, artistsTable, artistsColumns)
 	if err != nil {
 		t.Fatal(err)

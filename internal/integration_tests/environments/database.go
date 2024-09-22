@@ -5,8 +5,8 @@ import (
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg"
 )
 
-// DbEnvOperations represents operations for a test environment, used during integration tests.
-type DbEnvOperations interface {
+// DbEnvOps represents operations for a test environment, used during integration tests.
+type DbEnvOps interface {
 	database.ContainerOps
 	pkg.CreateOps
 	pkg.DropOps
@@ -22,7 +22,7 @@ type DbEnv struct {
 }
 
 // NewDbEnv creates a new instance of DbEnv.
-func NewDbEnv(container database.ContainerOps, create pkg.CreateOps, drop pkg.DropOps) DbEnvOperations {
+func NewDbEnv(container database.ContainerOps, create pkg.CreateOps, drop pkg.DropOps) DbEnvOps {
 	return &DbEnv{
 		ContainerOps: container,
 		CreateOps:    create,

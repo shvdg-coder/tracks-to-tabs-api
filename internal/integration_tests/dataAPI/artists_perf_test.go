@@ -49,7 +49,7 @@ func TestGetArtistsPerf(t *testing.T) {
 }
 
 // selectArtistIDs retrieves al the artist IDs from the artists table.
-func selectArtistIDs(t *testing.T, dbEnv env.DbEnvOperations) []uuid.UUID {
+func selectArtistIDs(t *testing.T, dbEnv env.DbEnvOps) []uuid.UUID {
 	rows, err := dbEnv.DB().Query("SELECT id FROM artists")
 	if err != nil {
 		t.Fatalf("error occured while querying artists table: %s", err.Error())
@@ -69,7 +69,7 @@ func selectArtistIDs(t *testing.T, dbEnv env.DbEnvOperations) []uuid.UUID {
 }
 
 // countRecords count the records of the artists, tracks and tabs.
-func countRecords(t *testing.T, dbEnv env.DbEnvOperations) (artistCount int, trackCount int, tabCount int) {
+func countRecords(t *testing.T, dbEnv env.DbEnvOps) (artistCount int, trackCount int, tabCount int) {
 	err := dbEnv.DB().QueryRow("SELECT COUNT(*) FROM artists").Scan(&artistCount)
 	if err != nil {
 		t.Fatalf("Failed to count artists: %s", err.Error())

@@ -7,30 +7,30 @@ import (
 
 // EnvManagement represents the operations related to managing environments.
 type EnvManagement interface {
-	CreatePostgresEnv() (DbEnvOperations, error)
-	CreateDbEnv(config *tstdb.ContainerConfig) (DbEnvOperations, error)
+	CreatePostgresEnv() (DbEnvOps, error)
+	CreateDbEnv(config *tstdb.ContainerConfig) (DbEnvOps, error)
 }
 
-// Service is responsible for managing different environments required for integration testing.
-type Service struct {
+// EnvSvc is responsible for managing different environments required for integration testing.
+type EnvSvc struct {
 	EnvManagement
 	Database tstdb.ContainerManagement
 }
 
-// NewService instantiates a new Service.
-func NewService() EnvManagement {
-	return &Service{
+// NewEnvSvc instantiates a new EnvSvc.
+func NewEnvSvc() EnvManagement {
+	return &EnvSvc{
 		Database: tstdb.NewContainerSvc(),
 	}
 }
 
 // CreatePostgresEnv creates a Database environment for Postgres, with default configurations.
-func (s *Service) CreatePostgresEnv() (DbEnvOperations, error) {
+func (s *EnvSvc) CreatePostgresEnv() (DbEnvOps, error) {
 	return s.CreateDbEnv(tstdb.NewPostgresContainerConfig())
 }
 
 // CreateDbEnv creates a Database environment.
-func (s *Service) CreateDbEnv(config *tstdb.ContainerConfig) (DbEnvOperations, error) {
+func (s *EnvSvc) CreateDbEnv(config *tstdb.ContainerConfig) (DbEnvOps, error) {
 	dbContainer, err := s.Database.CreateContainer(config)
 	svcManager := pkg.NewSvcManager(dbContainer)
 	if err != nil {
