@@ -1,4 +1,4 @@
-package integration_tests
+package dataAPI
 
 import (
 	"github.com/google/uuid"
@@ -75,5 +75,10 @@ func testFieldsOfArtist(t *testing.T, actualArtist *models.Artist, expectedArtis
 	// Check Artist Name
 	if actualArtist.Name != expectedArtist.Name {
 		t.Errorf("expected Name to be %s, got %s", expectedArtist.Name, actualArtist.Name)
+	}
+
+	// Check resources
+	if len(actualArtist.Resources) != len(expectedArtist.Resources) {
+		t.Errorf("expected %d resources, got %d", len(expectedArtist.Resources), len(actualArtist.Resources))
 	}
 }

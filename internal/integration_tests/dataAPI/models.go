@@ -1,4 +1,4 @@
-package integration_tests
+package dataAPI
 
 import "github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 
@@ -11,9 +11,11 @@ type ExpectedArtist struct {
 // ExpectedTrack contains the data of what a models.Track is expected to have.
 type ExpectedTrack struct {
 	*models.TrackEntry
+	Resources []string
 }
 
 // ExpectedTab contains the data of what a models.Tab is expected to have.
 type ExpectedTab struct {
 	*models.TabEntry
+	Resources []string
 }

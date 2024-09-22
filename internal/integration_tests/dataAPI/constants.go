@@ -1,4 +1,4 @@
-package integration_tests
+package dataAPI
 
 // CSV
 const artistsCSV = "./resources/csv/artists.csv"

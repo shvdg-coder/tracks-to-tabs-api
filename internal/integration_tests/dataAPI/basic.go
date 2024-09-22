@@ -1,4 +1,4 @@
-package integration_tests
+package dataAPI
 
 import (
 	tstenv "github.com/shvdg-coder/tracks-to-tabs-api/internal/integration_tests/environments"
