@@ -20,6 +20,8 @@ const CreateUsersTable = `
 	   email VARCHAR(255) UNIQUE NOT NULL,
 	   password VARCHAR(60) NOT NULL
 	);
+
+	CREATE INDEX idx_user_id ON users(id);
 `
 
 // DropUsersTable is an SQL query to drop the 'users' table from the database.

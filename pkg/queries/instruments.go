@@ -18,17 +18,13 @@ const CreateInstrumentsTable = `
 	   id SERIAL PRIMARY KEY,
 	   name VARCHAR(255) NOT NULL
 	);
+
+	CREATE INDEX idx_instrument_id ON instruments(id);
 `
 
 // DropInstrumentsTable is a SQL query to drop the 'instruments' table if it exists
 const DropInstrumentsTable = `
 	DROP TABLE IF EXISTS instruments;
-`
-
-// InsertInstrument is a SQL query string used to insert an instrument into the 'instruments' table.
-const InsertInstrument = `
-	INSERT INTO instruments (name)
-    VALUES ($1) 
 `
 
 // GetInstruments is a SQL query string to select an instrument.

@@ -24,17 +24,13 @@ const CreateSourcesTable = `
 	   category VARCHAR(100) NOT NULL,
 	   UNIQUE(name)                                    
 	);
+
+	CREATE INDEX idx_source_id ON sources(id);
 `
 
 // DropSourcesTable is a SQL query to drop the 'sources' table
 const DropSourcesTable = `
 	DROP TABLE IF EXISTS sources;
-`
-
-// InsertSource is a SQL to insert a new record into the 'sources' table
-const InsertSource = `
-	INSERT INTO sources (id, name, category)
-    VALUES ($1, $2, $3) 
 `
 
 // GetSourcesFromIDs is a SQL query to retrieve source records for the provided ID's

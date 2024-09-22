@@ -6,7 +6,6 @@ import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/queries"
-	"log"
 )
 
 // ReferenceData represents operations related to references in the database.
@@ -36,14 +35,6 @@ func (d *ReferenceSvc) InsertReferenceEntries(references ...*models.ReferenceEnt
 
 	fieldNames := []string{"internal_id", "source_id", "category", "type", "reference"}
 	return d.BulkInsert("references", fieldNames, data)
-}
-
-// InsertReferenceEntry inserts a record into the references table.
-func (d *ReferenceSvc) InsertReferenceEntry(reference *models.ReferenceEntry) {
-	_, err := d.DB().Exec(queries.InsertReference, reference.InternalID, reference.SourceID, reference.Category, reference.Type, reference.Reference)
-	if err != nil {
-		log.Printf("Failed to insert reference: %s", err.Error())
-	}
 }
 
 // GetReferenceEntry retrieves a reference entry, without entity references, for the provided internal ID.

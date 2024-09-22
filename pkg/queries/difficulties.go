@@ -17,19 +17,15 @@ It contains the following columns:
 const CreateDifficultiesTable = `
 	CREATE TABLE IF NOT EXISTS difficulties (
 	   id SERIAL PRIMARY KEY,
-	   name VARCHAR(255) NOT NULL
+	   name VARCHAR(255) NOT NULL	                                
 	);
+
+	CREATE INDEX idx_difficulty_id ON difficulties(id);
 `
 
 // DropDifficultiesTable is a SQL query to drop the 'difficulties' table if it exists
 const DropDifficultiesTable = `
 	DROP TABLE IF EXISTS difficulties;
-`
-
-// InsertDifficulty is a SQL query string used to insert a difficulty level into the 'difficulties' table.
-const InsertDifficulty = `
-	INSERT INTO difficulties (name)
-    VALUES ($1) 
 `
 
 // GetDifficulties retrieves the difficulties for the provided IDs.

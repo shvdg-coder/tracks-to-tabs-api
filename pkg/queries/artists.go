@@ -18,17 +18,13 @@ const CreateArtistsTable = `
 	   id UUID PRIMARY KEY,
 	   name VARCHAR(500) NOT NULL
 	);
+
+	CREATE INDEX idx_artist_id ON "artists"(id);
 `
 
 // DropArtistsTable is a SQL query to drop the 'artists' table from the database.
 const DropArtistsTable = `
 	DROP TABLE IF EXISTS artists;
-`
-
-// InsertArtists is a SQL query string used to insert artist(s) into the 'artists' table.
-const InsertArtists = `
-	INSERT INTO artists (id, name)
-    VALUES ($1, $2) 
 `
 
 // GetArtistsFromIDs is a SQL query string to retrieve the artists with the provided IDs from the 'artists' table.

@@ -24,17 +24,13 @@ const CreateTabsTable = `
 	   CONSTRAINT fk_instrument FOREIGN KEY(instrument_id) REFERENCES instruments(id),
 	   CONSTRAINT fk_difficulty	FOREIGN KEY(difficulty_id) REFERENCES difficulties(id)
 	);
+
+	CREATE INDEX idx_tab_id ON tabs(id);
 `
 
 // DropTabsTable is a SQL query to drop the 'tabs' table if it exists
 const DropTabsTable = `
 	DROP TABLE IF EXISTS tabs;
-`
-
-// InsertTab is a SQL query string used to insert a tab into the 'tabs' table.
-const InsertTab = `
-	INSERT INTO tabs (id, instrument_id, difficulty_id, description)
-    VALUES ($1, $2, $3, $4) 
 `
 
 // GetTabs is a SQL query sting used to retrieve tabs for the provided IDs.

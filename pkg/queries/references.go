@@ -27,20 +27,16 @@ const CreateReferencesTable = `
 	   category VARCHAR(250) NOT NULL, 
 	   type VARCHAR(250) NOT NULL,
 	   reference VARCHAR(250) NOT NULL,
-	   UNIQUE(internal_id, source_id, category, type),
+	   PRIMARY KEY (internal_id, source_id, category, type),
        CONSTRAINT fk_source FOREIGN KEY(source_id) REFERENCES sources(id)
 	);
+
+	CREATE INDEX idx_internal_id ON "references"(internal_id);
 `
 
 // DropReferencesTable is a SQL query to drop the 'references' table from the database.
 const DropReferencesTable = `
 	DROP TABLE IF EXISTS "references";
-`
-
-// InsertReference is a SQL query to insert a new reference record in the 'references' table
-const InsertReference = `
-	INSERT INTO "references" (internal_id, source_id, category, type, reference)
-    VALUES ($1, $2, $3, $4, $5) 
 `
 
 // GetReferences is a SQL query to retrieve references from the provided internal IDs.

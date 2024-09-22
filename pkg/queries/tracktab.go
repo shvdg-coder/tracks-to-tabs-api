@@ -16,19 +16,18 @@ const CreateTrackTabTable = `
 	CREATE TABLE IF NOT EXISTS track_tab  (
 	   track_id UUID REFERENCES tracks (id),
 	   tab_id UUID REFERENCES tabs (id),
-	   PRIMARY KEY (track_id, tab_id)
+	   PRIMARY KEY (track_id, tab_id),
+	   CONSTRAINT fk_track FOREIGN KEY(track_id) REFERENCES tracks(id),
+	   CONSTRAINT fk_tab FOREIGN KEY(tab_id) REFERENCES tabs(id)
 	);
+
+	CREATE INDEX idx_tracktab_track_id ON track_tab(track_id);
+	CREATE INDEX idx_tracktab_tab_id ON track_tab(tab_id);
 `
 
 // DropTrackTabTable is a SQL query that drops the 'track_tab' table from the database.
 const DropTrackTabTable = `
 	DROP TABLE IF EXISTS track_tab;
-`
-
-// InsertTrackTab is a SQL query to insert a link from a track to a tab in the 'track_tab' table.
-const InsertTrackTab = `
-	INSERT INTO track_tab (track_id, tab_id)
-    VALUES ($1, $2) 
 `
 
 // GetTrackTabLinks retrieves the 'track to tab' links for the provided Track IDs.

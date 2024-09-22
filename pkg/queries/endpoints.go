@@ -23,20 +23,16 @@ const CreateEndpointsTable = `
 	   category VARCHAR(250) NOT NULL,
 	   type VARCHAR(250) NOT NULL,
 	   url VARCHAR(250) NOT NULL,
-	   UNIQUE(source_id, category, type, url),  
+	   PRIMARY KEY (source_id, category, type, url),  
 	   CONSTRAINT fk_source FOREIGN KEY(source_id) REFERENCES sources(id)
 	);
+
+	CREATE INDEX idx_endpoint_id ON endpoints(source_id);
 `
 
 // DropEndpointsTable is a SQL query to drop the 'endpoints' table from the database.
 const DropEndpointsTable = `
 	DROP TABLE IF EXISTS "endpoints";
-`
-
-// InsertEndpoint is a SQL query to insert a new endpoint record in the 'endpoints' table
-const InsertEndpoint = `
-	INSERT INTO "endpoints" (source_id, category, type, url)
-    VALUES ($1, $2, $3, $4)
 `
 
 // GetEndpointsFromIDs is a SQL query to retrieve endpoints from the database.

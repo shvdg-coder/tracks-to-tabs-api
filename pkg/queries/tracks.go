@@ -20,17 +20,13 @@ const CreateTracksTable = `
 	   title VARCHAR(500) NOT NULL,
 	   duration NUMERIC NOT NULL
 	);
+
+	CREATE INDEX idx_track_id ON tracks(id);
 `
 
 // DropTracksTable is a SQL query to drop the 'tracks' table from the database.
 const DropTracksTable = `
 	DROP TABLE IF EXISTS tracks;
-`
-
-// InsertTrack is a SQL query to insert a track into the 'tracks' table.
-const InsertTrack = `
-	INSERT INTO tracks (id, title, duration)
-    VALUES ($1, $2, $3) 
 `
 
 // GetTracksFromIDs is a SQL query to retrieve the tracks with the provided track IDs from the 'tracks' table.
