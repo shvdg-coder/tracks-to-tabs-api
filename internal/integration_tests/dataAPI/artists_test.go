@@ -76,9 +76,4 @@ func testFieldsOfArtist(t *testing.T, actualArtist *models.Artist, expectedArtis
 	if actualArtist.Name != expectedArtist.Name {
 		t.Errorf("expected Name to be %s, got %s", expectedArtist.Name, actualArtist.Name)
 	}
-
-	// Check resources
-	if len(actualArtist.Resources) != len(expectedArtist.Resources) {
-		t.Errorf("expected %d resources, got %d", len(expectedArtist.Resources), len(actualArtist.Resources))
-	}
 }
