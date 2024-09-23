@@ -11,6 +11,7 @@ type APIOps interface {
 	DataOps
 	DummyOps
 	SeedOps
+	logic.DbOps
 }
 
 // API provides functionalities regarding the app.
@@ -20,6 +21,7 @@ type API struct {
 	DataOps
 	DummyOps
 	SeedOps
+	logic.DbOps
 }
 
 // NewAPI instantiates a API.
@@ -29,11 +31,15 @@ func NewAPI(configPath string) (*API, error) {
 		return nil, err
 	}
 
-	svcManager := createServiceManager(apiConfig.Database)
+	dbConfig := apiConfig.Database
+	database := logic.NewDbSvc(ValueDatabaseDriver, dbConfig.URL, logic.WithSSHTunnel(dbConfig.SSH), logic.WithConnection())
+
+	svcManager := NewSvcManager(database)
 	api := &API{
 		CreateOps: NewCreateAPI(svcManager),
 		DropOps:   NewDropAPI(svcManager),
 		DataOps:   NewDataAPI(svcManager),
+		DbOps:     database,
 	}
 
 	seeding := apiConfig.Seeding
@@ -44,10 +50,4 @@ func NewAPI(configPath string) (*API, error) {
 	}
 
 	return api, nil
-}
-
-// createServiceManager instantiates the service manager with the database.
-func createServiceManager(dbConfig *DatabaseConfig) *SvcManager {
-	database := logic.NewDbSvc(ValueDatabaseDriver, dbConfig.URL, logic.WithSSHTunnel(dbConfig.SSH), logic.WithConnection())
-	return NewSvcManager(database)
 }
