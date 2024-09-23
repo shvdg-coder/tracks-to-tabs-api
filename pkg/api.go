@@ -39,6 +39,7 @@ func NewAPI(configPath string) (*API, error) {
 	seeding := apiConfig.Seeding
 	if seeding != nil {
 		dummyAPI := NewDummyAPI(svcManager, seeding.Sources, seeding.Instruments, seeding.Difficulties)
+		api.DummyOps = dummyAPI
 		api.SeedOps = NewSeedingAPI(svcManager, seeding, dummyAPI)
 	}
 
