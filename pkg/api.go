@@ -30,16 +30,19 @@ func NewAPI(configPath string) (*API, error) {
 	}
 
 	svcManager := createServiceManager(apiConfig.Database)
-	seeding := apiConfig.Seeding
-	dummyAPI := NewDummyAPI(svcManager, seeding.Sources, seeding.Instruments, seeding.Difficulties)
-
-	return &API{
+	api := &API{
 		CreateOps: NewCreateAPI(svcManager),
 		DropOps:   NewDropAPI(svcManager),
 		DataOps:   NewDataAPI(svcManager),
-		DummyOps:  dummyAPI,
-		SeedOps:   NewSeedingAPI(svcManager, seeding, dummyAPI),
-	}, nil
+	}
+
+	seeding := apiConfig.Seeding
+	if seeding != nil {
+		dummyAPI := NewDummyAPI(svcManager, seeding.Sources, seeding.Instruments, seeding.Difficulties)
+		api.SeedOps = NewSeedingAPI(svcManager, seeding, dummyAPI)
+	}
+
+	return api, nil
 }
 
 // createServiceManager instantiates the service manager with the database.
