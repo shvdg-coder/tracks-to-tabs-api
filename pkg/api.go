@@ -1,44 +1,49 @@
 package pkg
 
 import (
-	"github.com/google/uuid"
-	logic "github.com/shvdg-dev/base-logic/pkg"
-	art "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists"
-	arttrk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/artists/artisttrack"
-	diff "github.com/shvdg-dev/tunes-to-tabs-api/pkg/difficulties"
-	end "github.com/shvdg-dev/tunes-to-tabs-api/pkg/endpoints"
-	inst "github.com/shvdg-dev/tunes-to-tabs-api/pkg/instruments"
-	ref "github.com/shvdg-dev/tunes-to-tabs-api/pkg/references"
-	src "github.com/shvdg-dev/tunes-to-tabs-api/pkg/sources"
-	tbs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tabs"
-	trk "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks"
-	trktab "github.com/shvdg-dev/tunes-to-tabs-api/pkg/tracks/tracktab"
-	usrs "github.com/shvdg-dev/tunes-to-tabs-api/pkg/users"
+	logic "github.com/shvdg-coder/base-logic/pkg"
 )
 
-// DataOperations represents all API data operations.
-type DataOperations interface {
-	art.DataOperations
-	GetArtistsCascading(artistID ...uuid.UUID) ([]*art.Artist, error)
-	trk.DataOperations
-	GetTracksCascading(tabID ...uuid.UUID) ([]*trk.Track, error)
-	tbs.DataOperations
-	arttrk.DataOperations
-	trktab.DataOperations
-	usrs.DataOperations
-	inst.DataOperations
-	diff.DataOperations
-	src.DataOperations
-	end.DataOperations
-	ref.DataOperations
+// APIOps represents the operations of the API.
+type APIOps interface {
+	CreateOps
+	DropOps
+	DataOps
+	DummyOps
+	SeedOps
 }
 
-// API represents the main entry point to interact with functionalities for the defined entities.
+// API provides functionalities regarding the app.
 type API struct {
-	Operations
+	CreateOps
+	DropOps
+	DataOps
+	DummyOps
+	SeedOps
 }
 
-// NewAPI creates a new instance of the API.
-func NewAPI(database logic.DbOperations) DataOperations {
-	return &API{Operations: NewServiceManager(database)}
+// NewAPI instantiates a API.
+func NewAPI(configPath string) (*API, error) {
+	apiConfig, err := NewAPIConfig(configPath)
+	if err != nil {
+		return nil, err
+	}
+
+	svcManager := createServiceManager(apiConfig.Database)
+	seeding := apiConfig.Seeding
+	dummyAPI := NewDummyAPI(svcManager, seeding.Sources, seeding.Instruments, seeding.Difficulties)
+
+	return &API{
+		CreateOps: NewCreateAPI(svcManager),
+		DropOps:   NewDropAPI(svcManager),
+		DataOps:   NewDataAPI(svcManager),
+		DummyOps:  dummyAPI,
+		SeedOps:   NewSeedingAPI(svcManager, seeding, dummyAPI),
+	}, nil
+}
+
+// createServiceManager instantiates the service manager with the database.
+func createServiceManager(dbConfig *DatabaseConfig) *SvcManager {
+	database := logic.NewDbSvc(ValueDatabaseDriver, dbConfig.URL, logic.WithSSHTunnel(dbConfig.SSH), logic.WithConnection())
+	return NewSvcManager(database)
 }

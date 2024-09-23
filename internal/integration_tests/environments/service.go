@@ -1,44 +1,44 @@
 package environments
 
 import (
-	tstdb "github.com/shvdg-dev/base-logic/pkg/testable/database"
-	inl "github.com/shvdg-dev/tunes-to-tabs-api/internal"
+	tstdb "github.com/shvdg-coder/base-logic/pkg/testable/database"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg"
 )
 
 // EnvManagement represents the operations related to managing environments.
 type EnvManagement interface {
-	CreatePostgresEnv() (DbEnvOperations, error)
-	CreateDbEnv(config *tstdb.ContainerConfig) (DbEnvOperations, error)
+	CreatePostgresEnv() (DbEnvOps, error)
+	CreateDbEnv(config *tstdb.ContainerConfig) (DbEnvOps, error)
 }
 
-// Service is responsible for managing different environments required for integration testing.
-type Service struct {
+// EnvSvc is responsible for managing different environments required for integration testing.
+type EnvSvc struct {
 	EnvManagement
 	Database tstdb.ContainerManagement
 }
 
-// NewService instantiates a new Service.
-func NewService() EnvManagement {
-	return &Service{
-		Database: tstdb.NewContainerService(),
+// NewEnvSvc instantiates a new EnvSvc.
+func NewEnvSvc() EnvManagement {
+	return &EnvSvc{
+		Database: tstdb.NewContainerSvc(),
 	}
 }
 
 // CreatePostgresEnv creates a Database environment for Postgres, with default configurations.
-func (s *Service) CreatePostgresEnv() (DbEnvOperations, error) {
+func (s *EnvSvc) CreatePostgresEnv() (DbEnvOps, error) {
 	return s.CreateDbEnv(tstdb.NewPostgresContainerConfig())
 }
 
 // CreateDbEnv creates a Database environment.
-func (s *Service) CreateDbEnv(config *tstdb.ContainerConfig) (DbEnvOperations, error) {
+func (s *EnvSvc) CreateDbEnv(config *tstdb.ContainerConfig) (DbEnvOps, error) {
 	dbContainer, err := s.Database.CreateContainer(config)
+	svcManager := pkg.NewSvcManager(dbContainer)
 	if err != nil {
 		return nil, err
 	}
 
-	tablesService := inl.NewTableService(dbContainer)
-	creatorService := inl.NewCreateService(tablesService)
-	dropService := inl.NewDropService(tablesService)
+	creatorService := pkg.NewCreateAPI(svcManager)
+	dropService := pkg.NewDropAPI(svcManager)
 	dbEnv := NewDbEnv(dbContainer, creatorService, dropService)
 
 	return dbEnv, nil

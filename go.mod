@@ -1,4 +1,4 @@
-module github.com/shvdg-dev/tunes-to-tabs-api
+module github.com/shvdg-coder/tracks-to-tabs-api
 
 go 1.22.2
 
@@ -6,8 +6,8 @@ require (
 	github.com/brianvoe/gofakeit/v7 v7.0.3
 	github.com/google/uuid v1.6.0
 	github.com/lib/pq v1.10.9
-	github.com/shvdg-dev/base-logic v0.0.18
-	gopkg.in/yaml.v2 v2.4.0
+	github.com/shvdg-coder/base-logic v0.0.10
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -27,6 +27,7 @@ require (
 	github.com/docker/docker v27.0.3+incompatible // indirect
 	github.com/docker/go-connections v0.5.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
+	github.com/elliotchance/sshtunnel v1.6.1 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
