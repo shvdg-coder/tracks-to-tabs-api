@@ -3,7 +3,7 @@ package dataAPI
 import (
 	"github.com/google/uuid"
 	env "github.com/shvdg-coder/tracks-to-tabs-api/internal/integration_tests/environments"
-	"github.com/shvdg-coder/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/services"
 	"testing"
 	"time"
 )
@@ -11,7 +11,7 @@ import (
 // TestGetArtistsPerf tests the performance of retrieving artists.
 func TestGetArtistsPerf(t *testing.T) {
 	dbEnv := createDefaultDbEnv(t)
-	svcManager := pkg.NewSvcManager(dbEnv)
+	svcManager := services.NewSvcManager(dbEnv)
 	defer dbEnv.Breakdown()
 
 	// Prepare
@@ -20,7 +20,7 @@ func TestGetArtistsPerf(t *testing.T) {
 	elapsed := time.Since(start)
 	t.Logf("Seeding artists took %s", elapsed.Round(time.Millisecond))
 
-	api := pkg.NewDataAPI(svcManager)
+	api := services.NewDataSvc(svcManager)
 
 	// Execute
 	artistIDs := selectArtistIDs(t, dbEnv)

@@ -2,51 +2,54 @@ package pkg
 
 import (
 	logic "github.com/shvdg-coder/base-logic/pkg"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/constants"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/services"
 )
 
 // APIOps represents the operations of the API.
 type APIOps interface {
-	CreateOps
-	DropOps
-	DataOps
-	DummyOps
-	SeedOps
+	services.CreateOps
+	services.DropOps
+	services.DataOps
+	services.DummyOps
+	services.SeedOps
 	logic.DbOps
 }
 
 // API provides functionalities regarding the app.
 type API struct {
-	CreateOps
-	DropOps
-	DataOps
-	DummyOps
-	SeedOps
+	services.CreateOps
+	services.DropOps
+	services.DataOps
+	services.DummyOps
+	services.SeedOps
 	logic.DbOps
 }
 
 // NewAPI instantiates a API.
 func NewAPI(configPath string) (*API, error) {
-	apiConfig, err := NewAPIConfig(configPath)
+	apiConfig, err := models.NewAPIConfig(configPath)
 	if err != nil {
 		return nil, err
 	}
 
 	dbConfig := apiConfig.Database
-	database := logic.NewDbSvc(ValueDatabaseDriver, dbConfig.URL, logic.WithSSHTunnel(dbConfig.SSH), logic.WithConnection())
+	database := logic.NewDbSvc(constants.ValueDatabaseDriver, dbConfig.URL, logic.WithSSHTunnel(dbConfig.SSH), logic.WithConnection())
 
-	svcManager := NewSvcManager(database)
+	svcManager := services.NewSvcManager(database)
 	api := &API{
-		CreateOps: NewCreateAPI(svcManager),
-		DropOps:   NewDropAPI(svcManager),
-		DataOps:   NewDataAPI(svcManager),
+		CreateOps: services.NewCreateSvc(svcManager),
+		DropOps:   services.NewDropSvc(svcManager),
+		DataOps:   services.NewDataSvc(svcManager),
 		DbOps:     database,
 	}
 
 	seeding := apiConfig.Seeding
 	if seeding != nil {
-		dummyAPI := NewDummyAPI(svcManager, seeding.Sources, seeding.Instruments, seeding.Difficulties)
-		api.DummyOps = dummyAPI
-		api.SeedOps = NewSeedingAPI(svcManager, seeding, dummyAPI)
+		dummySvc := services.NewDummySvc(svcManager, seeding.Sources, seeding.Instruments, seeding.Difficulties)
+		api.DummyOps = dummySvc
+		api.SeedOps = services.NewSeedSvc(svcManager, seeding, dummySvc)
 	}
 
 	return api, nil

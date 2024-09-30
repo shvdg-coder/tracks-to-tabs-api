@@ -1,4 +1,4 @@
-package pkg
+package constants
 
 const (
 	CategoryMusic  = "music"

@@ -1,4 +1,4 @@
-package pkg
+package services
 
 // CreateOps represents operations for creating tables.
 type CreateOps interface {
@@ -8,25 +8,25 @@ type CreateOps interface {
 	CreateRelationLinkTables()
 }
 
-// CreateAPI helps with creating tables for the database
-type CreateAPI struct {
+// CreateSvc helps with creating tables for the database
+type CreateSvc struct {
 	SvcOps
 }
 
-// NewCreateAPI creates a new instance of CreateAPI
-func NewCreateAPI(svcManager SvcOps) CreateOps {
-	return &CreateAPI{SvcOps: svcManager}
+// NewCreateSvc creates a new instance of CreateSvc
+func NewCreateSvc(svcManager SvcOps) CreateOps {
+	return &CreateSvc{SvcOps: svcManager}
 }
 
 // CreateAll when permitted, creates tables in the database
-func (c *CreateAPI) CreateAll() {
+func (c *CreateSvc) CreateAll() {
 	c.CreateLookupTables()
 	c.CreateStorageTables()
 	c.CreateRelationLinkTables()
 }
 
 // CreateLookupTables creates the lookup tables.
-func (c *CreateAPI) CreateLookupTables() {
+func (c *CreateSvc) CreateLookupTables() {
 	c.CreateInstrumentsTable()
 	c.CreateDifficultiesTable()
 	c.CreateSourcesTable()
@@ -34,7 +34,7 @@ func (c *CreateAPI) CreateLookupTables() {
 }
 
 // CreateStorageTables creates tables.
-func (c *CreateAPI) CreateStorageTables() {
+func (c *CreateSvc) CreateStorageTables() {
 	c.CreateArtistsTable()
 	c.CreateReferencesTable()
 	c.CreateTabsTable()
@@ -43,7 +43,7 @@ func (c *CreateAPI) CreateStorageTables() {
 }
 
 // CreateRelationLinkTables creates tables for establishing links.
-func (c *CreateAPI) CreateRelationLinkTables() {
+func (c *CreateSvc) CreateRelationLinkTables() {
 	c.CreateArtistTrackTable()
 	c.CreateTrackTabTable()
 }

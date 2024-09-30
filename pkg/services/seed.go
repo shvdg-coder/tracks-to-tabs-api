@@ -1,6 +1,7 @@
-package pkg
+package services
 
 import (
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/constants"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"log"
 	"strings"
@@ -11,19 +12,19 @@ type SeedOps interface {
 	Seed()
 }
 
-// SeedingAPI is responsible for seeding data.
-type SeedingAPI struct {
+// SeedSvc is responsible for seeding data.
+type SeedSvc struct {
 	SvcOps
-	*SeedingConfig
+	*models.SeedingConfig
 	DummyOps
 }
 
-// NewSeedingAPI instantiates a SeedingAPI.
-func NewSeedingAPI(svcManager SvcOps, config *SeedingConfig, dummies DummyOps) SeedOps {
-	return &SeedingAPI{svcManager, config, dummies}
+// NewSeedSvc instantiates a SeedSvc.
+func NewSeedSvc(svcManager SvcOps, config *models.SeedingConfig, dummies DummyOps) SeedOps {
+	return &SeedSvc{svcManager, config, dummies}
 }
 
-func (s *SeedingAPI) Seed() {
+func (s *SeedSvc) Seed() {
 	s.SeedInstruments()
 	s.SeedDifficulties()
 	s.SeedSources()
@@ -37,7 +38,7 @@ func (s *SeedingAPI) Seed() {
 }
 
 // SeedInstruments seeds the instruments table with the default instruments.
-func (s *SeedingAPI) SeedInstruments() {
+func (s *SeedSvc) SeedInstruments() {
 	err := s.InsertInstrumentEntries(s.SeedingConfig.Instruments...)
 	if err != nil {
 		log.Fatalf("Failed to insert instruments: %s", err.Error())
@@ -45,7 +46,7 @@ func (s *SeedingAPI) SeedInstruments() {
 }
 
 // SeedDifficulties seeds the difficulties table with the default difficulties.
-func (s *SeedingAPI) SeedDifficulties() {
+func (s *SeedSvc) SeedDifficulties() {
 	err := s.InsertDifficultyEntries(s.SeedingConfig.Difficulties...)
 	if err != nil {
 		log.Fatalf("Failed to insert difficulties: %s", err.Error())
@@ -53,7 +54,7 @@ func (s *SeedingAPI) SeedDifficulties() {
 }
 
 // SeedSources seeds the sources from the config file.
-func (s *SeedingAPI) SeedSources() {
+func (s *SeedSvc) SeedSources() {
 	err := s.InsertSourceEntries(s.SeedingConfig.Sources...)
 	if err != nil {
 		log.Fatalf("Failed to insert sources: %s", err.Error())
@@ -61,7 +62,7 @@ func (s *SeedingAPI) SeedSources() {
 }
 
 // SeedEndpoints seeds the endpoints from the config file.
-func (s *SeedingAPI) SeedEndpoints() {
+func (s *SeedSvc) SeedEndpoints() {
 	err := s.InsertEndpointEntries(s.SeedingConfig.Endpoints...)
 	if err != nil {
 		log.Fatalf("Failed to insert endpoints: %s", err.Error())
@@ -69,7 +70,7 @@ func (s *SeedingAPI) SeedEndpoints() {
 }
 
 // CreateAndInsertArtists creates and inserts artist entries and returns it.
-func (s *SeedingAPI) CreateAndInsertArtists() []*models.ArtistEntry {
+func (s *SeedSvc) CreateAndInsertArtists() []*models.ArtistEntry {
 	dummyArtists := s.CreateArtists(s.Dummies.Artists)
 
 	err := s.InsertArtistEntries(dummyArtists...)
@@ -81,7 +82,7 @@ func (s *SeedingAPI) CreateAndInsertArtists() []*models.ArtistEntry {
 }
 
 // CreateAndInsertArtistReferences creates and inserts artist references for given artists.
-func (s *SeedingAPI) CreateAndInsertArtistReferences(artists []*models.ArtistEntry) {
+func (s *SeedSvc) CreateAndInsertArtistReferences(artists []*models.ArtistEntry) {
 	artistRefs := make([]*models.ReferenceEntry, 0)
 
 	for _, artist := range artists {
@@ -95,22 +96,22 @@ func (s *SeedingAPI) CreateAndInsertArtistReferences(artists []*models.ArtistEnt
 }
 
 // CreateArtistReferences creates artist references and returns it.
-func (s *SeedingAPI) CreateArtistReferences(artist *models.ArtistEntry) []*models.ReferenceEntry {
+func (s *SeedSvc) CreateArtistReferences(artist *models.ArtistEntry) []*models.ReferenceEntry {
 	artistRefs := make([]*models.ReferenceEntry, 0)
 
-	sourceMusic := s.GetRandomSource(CategoryMusic)
-	artistIDRef := s.CreateReference(artist.ID, sourceMusic.ID, TypeID, CategoryArtist, s.CreateRandomUUID())
+	sourceMusic := s.GetRandomSource(constants.CategoryMusic)
+	artistIDRef := s.CreateReference(artist.ID, sourceMusic.ID, constants.TypeID, constants.CategoryArtist, s.CreateRandomUUID())
 	artistRefs = append(artistRefs, artistIDRef)
 
-	sourceTabs := s.GetRandomSource(CategoryTabs)
-	artistNameRef := s.CreateReference(artist.ID, sourceTabs.ID, TypeName, CategoryArtist, s.formatName(artist.Name))
+	sourceTabs := s.GetRandomSource(constants.CategoryTabs)
+	artistNameRef := s.CreateReference(artist.ID, sourceTabs.ID, constants.TypeName, constants.CategoryArtist, s.formatName(artist.Name))
 	artistRefs = append(artistRefs, artistNameRef)
 
 	return artistRefs
 }
 
 // CreateAndInsertTracks creates and inserts tracks for given artists and returns the tracks.
-func (s *SeedingAPI) CreateAndInsertTracks(artists []*models.ArtistEntry) []*models.TrackEntry {
+func (s *SeedSvc) CreateAndInsertTracks(artists []*models.ArtistEntry) []*models.TrackEntry {
 	dummyTracks := make([]*models.TrackEntry, 0)
 	dummyArtistTracks := make([]*models.ArtistTrackEntry, 0)
 
@@ -136,7 +137,7 @@ func (s *SeedingAPI) CreateAndInsertTracks(artists []*models.ArtistEntry) []*mod
 }
 
 // CreateAndInsertTrackReferences creates and inserts track references for given tracks.
-func (s *SeedingAPI) CreateAndInsertTrackReferences(tracks []*models.TrackEntry) {
+func (s *SeedSvc) CreateAndInsertTrackReferences(tracks []*models.TrackEntry) {
 	trackRefs := make([]*models.ReferenceEntry, 0)
 
 	for _, track := range tracks {
@@ -150,22 +151,22 @@ func (s *SeedingAPI) CreateAndInsertTrackReferences(tracks []*models.TrackEntry)
 }
 
 // CreateTrackReferences creates track references for a given track and returns it.
-func (s *SeedingAPI) CreateTrackReferences(track *models.TrackEntry) []*models.ReferenceEntry {
+func (s *SeedSvc) CreateTrackReferences(track *models.TrackEntry) []*models.ReferenceEntry {
 	trackRefs := make([]*models.ReferenceEntry, 0)
 
-	sourceMusic := s.GetRandomSource(CategoryMusic)
-	trackIDRef := s.CreateReference(track.ID, sourceMusic.ID, TypeID, CategoryTrack, s.CreateRandomUUID())
+	sourceMusic := s.GetRandomSource(constants.CategoryMusic)
+	trackIDRef := s.CreateReference(track.ID, sourceMusic.ID, constants.TypeID, constants.CategoryTrack, s.CreateRandomUUID())
 	trackRefs = append(trackRefs, trackIDRef)
 
-	sourceTabs := s.GetRandomSource(CategoryTabs)
-	trackNameRef := s.CreateReference(track.ID, sourceTabs.ID, TypeName, CategoryTrack, s.formatName(track.Title))
+	sourceTabs := s.GetRandomSource(constants.CategoryTabs)
+	trackNameRef := s.CreateReference(track.ID, sourceTabs.ID, constants.TypeName, constants.CategoryTrack, s.formatName(track.Title))
 	trackRefs = append(trackRefs, trackNameRef)
 
 	return trackRefs
 }
 
 // CreateAndInsertTabs creates and inserts tabs for given tacks and returns the tabs.
-func (s *SeedingAPI) CreateAndInsertTabs(tracks []*models.TrackEntry) []*models.TabEntry {
+func (s *SeedSvc) CreateAndInsertTabs(tracks []*models.TrackEntry) []*models.TabEntry {
 	dummyTabs := make([]*models.TabEntry, 0)
 	dummyTrackTabs := make([]*models.TrackTabEntry, 0)
 
@@ -191,7 +192,7 @@ func (s *SeedingAPI) CreateAndInsertTabs(tracks []*models.TrackEntry) []*models.
 }
 
 // CreateAndInsertTabReferences creates and inserts tab references for given tabs.
-func (s *SeedingAPI) CreateAndInsertTabReferences(tabs []*models.TabEntry) {
+func (s *SeedSvc) CreateAndInsertTabReferences(tabs []*models.TabEntry) {
 	tabRefs := make([]*models.ReferenceEntry, 0)
 
 	for _, tab := range tabs {
@@ -205,21 +206,21 @@ func (s *SeedingAPI) CreateAndInsertTabReferences(tabs []*models.TabEntry) {
 }
 
 // CreateTabReferences creates tab references for a given tab and returns it.
-func (s *SeedingAPI) CreateTabReferences(tab *models.TabEntry) []*models.ReferenceEntry {
+func (s *SeedSvc) CreateTabReferences(tab *models.TabEntry) []*models.ReferenceEntry {
 	tabRefs := make([]*models.ReferenceEntry, 0)
 
-	sourceTabs := s.GetRandomSource(CategoryTabs)
+	sourceTabs := s.GetRandomSource(constants.CategoryTabs)
 
-	tabIDRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeID, CategoryTab, s.CreateRandomUUID())
+	tabIDRef := s.CreateReference(tab.ID, sourceTabs.ID, constants.TypeID, constants.CategoryTab, s.CreateRandomUUID())
 	tabRefs = append(tabRefs, tabIDRef)
 
-	tabNameRef := s.CreateReference(tab.ID, sourceTabs.ID, TypeName, CategoryTab, s.formatName(tab.Description))
+	tabNameRef := s.CreateReference(tab.ID, sourceTabs.ID, constants.TypeName, constants.CategoryTab, s.formatName(tab.Description))
 	tabRefs = append(tabRefs, tabNameRef)
 
 	return tabRefs
 }
 
 // formatName formats the provided name.
-func (s *SeedingAPI) formatName(name string) string {
+func (s *SeedSvc) formatName(name string) string {
 	return strings.ToLower(strings.Replace(name, " ", "-", -1))
 }

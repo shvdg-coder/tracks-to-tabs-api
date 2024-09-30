@@ -3,16 +3,16 @@ package dataAPI
 import (
 	"github.com/google/uuid"
 	logic "github.com/shvdg-coder/base-logic/pkg"
-	"github.com/shvdg-coder/tracks-to-tabs-api/pkg"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/mappers"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/services"
 	"testing"
 )
 
 // TestGetArtists tests whether artists can be inserted and retrieved cascading.
 func TestGetArtists(t *testing.T) {
 	dbEnv := createDefaultDbEnv(t)
-	svcManager := pkg.NewSvcManager(dbEnv)
+	svcManager := services.NewSvcManager(dbEnv)
 	defer dbEnv.Breakdown()
 
 	// Prepare
@@ -32,7 +32,7 @@ func TestGetArtists(t *testing.T) {
 	}
 
 	mapper := mappers.NewArtistSvc()
-	api := pkg.NewDataAPI(svcManager)
+	api := services.NewDataSvc(svcManager)
 
 	// Execute
 	actualArtists, err := api.GetArtists(artistIDs...)

@@ -2,7 +2,7 @@ package environments
 
 import (
 	tstdb "github.com/shvdg-coder/base-logic/pkg/testable/database"
-	"github.com/shvdg-coder/tracks-to-tabs-api/pkg"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/services"
 )
 
 // EnvManagement represents the operations related to managing environments.
@@ -32,13 +32,13 @@ func (s *EnvSvc) CreatePostgresEnv() (DbEnvOps, error) {
 // CreateDbEnv creates a Database environment.
 func (s *EnvSvc) CreateDbEnv(config *tstdb.ContainerConfig) (DbEnvOps, error) {
 	dbContainer, err := s.Database.CreateContainer(config)
-	svcManager := pkg.NewSvcManager(dbContainer)
+	svcManager := services.NewSvcManager(dbContainer)
 	if err != nil {
 		return nil, err
 	}
 
-	creatorService := pkg.NewCreateAPI(svcManager)
-	dropService := pkg.NewDropAPI(svcManager)
+	creatorService := services.NewCreateSvc(svcManager)
+	dropService := services.NewDropSvc(svcManager)
 	dbEnv := NewDbEnv(dbContainer, creatorService, dropService)
 
 	return dbEnv, nil

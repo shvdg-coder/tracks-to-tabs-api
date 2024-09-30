@@ -1,4 +1,4 @@
-package pkg
+package services
 
 // DropOps represents operations for dropping tables.
 type DropOps interface {
@@ -8,25 +8,25 @@ type DropOps interface {
 	DropRelationLinkTables()
 }
 
-// DropAPI helps with deleting data from the database.
-type DropAPI struct {
+// DropSvc helps with deleting data from the database.
+type DropSvc struct {
 	SvcOps
 }
 
-// NewDropAPI creates a new instance of DropAPI.
-func NewDropAPI(svcManager SvcOps) DropOps {
-	return &DropAPI{svcManager}
+// NewDropSvc creates a new instance of DropSvc.
+func NewDropSvc(svcManager SvcOps) DropOps {
+	return &DropSvc{svcManager}
 }
 
 // DropAll when permitted, drops the tables in the database.
-func (d *DropAPI) DropAll() {
+func (d *DropSvc) DropAll() {
 	d.DropRelationLinkTables()
 	d.DropStorageTables()
 	d.DropLookupTables()
 }
 
 // DropLookupTables drops the lookup tables.
-func (d *DropAPI) DropLookupTables() {
+func (d *DropSvc) DropLookupTables() {
 	d.DropInstrumentsTable()
 	d.DropDifficultiesTable()
 	d.DropEndpointsTable()
@@ -34,7 +34,7 @@ func (d *DropAPI) DropLookupTables() {
 }
 
 // DropStorageTables drops the storage tables.
-func (d *DropAPI) DropStorageTables() {
+func (d *DropSvc) DropStorageTables() {
 	d.DropArtistsTable()
 	d.DropReferencesTable()
 	d.DropTabsTable()
@@ -43,7 +43,7 @@ func (d *DropAPI) DropStorageTables() {
 }
 
 // DropRelationLinkTables drops tables that establish links.
-func (d *DropAPI) DropRelationLinkTables() {
+func (d *DropSvc) DropRelationLinkTables() {
 	d.DropArtistTrackTable()
 	d.DropTrackTabTable()
 }

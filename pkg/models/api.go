@@ -1,9 +1,8 @@
-package pkg
+package models
 
 import (
 	faker "github.com/brianvoe/gofakeit/v7"
 	logic "github.com/shvdg-coder/base-logic/pkg"
-	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 	"gopkg.in/yaml.v3"
 	"os"
 )
@@ -22,11 +21,11 @@ type DatabaseConfig struct {
 
 // SeedingConfig holds the configuration related to seeding the application
 type SeedingConfig struct {
-	Dummies      DummyConfig               `json:"dummies"`
-	Instruments  []*models.InstrumentEntry `json:"instruments"`
-	Difficulties []*models.DifficultyEntry `json:"difficulties"`
-	Sources      []*models.SourceEntry     `json:"sources"`
-	Endpoints    []*models.EndpointEntry   `json:"endpoints"`
+	Dummies      DummyConfig        `json:"dummies"`
+	Instruments  []*InstrumentEntry `json:"instruments"`
+	Difficulties []*DifficultyEntry `json:"difficulties"`
+	Sources      []*SourceEntry     `json:"sources"`
+	Endpoints    []*EndpointEntry   `json:"endpoints"`
 }
 
 // DummyConfig contains the configuration for creating dummy data
