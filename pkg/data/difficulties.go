@@ -30,11 +30,10 @@ func (d *DifficultySvc) InsertDifficultyEntries(difficulties ...*models.Difficul
 	data := make([][]interface{}, len(difficulties))
 
 	for i, difficulty := range difficulties {
-		data[i] = difficulty.Fields()
+		data[i] = logic.GetFields(difficulty)
 	}
 
-	fieldNames := []string{"id", "name"}
-	return d.BulkInsert("difficulties", fieldNames, data)
+	return d.BulkInsert("difficulties", logic.GetFieldNames("db", &models.DifficultyEntry{}), data)
 }
 
 // GetDifficultyEntry retrieves a difficulty entry, without the entity references, for the provided ID.

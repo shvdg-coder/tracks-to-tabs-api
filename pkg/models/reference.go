@@ -7,11 +7,11 @@ import (
 
 // ReferenceEntry represents a reference in the database.
 type ReferenceEntry struct {
-	InternalID uuid.UUID
-	SourceID   uint
-	Category   string
-	Type       string
-	Reference  string
+	InternalID uuid.UUID `db:"internal_id"`
+	SourceID   uint      `db:"source_id"`
+	Category   string    `db:"category"`
+	Type       string    `db:"type"`
+	Reference  string    `db:"reference"`
 }
 
 // Fields returns a slice of interfaces containing values of the ReferenceEntry.

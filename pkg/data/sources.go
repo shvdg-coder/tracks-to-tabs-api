@@ -30,11 +30,10 @@ func (d *SourceSvc) InsertSourceEntries(sources ...*models.SourceEntry) error {
 	data := make([][]interface{}, len(sources))
 
 	for i, source := range sources {
-		data[i] = source.Fields()
+		data[i] = logic.GetFields(source)
 	}
 
-	fieldNames := []string{"id", "name", "category"}
-	return d.BulkInsert("sources", fieldNames, data)
+	return d.BulkInsert("sources", logic.GetFieldNames("db", &models.SourceEntry{}), data)
 }
 
 // GetSourceEntry retrieves a source from the database.

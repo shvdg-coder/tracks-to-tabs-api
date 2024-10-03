@@ -30,11 +30,10 @@ func (d *InstrumentSvc) InsertInstrumentEntries(instruments ...*models.Instrumen
 	data := make([][]interface{}, len(instruments))
 
 	for i, instrument := range instruments {
-		data[i] = instrument.Fields()
+		data[i] = logic.GetFields(instrument)
 	}
 
-	fieldNames := []string{"id", "name"}
-	return d.BulkInsert("instruments", fieldNames, data)
+	return d.BulkInsert("instruments", logic.GetFieldNames("db", &models.InstrumentEntry{}), data)
 }
 
 // GetInstrumentEntry retrieves an instrument for the provided ID.

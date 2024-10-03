@@ -31,11 +31,10 @@ func (d *TabSvc) InsertTabEntries(tabs ...*models.TabEntry) error {
 	data := make([][]interface{}, len(tabs))
 
 	for i, tab := range tabs {
-		data[i] = tab.Fields()
+		data[i] = logic.GetFields(tab)
 	}
 
-	fieldNames := []string{"id", "instrument_id", "difficulty_id", "description"}
-	return d.BulkInsert("tabs", fieldNames, data)
+	return d.BulkInsert("tabs", logic.GetFieldNames("db", &models.TabEntry{}), data)
 }
 
 // GetTabEntry retrieves a tab entry, without entity references, for the provided tab ID.

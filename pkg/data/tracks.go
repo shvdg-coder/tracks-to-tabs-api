@@ -30,11 +30,10 @@ func (d *TrackSvc) InsertTrackEntries(tracks ...*models.TrackEntry) error {
 	data := make([][]interface{}, len(tracks))
 
 	for i, track := range tracks {
-		data[i] = track.Fields()
+		data[i] = logic.GetFields(track)
 	}
 
-	fieldNames := []string{"id", "title", "duration"}
-	return d.BulkInsert("tracks", fieldNames, data)
+	return d.BulkInsert("tracks", logic.GetFieldNames("db", &models.TrackEntry{}), data)
 }
 
 // GetTrackEntry retrieves a track entry, without entity references, for the provided ID.

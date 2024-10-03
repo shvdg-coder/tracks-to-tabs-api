@@ -7,14 +7,10 @@ import (
 
 // TrackEntry represents a track in the database.
 type TrackEntry struct {
-	ID       uuid.UUID
-	Title    string
-	Duration uint // In milliseconds.
-}
-
-// Fields returns a slice of interfaces containing values of the TrackEntry.
-func (t *TrackEntry) Fields() []interface{} {
-	return []interface{}{t.ID.String(), t.Title, t.Duration}
+	ID       uuid.UUID `db:"id"`
+	Title    string    `db:"title"`
+	Cover    string    `db:"cover"`    // Image
+	Duration uint      `db:"duration"` // In milliseconds.
 }
 
 // Track represents a track.

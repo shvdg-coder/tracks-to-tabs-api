@@ -30,11 +30,10 @@ func (d *TrackTabSvc) InsertTrackTabEntries(trackTabs ...*models.TrackTabEntry) 
 	data := make([][]interface{}, len(trackTabs))
 
 	for i, link := range trackTabs {
-		data[i] = link.Fields()
+		data[i] = logic.GetFields(link)
 	}
 
-	fieldNames := []string{"track_id", "tab_id"}
-	return d.BulkInsert("track_tab", fieldNames, data)
+	return d.BulkInsert("track_tab", logic.GetFieldNames("db", &models.TrackTabEntry{}), data)
 }
 
 // GetTrackToTabEntry retrieves the 'track to tab' link for the provided ID.

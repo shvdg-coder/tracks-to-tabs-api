@@ -30,11 +30,10 @@ func (d *ReferenceSvc) InsertReferenceEntries(references ...*models.ReferenceEnt
 	data := make([][]interface{}, len(references))
 
 	for i, reference := range references {
-		data[i] = reference.Fields()
+		data[i] = logic.GetFields(reference)
 	}
 
-	fieldNames := []string{"internal_id", "source_id", "category", "type", "reference"}
-	return d.BulkInsert("references", fieldNames, data)
+	return d.BulkInsert("references", logic.GetFieldNames("db", &models.ReferenceEntry{}), data)
 }
 
 // GetReferenceEntry retrieves a reference entry, without entity references, for the provided internal ID.

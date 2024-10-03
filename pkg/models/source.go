@@ -4,9 +4,9 @@ import "encoding/json"
 
 // SourceEntry represents a source in the database.
 type SourceEntry struct {
-	ID       uint   `yaml:"id"`
-	Name     string `yaml:"name"`
-	Category string `yaml:"category"`
+	ID       uint   `yaml:"id" db:"id"`
+	Name     string `yaml:"name" db:"name"`
+	Category string `yaml:"category" db:"category"`
 }
 
 // Fields returns a slice of interfaces containing values of the SourceEntry.

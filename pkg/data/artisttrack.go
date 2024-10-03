@@ -31,11 +31,10 @@ func (d *ArtistTrackSvc) InsertArtistTrackEntries(artistTracks ...*models.Artist
 	data := make([][]interface{}, len(artistTracks))
 
 	for i, link := range artistTracks {
-		data[i] = link.Fields()
+		data[i] = logic.GetFields(link)
 	}
 
-	fieldNames := []string{"artist_id", "track_id"}
-	return d.BulkInsert("artist_track", fieldNames, data)
+	return d.BulkInsert("artist_track", logic.GetFieldNames("db", &models.ArtistTrackEntry{}), data)
 }
 
 // GetArtistToTrackEntry retrieves the 'artist to track' link for the provided artist or track IDs.

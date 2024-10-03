@@ -7,10 +7,10 @@ import (
 
 // TabEntry represents a tab.
 type TabEntry struct {
-	ID           uuid.UUID
-	InstrumentID uint
-	DifficultyID uint
-	Description  string
+	ID           uuid.UUID `db:"id"`
+	InstrumentID uint      `db:"instrument_id"`
+	DifficultyID uint      `db:"difficulty_id"`
+	Description  string    `db:"description"`
 }
 
 // Fields returns a slice of interfaces containing values of the TabEntry.

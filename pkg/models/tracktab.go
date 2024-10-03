@@ -4,8 +4,8 @@ import "github.com/google/uuid"
 
 // TrackTabEntry represents a link from a track to a tab.
 type TrackTabEntry struct {
-	TrackID uuid.UUID
-	TabID   uuid.UUID
+	TrackID uuid.UUID `db:"track_id"`
+	TabID   uuid.UUID `db:"tab_id"`
 }
 
 // Fields returns a slice of interfaces containing values of the TrackTabEntry.

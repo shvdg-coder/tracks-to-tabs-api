@@ -4,13 +4,8 @@ import "encoding/json"
 
 // DifficultyEntry represents a difficulty level in the database.
 type DifficultyEntry struct {
-	ID   uint   `yaml:"id"`
-	Name string `yaml:"name"`
-}
-
-// Fields returns a slice of interfaces containing values of the DifficultyEntry.
-func (d *DifficultyEntry) Fields() []interface{} {
-	return []interface{}{d.ID, d.Name}
+	ID   uint   `yaml:"id" db:"id"`
+	Name string `yaml:"name" db:"name"`
 }
 
 // Difficulty represents a difficulty with entity references

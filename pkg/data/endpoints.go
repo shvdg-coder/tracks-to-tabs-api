@@ -29,11 +29,10 @@ func (d *EndpointSvc) InsertEndpointEntries(endpoints ...*models.EndpointEntry) 
 	data := make([][]interface{}, len(endpoints))
 
 	for i, endpoint := range endpoints {
-		data[i] = endpoint.Fields()
+		data[i] = logic.GetFields(endpoint)
 	}
 
-	fieldNames := []string{"source_id", "category", "type", "url"}
-	return d.BulkInsert("endpoints", fieldNames, data)
+	return d.BulkInsert("endpoints", logic.GetFieldNames("db", &models.EndpointEntry{}), data)
 }
 
 // GetEndpointEntry retrieves the endpoint for the provided ID from the database.

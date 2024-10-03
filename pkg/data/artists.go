@@ -31,11 +31,10 @@ func (d *ArtistSvc) InsertArtistEntries(artists ...*models.ArtistEntry) error {
 	data := make([][]interface{}, len(artists))
 
 	for i, artist := range artists {
-		data[i] = artist.Fields()
+		data[i] = logic.GetFields(artist)
 	}
 
-	fieldNames := []string{"id", "name"}
-	return d.BulkInsert("artists", fieldNames, data)
+	return d.BulkInsert("artists", logic.GetFieldNames("db", &models.ArtistEntry{}), data)
 }
 
 // GetArtistEntry retrieves an artist entry, without entity references, for the provided ID.
