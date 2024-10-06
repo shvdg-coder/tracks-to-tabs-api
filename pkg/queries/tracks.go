@@ -32,4 +32,4 @@ const DropTracksTable = `
 `
 
 // GetTracksFromIDs is a SQL query to retrieve the tracks with the provided track IDs from the 'tracks' table.
-const GetTracksFromIDs = `SELECT id, title, cover, duration FROM tracks WHERE id = ANY($1::uuid[])`
+const GetTracksFromIDs = `SELECT id, title, duration, cover FROM tracks WHERE id = ANY($1::uuid[])`

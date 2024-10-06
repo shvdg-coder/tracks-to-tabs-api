@@ -58,7 +58,7 @@ func (d *ArtistSvc) GetArtistsEntries(artistID ...uuid.UUID) ([]*models.ArtistEn
 	var artists []*models.ArtistEntry
 	for rows.Next() {
 		artistEntry := &models.ArtistEntry{}
-		err := rows.Scan(&artistEntry.ID, &artistEntry.Name)
+		err := rows.Scan(&artistEntry.ID, &artistEntry.Name, &artistEntry.Cover, &artistEntry.Banner)
 		if err != nil {
 			return nil, err
 		}

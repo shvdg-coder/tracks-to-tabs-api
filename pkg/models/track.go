@@ -1,16 +1,17 @@
 package models
 
 import (
+	"database/sql"
 	"encoding/json"
 	"github.com/google/uuid"
 )
 
 // TrackEntry represents a track in the database.
 type TrackEntry struct {
-	ID       uuid.UUID `db:"id"`
-	Title    string    `db:"title"`
-	Cover    string    `db:"cover"`    // Image
-	Duration uint      `db:"duration"` // In milliseconds.
+	ID       uuid.UUID      `db:"id"`
+	Title    string         `db:"title"`
+	Duration uint           `db:"duration"` // In milliseconds.
+	Cover    sql.NullString `db:"cover"`    // Image
 }
 
 // Track represents a track.

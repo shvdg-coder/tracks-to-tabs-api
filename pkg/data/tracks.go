@@ -57,7 +57,7 @@ func (d *TrackSvc) GetTrackEntries(trackID ...uuid.UUID) ([]*models.TrackEntry, 
 	var tracks []*models.TrackEntry
 	for rows.Next() {
 		track := &models.TrackEntry{}
-		err := rows.Scan(&track.ID, &track.Title, &track.Duration)
+		err := rows.Scan(&track.ID, &track.Title, &track.Duration, &track.Cover)
 		if err != nil {
 			return nil, err
 		}

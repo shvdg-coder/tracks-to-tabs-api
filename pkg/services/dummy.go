@@ -1,6 +1,7 @@
 package services
 
 import (
+	"database/sql"
 	"encoding/base64"
 	faker "github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
@@ -89,13 +90,13 @@ func (d *DummySvc) CreateArtists(config *models.ArtistConfig) []*models.ArtistEn
 
 // CreateArtist creates a dummy artist with a random name and tracks.
 func (d *DummySvc) CreateArtist() *models.ArtistEntry {
-	coverImg := faker.ImageJpeg(750, 750)
-	bannerImg := faker.ImageJpeg(2660, 1140)
+	coverImg := base64.StdEncoding.EncodeToString(faker.ImageJpeg(750, 750))
+	bannerImg := base64.StdEncoding.EncodeToString(faker.ImageJpeg(2660, 1140))
 	return &models.ArtistEntry{
 		ID:     uuid.New(),
 		Name:   faker.HipsterWord(),
-		Cover:  base64.StdEncoding.EncodeToString(coverImg),
-		Banner: base64.StdEncoding.EncodeToString(bannerImg),
+		Cover:  sql.NullString{String: coverImg, Valid: true},
+		Banner: sql.NullString{String: bannerImg, Valid: true},
 	}
 }
 
@@ -110,11 +111,11 @@ func (d *DummySvc) CreateTracks(config *models.TrackConfig) []*models.TrackEntry
 
 // CreateTrack creates a dummy track with a random title, duration, and tabs.
 func (d *DummySvc) CreateTrack() *models.TrackEntry {
-	coverImg := faker.ImageJpeg(750, 750)
+	coverImg := base64.StdEncoding.EncodeToString(faker.ImageJpeg(750, 750))
 	return &models.TrackEntry{
 		ID:       uuid.New(),
 		Title:    faker.HipsterSentence(faker.Number(1, 6)),
-		Cover:    base64.StdEncoding.EncodeToString(coverImg),
+		Cover:    sql.NullString{String: coverImg, Valid: true},
 		Duration: uint(faker.Number(10000, 3000000)),
 	}
 }
