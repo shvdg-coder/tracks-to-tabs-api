@@ -3,8 +3,10 @@ package services
 import (
 	"database/sql"
 	"encoding/base64"
+	"fmt"
 	faker "github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
+	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/constants"
 	"github.com/shvdg-coder/tracks-to-tabs-api/pkg/models"
 )
 
@@ -90,8 +92,8 @@ func (d *DummySvc) CreateArtists(config *models.ArtistConfig) []*models.ArtistEn
 
 // CreateArtist creates a dummy artist with a random name and tracks.
 func (d *DummySvc) CreateArtist() *models.ArtistEntry {
-	coverImg := base64.StdEncoding.EncodeToString(faker.ImageJpeg(750, 750))
-	bannerImg := base64.StdEncoding.EncodeToString(faker.ImageJpeg(2660, 1140))
+	coverImg := fmt.Sprintf("%s,%s", constants.ValueBase64JPeg, base64.StdEncoding.EncodeToString(faker.ImageJpeg(750, 750)))
+	bannerImg := fmt.Sprintf("%s,%s", constants.ValueBase64JPeg, base64.StdEncoding.EncodeToString(faker.ImageJpeg(2660, 1140)))
 	return &models.ArtistEntry{
 		ID:     uuid.New(),
 		Name:   faker.HipsterWord(),
@@ -111,7 +113,7 @@ func (d *DummySvc) CreateTracks(config *models.TrackConfig) []*models.TrackEntry
 
 // CreateTrack creates a dummy track with a random title, duration, and tabs.
 func (d *DummySvc) CreateTrack() *models.TrackEntry {
-	coverImg := base64.StdEncoding.EncodeToString(faker.ImageJpeg(750, 750))
+	coverImg := fmt.Sprintf("%s,%s", constants.ValueBase64JPeg, base64.StdEncoding.EncodeToString(faker.ImageJpeg(750, 750)))
 	return &models.TrackEntry{
 		ID:       uuid.New(),
 		Title:    faker.HipsterSentence(faker.Number(1, 6)),

@@ -12,4 +12,5 @@ const (
 
 const (
 	ValueDatabaseDriver = "postgres"
+	ValueBase64JPeg     = "data:image/jpeg;base64"
 )
