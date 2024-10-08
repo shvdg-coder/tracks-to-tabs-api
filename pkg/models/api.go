@@ -9,8 +9,16 @@ import (
 
 // APIConfig holds the overall configuration for the application
 type APIConfig struct {
+	Commands *CommandsConfig `json:"commands"`
 	Database *DatabaseConfig `json:"database"`
 	Seeding  *SeedingConfig  `json:"seeding"`
+}
+
+// CommandsConfig holds the configuration related to the commands
+type CommandsConfig struct {
+	CreateEnabled bool `json:"create_enabled"`
+	DropEnabled   bool `json:"drop_enabled"`
+	SeedEnabled   bool `json:"seed_enabled"`
 }
 
 // DatabaseConfig holds the configuration related to the database

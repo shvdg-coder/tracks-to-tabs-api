@@ -1,3 +1,7 @@
+commands:
+  create_enabled: true
+  drop_enabled: true
+  seed_enabled: true
 database:
   url: postgresql://user:password@localhost:8443/testdb
   ssh:

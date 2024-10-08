@@ -19,6 +19,7 @@ type APIOps interface {
 
 // API provides functionalities regarding the app.
 type API struct {
+	Config *models.APIConfig
 	services.CreateOps
 	services.DropOps
 	services.DataOps
@@ -39,6 +40,7 @@ func NewAPI(configPath string) (*API, error) {
 
 	svcManager := services.NewSvcManager(database)
 	api := &API{
+		Config:    apiConfig,
 		CreateOps: services.NewCreateSvc(svcManager),
 		DropOps:   services.NewDropSvc(svcManager),
 		DataOps:   services.NewDataSvc(svcManager),

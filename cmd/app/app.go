@@ -36,11 +36,23 @@ func handleArgs(args []string) {
 func handleArg(arg string) {
 	switch arg {
 	case CommandCreate:
-		api.CreateAll()
+		if api.Config.Commands.CreateEnabled {
+			api.CreateAll()
+		} else {
+			log.Println("Create is disabled in the config file.")
+		}
 	case CommandDrop:
-		api.DropAll()
+		if api.Config.Commands.DropEnabled {
+			api.DropAll()
+		} else {
+			log.Println("Drop is disabled in the config file.")
+		}
 	case CommandSeed:
-		api.Seed()
+		if api.Config.Commands.SeedEnabled {
+			api.Seed()
+		} else {
+			log.Println("Seed is disabled in the config file.")
+		}
 	default:
 		printErrorAndExit()
 	}

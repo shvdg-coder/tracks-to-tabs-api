@@ -19,6 +19,7 @@ const CreateArtistsTable = `
 	CREATE TABLE IF NOT EXISTS artists  (
 	   id UUID PRIMARY KEY,
 	   name VARCHAR(500) NOT NULL,
+	   popularity INT NULL,
 	   cover TEXT,
 	   banner TEXT
 	);

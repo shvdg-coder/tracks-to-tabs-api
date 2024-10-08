@@ -20,6 +20,7 @@ const CreateTracksTable = `
 	   id UUID PRIMARY KEY,
 	   title VARCHAR(500) NOT NULL,
 	   duration NUMERIC NOT NULL,
+	   popularity INT NULL,
 	   cover TEXT
 	);
 
