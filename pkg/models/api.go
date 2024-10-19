@@ -9,43 +9,43 @@ import (
 
 // APIConfig holds the overall configuration for the application
 type APIConfig struct {
-	Commands *CommandsConfig `json:"commands"`
-	Database *DatabaseConfig `json:"database"`
-	Seeding  *SeedingConfig  `json:"seeding"`
+	Commands *CommandsConfig `yaml:"commands"`
+	Database *DatabaseConfig `yaml:"database"`
+	Seeding  *SeedingConfig  `yaml:"seeding"`
 }
 
 // CommandsConfig holds the configuration related to the commands
 type CommandsConfig struct {
-	CreateEnabled bool `json:"create_enabled"`
-	DropEnabled   bool `json:"drop_enabled"`
-	SeedEnabled   bool `json:"seed_enabled"`
+	CreateEnabled bool `yaml:"create_enabled"`
+	DropEnabled   bool `yaml:"drop_enabled"`
+	SeedEnabled   bool `yaml:"seed_enabled"`
 }
 
 // DatabaseConfig holds the configuration related to the database
 type DatabaseConfig struct {
-	URL string           `json:"url"`
-	SSH *logic.SSHConfig `json:"ssh"`
+	URL string           `yaml:"url"`
+	SSH *logic.SSHConfig `yaml:"ssh"`
 }
 
 // SeedingConfig holds the configuration related to seeding the application
 type SeedingConfig struct {
-	Dummies      DummyConfig        `json:"dummies"`
-	Instruments  []*InstrumentEntry `json:"instruments"`
-	Difficulties []*DifficultyEntry `json:"difficulties"`
-	Sources      []*SourceEntry     `json:"sources"`
-	Endpoints    []*EndpointEntry   `json:"endpoints"`
+	Dummies      DummyConfig        `yaml:"dummies"`
+	Instruments  []*InstrumentEntry `yaml:"instruments"`
+	Difficulties []*DifficultyEntry `yaml:"difficulties"`
+	Sources      []*SourceEntry     `yaml:"sources"`
+	Endpoints    []*EndpointEntry   `yaml:"endpoints"`
 }
 
 // DummyConfig contains the configuration for creating dummy data
 type DummyConfig struct {
-	Artists *ArtistConfig `json:"artists"`
+	Artists *ArtistConfig `yaml:"artists"`
 }
 
 // ArtistConfig covers configuration related to artist data
 type ArtistConfig struct {
-	Min    int          `json:"min"`
-	Max    int          `json:"max"`
-	Tracks *TrackConfig `json:"tracks"`
+	Min    int          `yaml:"min"`
+	Max    int          `yaml:"max"`
+	Tracks *TrackConfig `yaml:"tracks"`
 }
 
 // RandomAmount returns a random number between the defined min and max value.
@@ -55,9 +55,9 @@ func (a *ArtistConfig) RandomAmount() uint {
 
 // TrackConfig represents configuration related to audio tracks
 type TrackConfig struct {
-	Min  int        `json:"min"`
-	Max  int        `json:"max"`
-	Tabs *TabConfig `json:"tabs"`
+	Min  int        `yaml:"min"`
+	Max  int        `yaml:"max"`
+	Tabs *TabConfig `yaml:"tabs"`
 }
 
 // RandomAmount returns a random number between the defined min and max value.
@@ -67,8 +67,8 @@ func (t *TrackConfig) RandomAmount() uint {
 
 // TabConfig defines configuration relevant to tabs
 type TabConfig struct {
-	Min int `json:"min"`
-	Max int `json:"max"`
+	Min int `yaml:"min"`
+	Max int `yaml:"max"`
 }
 
 // RandomAmount returns a random number between the defined min and max value.
