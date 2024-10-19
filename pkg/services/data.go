@@ -10,6 +10,7 @@ type DataOps interface {
 	GetArtists(artistID ...uuid.UUID) ([]*models.Artist, error)
 	GetTracks(trackID ...uuid.UUID) ([]*models.Track, error)
 	GetTabs(tabID ...uuid.UUID) ([]*models.Tab, error)
+	SvcOps
 }
 
 // DataSvc represents the main entry point to interact with functionalities for the defined entities.
