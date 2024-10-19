@@ -18,7 +18,7 @@ It contains the following columns:
 const CreateArtistsTable = `
 	CREATE TABLE IF NOT EXISTS artists  (
 	   id UUID PRIMARY KEY,
-	   name VARCHAR(500) NOT NULL,
+	   name VARCHAR(500) NOT NULL UNIQUE,
 	   popularity INT NULL,
 	   cover TEXT,
 	   banner TEXT
