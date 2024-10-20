@@ -16,9 +16,7 @@ const CreateTrackTabTable = `
 	CREATE TABLE IF NOT EXISTS track_tab  (
 	   track_id UUID REFERENCES tracks (id),
 	   tab_id UUID REFERENCES tabs (id),
-	   PRIMARY KEY (track_id, tab_id),
-	   CONSTRAINT fk_track FOREIGN KEY(track_id) REFERENCES tracks(id),
-	   CONSTRAINT fk_tab FOREIGN KEY(tab_id) REFERENCES tabs(id)
+	   PRIMARY KEY (track_id, tab_id)
 	);
 
 	CREATE INDEX idx_tracktab_track_id ON track_tab(track_id);

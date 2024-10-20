@@ -18,11 +18,9 @@ It contains the following columns:
 const CreateTabsTable = `
 	CREATE TABLE IF NOT EXISTS tabs (
 	   id UUID PRIMARY KEY,
-	   instrument_id INT NOT NULL,
-	   difficulty_id INT NOT NULL,
-	   description TEXT,
-	   CONSTRAINT fk_instrument FOREIGN KEY(instrument_id) REFERENCES instruments(id),
-	   CONSTRAINT fk_difficulty	FOREIGN KEY(difficulty_id) REFERENCES difficulties(id)
+	   instrument_id INT REFERENCES instruments(id) NOT NULL,
+	   difficulty_id INT REFERENCES difficulties(id) NOT NULL,
+	   description TEXT NULL
 	);
 
 	CREATE INDEX idx_tab_id ON tabs(id);

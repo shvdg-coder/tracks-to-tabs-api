@@ -17,9 +17,7 @@ const CreateArtistTrackTable = `
 	CREATE TABLE IF NOT EXISTS artist_track  (
 	   artist_id UUID REFERENCES artists(id),
 	   track_id UUID REFERENCES tracks(id),
-	   PRIMARY KEY (artist_id, track_id),
-	   CONSTRAINT fk_artist FOREIGN KEY(artist_id) REFERENCES artists(id),
-	   CONSTRAINT fk_track FOREIGN KEY(track_id) REFERENCES tracks(id)
+	   PRIMARY KEY (artist_id, track_id)
 	);
 
 	CREATE INDEX idx_artisttrack_artist_id ON artist_track(artist_id);

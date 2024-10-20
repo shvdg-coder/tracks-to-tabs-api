@@ -23,12 +23,11 @@ It contains the following columns:
 const CreateReferencesTable = `
 	CREATE TABLE IF NOT EXISTS "references" (
 	   internal_id UUID NOT NULL,
-	   source_id INT NOT NULL,
+	   source_id INT REFERENCES sources(id) NOT NULL,
 	   category VARCHAR(250) NOT NULL, 
 	   type VARCHAR(250) NOT NULL,
 	   reference VARCHAR(250) NOT NULL,
-	   PRIMARY KEY (internal_id, source_id, category, type),
-       CONSTRAINT fk_source FOREIGN KEY(source_id) REFERENCES sources(id)
+	   PRIMARY KEY (internal_id, source_id, category, type)
 	);
 
 	CREATE INDEX idx_internal_id ON "references"(internal_id);

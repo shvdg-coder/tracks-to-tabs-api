@@ -19,7 +19,7 @@ It contains the following columns:
 */
 const CreateEndpointsTable = `
 	CREATE TABLE IF NOT EXISTS "endpoints" (
-	   source_id INT NOT NULL,
+	   source_id INT REFERENCES sources(id) NOT NULL,
 	   category VARCHAR(250) NOT NULL,
 	   type VARCHAR(250) NOT NULL,
 	   url VARCHAR(250) NOT NULL,
